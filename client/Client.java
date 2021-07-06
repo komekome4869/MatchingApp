@@ -62,7 +62,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    setup();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"setup");
+	    layout.show(cardPanel,"MyProfile");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -424,10 +424,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lGradeMyProfile);
 
         JComboBox<String> cbGradeMyProfile = new JComboBox<String>(Grade);
-        cbGradeMyProfile.addItem("1");
-        cbGradeMyProfile.addItem("2");
-        cbGradeMyProfile.addItem("3");
-        cbGradeMyProfile.addItem("4");
         cbGradeMyProfile.setBounds(w/3,31*h/60,w/2,h/30);
 		cbGradeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(cbGradeMyProfile);
