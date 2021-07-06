@@ -60,6 +60,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    myProfile();
 	    howToUse();
 	    setup();
+	    invite();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
 	    layout.show(cardPanel,"MyProfile");
@@ -552,6 +553,56 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(rbDeleteAccountSetup);
 
         cardPanel.add(card,"setup");
+	}
+
+	public void invite() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		//タイトル
+		JLabel ltitleinvite = new JLabel("グループ招待");
+		ltitleinvite.setBounds(w/4,h/50,w/2,h/10);
+		ltitleinvite.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		ltitleinvite.setHorizontalAlignment(JLabel.CENTER);
+        card.add(ltitleinvite);
+
+        //画像貼り付け
+        ImageIcon IIimageinvite = new ImageIcon("Black.jpg");
+        JLabel liconinvite = new JLabel(IIimageinvite);
+        liconinvite.setBounds(w/4,3*h/20,w/2,h/5);
+        liconinvite.setHorizontalAlignment(JLabel.CENTER);
+        card.add(liconinvite);
+
+        //プロフィール確認ボタン
+        JButton bprofileinvite = new JButton("プロフィールを確認する");
+        bprofileinvite.setBounds(w/4,7*h/20,w/2,h/20);
+        //bprofileinvite.addActionListener(this);
+        card.add(bprofileinvite);
+
+        //参加するボタン
+        JButton bokinvite = new JButton("参加する！");
+        bokinvite.setBounds(w/4,9*h/20,w/2,h/20);
+        //bokinvite.addActionListener(this);
+        card.add(bokinvite);
+
+        //参加しないボタン
+        JButton bnoinvite = new JButton("参加しない");
+        bnoinvite.setBounds(w/4,11*h/20,w/2,h/20);
+        //bnoinvite.addActionListener(this);
+        card.add(bnoinvite);
+
+        JLabel llabelinvite = new JLabel("〇〇さんに招待されました！");
+        llabelinvite.setBounds(0,13*h/20,w,h/20);
+        llabelinvite.setHorizontalAlignment(JLabel.CENTER);
+        card.add(llabelinvite);
+
+        getContentPane().add(card,null);
+        //menu
+
+        //通知
+
+
+        cardPanel.add(card,"invite");
 	}
 
 	public void stateChanged(ChangeEvent e) {
