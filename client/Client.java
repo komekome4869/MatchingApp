@@ -70,7 +70,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    finishAuthen();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"finishAuthen");
+	    layout.show(cardPanel,"MyGroupProfile");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
