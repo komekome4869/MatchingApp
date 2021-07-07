@@ -1,1 +1,172 @@
+import java.io.Serializable;
+import java.util.UUID;
 
+import javax.swing.ImageIcon;
+
+public class UserInfo implements Serializable{
+	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
+
+	static int studentNumber=0;
+	static String name="";
+	static int gender=2;	//性別～サークルはClient.java内の配列で文字に変換する
+	static int grade=0;
+	static int faculty=0;
+	static int birth=0;
+	static int circle=0;
+	static String hobby="";
+	static int[] sendGood=new int[MAX];
+	static int[] recieveGood=new int[MAX];
+	static int[] matchedUser=new int[MAX];
+	static UUID[] joiningGroup=new UUID[MAX];
+	static UUID[] invitedGroup=new UUID[MAX];
+	static ImageIcon studentCard;
+	static int isAuthentificated=0;		//0:認証されていない,1:認証された,2:認証されたが「認証されました画面」を見ていない
+	static ImageIcon mainPhoto;
+	static ImageIcon[] subPhoto=new ImageIcon[4];
+	static String lineId;
+
+	public void setStudentNumber(int sn) {
+		studentNumber=sn;
+	}
+
+	public int getStudentNumber() {
+		return studentNumber;
+	}
+
+	public void setName(String n) {
+		name=n;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setGender(int g) {
+		gender=g;
+	}
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGrade(int g) {
+		grade=g;
+	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setFaculty(int f) {
+		faculty=f;
+	}
+
+	public int getFaculty() {
+		return faculty;
+	}
+
+	public void setBirth(int b) {
+		gender=b;
+	}
+
+	public int getBirth() {
+		return birth;
+	}
+
+	public void setCircle(int c) {
+		gender=c;
+	}
+
+	public int getCircle() {
+		return circle;
+	}
+
+	public void setHobby(String h) {
+		hobby=h;
+	}
+
+	public String getHobby() {
+		return hobby;
+	}
+
+	public void setSendGood(int[] sg) {
+		sendGood=sg;
+	}
+
+	public int[] getSendGood() {
+		return sendGood;
+	}
+
+	public void setRecieveGood(int[] rg) {
+		recieveGood=rg;
+	}
+
+	public int[] getRecieveGood() {
+		return recieveGood;
+	}
+
+	public void setMatchedUser(int[] mu) {
+		matchedUser=mu;
+	}
+
+	public int[] getMatchedUser() {
+		return matchedUser;
+	}
+
+	public void setJoiningGroop(UUID[] jg) {
+		joiningGroup=jg;
+	}
+
+	public UUID[] getJoiningGroup() {
+		return joiningGroup;
+	}
+
+	public void setInvitedGroop(UUID[] ig) {
+		invitedGroup=ig;
+	}
+
+	public UUID[] getInvitedGroup() {
+		return invitedGroup;
+	}
+
+	public void setStudentCard(ImageIcon sc) {
+		studentCard=sc;
+	}
+
+	public ImageIcon getStudentCard() {
+		return studentCard;
+	}
+
+	public void setIsAuthentificated(int ia) {
+		isAuthentificated=ia;
+	}
+
+	public int getIsAuthentificated() {
+		return isAuthentificated;
+	}
+
+	public void setMainPhoto(ImageIcon mp) {
+		mainPhoto=mp;
+	}
+
+	public ImageIcon getMainPhoto() {
+		return mainPhoto;
+	}
+
+	public void setSubPhoto(ImageIcon[] sp) {
+		subPhoto=sp;
+	}
+
+	public ImageIcon[] getSubPhoto() {
+		return subPhoto;
+	}
+
+	public void setLineId(String li) {
+		lineId=li;
+	}
+
+	public String getLineId() {
+		return lineId;
+	}
+
+}

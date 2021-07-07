@@ -181,7 +181,7 @@ public class Server extends JFrame implements ActionListener{
 		    cardPanel.setLayout(cardLayout);
 
 		    search();
-		    userInfo();
+		    aboutUser();
 
 		    cardLayout.show(cardPanel,"UserInfo");
 		    pack();
@@ -223,7 +223,7 @@ public class Server extends JFrame implements ActionListener{
 			cardPanel.add(card,"search");
 		}
 
-		public void userInfo() {
+		public void aboutUser() {
 
 
 			// 項目

@@ -33,8 +33,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	int w=400;
 	int h=650;
+	UserInfo myUserInfo=new UserInfo();
 
-	
 	//プロフィールの検索で選ぶやつ
 	String[] Sex = {"男性", "女性", "その他"};
 	String[] Grade = {"1", "2", "3", "4"};
@@ -42,8 +42,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String[] Birthplace = {"北海道・東北", "関東", "中部", "近畿", "中国", "四国", "九州", "海外"};
 	String[] Circle = {"テニス", "運動", "文化"};
 	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
-	
-	
+
+
 	JPanel cardPanel;
 	CardLayout layout;
 
@@ -701,14 +701,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bGoodViewGroup.setActionCommand("label");
         bGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
         card.add(bGoodViewGroup);
-        
+
         JButton bHomeViewGroup=new JButton("HOME");
         bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
         bHomeViewGroup.addActionListener(this);
         bHomeViewGroup.setActionCommand("label");
         bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHomeViewGroup);
-        
+
         JButton bInformViewGroup=new JButton("通知");
         bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInformViewGroup.addActionListener(this);
@@ -764,7 +764,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
         tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(tfRelationMyGroupProfile);
-        
+
         JLabel lPurposeMyGroupProfile = new JLabel("目的");
 		lPurposeMyGroupProfile.setBounds(w/8,26*h/60,w/6,h/20);
 		lPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -794,21 +794,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
         bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bQuitMyGroupProfile);
-        
+
         JButton bChangeMyProfile = new JButton("変更確定");
         bChangeMyProfile.setBounds(w/2,44*h/60,5*w/22,h/20);
         bChangeMyProfile.addActionListener(this);
         bChangeMyProfile.setActionCommand("ヘルプmenu");
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bChangeMyProfile);
-        
+
         JButton bHomeViewGroup=new JButton("HOME");
         bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
         bHomeViewGroup.addActionListener(this);
         bHomeViewGroup.setActionCommand("label");
         bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHomeViewGroup);
-        
+
         JButton bInformViewGroup=new JButton("通知");
         bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInformViewGroup.addActionListener(this);
@@ -818,7 +818,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"MyGroupProfile");
 	}
-	
+
 	public void makeGroup() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -864,7 +864,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
         tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(tfRelationMyGroupProfile);
-        
+
         JLabel lPurposeMyGroupProfile = new JLabel("目的");
 		lPurposeMyGroupProfile.setBounds(w/8,26*h/60,w/6,h/20);
 		lPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -894,14 +894,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
         bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bQuitMyGroupProfile);
-        
+
         JButton bHomeViewGroup=new JButton("HOME");
         bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
         bHomeViewGroup.addActionListener(this);
         bHomeViewGroup.setActionCommand("label");
         bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHomeViewGroup);
-        
+
         JButton bInformViewGroup=new JButton("通知");
         bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInformViewGroup.addActionListener(this);
@@ -911,7 +911,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"MakeGroup");
 	}
-	
+
 	public void finishAuthen(){
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -931,7 +931,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"finishAuthen");
 	}
-	
+
 	public void actionPerformed(ActionEvent ae) {
 	}
 
