@@ -63,20 +63,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    myProfile();
 	    howToUse();
 	    setup();
-<<<<<<< HEAD
 	    invite();
 	    home();
 	    change();
-=======
 	    searchUser();
 	    viewGroup();
 	    myGroupProfile();
 	    makeGroup();
 	    finishAuthen();
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"MyGroupProfile");
+	    layout.show(cardPanel,"change");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -574,7 +571,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"setup");
 	}
 
-<<<<<<< HEAD
 	public void invite() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -732,8 +728,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"change");
 	}
 
-
-=======
 	public void searchUser() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1100,7 +1094,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	public void actionPerformed(ActionEvent ae) {
 	}
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 
 	public void stateChanged(ChangeEvent e) {
 		JRadioButton cb = (JRadioButton)e.getSource();
