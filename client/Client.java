@@ -61,6 +61,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    howToUse();
 	    setup();
 	    invite();
+	    home();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
 	    layout.show(cardPanel,"MyProfile");
@@ -604,6 +605,62 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"invite");
 	}
+
+	public void home() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel ltitlehome = new JLabel("HOME");
+		ltitlehome.setBounds(w/4,h/50,w/2,h/10);
+		ltitlehome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		ltitlehome.setHorizontalAlignment(JLabel.CENTER);
+        card.add(ltitlehome);
+
+        JButton bsearchhome = new JButton("Search");
+        bsearchhome.setBounds(w/12,h/30,w/5,h/15);
+        card.add(bsearchhome);
+
+        JButton bmenuhome = new JButton("MENU");
+        bmenuhome.setBounds(5*w/7,h/30,w/5,h/15);
+        card.add(bmenuhome);
+
+        ImageIcon IIimagehome1 = new ImageIcon("test.jpg");
+        JButton biconhome1 = new JButton(" 〇〇 3年",IIimagehome1);
+        biconhome1.setBounds(w/4,3*h/20,w/2,h/10);
+        card.add(biconhome1);
+
+        ImageIcon IIimagehome2 = new ImageIcon("test.jpg");
+        JButton biconhome2 = new JButton(" 〇〇 4年",IIimagehome2);
+        biconhome2.setBounds(w/4,7*h/20,w/2,h/10);
+        card.add(biconhome2);
+
+        ImageIcon IIimagehome3 = new ImageIcon("test.jpg");
+        JButton biconhome3 = new JButton(" 〇〇 1年",IIimagehome3);
+        biconhome3.setBounds(w/4,11*h/20,w/2,h/10);
+        card.add(biconhome3);
+
+        JLabel lbackhome = new JLabel("back");
+        lbackhome.setBounds(w/6,15*h/20,w/2,h/20);
+        card.add(lbackhome);
+
+        ImageIcon IIlefthome = new ImageIcon("left.jpeg");
+        JButton blefthome = new JButton(IIlefthome);
+        blefthome.setBounds(w/4,15*h/20,w/11,h/20);
+        card.add(blefthome);
+
+        ImageIcon IIrighthome = new ImageIcon("right.jpeg");
+        JButton brighthome = new JButton(IIrighthome);
+        brighthome.setBounds(2*w/3,15*h/20,w/11,h/20);
+        card.add(brighthome);
+
+        JLabel lnexthome = new JLabel("next");
+        lnexthome.setBounds(7*w/9,15*h/20,w/2,h/20);
+        card.add(lnexthome);
+
+
+        cardPanel.add(card,"home");
+	}
+
 
 	public void stateChanged(ChangeEvent e) {
 		JRadioButton cb = (JRadioButton)e.getSource();
