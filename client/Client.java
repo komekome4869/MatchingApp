@@ -42,6 +42,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String[] Circle = {"テニス", "運動", "文化"};
 	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
 
+	//画像
+	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
+	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
+	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
+	ImageIcon iTest=new ImageIcon("./img/test.jpeg");
+
 	//アクションリスナーでいじるために一部の変数を外部変数に
 	JTextField tfIdLogin = new JTextField(20);
 	JTextField tfPasswordLogin = new JTextField(20);
@@ -56,6 +62,50 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	JTextField tfNumberJudge= new JTextField(20);
 	JLabel lPicOutputJudge= new JLabel("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
 	JLabel lErrorJudge = new JLabel("未入力の箇所があります");
+
+	JButton bIconHome[]=new JButton[3];
+
+	JLabel lNameReply = new JLabel("○○");
+    JLabel lMainPhotoReply = new JLabel("");
+    JLabel[] lSubPhotoReply = new JLabel[4];
+    JLabel lGenderReply2 = new JLabel("○○");
+    JLabel lGradeReply2 = new JLabel("○○");
+    JLabel lFacultyReply2 = new JLabel("○○");
+    JLabel lBirthReply2 = new JLabel("○○");
+    JLabel lCircleReply2 = new JLabel("○○");
+    JLabel lHobbyReply2 = new JLabel("○○");
+
+    JLabel lNameGood = new JLabel("○○");
+    JLabel lMainPhotoGood = new JLabel("");
+    JLabel[] lSubPhotoGood = new JLabel[4];
+    JLabel lGenderGood2 = new JLabel("○○");
+    JLabel lGradeGood2 = new JLabel("○○");
+    JLabel lFacultyGood2 = new JLabel("○○");
+    JLabel lBirthGood2 = new JLabel("○○");
+    JLabel lCircleGood2 = new JLabel("○○");
+    JLabel lHobbyGood2 = new JLabel("○○");
+    JButton bGoodGood = new JButton("いいね");
+    JLabel lGoodGood = new JLabel("既にいいねしました");
+
+    JLabel lNameMatching = new JLabel("○○さんとマッチしました！");
+    JLabel lIdMatching = new JLabel("LINEID:aaaaaaaaa");
+
+    JComboBox<String> cbGenderSearchUser = new JComboBox<String>(Sex);
+    JComboBox<String> cbGradeSearchUser = new JComboBox<String>(Grade);
+    JComboBox<String> cbFacultySearchUser = new JComboBox<String>(Faculty);
+    JComboBox<String> cbBirthSearchUser = new JComboBox<String>(Birthplace);
+    JComboBox<String> cbCircleSearchUser = new JComboBox<String>(Circle);
+    
+    JButton bMainPhotoMyProfile = new JButton("");
+    JButton[] bSubPhotoMyProfile = new JButton[4];
+    JTextField tfNameMyprofile = new JTextField("");
+    JComboBox<String> cbGenderMyProfile = new JComboBox<String>(Sex);
+    JComboBox<String> cbGradeMyProfile = new JComboBox<String>(Grade);
+    JComboBox<String> cbFacultyMyProfile = new JComboBox<String>(Faculty);
+    JComboBox<String> cbBirthMyProfile = new JComboBox<String>(Birthplace);
+    JComboBox<String> cbCircleMyProfile = new JComboBox<String>(Circle);
+    JTextField tfHobbyMyProfile = new JTextField("");
+    JTextField tfLineIdMyProfile = new JTextField("");
 
 	JPanel cardPanel;
 	CardLayout layout;
@@ -73,24 +123,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    pleaseWait();
 	    finishAuthen();
 	    home();
-	    matching();
-	    gathering();
-	    menu();
-	    myProfile();
-	    howToUse();
-	    setup();
-	    invite();
-	    change();
-	    searchUser();
-	    viewGroup();
-	    myGroupProfile();
-	    makeGroup();
 	    reply();
 	    good();
-
+	    matching();
+	    searchUser();
+	    menu();
+	    myProfile();
+	    change();
+	    makeGroup();
+	    gathering();
+	    invite();
+	    viewGroup();
+	    myGroupProfile();
+	    setup();
+	    howToUse();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"home");
+	    layout.show(cardPanel,"myProfile");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -332,55 +381,317 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel ltitlehome = new JLabel("HOME");
-		ltitlehome.setBounds(w/4,h/50,w/2,h/10);
-		ltitlehome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
-		ltitlehome.setHorizontalAlignment(JLabel.CENTER);
-        card.add(ltitlehome);
+		JLabel lTitleHome = new JLabel("HOME");
+		lTitleHome.setBounds(w/4,h/50,w/2,h/10);
+		lTitleHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleHome.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleHome);
 
-        JButton bsearchhome = new JButton("Search");
-        bsearchhome.setBounds(w/12,h/30,w/5,h/15);
-        card.add(bsearchhome);
+        JButton bSearchHome = new JButton("Search");
+        bSearchHome.setBounds(w/12,h/30,w/5,h/15);
+        bSearchHome.addActionListener(this);
+        bSearchHome.setActionCommand("検索home");
+        card.add(bSearchHome);
 
-        JButton bmenuhome = new JButton("MENU");
-        bmenuhome.setBounds(5*w/7,h/30,w/5,h/15);
-        card.add(bmenuhome);
+        JButton bMenuHome = new JButton("MENU");
+        bMenuHome.setBounds(5*w/7,h/30,w/5,h/15);
+        bMenuHome.addActionListener(this);
+        bMenuHome.setActionCommand("メニューhome");
+        card.add(bMenuHome);
 
-        ImageIcon IIimagehome1 = new ImageIcon("test.jpg");
-        JButton biconhome1 = new JButton(" 〇〇 3年",IIimagehome1);
-        biconhome1.setBounds(w/4,3*h/20,w/2,h/10);
-        card.add(biconhome1);
 
-        ImageIcon IIimagehome2 = new ImageIcon("test.jpg");
-        JButton biconhome2 = new JButton(" 〇〇 4年",IIimagehome2);
-        biconhome2.setBounds(w/4,7*h/20,w/2,h/10);
-        card.add(biconhome2);
-
-        ImageIcon IIimagehome3 = new ImageIcon("test.jpg");
-        JButton biconhome3 = new JButton(" 〇〇 1年",IIimagehome3);
-        biconhome3.setBounds(w/4,11*h/20,w/2,h/10);
-        card.add(biconhome3);
+        for(int i=0;i<3;i++) {
+        	bIconHome[i]=new JButton("プロフィール",iRight);
+        	bIconHome[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
+        	bIconHome[i].addActionListener(this);
+        	bIconHome[i].setActionCommand("プロフィール"+Integer.toString(i)+"home");
+        	bIconHome[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	card.add(bIconHome[i]);
+        }
 
         JLabel lbackhome = new JLabel("back");
         lbackhome.setBounds(w/6,15*h/20,w/2,h/20);
         card.add(lbackhome);
 
-        ImageIcon IIlefthome = new ImageIcon("left.jpeg");
-        JButton blefthome = new JButton(IIlefthome);
-        blefthome.setBounds(w/4,15*h/20,w/11,h/20);
-        card.add(blefthome);
+        JButton bLeftHome = new JButton(iLeft);
+        bLeftHome.setBounds(w/4,15*h/20,w/11,h/20);
+        bLeftHome.addActionListener(this);
+    	bLeftHome.setActionCommand("前のページhome");
+        card.add(bLeftHome);
 
-        ImageIcon IIrighthome = new ImageIcon("right.jpeg");
-        JButton brighthome = new JButton(IIrighthome);
-        brighthome.setBounds(2*w/3,15*h/20,w/11,h/20);
-        card.add(brighthome);
+        JButton bRightHome = new JButton(iRight);
+        bRightHome.setBounds(2*w/3,15*h/20,w/11,h/20);
+        bRightHome.addActionListener(this);
+    	bRightHome.setActionCommand("次のページhome");
+        card.add(bRightHome);
 
         JLabel lnexthome = new JLabel("next");
         lnexthome.setBounds(7*w/9,15*h/20,w/2,h/20);
         card.add(lnexthome);
 
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
 
         cardPanel.add(card,"home");
+
+	}
+
+	public void reply() {
+		JPanel card = new JPanel();
+		card.setLayout(null);
+
+		JButton bBackReply = new JButton("←");
+        bBackReply.setBounds(w/30,h/60,w/6,h/15);
+        bBackReply.addActionListener(this);
+        bBackReply.setActionCommand("戻る");
+        bBackReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bBackReply);
+
+		lNameReply.setBounds(w/4,h/60,w/2,h/15);
+		lNameReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lNameReply.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lNameReply);
+
+        lMainPhotoReply.setBounds(w/4,6*h/60,w/2,h/6);
+        lMainPhotoReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(lMainPhotoReply);
+
+        for(int i=0;i<4;i++) {
+        	lSubPhotoReply[i] = new JLabel();
+        	lSubPhotoReply[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
+            lSubPhotoReply[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            card.add(lSubPhotoReply[i]);
+        }
+
+        JLabel lGenderReply = new JLabel("性別");
+		lGenderReply.setBounds(0,25*h/60,w/3,h/30);
+		lGenderReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGenderReply.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lGenderReply);
+
+        lGenderReply2.setBounds(w/2,25*h/60,w/3,h/30);
+		lGenderReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGenderReply2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lGenderReply2);
+
+        JLabel lGradeReply = new JLabel("学年");
+		lGradeReply.setBounds(0,28*h/60,w/3,h/30);
+		lGradeReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGradeReply.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lGradeReply);
+
+        lGradeReply2.setBounds(w/2,28*h/60,w/3,h/30);
+		lGradeReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGradeReply2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lGradeReply2);
+
+        JLabel lFacultyReply = new JLabel("学部");
+		lFacultyReply.setBounds(0,31*h/60,w/3,h/30);
+		lFacultyReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lFacultyReply.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lFacultyReply);
+
+        lFacultyReply2.setBounds(w/2,31*h/60,w/3,h/30);
+        lFacultyReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lFacultyReply2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lFacultyReply2);
+
+        JLabel lBirthReply = new JLabel("出身");
+		lBirthReply.setBounds(0,34*h/60,w/3,h/30);
+		lBirthReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lBirthReply.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lBirthReply);
+
+        lBirthReply2.setBounds(w/2,34*h/60,w/3,h/30);
+        lBirthReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lBirthReply2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lBirthReply2);
+
+        JLabel lCircleReply = new JLabel("サークル");
+		lCircleReply.setBounds(0,37*h/60,w/3,h/30);
+		lCircleReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lCircleReply.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lCircleReply);
+
+        lCircleReply2.setBounds(w/2,37*h/60,w/3,h/30);
+        lCircleReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lCircleReply2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lCircleReply2);
+
+        JLabel lHobbyReply = new JLabel("趣味");
+		lHobbyReply.setBounds(0,40*h/60,w/3,h/30);
+		lHobbyReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lHobbyReply.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lHobbyReply);
+
+        lHobbyReply2.setBounds(w/2,40*h/60,w/3,h/30);
+        lHobbyReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lHobbyReply2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lHobbyReply2);
+
+        JButton bGoodReply = new JButton("いいね");
+        bGoodReply.setBounds(w/4,46*h/60,w/4,h/20);
+        bGoodReply.addActionListener(this);
+        bGoodReply.setActionCommand("いいねreply");
+        bGoodReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bGoodReply);
+
+        JButton bBadReply = new JButton("断る");
+        bBadReply.setBounds(w/2,46*h/60,w/4,h/20);
+        bBadReply.addActionListener(this);
+        bBadReply.setActionCommand("断るreply");
+        bBadReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bBadReply);
+
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+		cardPanel.add(card,"reply");
+	}
+
+
+	public void good() {
+		JPanel card = new JPanel();
+		card.setLayout(null);
+
+		JButton bBackGood = new JButton("←");
+        bBackGood.setBounds(w/30,h/60,w/6,h/15);
+        bBackGood.addActionListener(this);
+        bBackGood.setActionCommand("戻る");
+        bBackGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bBackGood);
+
+		lNameGood.setBounds(w/4,h/60,w/2,h/15);
+		lNameGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lNameGood.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lNameGood);
+
+        lMainPhotoGood.setBounds(w/4,6*h/60,w/2,h/6);
+        lMainPhotoGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(lMainPhotoGood);
+
+        for(int i=0;i<4;i++) {
+        	lSubPhotoGood[i] = new JLabel();
+        	lSubPhotoGood[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
+            lSubPhotoGood[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            card.add(lSubPhotoGood[i]);
+        }
+
+        JLabel lGenderGood = new JLabel("性別");
+		lGenderGood.setBounds(0,25*h/60,w/3,h/30);
+		lGenderGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGenderGood.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lGenderGood);
+
+        lGenderGood2.setBounds(w/2,25*h/60,w/3,h/30);
+		lGenderGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGenderGood2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lGenderGood2);
+
+        JLabel lGradeGood = new JLabel("学年");
+		lGradeGood.setBounds(0,28*h/60,w/3,h/30);
+		lGradeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGradeGood.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lGradeGood);
+
+        lGradeGood2.setBounds(w/2,28*h/60,w/3,h/30);
+		lGradeGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGradeGood2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lGradeGood2);
+
+        JLabel lFacultyGood = new JLabel("学部");
+		lFacultyGood.setBounds(0,31*h/60,w/3,h/30);
+		lFacultyGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lFacultyGood.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lFacultyGood);
+
+        lFacultyGood2.setBounds(w/2,31*h/60,w/3,h/30);
+        lFacultyGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lFacultyGood2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lFacultyGood2);
+
+        JLabel lBirthGood = new JLabel("出身");
+		lBirthGood.setBounds(0,34*h/60,w/3,h/30);
+		lBirthGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lBirthGood.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lBirthGood);
+
+        lBirthGood2.setBounds(w/2,34*h/60,w/3,h/30);
+        lBirthGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lBirthGood2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lBirthGood2);
+
+        JLabel lCircleGood = new JLabel("サークル");
+		lCircleGood.setBounds(0,37*h/60,w/3,h/30);
+		lCircleGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lCircleGood.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lCircleGood);
+
+        lCircleGood2.setBounds(w/2,37*h/60,w/3,h/30);
+        lCircleGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lCircleGood2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lCircleGood2);
+
+        JLabel lHobbyGood = new JLabel("趣味");
+		lHobbyGood.setBounds(0,40*h/60,w/3,h/30);
+		lHobbyGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lHobbyGood.setHorizontalAlignment(JLabel.RIGHT);
+        card.add(lHobbyGood);
+
+        lHobbyGood2.setBounds(w/2,40*h/60,w/3,h/30);
+        lHobbyGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lHobbyGood2.setHorizontalAlignment(JLabel.LEFT);
+        card.add(lHobbyGood2);
+
+        bGoodGood.setBounds(w/4,46*h/60,w/2,h/20);
+        bGoodGood.addActionListener(this);
+        bGoodGood.setActionCommand("いいねgood");
+        bGoodGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bGoodGood);
+
+        lGoodGood.setBounds(0,46*h/60,w,h/20);
+        lGoodGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lGoodGood.setHorizontalAlignment(JLabel.CENTER);
+        lGoodGood.setVisible(false);
+        card.add(lGoodGood);
+
+        JButton bHomeGood=new JButton("HOME");
+        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
+        bHomeGood.addActionListener(this);
+        bHomeGood.setActionCommand("HOME");
+        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHomeGood);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+		cardPanel.add(card,"good");
 	}
 
 
@@ -394,19 +705,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lTitleMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatching);
 
-        ImageIcon icon = new ImageIcon("test.png");
+        JButton bBackMatching = new JButton("←");
+        bBackMatching.setBounds(w/30,h/60,w/6,h/15);
+        bBackMatching.addActionListener(this);
+        bBackMatching.setActionCommand("戻る");
+        bBackMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bBackMatching);
+
+        ImageIcon icon = new ImageIcon("test.jpeg");
         JLabel lIconMatching = new JLabel(icon);
         lIconMatching.setBounds(w/5,h/7,w/2,h/5);
         lIconMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIconMatching);
 
-        JLabel lNameMatching = new JLabel("○○さんとマッチしました！");
         lNameMatching.setBounds(0,11*h/20,w,h/15);
         lNameMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         lNameMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMatching);
 
-        JLabel lIdMatching = new JLabel("LINEID:aaaaaaaaa");
         lIdMatching.setBounds(0,13*h/20,w,h/15);
         lIdMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         lIdMatching.setHorizontalAlignment(JLabel.CENTER);
@@ -415,11 +731,438 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bProfMatching=new JButton("プロフィールを確認する");
         bProfMatching.setBounds(w/4,8*h/20,w/2,h/15);
         bProfMatching.addActionListener(this);
-        bProfMatching.setActionCommand("label");
+        bProfMatching.setActionCommand("確認matching");
         bProfMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bProfMatching);
 
-		cardPanel.add(card,"マッチング");
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+		cardPanel.add(card,"matching");
+	}
+
+	public void searchUser() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JButton bBackSearchUser = new JButton("←");
+        bBackSearchUser.setBounds(w/30,h/20,w/6,h/15);
+        bBackSearchUser.addActionListener(this);
+        bBackSearchUser.setActionCommand("ヘルプmenu");
+        bBackSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bBackSearchUser);
+
+		JLabel lTitleSearchUser = new JLabel("検索");
+		lTitleSearchUser.setBounds(w/4,h/60,w/2,2*h/15);
+		lTitleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/10));
+		lTitleSearchUser.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleSearchUser);
+
+        JLabel lGenderSearchUser = new JLabel("性別");
+		lGenderSearchUser.setBounds(w/8,5*h/25,w/6,2*h/25);
+		lGenderSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lGenderSearchUser.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lGenderSearchUser);
+
+        cbGenderSearchUser.setBounds(w/3,5*h/25,w/2,2*h/25);
+		cbGenderSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(cbGenderSearchUser);
+
+        JLabel lGradeSearchUser = new JLabel("学年");
+		lGradeSearchUser.setBounds(w/8,8*h/25,w/6,2*h/25);
+		lGradeSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lGradeSearchUser.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lGradeSearchUser);
+
+        cbGradeSearchUser.setBounds(w/3,8*h/25,w/2,2*h/25);
+		cbGradeSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(cbGradeSearchUser);
+
+        JLabel lFacultySearchUser = new JLabel("学部");
+		lFacultySearchUser.setBounds(w/8,11*h/25,w/6,2*h/25);
+		lFacultySearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lFacultySearchUser.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lFacultySearchUser);
+
+        cbFacultySearchUser.setBounds(w/3,11*h/25,w/2,2*h/25);
+		cbFacultySearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(cbFacultySearchUser);
+
+        JLabel lBirthSearchUser = new JLabel("出身");
+		lBirthSearchUser.setBounds(w/8,14*h/25,w/6,2*h/25);
+		lBirthSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lBirthSearchUser.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lBirthSearchUser);
+
+        cbBirthSearchUser.setBounds(w/3,14*h/25,w/2,2*h/25);
+        cbBirthSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(cbBirthSearchUser);
+
+        JLabel lCircleSearchUser = new JLabel("サークル");
+		lCircleSearchUser.setBounds(w/8,17*h/25,w/6,2*h/25);
+		lCircleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lCircleSearchUser.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lCircleSearchUser);
+
+        cbCircleSearchUser.setBounds(w/3,17*h/25,w/2,2*h/25);
+        cbCircleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(cbCircleSearchUser);
+
+        JButton bSearchSeachUser = new JButton("検索");
+        bSearchSeachUser.setBounds(3*w/10,20*h/25,2*w/5,h/10);
+        bSearchSeachUser.addActionListener(this);
+        bSearchSeachUser.setActionCommand("検索searchUser");
+        bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bSearchSeachUser);
+
+        cardPanel.add(card,"searchUser");
+	}
+
+	public void menu() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lTitleMenu = new JLabel("Menu");
+		lTitleMenu.setBounds(w/4,2*h/30,w/2,3*h/30);
+		lTitleMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/20));
+		lTitleMenu.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleMenu);
+
+        JButton bProfileMenu=new JButton("Myプロフィール");
+        bProfileMenu.setBounds(w/4,8*h/30,w/2,3*h/30);
+        bProfileMenu.addActionListener(this);
+        bProfileMenu.setActionCommand("Myプロフィールmenu");
+        bProfileMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bProfileMenu);
+
+        JButton bChangeAccountMenu=new JButton("アカウント切り替え");
+        bChangeAccountMenu.setBounds(w/4,12*h/30,w/2,3*h/30);
+        bChangeAccountMenu.addActionListener(this);
+        bChangeAccountMenu.setActionCommand("アカウント切り替えmenu");
+        bChangeAccountMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bChangeAccountMenu);
+
+        JButton bConfigMenu=new JButton("設定");
+        bConfigMenu.setBounds(w/4,16*h/30,w/2,3*h/30);
+        bConfigMenu.addActionListener(this);
+        bConfigMenu.setActionCommand("設定menu");
+        bConfigMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bConfigMenu);
+
+        JButton bHelpMenu=new JButton("ヘルプ");
+        bHelpMenu.setBounds(w/4,20*h/30,w/2,3*h/30);
+        bHelpMenu.addActionListener(this);
+        bHelpMenu.setActionCommand("ヘルプmenu");
+        bHelpMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bHelpMenu);
+
+        JButton bHomeGood=new JButton("HOME");
+        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
+        bHomeGood.addActionListener(this);
+        bHomeGood.setActionCommand("HOME");
+        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHomeGood);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+		cardPanel.add(card,"menu");
+	}
+
+	public void myProfile() {
+		JPanel card = new JPanel();
+		card.setLayout(null);
+
+		JButton bBackMyProfile = new JButton("←");
+        bBackMyProfile.setBounds(w/30,h/60,w/6,h/15);
+        bBackMyProfile.addActionListener(this);
+        bBackMyProfile.setActionCommand("戻る");
+        bBackMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bBackMyProfile);
+
+        JLabel lTitleMyProfile = new JLabel("Myプロフィール");
+		lTitleMyProfile.setBounds(w/4,h/60,w/2,h/15);
+		lTitleMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lTitleMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleMyProfile);
+
+        bMainPhotoMyProfile.setBounds(w/4,6*h/60,w/2,h/6);
+        bMainPhotoMyProfile.addActionListener(this);
+        bMainPhotoMyProfile.setActionCommand("メインmyProfile");
+        bMainPhotoMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bMainPhotoMyProfile);
+
+        for(int i=0;i<4;i++) {
+        	bSubPhotoMyProfile[i] = new JButton();
+        	bSubPhotoMyProfile[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
+            bSubPhotoMyProfile[i].addActionListener(this);
+            bSubPhotoMyProfile[i].setActionCommand("サブmyProfile"+Integer.toString(i));
+            bSubPhotoMyProfile[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            card.add(bSubPhotoMyProfile[i]);
+        }
+
+        JLabel lNameMyProfile = new JLabel("名前");
+		lNameMyProfile.setBounds(w/8,25*h/60,w/6,h/30);
+		lNameMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lNameMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lNameMyProfile);
+
+        tfNameMyprofile.setBounds(w/3,25*h/60,w/2,h/30);
+        tfNameMyprofile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfNameMyprofile);
+
+        JLabel lGenderMyProfile = new JLabel("性別");
+		lGenderMyProfile.setBounds(w/8,55*h/120,w/6,h/30);
+		lGenderMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGenderMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lGenderMyProfile);
+
+        cbGenderMyProfile.setBounds(w/3,55*h/120,w/2,h/30);
+		cbGenderMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbGenderMyProfile);
+
+        JLabel lGradeMyProfile = new JLabel("学年");
+		lGradeMyProfile.setBounds(w/8,60*h/120,w/6,h/30);
+		lGradeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lGradeMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lGradeMyProfile);
+
+        cbGradeMyProfile.setBounds(w/3,60*h/120,w/2,h/30);
+		cbGradeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbGradeMyProfile);
+
+        JLabel lFacultyMyProfile = new JLabel("学部");
+		lFacultyMyProfile.setBounds(w/8,65*h/120,w/6,h/30);
+		lFacultyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lFacultyMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lFacultyMyProfile);
+
+        cbFacultyMyProfile.setBounds(w/3,65*h/120,w/2,h/30);
+		cbFacultyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbFacultyMyProfile);
+
+        JLabel lBirthMyProfile = new JLabel("出身");
+		lBirthMyProfile.setBounds(w/8,70*h/120,w/6,h/30);
+		lBirthMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lBirthMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lBirthMyProfile);
+
+        cbBirthMyProfile.setBounds(w/3,70*h/120,w/2,h/30);
+        cbBirthMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbBirthMyProfile);
+
+        JLabel lCircleMyProfile = new JLabel("サークル");
+		lCircleMyProfile.setBounds(w/8,75*h/120,w/6,h/30);
+		lCircleMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lCircleMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lCircleMyProfile);
+
+        cbCircleMyProfile.setBounds(w/3,75*h/120,w/2,h/30);
+        cbCircleMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbCircleMyProfile);
+
+        JLabel lHobbyMyProfile = new JLabel("趣味");
+		lHobbyMyProfile.setBounds(w/8,80*h/120,w/6,h/30);
+		lHobbyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lHobbyMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lHobbyMyProfile);
+
+        tfHobbyMyProfile.setBounds(w/3,80*h/120,w/2,h/30);
+        tfHobbyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfHobbyMyProfile);
+
+        JLabel lLineIdMyProfile = new JLabel("LINEのID");
+		lLineIdMyProfile.setBounds(w/8,85*h/120,w/6,h/30);
+		lLineIdMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lLineIdMyProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lLineIdMyProfile);
+
+        tfLineIdMyProfile.setBounds(w/3,85*h/120,w/2,h/30);
+        tfLineIdMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfLineIdMyProfile);
+
+        JButton bChangeMyProfile = new JButton("変更確定");
+        bChangeMyProfile.setBounds(w/4,92*h/120,w/2,h/20);
+        bChangeMyProfile.addActionListener(this);
+        bChangeMyProfile.setActionCommand("ヘルプmenu");
+        bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bChangeMyProfile);
+
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+		cardPanel.add(card,"myProfile");
+	}
+
+	public void change() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel ltitlechange = new JLabel("アカウント切り替え");
+		ltitlechange.setBounds(w/5,h/50,3*w/5,h/10);
+		ltitlechange.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		ltitlechange.setHorizontalAlignment(JLabel.CENTER);
+        card.add(ltitlechange);
+
+        ImageIcon IIleftchange = new ImageIcon("left.jpeg");
+        JButton bsearchchange = new JButton(IIleftchange);
+        bsearchchange.setBounds(w/14,h/30,w/11,h/20);
+        card.add(bsearchchange);
+
+
+        ImageIcon IIimagechange1 = new ImageIcon("add.jpeg");
+        JButton biconchange1 = new JButton("グループ作成",IIimagechange1);
+        biconchange1.setBounds(w/4,3*h/20,w/2,h/10);
+        card.add(biconchange1);
+
+        ImageIcon IIimagechange2 = new ImageIcon("test.jpg");
+        JButton biconchange2 = new JButton(" 〇〇 ",IIimagechange2);
+        biconchange2.setBounds(w/4,7*h/20,w/2,h/10);
+        card.add(biconchange2);
+
+        ImageIcon IIimagechange3 = new ImageIcon("test.jpg");
+        JButton biconchange3 = new JButton(" 〇〇 ",IIimagechange3);
+        biconchange3.setBounds(w/4,11*h/20,w/2,h/10);
+        card.add(biconchange3);
+
+        JLabel lbackchange = new JLabel("back");
+        lbackchange.setBounds(w/6,15*h/20,w/2,h/20);
+        card.add(lbackchange);
+
+        JButton bleftchange = new JButton(IIleftchange);
+        bleftchange.setBounds(w/4,15*h/20,w/11,h/20);
+        card.add(bleftchange);
+
+        ImageIcon IIrightchange = new ImageIcon("right.jpeg");
+        JButton brightchange = new JButton(IIrightchange);
+        brightchange.setBounds(2*w/3,15*h/20,w/11,h/20);
+        card.add(brightchange);
+
+        JLabel lnextchange = new JLabel("next");
+        lnextchange.setBounds(7*w/9,15*h/20,w/2,h/20);
+        card.add(lnextchange);
+
+
+        cardPanel.add(card,"change");
+	}
+
+	public void makeGroup() {
+		JPanel card = new JPanel();
+		card.setLayout(null);
+
+		JButton bBackMyGroupProfile = new JButton("←");
+        bBackMyGroupProfile.setBounds(w/30,h/60,w/6,h/15);
+        bBackMyGroupProfile.addActionListener(this);
+        bBackMyGroupProfile.setActionCommand("ヘルプmenu");
+        bBackMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bBackMyGroupProfile);
+
+        JLabel lTitleMyGroupProfile = new JLabel("グループプロフィール");
+		lTitleMyGroupProfile.setBounds(w/5,h/60,3*w/5,h/15);
+		lTitleMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lTitleMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleMyGroupProfile);
+
+        JButton bPhotoMyGroupProfile = new JButton("プロフィール写真を選択");
+        bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
+        bPhotoMyGroupProfile.addActionListener(this);
+        bPhotoMyGroupProfile.setActionCommand("ヘルプmenu");
+        bPhotoMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(bPhotoMyGroupProfile);
+
+        JLabel lNameMyGroupProfile = new JLabel("グループ名");
+		lNameMyGroupProfile.setBounds(w/9,18*h/60,w/5,h/20);
+		lNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lNameMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lNameMyGroupProfile);
+
+        JTextField tfNameMyGroupProfile = new JTextField("");
+        tfNameMyGroupProfile.setBounds(w/3,18*h/60,w/2,h/20);
+        tfNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfNameMyGroupProfile);
+
+        JLabel lRelationMyGroupProfile = new JLabel("関係性");
+		lRelationMyGroupProfile.setBounds(w/8,22*h/60,w/6,h/20);
+		lRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lRelationMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lRelationMyGroupProfile);
+
+        JTextField tfRelationMyGroupProfile = new JTextField("");
+        tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
+        tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfRelationMyGroupProfile);
+
+        JLabel lPurposeMyGroupProfile = new JLabel("目的");
+		lPurposeMyGroupProfile.setBounds(w/8,26*h/60,w/6,h/20);
+		lPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lPurposeMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lPurposeMyGroupProfile);
+
+        JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
+        cbPurposeMyGroupProfile.setBounds(w/3,26*h/60,w/2,h/20);
+        cbPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbPurposeMyGroupProfile);
+
+
+        JLabel lCommentMyGroupProfile = new JLabel("ひとこと");
+		lCommentMyGroupProfile.setBounds(w/8,30*h/60,w/6,h/20);
+		lCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lCommentMyGroupProfile);
+
+        JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
+        taCommentMyGroupProfile.setBounds(w/3,30*h/60,w/2,h/5);
+        taCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(taCommentMyGroupProfile);
+
+        JButton bQuitMyGroupProfile = new JButton("メンバーを選択");
+        bQuitMyGroupProfile.setBounds(w/3,44*h/60,w/3,h/15);
+        bQuitMyGroupProfile.addActionListener(this);
+        bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
+        bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(bQuitMyGroupProfile);
+
+        JButton bHomeViewGroup=new JButton("HOME");
+        bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
+        bHomeViewGroup.addActionListener(this);
+        bHomeViewGroup.setActionCommand("HOME");
+        bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHomeViewGroup);
+
+        JButton bInformViewGroup=new JButton("通知");
+        bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInformViewGroup.addActionListener(this);
+        bInformViewGroup.setActionCommand("通知");
+        bInformViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInformViewGroup);
+
+		cardPanel.add(card,"MakeGroup");
 	}
 
 	public void gathering() {
@@ -492,247 +1235,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel.add(card,"gathering");
 	}
 
-	public void menu() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
 
-		JLabel lTitleMenu = new JLabel("Menu");
-		lTitleMenu.setBounds(w/4,2*h/30,w/2,3*h/30);
-		lTitleMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/20));
-		lTitleMenu.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleMenu);
-
-        JButton bProfileMenu=new JButton("Myプロフィール");
-        bProfileMenu.setBounds(w/4,8*h/30,w/2,3*h/30);
-        bProfileMenu.addActionListener(this);
-        bProfileMenu.setActionCommand("Myプロフィールmenu");
-        bProfileMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bProfileMenu);
-
-        JButton bChangeAccountMenu=new JButton("アカウント切り替え");
-        bChangeAccountMenu.setBounds(w/4,12*h/30,w/2,3*h/30);
-        bChangeAccountMenu.addActionListener(this);
-        bChangeAccountMenu.setActionCommand("アカウント切り替えmenu");
-        bChangeAccountMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bChangeAccountMenu);
-
-        JButton bConfigMenu=new JButton("設定");
-        bConfigMenu.setBounds(w/4,16*h/30,w/2,3*h/30);
-        bConfigMenu.addActionListener(this);
-        bConfigMenu.setActionCommand("設定menu");
-        bConfigMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bConfigMenu);
-
-        JButton bHelpMenu=new JButton("ヘルプ");
-        bHelpMenu.setBounds(w/4,20*h/30,w/2,3*h/30);
-        bHelpMenu.addActionListener(this);
-        bHelpMenu.setActionCommand("ヘルプmenu");
-        bHelpMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bHelpMenu);
-
-		cardPanel.add(card,"menu");
-	}
-
-	public void myProfile() {
-		JPanel card = new JPanel();
-		card.setLayout(null);
-
-		JButton bBackMyProfile = new JButton("←");
-        bBackMyProfile.setBounds(w/30,h/60,w/6,h/15);
-        bBackMyProfile.addActionListener(this);
-        bBackMyProfile.setActionCommand("ヘルプmenu");
-        bBackMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackMyProfile);
-
-        JLabel lTitleMyProfile = new JLabel("Myプロフィール");
-		lTitleMyProfile.setBounds(w/4,h/60,w/2,h/15);
-		lTitleMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lTitleMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleMyProfile);
-
-        JButton bMainPhotoMyProfile = new JButton("");
-        bMainPhotoMyProfile.setBounds(w/4,6*h/60,w/2,h/6);
-        bMainPhotoMyProfile.addActionListener(this);
-        bMainPhotoMyProfile.setActionCommand("ヘルプmenu");
-        bMainPhotoMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bMainPhotoMyProfile);
-
-        JButton[] bSubPhotoMyProfile = new JButton[4];
-        for(int i=0;i<4;i++) {
-        	bSubPhotoMyProfile[i] = new JButton();
-        	bSubPhotoMyProfile[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-            bSubPhotoMyProfile[i].addActionListener(this);
-            bSubPhotoMyProfile[i].setActionCommand("ヘルプmenu");
-            bSubPhotoMyProfile[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-            card.add(bSubPhotoMyProfile[i]);
-        }
-
-        JLabel lNameMyProfile = new JLabel("名前");
-		lNameMyProfile.setBounds(w/8,25*h/60,w/6,h/30);
-		lNameMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lNameMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lNameMyProfile);
-
-        JTextField tfNameMyprofile = new JTextField("");
-        tfNameMyprofile.setBounds(w/3,25*h/60,w/2,h/30);
-        tfNameMyprofile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfNameMyprofile);
-
-        JLabel lGenderMyProfile = new JLabel("性別");
-		lGenderMyProfile.setBounds(w/8,28*h/60,w/6,h/30);
-		lGenderMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGenderMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lGenderMyProfile);
-
-        JComboBox<String> cbGenderMyProfile = new JComboBox<String>(Sex);
-        cbGenderMyProfile.setBounds(w/3,28*h/60,w/2,h/30);
-		cbGenderMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbGenderMyProfile);
-
-        JLabel lGradeMyProfile = new JLabel("学年");
-		lGradeMyProfile.setBounds(w/8,31*h/60,w/6,h/30);
-		lGradeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGradeMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lGradeMyProfile);
-
-        JComboBox<String> cbGradeMyProfile = new JComboBox<String>(Grade);
-        cbGradeMyProfile.setBounds(w/3,31*h/60,w/2,h/30);
-		cbGradeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbGradeMyProfile);
-
-        JLabel lFacultyMyProfile = new JLabel("学部");
-		lFacultyMyProfile.setBounds(w/8,34*h/60,w/6,h/30);
-		lFacultyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lFacultyMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lFacultyMyProfile);
-
-        JComboBox<String> cbFacultyMyProfile = new JComboBox<String>(Faculty);
-        cbFacultyMyProfile.setBounds(w/3,34*h/60,w/2,h/30);
-		cbFacultyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbFacultyMyProfile);
-
-        JLabel lBirthMyProfile = new JLabel("出身");
-		lBirthMyProfile.setBounds(w/8,37*h/60,w/6,h/30);
-		lBirthMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lBirthMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lBirthMyProfile);
-
-        JComboBox<String> cbBirthMyProfile = new JComboBox<String>(Birthplace);
-        cbBirthMyProfile.setBounds(w/3,37*h/60,w/2,h/30);
-        cbBirthMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbBirthMyProfile);
-
-        JLabel lCircleMyProfile = new JLabel("サークル");
-		lCircleMyProfile.setBounds(w/8,40*h/60,w/6,h/30);
-		lCircleMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lCircleMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lCircleMyProfile);
-
-        JComboBox<String> cbCircleMyProfile = new JComboBox<String>(Circle);
-        cbCircleMyProfile.setBounds(w/3,40*h/60,w/2,h/30);
-        cbCircleMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbCircleMyProfile);
-
-        JLabel lHobbyMyProfile = new JLabel("趣味");
-		lHobbyMyProfile.setBounds(w/8,43*h/60,w/6,h/30);
-		lHobbyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lHobbyMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lHobbyMyProfile);
-
-        JTextField tfHobbyMyProfile = new JTextField("");
-        tfHobbyMyProfile.setBounds(w/3,43*h/60,w/2,h/30);
-        tfHobbyMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfHobbyMyProfile);
-
-        JLabel lLineIdMyProfile = new JLabel("LINEのID");
-		lLineIdMyProfile.setBounds(w/8,46*h/60,w/6,h/30);
-		lLineIdMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		lLineIdMyProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lLineIdMyProfile);
-
-        JTextField tfLineIdMyProfile = new JTextField("");
-        tfLineIdMyProfile.setBounds(w/3,46*h/60,w/2,h/30);
-        tfLineIdMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfLineIdMyProfile);
-
-        JButton bChangeMyProfile = new JButton("変更確定");
-        bChangeMyProfile.setBounds(w/4,49*h/60,w/2,h/20);
-        bChangeMyProfile.addActionListener(this);
-        bChangeMyProfile.setActionCommand("ヘルプmenu");
-        bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bChangeMyProfile);
-
-		cardPanel.add(card,"MyProfile");
-	}
-
-	public void howToUse() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		//使い方
-		String explain = "aaaaaaaaaaaa\naaaaaaaaa\naaaaaaa\naaa\na\na\n\na\naa\naa\naa\naa\naa\nb\na\nq\nww\nrr\nf";
-
-		JLabel lTitleHtu = new JLabel("使い方");
-		lTitleHtu.setBounds(w/4,h/15,w/2,h/10);
-		lTitleHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
-		lTitleHtu.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleHtu);
-
-        JTextArea taexpHtu = new JTextArea(explain);
-        taexpHtu.setEditable(false);
-        //taexpHtu.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
-        taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        // スクロールバー
-        JScrollPane sp = new JScrollPane(taexpHtu);
-		sp.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
-		card.add(sp);
-        //card.add(taexpHtu);
-
-        Rect rect = new Rect();
-        rect.setBounds(0,0,w,h);
-        card.add(rect);
-
-
-        cardPanel.add(card,"howToUse");
-	}
-
-	public void setup() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-
-		JLabel lTitleSetup = new JLabel("設定");
-		lTitleSetup.setBounds(w/4,h/15,w/2,h/10);
-		lTitleSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
-		lTitleSetup.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleSetup);
-
-        JLabel lProfileSetup = new JLabel("個人プロフィールの公開・非公開");
-        lProfileSetup.setBounds(w/10,2*h/10,w/2,h/10);
-        lProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lProfileSetup);
-
-        JRadioButton rbProfileSetup = new JRadioButton("公開", true);
-        rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
-        rbProfileSetup.addChangeListener(this);
-        rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(rbProfileSetup);
-
-        JLabel lDeleteAccountSetup = new JLabel("アカウント削除");
-        lDeleteAccountSetup.setBounds(w/10,3*h/10,w/2,h/10);
-        lDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        lDeleteAccountSetup.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lDeleteAccountSetup);
-
-        JButton bDeleteAccountSetup = new JButton("削除");
-        bDeleteAccountSetup.setBounds(7*w/10,21*h/65,w/7,h/20);
-        bDeleteAccountSetup.addActionListener(this);
-        bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
-        card.add(bDeleteAccountSetup);
-
-        cardPanel.add(card,"setup");
-	}
+	
 
 	public void invite() {
 		JPanel card=new JPanel();
@@ -783,140 +1287,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"invite");
 	}
-
-	public void change() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		JLabel ltitlechange = new JLabel("アカウント切り替え");
-		ltitlechange.setBounds(w/5,h/50,3*w/5,h/10);
-		ltitlechange.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
-		ltitlechange.setHorizontalAlignment(JLabel.CENTER);
-        card.add(ltitlechange);
-
-        ImageIcon IIleftchange = new ImageIcon("left.jpeg");
-        JButton bsearchchange = new JButton(IIleftchange);
-        bsearchchange.setBounds(w/14,h/30,w/11,h/20);
-        card.add(bsearchchange);
-
-
-        ImageIcon IIimagechange1 = new ImageIcon("add.jpeg");
-        JButton biconchange1 = new JButton("グループ作成",IIimagechange1);
-        biconchange1.setBounds(w/4,3*h/20,w/2,h/10);
-        card.add(biconchange1);
-
-        ImageIcon IIimagechange2 = new ImageIcon("test.jpg");
-        JButton biconchange2 = new JButton(" 〇〇 ",IIimagechange2);
-        biconchange2.setBounds(w/4,7*h/20,w/2,h/10);
-        card.add(biconchange2);
-
-        ImageIcon IIimagechange3 = new ImageIcon("test.jpg");
-        JButton biconchange3 = new JButton(" 〇〇 ",IIimagechange3);
-        biconchange3.setBounds(w/4,11*h/20,w/2,h/10);
-        card.add(biconchange3);
-
-        JLabel lbackchange = new JLabel("back");
-        lbackchange.setBounds(w/6,15*h/20,w/2,h/20);
-        card.add(lbackchange);
-
-        JButton bleftchange = new JButton(IIleftchange);
-        bleftchange.setBounds(w/4,15*h/20,w/11,h/20);
-        card.add(bleftchange);
-
-        ImageIcon IIrightchange = new ImageIcon("right.jpeg");
-        JButton brightchange = new JButton(IIrightchange);
-        brightchange.setBounds(2*w/3,15*h/20,w/11,h/20);
-        card.add(brightchange);
-
-        JLabel lnextchange = new JLabel("next");
-        lnextchange.setBounds(7*w/9,15*h/20,w/2,h/20);
-        card.add(lnextchange);
-
-
-        cardPanel.add(card,"change");
-	}
-
-	public void searchUser() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		JButton bBackSearchUser = new JButton("←");
-        bBackSearchUser.setBounds(w/30,h/20,w/6,h/15);
-        bBackSearchUser.addActionListener(this);
-        bBackSearchUser.setActionCommand("ヘルプmenu");
-        bBackSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackSearchUser);
-
-		JLabel lTitleSearchUser = new JLabel("検索");
-		lTitleSearchUser.setBounds(w/4,h/60,w/2,2*h/15);
-		lTitleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/10));
-		lTitleSearchUser.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleSearchUser);
-
-        JLabel lGenderSearchUser = new JLabel("性別");
-		lGenderSearchUser.setBounds(w/8,5*h/25,w/6,2*h/25);
-		lGenderSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		lGenderSearchUser.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lGenderSearchUser);
-
-        JComboBox<String> cbGenderSearchUser = new JComboBox<String>(Sex);
-        cbGenderSearchUser.setBounds(w/3,5*h/25,w/2,2*h/25);
-		cbGenderSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(cbGenderSearchUser);
-
-        JLabel lGradeSearchUser = new JLabel("学年");
-		lGradeSearchUser.setBounds(w/8,8*h/25,w/6,2*h/25);
-		lGradeSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		lGradeSearchUser.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lGradeSearchUser);
-
-        JComboBox<String> cbGradeSearchUser = new JComboBox<String>(Grade);
-        cbGradeSearchUser.setBounds(w/3,8*h/25,w/2,2*h/25);
-		cbGradeSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(cbGradeSearchUser);
-
-        JLabel lFacultySearchUser = new JLabel("学部");
-		lFacultySearchUser.setBounds(w/8,11*h/25,w/6,2*h/25);
-		lFacultySearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		lFacultySearchUser.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lFacultySearchUser);
-
-        JComboBox<String> cbFacultySearchUser = new JComboBox<String>(Faculty);
-        cbFacultySearchUser.setBounds(w/3,11*h/25,w/2,2*h/25);
-		cbFacultySearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(cbFacultySearchUser);
-
-        JLabel lBirthSearchUser = new JLabel("出身");
-		lBirthSearchUser.setBounds(w/8,14*h/25,w/6,2*h/25);
-		lBirthSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		lBirthSearchUser.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lBirthSearchUser);
-
-        JComboBox<String> cbBirthSearchUser = new JComboBox<String>(Birthplace);
-        cbBirthSearchUser.setBounds(w/3,14*h/25,w/2,2*h/25);
-        cbBirthSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(cbBirthSearchUser);
-
-        JLabel lCircleSearchUser = new JLabel("サークル");
-		lCircleSearchUser.setBounds(w/8,17*h/25,w/6,2*h/25);
-		lCircleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lCircleSearchUser.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lCircleSearchUser);
-
-        JComboBox<String> cbCircleSearchUser = new JComboBox<String>(Circle);
-        cbCircleSearchUser.setBounds(w/3,17*h/25,w/2,2*h/25);
-        cbCircleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(cbCircleSearchUser);
-
-        JButton bSearchSeachUser = new JButton("検索");
-        bSearchSeachUser.setBounds(3*w/10,20*h/25,2*w/5,h/10);
-        bSearchSeachUser.addActionListener(this);
-        bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bSearchSeachUser);
-
-        cardPanel.add(card,"SearchUser");
-	}
-
+	
 	public void viewGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -986,7 +1357,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"viewGroup");
 	}
-
+	
 	public void myGroupProfile() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1087,366 +1458,75 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel.add(card,"MyGroupProfile");
 	}
 
-	public void makeGroup() {
-		JPanel card = new JPanel();
+	public void setup() {
+		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JButton bBackMyGroupProfile = new JButton("←");
-        bBackMyGroupProfile.setBounds(w/30,h/60,w/6,h/15);
-        bBackMyGroupProfile.addActionListener(this);
-        bBackMyGroupProfile.setActionCommand("ヘルプmenu");
-        bBackMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackMyGroupProfile);
 
-        JLabel lTitleMyGroupProfile = new JLabel("グループプロフィール");
-		lTitleMyGroupProfile.setBounds(w/5,h/60,3*w/5,h/15);
-		lTitleMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lTitleMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleMyGroupProfile);
+		JLabel lTitleSetup = new JLabel("設定");
+		lTitleSetup.setBounds(w/4,h/15,w/2,h/10);
+		lTitleSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
+		lTitleSetup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleSetup);
 
-        JButton bPhotoMyGroupProfile = new JButton("プロフィール写真を選択");
-        bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
-        bPhotoMyGroupProfile.addActionListener(this);
-        bPhotoMyGroupProfile.setActionCommand("ヘルプmenu");
-        bPhotoMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(bPhotoMyGroupProfile);
+        JLabel lProfileSetup = new JLabel("個人プロフィールの公開・非公開");
+        lProfileSetup.setBounds(w/10,2*h/10,w/2,h/10);
+        lProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lProfileSetup);
 
-        JLabel lNameMyGroupProfile = new JLabel("グループ名");
-		lNameMyGroupProfile.setBounds(w/9,18*h/60,w/5,h/20);
-		lNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		lNameMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lNameMyGroupProfile);
+        JRadioButton rbProfileSetup = new JRadioButton("公開", true);
+        rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
+        rbProfileSetup.addChangeListener(this);
+        rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(rbProfileSetup);
 
-        JTextField tfNameMyGroupProfile = new JTextField("");
-        tfNameMyGroupProfile.setBounds(w/3,18*h/60,w/2,h/20);
-        tfNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfNameMyGroupProfile);
+        JLabel lDeleteAccountSetup = new JLabel("アカウント削除");
+        lDeleteAccountSetup.setBounds(w/10,3*h/10,w/2,h/10);
+        lDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        lDeleteAccountSetup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lDeleteAccountSetup);
 
-        JLabel lRelationMyGroupProfile = new JLabel("関係性");
-		lRelationMyGroupProfile.setBounds(w/8,22*h/60,w/6,h/20);
-		lRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lRelationMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lRelationMyGroupProfile);
+        JButton bDeleteAccountSetup = new JButton("削除");
+        bDeleteAccountSetup.setBounds(7*w/10,21*h/65,w/7,h/20);
+        bDeleteAccountSetup.addActionListener(this);
+        bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
+        card.add(bDeleteAccountSetup);
 
-        JTextField tfRelationMyGroupProfile = new JTextField("");
-        tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
-        tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfRelationMyGroupProfile);
-
-        JLabel lPurposeMyGroupProfile = new JLabel("目的");
-		lPurposeMyGroupProfile.setBounds(w/8,26*h/60,w/6,h/20);
-		lPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lPurposeMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lPurposeMyGroupProfile);
-
-        JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
-        cbPurposeMyGroupProfile.setBounds(w/3,26*h/60,w/2,h/20);
-        cbPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbPurposeMyGroupProfile);
-
-
-        JLabel lCommentMyGroupProfile = new JLabel("ひとこと");
-		lCommentMyGroupProfile.setBounds(w/8,30*h/60,w/6,h/20);
-		lCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lCommentMyGroupProfile);
-
-        JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
-        taCommentMyGroupProfile.setBounds(w/3,30*h/60,w/2,h/5);
-        taCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(taCommentMyGroupProfile);
-
-        JButton bQuitMyGroupProfile = new JButton("メンバーを選択");
-        bQuitMyGroupProfile.setBounds(w/3,44*h/60,w/3,h/15);
-        bQuitMyGroupProfile.addActionListener(this);
-        bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
-        bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(bQuitMyGroupProfile);
-
-        JButton bHomeViewGroup=new JButton("HOME");
-        bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeViewGroup.addActionListener(this);
-        bHomeViewGroup.setActionCommand("label");
-        bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeViewGroup);
-
-        JButton bInformViewGroup=new JButton("通知");
-        bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
-        bInformViewGroup.addActionListener(this);
-        bInformViewGroup.setActionCommand("label");
-        bInformViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bInformViewGroup);
-
-		cardPanel.add(card,"MakeGroup");
+        cardPanel.add(card,"setup");
 	}
 
-	public void reply() {
-		JPanel card = new JPanel();
+
+
+	public void howToUse() {
+		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JButton bBackReply = new JButton("←");
-        bBackReply.setBounds(w/30,h/60,w/6,h/15);
-        bBackReply.addActionListener(this);
-        bBackReply.setActionCommand("ヘルプmenu");
-        bBackReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackReply);
+		//使い方
+		String explain = "aaaaaaaaaaaa\naaaaaaaaa\naaaaaaa\naaa\na\na\n\na\naa\naa\naa\naa\naa\nb\na\nq\nww\nrr\nf";
 
-        JLabel lTitleReply = new JLabel("○○");
-		lTitleReply.setBounds(w/4,h/60,w/2,h/15);
-		lTitleReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lTitleReply.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleReply);
+		JLabel lTitleHtu = new JLabel("使い方");
+		lTitleHtu.setBounds(w/4,h/15,w/2,h/10);
+		lTitleHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
+		lTitleHtu.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleHtu);
 
-        JButton bMainPhotoReply = new JButton("");
-        bMainPhotoReply.setBounds(w/4,6*h/60,w/2,h/6);
-        bMainPhotoReply.addActionListener(this);
-        bMainPhotoReply.setActionCommand("ヘルプmenu");
-        bMainPhotoReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bMainPhotoReply);
+        JTextArea taexpHtu = new JTextArea(explain);
+        taexpHtu.setEditable(false);
+        //taexpHtu.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
+        taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        // スクロールバー
+        JScrollPane sp = new JScrollPane(taexpHtu);
+		sp.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
+		card.add(sp);
+        //card.add(taexpHtu);
 
-        JButton[] bSubPhotoReply = new JButton[4];
-        for(int i=0;i<4;i++) {
-        	bSubPhotoReply[i] = new JButton();
-        	bSubPhotoReply[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-            bSubPhotoReply[i].addActionListener(this);
-            bSubPhotoReply[i].setActionCommand("ヘルプmenu");
-            bSubPhotoReply[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-            card.add(bSubPhotoReply[i]);
-        }
+        Rect rect = new Rect();
+        rect.setBounds(0,0,w,h);
+        card.add(rect);
 
-        JLabel lNameReply = new JLabel("名前");
-		lNameReply.setBounds(0,25*h/60,w/3,h/30);
-		lNameReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lNameReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lNameReply);
 
-        JLabel lNameReply2 = new JLabel("○○");
-        lNameReply2.setBounds(w/2,25*h/60,w/3,h/30);
-        lNameReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lNameReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lNameReply2);
-
-        JLabel lGenderReply = new JLabel("性別");
-		lGenderReply.setBounds(0,28*h/60,w/3,h/30);
-		lGenderReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGenderReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lGenderReply);
-
-        JLabel lGenderReply2 = new JLabel("○○");
-        lGenderReply2.setBounds(w/2,28*h/60,w/3,h/30);
-		lGenderReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGenderReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lGenderReply2);
-
-        JLabel lGradeReply = new JLabel("学年");
-		lGradeReply.setBounds(0,31*h/60,w/3,h/30);
-		lGradeReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGradeReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lGradeReply);
-
-        JLabel lGradeReply2 = new JLabel("○○");
-        lGradeReply2.setBounds(w/2,31*h/60,w/3,h/30);
-		lGradeReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGradeReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lGradeReply2);
-
-        JLabel lFacultyReply = new JLabel("学部");
-		lFacultyReply.setBounds(0,34*h/60,w/3,h/30);
-		lFacultyReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lFacultyReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lFacultyReply);
-
-        JLabel lFacultyReply2 = new JLabel("○○");
-        lFacultyReply2.setBounds(w/2,34*h/60,w/3,h/30);
-        lFacultyReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lFacultyReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lFacultyReply2);
-
-        JLabel lBirthReply = new JLabel("出身");
-		lBirthReply.setBounds(0,37*h/60,w/3,h/30);
-		lBirthReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lBirthReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lBirthReply);
-
-        JLabel lBirthReply2 = new JLabel("○○");
-        lBirthReply2.setBounds(w/2,37*h/60,w/3,h/30);
-        lBirthReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lBirthReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lBirthReply2);
-
-        JLabel lCircleReply = new JLabel("サークル");
-		lCircleReply.setBounds(0,40*h/60,w/3,h/30);
-		lCircleReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lCircleReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lCircleReply);
-
-        JLabel lCircleReply2 = new JLabel("○○");
-        lCircleReply2.setBounds(w/2,40*h/60,w/3,h/30);
-        lCircleReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lCircleReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lCircleReply2);
-
-        JLabel lHobbyReply = new JLabel("趣味");
-		lHobbyReply.setBounds(0,43*h/60,w/3,h/30);
-		lHobbyReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lHobbyReply.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lHobbyReply);
-
-        JLabel lHobbyReply2 = new JLabel("○○");
-        lHobbyReply2.setBounds(w/2,43*h/60,w/3,h/30);
-        lHobbyReply2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lHobbyReply2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lHobbyReply2);
-
-        JButton bGoodReply = new JButton("いいね");
-        bGoodReply.setBounds(w/4,49*h/60,w/4,h/20);
-        bGoodReply.addActionListener(this);
-        bGoodReply.setActionCommand("ヘルプmenu");
-        bGoodReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bGoodReply);
-
-        JButton bBadReply = new JButton("断る");
-        bBadReply.setBounds(w/2,49*h/60,w/4,h/20);
-        bBadReply.addActionListener(this);
-        bBadReply.setActionCommand("ヘルプmenu");
-        bBadReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bBadReply);
-
-		cardPanel.add(card,"reply");
-	}
-
-	public void good() {
-		JPanel card = new JPanel();
-		card.setLayout(null);
-
-		JButton bBackGood = new JButton("←");
-        bBackGood.setBounds(w/30,h/60,w/6,h/15);
-        bBackGood.addActionListener(this);
-        bBackGood.setActionCommand("ヘルプmenu");
-        bBackGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackGood);
-
-        JLabel lTitleGood = new JLabel("○○");
-		lTitleGood.setBounds(w/4,h/60,w/2,h/15);
-		lTitleGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lTitleGood.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleGood);
-
-        JButton bMainPhotoGood = new JButton("");
-        bMainPhotoGood.setBounds(w/4,6*h/60,w/2,h/6);
-        bMainPhotoGood.addActionListener(this);
-        bMainPhotoGood.setActionCommand("ヘルプmenu");
-        bMainPhotoGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bMainPhotoGood);
-
-        JButton[] bSubPhotoGood = new JButton[4];
-        for(int i=0;i<4;i++) {
-        	bSubPhotoGood[i] = new JButton();
-        	bSubPhotoGood[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-            bSubPhotoGood[i].addActionListener(this);
-            bSubPhotoGood[i].setActionCommand("ヘルプmenu");
-            bSubPhotoGood[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-            card.add(bSubPhotoGood[i]);
-        }
-
-        JLabel lNameGood = new JLabel("名前");
-		lNameGood.setBounds(0,25*h/60,w/3,h/30);
-		lNameGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lNameGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lNameGood);
-
-        JLabel lNameGood2 = new JLabel("○○");
-        lNameGood2.setBounds(w/2,25*h/60,w/3,h/30);
-        lNameGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lNameGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lNameGood2);
-
-        JLabel lGenderGood = new JLabel("性別");
-		lGenderGood.setBounds(0,28*h/60,w/3,h/30);
-		lGenderGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGenderGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lGenderGood);
-
-        JLabel lGenderGood2 = new JLabel("○○");
-        lGenderGood2.setBounds(w/2,28*h/60,w/3,h/30);
-		lGenderGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGenderGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lGenderGood2);
-
-        JLabel lGradeGood = new JLabel("学年");
-		lGradeGood.setBounds(0,31*h/60,w/3,h/30);
-		lGradeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGradeGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lGradeGood);
-
-        JLabel lGradeGood2 = new JLabel("○○");
-        lGradeGood2.setBounds(w/2,31*h/60,w/3,h/30);
-		lGradeGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lGradeGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lGradeGood2);
-
-        JLabel lFacultyGood = new JLabel("学部");
-		lFacultyGood.setBounds(0,34*h/60,w/3,h/30);
-		lFacultyGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lFacultyGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lFacultyGood);
-
-        JLabel lFacultyGood2 = new JLabel("○○");
-        lFacultyGood2.setBounds(w/2,34*h/60,w/3,h/30);
-        lFacultyGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lFacultyGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lFacultyGood2);
-
-        JLabel lBirthGood = new JLabel("出身");
-		lBirthGood.setBounds(0,37*h/60,w/3,h/30);
-		lBirthGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lBirthGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lBirthGood);
-
-        JLabel lBirthGood2 = new JLabel("○○");
-        lBirthGood2.setBounds(w/2,37*h/60,w/3,h/30);
-        lBirthGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lBirthGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lBirthGood2);
-
-        JLabel lCircleGood = new JLabel("サークル");
-		lCircleGood.setBounds(0,40*h/60,w/3,h/30);
-		lCircleGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lCircleGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lCircleGood);
-
-        JLabel lCircleGood2 = new JLabel("○○");
-        lCircleGood2.setBounds(w/2,40*h/60,w/3,h/30);
-        lCircleGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lCircleGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lCircleGood2);
-
-        JLabel lHobbyGood = new JLabel("趣味");
-		lHobbyGood.setBounds(0,43*h/60,w/3,h/30);
-		lHobbyGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lHobbyGood.setHorizontalAlignment(JLabel.RIGHT);
-        card.add(lHobbyGood);
-
-        JLabel lHobbyGood2 = new JLabel("○○");
-        lHobbyGood2.setBounds(w/2,43*h/60,w/3,h/30);
-        lHobbyGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lHobbyGood2.setHorizontalAlignment(JLabel.LEFT);
-        card.add(lHobbyGood2);
-
-        /*JButton bGoodGood = new JButton("いいね"); //いいねをしたかどうかで条件分岐(bGoodGood or lGoodGood2)
-        bGoodGood.setBounds(w/4,49*h/60,w/2,h/20);
-        bGoodGood.addActionListener(this);
-        bGoodGood.setActionCommand("ヘルプmenu");
-        bGoodGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bGoodGood);*/
-
-        JLabel lGoodGood2 = new JLabel("既にいいねしました");
-        lGoodGood2.setBounds(0,49*h/60,w,h/20);
-        lGoodGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        lGoodGood2.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lGoodGood2);
-
-		cardPanel.add(card,"good");
+        cardPanel.add(card,"howToUse");
 	}
 
 	public void actionPerformed(ActionEvent ae) {
