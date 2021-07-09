@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.TextArea;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +42,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String[] Circle = {"テニス", "運動", "文化"};
 	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
 
+	//アクションリスナーでいじるために一部の変数を外部変数に
+	JTextField tfIdLogin = new JTextField(20);
+	JTextField tfPasswordLogin = new JTextField(20);
+	JLabel lMessageLogin = new JLabel("学籍番号もしくはパスワードが正しくありません");
+
+	JTextField tfIdNew_r = new JTextField(20);
+	JTextField tfPasswordNew_r = new JTextField(20);
+	JTextField tfPasswordconfNew_r = new JTextField(20);
+	JLabel lMessageNew_r = new JLabel("パスワードが一致していません");
+
+	JTextField tfNameJudge = new JTextField(20);
+	JTextField tfNumberJudge= new JTextField(20);
+	JLabel lPicOutputJudge= new JLabel("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
+	JLabel lErrorJudge = new JLabel("未入力の箇所があります");
 
 	JPanel cardPanel;
 	CardLayout layout;
@@ -55,29 +68,29 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	    //自分が作る画面のメソッド名をここに書く
 	    login();
-	    matching();
 	    new_regis();
-	    wait1();
+	    judging();
+	    pleaseWait();
+	    finishAuthen();
+	    home();
+	    matching();
 	    gathering();
 	    menu();
 	    myProfile();
 	    howToUse();
 	    setup();
 	    invite();
-	    home();
 	    change();
 	    searchUser();
 	    viewGroup();
 	    myGroupProfile();
 	    makeGroup();
-	    finishAuthen();
-	    judging();
 	    reply();
 	    good();
-	    
+
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"reply");
+	    layout.show(cardPanel,"home");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,7 +123,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lIdLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIdLogin);
 
-        JTextField tfIdLogin = new JTextField(20);
         tfIdLogin.setBounds(2*w/5,h/3,2*w/5,h/15);
         tfIdLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(tfIdLogin);
@@ -121,7 +133,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lPasswordLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPasswordLogin);
 
-        JTextField tfPasswordLogin = new JTextField(20);
         tfPasswordLogin.setBounds(2*w/5,7*h/15,2*w/5,h/15);
         tfPasswordLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(tfPasswordLogin);
@@ -129,18 +140,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLoginLogin=new JButton("ログイン");
         bLoginLogin.setBounds(w/4,19*h/30,w/2,h/15);
         bLoginLogin.addActionListener(this);
-        bLoginLogin.setActionCommand("login");//ボタンにラベル付け、ここのルールも決めたほうがいい
+        bLoginLogin.setActionCommand("ログインlogin");//ボタンにラベル付け、ここのルールも決めたほうがいい
         bLoginLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bLoginLogin);
 
         JButton bNewAccountLogin=new JButton("新規作成");
         bNewAccountLogin.setBounds(w/4,22*h/30,w/2,h/15);
         bNewAccountLogin.addActionListener(this);
-        bNewAccountLogin.setActionCommand("アカウント作成");
+        bNewAccountLogin.setActionCommand("アカウント作成login");
         bNewAccountLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bNewAccountLogin);
 
-        JLabel lMessageLogin = new JLabel("学籍番号もしくはパスワードが正しくありません");
         lMessageLogin.setBounds(w/10,26*h/30,4*w/5,h/30);
         lMessageLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         lMessageLogin.setHorizontalAlignment(JLabel.CENTER);
@@ -152,6 +162,227 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         //自分が作る画面に名前付け。メソッド名と同じじゃなくても大丈夫だけど、同じのほうが分かりやすいかも。
 		cardPanel.add(card,"login");
 	}
+
+	public void new_regis() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lTitleNew_r = new JLabel("新規登録");
+		lTitleNew_r.setBounds(w/4,h/10,w/2,h/10);
+		lTitleNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/20));
+		lTitleNew_r.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleNew_r);
+
+        JLabel lIdNew_r = new JLabel("学籍番号");
+        lIdNew_r.setBounds(w/5,h/3,w/5,h/15);
+        lIdNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(lIdNew_r);
+
+        tfIdNew_r.setBounds(2*w/5,h/3,2*w/5,h/15);
+        tfIdNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(tfIdNew_r);
+
+        JLabel lPasswordNew_r = new JLabel("パスワード");
+        lPasswordNew_r.setBounds(w/5,7*h/15,w/5,h/15);
+        lPasswordNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(lPasswordNew_r);
+
+        tfPasswordNew_r.setBounds(2*w/5,7*h/15,2*w/5,h/15);
+        tfPasswordNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(tfPasswordNew_r);
+
+        JLabel lPasswordconfNew_r = new JLabel("パスワード(確認用)");
+        lPasswordconfNew_r.setBounds(w/10,9*h/15,w/2,h/15);
+        lPasswordconfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(lPasswordconfNew_r);
+
+        tfPasswordconfNew_r.setBounds(2*w/5,9*h/15,2*w/5,h/15);
+        tfPasswordconfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(tfPasswordconfNew_r);
+
+        JButton bNewAccountNew_r=new JButton("登録");
+        bNewAccountNew_r.setBounds(w/4,23*h/30,w/2,h/15);
+        bNewAccountNew_r.addActionListener(this);
+        bNewAccountNew_r.setActionCommand("登録new_regis");
+        bNewAccountNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bNewAccountNew_r);
+
+        lMessageNew_r.setBounds(w/10,26*h/30,4*w/5,h/30);
+        lMessageNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        lMessageNew_r.setHorizontalAlignment(JLabel.CENTER);
+        lMessageNew_r.setForeground(Color.RED);
+        lMessageNew_r.setVisible(false);
+        card.add(lMessageNew_r);
+
+		cardPanel.add(card,"new_regis");
+	}
+
+	public void judging() {
+
+		JPanel card=new JPanel();
+
+		card.setLayout(null);
+
+		JLabel lTitleJudge = new JLabel("本人確認");
+		lTitleJudge.setBounds(w/4,h/20,w/2,h/10);
+		lTitleJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/10));
+		lTitleJudge.setHorizontalAlignment(JLabel.CENTER);
+		card.add(lTitleJudge);
+
+		JLabel lIdJudge = new JLabel("氏名");
+		lIdJudge.setBounds(w/5,h/5,w/5,h/15);
+		lIdJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lIdJudge.setHorizontalAlignment(JLabel.CENTER);
+		card.add(lIdJudge);
+
+		tfNameJudge.setBounds(2*w/5,h/5,2*w/5,h/15);
+		tfNameJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		card.add(tfNameJudge);
+
+		JLabel lNumberJudge = new JLabel("学籍番号");
+		lNumberJudge.setBounds(w/5,h/3,w/5,h/15);
+		lNumberJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lNumberJudge.setHorizontalAlignment(JLabel.CENTER);
+		card.add(lNumberJudge);
+
+		tfNumberJudge.setBounds(2*w/5,h/3,2*w/5,h/15);
+		tfNumberJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		card.add(tfNumberJudge);
+
+		JLabel lPicJudge = new JLabel("学生証");
+		lPicJudge.setBounds(w/5,h/2,w/5,h/15);
+		lPicJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lPicJudge.setHorizontalAlignment(JLabel.CENTER);
+		card.add(lPicJudge);
+
+		JButton bChoiceJudge=new JButton("選択");
+		bChoiceJudge.setBounds(9*w/40,9*h/15,3*w/20,h/15);
+		bChoiceJudge.addActionListener(this);
+		bChoiceJudge.setActionCommand("選択judge");
+		bChoiceJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/50));
+		card.add(bChoiceJudge);
+
+		lPicOutputJudge.setBounds(2*w/5,h/2,2*w/5,h/6);
+		lPicOutputJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/23));
+		lPicOutputJudge.setHorizontalAlignment(JLabel.CENTER);
+		card.add(lPicOutputJudge);
+
+		JButton bSendJudge=new JButton("送信");
+		bSendJudge.setBounds(w/4,23*h/30,w/2,h/15);
+		bSendJudge.addActionListener(this);
+		bSendJudge.setActionCommand("送信judge");
+		bSendJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		card.add(bSendJudge);
+
+		lErrorJudge.setBounds(0,26*h/30,w,h/15);
+		lErrorJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lErrorJudge.setForeground(Color.RED);
+		lErrorJudge.setHorizontalAlignment(JLabel.CENTER);
+		lErrorJudge.setVisible(false);
+		card.add(lErrorJudge);
+
+		cardPanel.add(card,"judge");
+		}
+
+	public void pleaseWait() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel waitpl = new JLabel("<html><body>本人確認が完了するまでお待ちください<br />"
+				+ "このままアプリを閉じても大丈夫です</body></html>");
+		waitpl.setBounds(0,h/10,w,h/5);
+		waitpl.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		waitpl.setHorizontalAlignment(JLabel.CENTER);
+		card.add(waitpl);
+
+		JLabel manual = new JLabel("<html><body>"
+				+ "Step1 自分のプロフィールを<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;作りましょう<br /><br />"
+				+ "step2 気になるお相手を探して<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;「いいね」を押しましょう<br /><br />"
+				+ "Step3 両想いでマッチング成立！<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINEをしましょう<br /><br />"
+				+ "Step4 個人だけでなくグループでも<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;マッチングできます</body></html>");
+		manual.setBounds(w/8,h/5,3*w/4,5*h/10);
+		manual.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		manual.setHorizontalAlignment(JLabel.CENTER);
+		card.add(manual);
+
+		cardPanel.add(card,"pleaseWait");
+	}
+
+	public void finishAuthen(){
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lMessageFinishAuthen = new JLabel("本人確認が完了しました");
+		lMessageFinishAuthen.setBounds(0,h/3,w,h/5);
+		lMessageFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/15));
+		lMessageFinishAuthen.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lMessageFinishAuthen);
+
+        JButton bnextFinishAuthen=new JButton("すすむ");
+        bnextFinishAuthen.setBounds(w/4,3*h/4,w/2,h/10);
+        bnextFinishAuthen.addActionListener(this);
+        bnextFinishAuthen.setActionCommand("すすむfinishAuthenl");
+        bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bnextFinishAuthen);
+
+		cardPanel.add(card,"finishAuthen");
+	}
+
+	public void home() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel ltitlehome = new JLabel("HOME");
+		ltitlehome.setBounds(w/4,h/50,w/2,h/10);
+		ltitlehome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		ltitlehome.setHorizontalAlignment(JLabel.CENTER);
+        card.add(ltitlehome);
+
+        JButton bsearchhome = new JButton("Search");
+        bsearchhome.setBounds(w/12,h/30,w/5,h/15);
+        card.add(bsearchhome);
+
+        JButton bmenuhome = new JButton("MENU");
+        bmenuhome.setBounds(5*w/7,h/30,w/5,h/15);
+        card.add(bmenuhome);
+
+        ImageIcon IIimagehome1 = new ImageIcon("test.jpg");
+        JButton biconhome1 = new JButton(" 〇〇 3年",IIimagehome1);
+        biconhome1.setBounds(w/4,3*h/20,w/2,h/10);
+        card.add(biconhome1);
+
+        ImageIcon IIimagehome2 = new ImageIcon("test.jpg");
+        JButton biconhome2 = new JButton(" 〇〇 4年",IIimagehome2);
+        biconhome2.setBounds(w/4,7*h/20,w/2,h/10);
+        card.add(biconhome2);
+
+        ImageIcon IIimagehome3 = new ImageIcon("test.jpg");
+        JButton biconhome3 = new JButton(" 〇〇 1年",IIimagehome3);
+        biconhome3.setBounds(w/4,11*h/20,w/2,h/10);
+        card.add(biconhome3);
+
+        JLabel lbackhome = new JLabel("back");
+        lbackhome.setBounds(w/6,15*h/20,w/2,h/20);
+        card.add(lbackhome);
+
+        ImageIcon IIlefthome = new ImageIcon("left.jpeg");
+        JButton blefthome = new JButton(IIlefthome);
+        blefthome.setBounds(w/4,15*h/20,w/11,h/20);
+        card.add(blefthome);
+
+        ImageIcon IIrighthome = new ImageIcon("right.jpeg");
+        JButton brighthome = new JButton(IIrighthome);
+        brighthome.setBounds(2*w/3,15*h/20,w/11,h/20);
+        card.add(brighthome);
+
+        JLabel lnexthome = new JLabel("next");
+        lnexthome.setBounds(7*w/9,15*h/20,w/2,h/20);
+        card.add(lnexthome);
+
+
+        cardPanel.add(card,"home");
+	}
+
 
 	public void matching() {
 		JPanel card=new JPanel();
@@ -189,78 +420,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bProfMatching);
 
 		cardPanel.add(card,"マッチング");
-	}
-
-	public void new_regis() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		JLabel lTitleNew_r = new JLabel("新規登録");
-		lTitleNew_r.setBounds(w/4,h/10,w/2,h/10);
-		lTitleNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/20));
-		lTitleNew_r.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleNew_r);
-
-        JLabel lIdNew_r = new JLabel("学籍番号");
-        lIdNew_r.setBounds(w/5,h/3,w/5,h/15);
-        lIdNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(lIdNew_r);
-
-        JTextField tfIdNew_r = new JTextField(20);
-        tfIdNew_r.setBounds(2*w/5,h/3,2*w/5,h/15);
-        tfIdNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfIdNew_r);
-
-        JLabel lPasswordNew_r = new JLabel("パスワード");
-        lPasswordNew_r.setBounds(w/5,7*h/15,w/5,h/15);
-        lPasswordNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(lPasswordNew_r);
-
-        JTextField tfPasswordNew_r = new JTextField(20);
-        tfPasswordNew_r.setBounds(2*w/5,7*h/15,2*w/5,h/15);
-        tfPasswordNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfPasswordNew_r);
-
-        JLabel lPasswordconfNew_r = new JLabel("パスワード（確認用）");
-        lPasswordconfNew_r.setBounds(w/10,9*h/15,w/2,h/15);
-        lPasswordconfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(lPasswordconfNew_r);
-
-        JTextField tfPasswordconfNew_r = new JTextField(20);
-        tfPasswordconfNew_r.setBounds(2*w/5,9*h/15,2*w/5,h/15);
-        tfPasswordconfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfPasswordconfNew_r);
-
-        JButton bNewAccountNew_r=new JButton("登録");
-        bNewAccountNew_r.setBounds(w/4,23*h/30,w/2,h/15);
-        bNewAccountNew_r.addActionListener(this);
-        bNewAccountNew_r.setActionCommand("アカウント作成");
-        bNewAccountNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bNewAccountNew_r);
-
-		cardPanel.add(card,"new_regis");
-	}
-
-	public void wait1() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		JLabel waitpl = new JLabel("本人確認が完了するまでお待ちください\n"
-				+ "このままアプリを閉じても大丈夫です");
-		waitpl.setBounds(w/4,h/10,w/2,h/10);
-		waitpl.setHorizontalAlignment(JLabel.CENTER);
-		card.add(waitpl);
-
-		TextArea manual = new TextArea();
-		manual.setText("Step1　自分のプロフィールを作りましょう");
-		manual.setText("Step2　気になるお相手を探して「いいね」を押しましょう");
-		manual.setText("Step3　両想いでマッチング成立！LINEをしましょう");
-		manual.setText("Step4　個人だけでなくグループでもマッチングできます");
-		card.add(manual);
-
-		cardPanel.add(card,"wait1");
-
-
 	}
 
 	public void gathering() {
@@ -623,61 +782,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
         cardPanel.add(card,"invite");
-	}
-
-	public void home() {
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		JLabel ltitlehome = new JLabel("HOME");
-		ltitlehome.setBounds(w/4,h/50,w/2,h/10);
-		ltitlehome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
-		ltitlehome.setHorizontalAlignment(JLabel.CENTER);
-        card.add(ltitlehome);
-
-        JButton bsearchhome = new JButton("Search");
-        bsearchhome.setBounds(w/12,h/30,w/5,h/15);
-        card.add(bsearchhome);
-
-        JButton bmenuhome = new JButton("MENU");
-        bmenuhome.setBounds(5*w/7,h/30,w/5,h/15);
-        card.add(bmenuhome);
-
-        ImageIcon IIimagehome1 = new ImageIcon("test.jpg");
-        JButton biconhome1 = new JButton(" 〇〇 3年",IIimagehome1);
-        biconhome1.setBounds(w/4,3*h/20,w/2,h/10);
-        card.add(biconhome1);
-
-        ImageIcon IIimagehome2 = new ImageIcon("test.jpg");
-        JButton biconhome2 = new JButton(" 〇〇 4年",IIimagehome2);
-        biconhome2.setBounds(w/4,7*h/20,w/2,h/10);
-        card.add(biconhome2);
-
-        ImageIcon IIimagehome3 = new ImageIcon("test.jpg");
-        JButton biconhome3 = new JButton(" 〇〇 1年",IIimagehome3);
-        biconhome3.setBounds(w/4,11*h/20,w/2,h/10);
-        card.add(biconhome3);
-
-        JLabel lbackhome = new JLabel("back");
-        lbackhome.setBounds(w/6,15*h/20,w/2,h/20);
-        card.add(lbackhome);
-
-        ImageIcon IIlefthome = new ImageIcon("left.jpeg");
-        JButton blefthome = new JButton(IIlefthome);
-        blefthome.setBounds(w/4,15*h/20,w/11,h/20);
-        card.add(blefthome);
-
-        ImageIcon IIrighthome = new ImageIcon("right.jpeg");
-        JButton brighthome = new JButton(IIrighthome);
-        brighthome.setBounds(2*w/3,15*h/20,w/11,h/20);
-        card.add(brighthome);
-
-        JLabel lnexthome = new JLabel("next");
-        lnexthome.setBounds(7*w/9,15*h/20,w/2,h/20);
-        card.add(lnexthome);
-
-
-        cardPanel.add(card,"home");
 	}
 
 	public void change() {
@@ -1076,91 +1180,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel.add(card,"MakeGroup");
 	}
 
-	public void finishAuthen(){
-		JPanel card=new JPanel();
-		card.setLayout(null);
-
-		JLabel lMessageFinishAuthen = new JLabel("本人確認が完了しました");
-		lMessageFinishAuthen.setBounds(0,h/3,w,h/5);
-		lMessageFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/15));
-		lMessageFinishAuthen.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lMessageFinishAuthen);
-
-        JButton bnextFinishAuthen=new JButton("すすむ");
-        bnextFinishAuthen.setBounds(w/4,3*h/4,w/2,h/10);
-        bnextFinishAuthen.addActionListener(this);
-        bnextFinishAuthen.setActionCommand("label");
-        bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(bnextFinishAuthen);
-
-		cardPanel.add(card,"finishAuthen");
-	}
-
-	public void judging() {
-
-		JPanel card=new JPanel();
-
-		card.setLayout(null);
-
-		JLabel lTitleJudge = new JLabel("本人確認");
-		lTitleJudge.setBounds(w/4,h/20,w/2,h/10);
-		lTitleJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/10));
-		lTitleJudge.setHorizontalAlignment(JLabel.CENTER);
-		card.add(lTitleJudge);
-
-		JLabel lIdJudge = new JLabel("氏名");
-		lIdJudge.setBounds(w/5,h/5,w/5,h/15);
-		lIdJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		card.add(lIdJudge);
-
-		JTextField tfIdJudge = new JTextField(20);
-		tfIdJudge.setBounds(2*w/5,h/5,2*w/5,h/15);
-		tfIdJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		card.add(tfIdJudge);
-
-		JLabel lNumberJudge = new JLabel("学籍番号");
-		lNumberJudge.setBounds(w/5,h/3,w/5,h/15);
-		lNumberJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		card.add(lNumberJudge);
-
-		JTextField tfPasswordJudge= new JTextField(20);
-		tfPasswordJudge.setBounds(2*w/5,h/3,2*w/5,h/15);
-		tfPasswordJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		card.add(tfPasswordJudge);
-
-		JLabel lPicJudge = new JLabel("学生証");
-		lPicJudge.setBounds(w/5,h/2,w/5,h/15);
-		lPicJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		card.add(lPicJudge);
-
-		JButton bChoiceJudge=new JButton("選択");
-		bChoiceJudge.setBounds(2*w/5,h/2,w/8,h/15);
-		bChoiceJudge.addActionListener(this);
-		bChoiceJudge.setActionCommand("choice");
-		bChoiceJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/50));
-		card.add(bChoiceJudge);
-
-		JTextField tfPicJudge= new JTextField(20);
-		tfPicJudge.setBounds(7*w/13,h/2,w/3,h/15);
-		tfPicJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		card.add(tfPicJudge);
-
-		JLabel lErrorJudge = new JLabel("未入力の箇所があります");
-		lErrorJudge.setBounds(0,13*h/20,w,h/15);
-		lErrorJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		lErrorJudge.setHorizontalAlignment(JLabel.CENTER);
-		card.add(lErrorJudge);
-
-		JButton bSendJudge=new JButton("送信");
-		bSendJudge.setBounds(w/4,23*h/30,w/2,h/15);
-		bSendJudge.addActionListener(this);
-		bSendJudge.setActionCommand("送信");
-		bSendJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-		card.add(bSendJudge);
-
-		cardPanel.add(card,"judge");
-		}
-
 	public void reply() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1285,7 +1304,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bGoodReply.setActionCommand("ヘルプmenu");
         bGoodReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bGoodReply);
-        
+
         JButton bBadReply = new JButton("断る");
         bBadReply.setBounds(w/2,49*h/60,w/4,h/20);
         bBadReply.addActionListener(this);
@@ -1295,7 +1314,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"reply");
 	}
-	
+
 	public void good() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1426,10 +1445,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lGoodGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         lGoodGood2.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGoodGood2);
-        
+
 		cardPanel.add(card,"good");
 	}
-	
+
 	public void actionPerformed(ActionEvent ae) {
 	}
 
