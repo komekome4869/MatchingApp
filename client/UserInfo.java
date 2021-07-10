@@ -7,6 +7,7 @@ public class UserInfo implements Serializable{
 	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
 
 	static int studentNumber=0;	//学籍番号
+	static String password="";
 	static String name="";		//ユーザ名。認証時は氏名として使う。
 	//性別～サークルはClient.java内の配列で文字に変換する
 	static int gender=2;	//性別
@@ -33,6 +34,14 @@ public class UserInfo implements Serializable{
 
 	public int getStudentNumber() {
 		return studentNumber;
+	}
+
+	public void setPassword(String pw) {
+		password=pw;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	public void setName(String n) {
