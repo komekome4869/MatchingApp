@@ -5,15 +5,21 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,6 +39,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	int w=400;
 	int h=650;
 	UserInfo myUserInfo=new UserInfo();
+	GroupInfo myGroupInfo= new GroupInfo();
+	UserInfo[] nowShowingUsers=new UserInfo[3];
+	GroupInfo[] nowShowingGroup=new GroupInfo[3];
 
 	//プロフィールの検索で選ぶやつ
 	String[] Sex = {"男性", "女性", "その他"};
@@ -56,7 +65,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	JTextField tfIdNew_r = new JTextField(20);
 	JTextField tfPasswordNew_r = new JTextField(20);
-	JTextField tfPasswordconfNew_r = new JTextField(20);
+	JTextField tfPasswordConfNew_r = new JTextField(20);
 	JLabel lMessageNew_r = new JLabel("パスワードが一致していません");
 
 	JTextField tfNameJudge = new JTextField(20);
@@ -96,10 +105,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JComboBox<String> cbFacultySearchUser = new JComboBox<String>(Faculty);
     JComboBox<String> cbBirthSearchUser = new JComboBox<String>(Birthplace);
     JComboBox<String> cbCircleSearchUser = new JComboBox<String>(Circle);
-    
+
     JComboBox<String> cbPurposeSearchGroup = new JComboBox<String>(Purpose);
     JComboBox<String> cbHowManySearchGroup = new JComboBox<String>(HowMany);
-    
+
     JButton bMainPhotoMyProfile = new JButton("");
     JButton[] bSubPhotoMyProfile = new JButton[4];
     JTextField tfNameMyprofile = new JTextField("");
@@ -110,17 +119,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JComboBox<String> cbCircleMyProfile = new JComboBox<String>(Circle);
     JTextField tfHobbyMyProfile = new JTextField("");
     JTextField tfLineIdMyProfile = new JTextField("");
-    
+
     JButton[] bIconChange=new JButton[3];
-    
+
     JButton bPhotoMakeGroup = new JButton("プロフィール写真を選択");
     JTextField tfNameMakeGroup = new JTextField("");
     JTextField tfRelationMakeGroup = new JTextField("");
     JComboBox<String> cbPurposeMakeGroup = new JComboBox<String>(Purpose);
     JTextArea taCommentMakeGroup = new JTextArea("",15,3);
-    
+
     JTextField tfNumberGather[]=new JTextField[5];
-    
+
     JLabel lIconInvite = new JLabel(iTest);
     JLabel lHostInvite = new JLabel("〇〇さんに招待されました！");
     JLabel lGroupNameViewGroup = new JLabel("グループ名");
@@ -129,22 +138,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JButton[] bMemberProfileViewGroup = new JButton[5];
     JButton bGoodViewGroup=new JButton("いいね");
     JLabel lGoodViewGroup=new JLabel("すでに いいね しています");
-    
+
     JButton bPhotoMyGroupProfile = new JButton("写真");
     JTextField tfNameMyGroupProfile = new JTextField("");
     JTextField tfRelationMyGroupProfile = new JTextField("");
     JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
     JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
     JButton bQuitMyGroupProfile = new JButton("解散");
-    
+
     JRadioButton rbProfileSetup = new JRadioButton("公開", true);
-    
+
     JButton[] bIconInviteInform=new JButton[3];
-    
+
     JButton[] bIconGoodInform=new JButton[3];
-    
+
     JButton[] bIconMatchingInform=new JButton[3];
-    
+
 
 	JPanel cardPanel;
 	CardLayout layout;
@@ -183,7 +192,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"searchGroup");
+	    layout.show(cardPanel,"judge");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -289,9 +298,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lPasswordconfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(lPasswordconfNew_r);
 
-        tfPasswordconfNew_r.setBounds(2*w/5,9*h/15,2*w/5,h/15);
-        tfPasswordconfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfPasswordconfNew_r);
+        tfPasswordConfNew_r.setBounds(2*w/5,9*h/15,2*w/5,h/15);
+        tfPasswordConfNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(tfPasswordConfNew_r);
 
         JButton bNewAccountNew_r=new JButton("登録");
         bNewAccountNew_r.setBounds(w/4,23*h/30,w/2,h/15);
@@ -912,7 +921,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"searchGroup");
 	}
-	
+
 	public void menu() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1112,7 +1121,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		ltitlechange.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
 		ltitlechange.setHorizontalAlignment(JLabel.CENTER);
         card.add(ltitlechange);
-        
+
         JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
@@ -1124,7 +1133,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bMakeGroupChange.addActionListener(this);
         bMakeGroupChange.setActionCommand("グループ作成change");
         card.add(bMakeGroupChange);
-        
+
         for(int i=0;i<3;i++) {
         	bIconChange[i]=new JButton();
         	bIconChange[i].setBounds(w/4,(6+3*i)*h/20,w/2,h/10);
@@ -1244,7 +1253,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		JPanel card=new JPanel();
 		card.setLayout(null);
-		
+
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
@@ -1270,7 +1279,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
             tfNumberGather[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
             card.add(tfNumberGather[i]);
         }
-        
+
         /* //確定ボタン
         JButton bAddGather = new JButton("入力欄を追加する");
         bAddGather.setBounds(15*w/40,add_height*h/65,20*w/40,3*h/65);
@@ -1287,7 +1296,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bConfGather.setActionCommand("確定");
         bConfGather.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bConfGather);
-        
+
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
@@ -1363,7 +1372,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         //getContentPane().add(card,null);
         //menu
 
@@ -1372,7 +1381,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"invite");
 	}
-	
+
 	public void viewGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1413,7 +1422,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
         bGoodViewGroup.setVisible(false);
         card.add(bGoodViewGroup);
-        
+
         lGoodViewGroup.setBounds(w/5,45*h/60,3*w/5,h/15);
         lGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         lGoodViewGroup.setHorizontalAlignment(JLabel.CENTER);
@@ -1436,7 +1445,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"viewGroup");
 	}
-	
+
 	public void myGroupProfile() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1546,7 +1555,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lProfileSetup);
-        
+
         rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
         rbProfileSetup.addChangeListener(this);
         rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
@@ -1563,7 +1572,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bDeleteAccountSetup.addActionListener(this);
         bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
         card.add(bDeleteAccountSetup);
-        
+
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
@@ -1593,7 +1602,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bPrePage.addActionListener(this);
         bPrePage.setActionCommand("戻る");
         card.add(bPrePage);
-		
+
 		JLabel lTitleHtu = new JLabel("使い方");
 		lTitleHtu.setBounds(w/4,h/15,w/2,h/10);
 		lTitleHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
@@ -1627,7 +1636,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         cardPanel.add(card,"howToUse");
 	}
 
@@ -1678,7 +1687,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"inform");
 	}
-	
+
 	public void inviteInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1734,7 +1743,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"inviteInform");
 	}
-	
+
 	public void goodInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1790,7 +1799,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"goodInform");
 	}
-	
+
 	public void matchingInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1846,8 +1855,131 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"matchingInform");
 	}
-	
+
 	public void actionPerformed(ActionEvent ae) {
+		String cmd = ae.getActionCommand();
+
+		switch(cmd) {
+
+		case "ログインlogin":
+			int id=Integer.valueOf(tfIdLogin.getText());
+			String password=tfPasswordLogin.getText();
+			boolean canLogin=true;
+
+			//canLogin=ログイン確認のメソッド
+
+			if(canLogin) {
+				//myUserInfoの設定
+				int temp=myUserInfo.getIsAuthentificated();
+				if(temp==0) {
+					layout.show(cardPanel,"pleaseWait");
+				}
+				else if(temp==1) {
+					//1ページ目の情報取得
+					for(int i=0;i<3;i++) {
+						if(nowShowingUsers[i]==null) {
+							bIconHome[i].setVisible(false);
+						}
+						else {
+							bIconHome[i].setIcon(nowShowingUsers[i].getMainPhoto());
+							bIconHome[i].setText(nowShowingUsers[i].getName());
+						}
+					}
+					layout.show(cardPanel,"home");
+				}
+				else {
+					layout.show(cardPanel,"finishAuthen");
+				}
+			}
+			else {
+				lMessageLogin.setVisible(true);
+			}
+
+			break;
+
+
+		case "アカウント作成login":
+			layout.show(cardPanel,"new_regis");
+
+			break;
+
+
+		case "登録new_regis":
+			id=Integer.valueOf(tfIdNew_r.getText());
+			password=tfPasswordNew_r.getText();
+			String passwordConf=tfPasswordConfNew_r.getText();
+
+			if(password==passwordConf) {
+				myUserInfo.setStudentNumber(id);
+				myUserInfo.setPassword(password);
+				layout.show(cardPanel,"judge");
+			}
+			else {
+				lMessageNew_r.setVisible(true);
+			}
+
+			break;
+
+
+		case "選択judge":
+			FileDialog fd =
+            new FileDialog(this,"Open File",FileDialog.LOAD);
+			fd.setVisible(true);
+			BufferedImage bi = null;
+			ImageIcon studentCard=new ImageIcon();
+
+			try {
+				File f = new File(fd.getDirectory()+"/"+fd.getFile());
+				bi=ImageIO.read(f);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			if(bi!=null) {
+				studentCard=new ImageIcon(bi);
+				myUserInfo.setStudentCard(studentCard);
+
+				lPicOutputJudge.setText("");
+				BufferedImage biResized=new BufferedImage(2*w/5,h/6,BufferedImage.TYPE_3BYTE_BGR);
+				biResized.createGraphics().drawImage(bi.getScaledInstance(2*w/5,h/6,Image.SCALE_AREA_AVERAGING),0, 0, 2*w/5, h/6, null);
+				studentCard=new ImageIcon(bi);
+				lPicOutputJudge.setIcon(studentCard);
+			}
+
+
+		case "送信judge":
+			if(tfNameJudge.getText()==""||tfNumberJudge.getText()==""||lPicOutputJudge.getIcon()==null) {
+				lErrorJudge.setVisible(true);
+			}
+			else {
+				myUserInfo.setName(tfNameJudge.getText());
+				myUserInfo.setStudentNumber(Integer.valueOf(tfNumberJudge.getText()));
+				//学籍番号の登録が2回目？
+				//新規登録メソッド
+				layout.show(cardPanel,"pleaseWait");
+			}
+			break;
+
+
+		case "すすむfinishAuthen":
+			//1ページ目の情報取得
+			for(int i=0;i<3;i++) {
+				if(nowShowingUsers[i]==null) {
+					bIconHome[i].setVisible(false);
+				}
+				else {
+					bIconHome[i].setIcon(nowShowingUsers[i].getMainPhoto());
+					bIconHome[i].setText(nowShowingUsers[i].getName());
+				}
+			}
+			myUserInfo.setIsAuthentificated(1);
+			//新プロフの送信
+			layout.show(cardPanel,"home");
+
+			break;
+		}
+
 	}
 
 	public void stateChanged(ChangeEvent e) {
