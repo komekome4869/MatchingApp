@@ -41,6 +41,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String[] Birthplace = {"北海道・東北", "関東", "中部", "近畿", "中国", "四国", "九州", "海外"};
 	String[] Circle = {"テニス", "運動", "文化"};
 	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
+	String[] HowMany = {"2","3","4","5"};
 
 	//画像
 	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
@@ -96,6 +97,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JComboBox<String> cbBirthSearchUser = new JComboBox<String>(Birthplace);
     JComboBox<String> cbCircleSearchUser = new JComboBox<String>(Circle);
     
+    JComboBox<String> cbPurposeSearchGroup = new JComboBox<String>(Purpose);
+    JComboBox<String> cbHowManySearchGroup = new JComboBox<String>(HowMany);
+    
     JButton bMainPhotoMyProfile = new JButton("");
     JButton[] bSubPhotoMyProfile = new JButton[4];
     JTextField tfNameMyprofile = new JTextField("");
@@ -106,6 +110,41 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JComboBox<String> cbCircleMyProfile = new JComboBox<String>(Circle);
     JTextField tfHobbyMyProfile = new JTextField("");
     JTextField tfLineIdMyProfile = new JTextField("");
+    
+    JButton[] bIconChange=new JButton[3];
+    
+    JButton bPhotoMakeGroup = new JButton("プロフィール写真を選択");
+    JTextField tfNameMakeGroup = new JTextField("");
+    JTextField tfRelationMakeGroup = new JTextField("");
+    JComboBox<String> cbPurposeMakeGroup = new JComboBox<String>(Purpose);
+    JTextArea taCommentMakeGroup = new JTextArea("",15,3);
+    
+    JTextField tfNumberGather[]=new JTextField[5];
+    
+    JLabel lIconInvite = new JLabel(iTest);
+    JLabel lHostInvite = new JLabel("〇〇さんに招待されました！");
+    JLabel lGroupNameViewGroup = new JLabel("グループ名");
+    JLabel lGroupPhotoViewGroup = new JLabel("グル写真");
+    JLabel lGroupProfileViewGroup=new JLabel("プロフィール");
+    JButton[] bMemberProfileViewGroup = new JButton[5];
+    JButton bGoodViewGroup=new JButton("いいね");
+    JLabel lGoodViewGroup=new JLabel("すでに いいね しています");
+    
+    JButton bPhotoMyGroupProfile = new JButton("写真");
+    JTextField tfNameMyGroupProfile = new JTextField("");
+    JTextField tfRelationMyGroupProfile = new JTextField("");
+    JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
+    JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
+    JButton bQuitMyGroupProfile = new JButton("解散");
+    
+    JRadioButton rbProfileSetup = new JRadioButton("公開", true);
+    
+    JButton[] bIconInviteInform=new JButton[3];
+    
+    JButton[] bIconGoodInform=new JButton[3];
+    
+    JButton[] bIconMatchingInform=new JButton[3];
+    
 
 	JPanel cardPanel;
 	CardLayout layout;
@@ -127,6 +166,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    good();
 	    matching();
 	    searchUser();
+	    searchGroup();
 	    menu();
 	    myProfile();
 	    change();
@@ -137,9 +177,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    myGroupProfile();
 	    setup();
 	    howToUse();
+	    inform();
+	    inviteInform();
+	    goodInform();
+	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"myProfile");
+	    layout.show(cardPanel,"searchGroup");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -451,12 +495,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card = new JPanel();
 		card.setLayout(null);
 
-		JButton bBackReply = new JButton("←");
-        bBackReply.setBounds(w/30,h/60,w/6,h/15);
-        bBackReply.addActionListener(this);
-        bBackReply.setActionCommand("戻る");
-        bBackReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackReply);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
 		lNameReply.setBounds(w/4,h/60,w/2,h/15);
 		lNameReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -571,17 +614,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel.add(card,"reply");
 	}
 
-
 	public void good() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
 
-		JButton bBackGood = new JButton("←");
-        bBackGood.setBounds(w/30,h/60,w/6,h/15);
-        bBackGood.addActionListener(this);
-        bBackGood.setActionCommand("戻る");
-        bBackGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackGood);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
 		lNameGood.setBounds(w/4,h/60,w/2,h/15);
 		lNameGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -694,7 +735,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel.add(card,"good");
 	}
 
-
 	public void matching() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -705,12 +745,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lTitleMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatching);
 
-        JButton bBackMatching = new JButton("←");
-        bBackMatching.setBounds(w/30,h/60,w/6,h/15);
-        bBackMatching.addActionListener(this);
-        bBackMatching.setActionCommand("戻る");
-        bBackMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackMatching);
+        JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
         ImageIcon icon = new ImageIcon("test.jpeg");
         JLabel lIconMatching = new JLabel(icon);
@@ -756,12 +795,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JButton bBackSearchUser = new JButton("←");
-        bBackSearchUser.setBounds(w/30,h/20,w/6,h/15);
-        bBackSearchUser.addActionListener(this);
-        bBackSearchUser.setActionCommand("ヘルプmenu");
-        bBackSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackSearchUser);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
 		JLabel lTitleSearchUser = new JLabel("検索");
 		lTitleSearchUser.setBounds(w/4,h/60,w/2,2*h/15);
@@ -829,6 +867,52 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"searchUser");
 	}
 
+	public void searchGroup() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
+
+		JLabel lTitleSearchGroup = new JLabel("検索");
+		lTitleSearchGroup.setBounds(w/4,h/60,w/2,2*h/15);
+		lTitleSearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/10));
+		lTitleSearchGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleSearchGroup);
+
+        JLabel lPurposeSearchGroup = new JLabel("目的");
+		lPurposeSearchGroup.setBounds(w/8,5*h/20,w/6,2*h/20);
+		lPurposeSearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lPurposeSearchGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lPurposeSearchGroup);
+
+        cbPurposeSearchGroup.setBounds(w/3,5*h/20,w/2,2*h/20);
+		cbPurposeSearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbPurposeSearchGroup);
+
+        JLabel lHowManySearchGroup = new JLabel("人数");
+		lHowManySearchGroup.setBounds(w/8,10*h/20,w/6,2*h/20);
+		lHowManySearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lHowManySearchGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lHowManySearchGroup);
+
+        cbHowManySearchGroup.setBounds(w/3,10*h/20,w/2,2*h/20);
+        cbHowManySearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(cbHowManySearchGroup);
+
+        JButton bSearchSeachGroup = new JButton("検索");
+        bSearchSeachGroup.setBounds(3*w/10,15*h/20,2*w/5,h/8);
+        bSearchSeachGroup.addActionListener(this);
+        bSearchSeachGroup.setActionCommand("検索searchGroup");
+        bSearchSeachGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bSearchSeachGroup);
+
+        cardPanel.add(card,"searchGroup");
+	}
+	
 	public void menu() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -888,12 +972,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card = new JPanel();
 		card.setLayout(null);
 
-		JButton bBackMyProfile = new JButton("←");
-        bBackMyProfile.setBounds(w/30,h/60,w/6,h/15);
-        bBackMyProfile.addActionListener(this);
-        bBackMyProfile.setActionCommand("戻る");
-        bBackMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackMyProfile);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
         JLabel lTitleMyProfile = new JLabel("Myプロフィール");
 		lTitleMyProfile.setBounds(w/4,h/60,w/2,h/15);
@@ -911,7 +994,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bSubPhotoMyProfile[i] = new JButton();
         	bSubPhotoMyProfile[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             bSubPhotoMyProfile[i].addActionListener(this);
-            bSubPhotoMyProfile[i].setActionCommand("サブmyProfile"+Integer.toString(i));
+            bSubPhotoMyProfile[i].setActionCommand("サブ"+Integer.toString(i)+"myProfile");
             bSubPhotoMyProfile[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
             card.add(bSubPhotoMyProfile[i]);
         }
@@ -1029,38 +1112,36 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		ltitlechange.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
 		ltitlechange.setHorizontalAlignment(JLabel.CENTER);
         card.add(ltitlechange);
+        
+        JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
-        ImageIcon IIleftchange = new ImageIcon("left.jpeg");
-        JButton bsearchchange = new JButton(IIleftchange);
-        bsearchchange.setBounds(w/14,h/30,w/11,h/20);
-        card.add(bsearchchange);
-
-
-        ImageIcon IIimagechange1 = new ImageIcon("add.jpeg");
-        JButton biconchange1 = new JButton("グループ作成",IIimagechange1);
-        biconchange1.setBounds(w/4,3*h/20,w/2,h/10);
-        card.add(biconchange1);
-
-        ImageIcon IIimagechange2 = new ImageIcon("test.jpg");
-        JButton biconchange2 = new JButton(" 〇〇 ",IIimagechange2);
-        biconchange2.setBounds(w/4,7*h/20,w/2,h/10);
-        card.add(biconchange2);
-
-        ImageIcon IIimagechange3 = new ImageIcon("test.jpg");
-        JButton biconchange3 = new JButton(" 〇〇 ",IIimagechange3);
-        biconchange3.setBounds(w/4,11*h/20,w/2,h/10);
-        card.add(biconchange3);
+        JButton bMakeGroupChange = new JButton("グループ作成",iAdd);
+        bMakeGroupChange.setBounds(w/4,3*h/20,w/2,h/10);
+        bMakeGroupChange.addActionListener(this);
+        bMakeGroupChange.setActionCommand("グループ作成change");
+        card.add(bMakeGroupChange);
+        
+        for(int i=0;i<3;i++) {
+        	bIconChange[i]=new JButton();
+        	bIconChange[i].setBounds(w/4,(6+3*i)*h/20,w/2,h/10);
+        	bIconChange[i].addActionListener(this);
+        	bIconChange[i].setActionCommand("グループ"+Integer.toString(i)+"change");
+        	card.add(bIconChange[i]);
+        }
 
         JLabel lbackchange = new JLabel("back");
         lbackchange.setBounds(w/6,15*h/20,w/2,h/20);
         card.add(lbackchange);
 
-        JButton bleftchange = new JButton(IIleftchange);
+        JButton bleftchange = new JButton(iLeft);
         bleftchange.setBounds(w/4,15*h/20,w/11,h/20);
         card.add(bleftchange);
 
-        ImageIcon IIrightchange = new ImageIcon("right.jpeg");
-        JButton brightchange = new JButton(IIrightchange);
+        JButton brightchange = new JButton(iRight);
         brightchange.setBounds(2*w/3,15*h/20,w/11,h/20);
         card.add(brightchange);
 
@@ -1076,104 +1157,104 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card = new JPanel();
 		card.setLayout(null);
 
-		JButton bBackMyGroupProfile = new JButton("←");
-        bBackMyGroupProfile.setBounds(w/30,h/60,w/6,h/15);
-        bBackMyGroupProfile.addActionListener(this);
-        bBackMyGroupProfile.setActionCommand("ヘルプmenu");
-        bBackMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackMyGroupProfile);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
-        JLabel lTitleMyGroupProfile = new JLabel("グループプロフィール");
-		lTitleMyGroupProfile.setBounds(w/5,h/60,3*w/5,h/15);
-		lTitleMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lTitleMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lTitleMyGroupProfile);
+        JLabel lTitleMakeGroup = new JLabel("グループプロフィール");
+		lTitleMakeGroup.setBounds(w/5,h/60,3*w/5,h/15);
+		lTitleMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lTitleMakeGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleMakeGroup);
 
-        JButton bPhotoMyGroupProfile = new JButton("プロフィール写真を選択");
-        bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
-        bPhotoMyGroupProfile.addActionListener(this);
-        bPhotoMyGroupProfile.setActionCommand("ヘルプmenu");
-        bPhotoMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(bPhotoMyGroupProfile);
+        bPhotoMakeGroup.setBounds(w/4,6*h/60,w/2,h/6);
+        bPhotoMakeGroup.addActionListener(this);
+        bPhotoMakeGroup.setActionCommand("メインMakeGroup");
+        bPhotoMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(bPhotoMakeGroup);
 
-        JLabel lNameMyGroupProfile = new JLabel("グループ名");
-		lNameMyGroupProfile.setBounds(w/9,18*h/60,w/5,h/20);
-		lNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-		lNameMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lNameMyGroupProfile);
+        JLabel lNameMakeGroup = new JLabel("グループ名");
+		lNameMakeGroup.setBounds(w/9,18*h/60,w/5,h/20);
+		lNameMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+		lNameMakeGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lNameMakeGroup);
 
-        JTextField tfNameMyGroupProfile = new JTextField("");
-        tfNameMyGroupProfile.setBounds(w/3,18*h/60,w/2,h/20);
-        tfNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfNameMyGroupProfile);
+        tfNameMakeGroup.setBounds(w/3,18*h/60,w/2,h/20);
+        tfNameMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfNameMakeGroup);
 
-        JLabel lRelationMyGroupProfile = new JLabel("関係性");
-		lRelationMyGroupProfile.setBounds(w/8,22*h/60,w/6,h/20);
-		lRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lRelationMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lRelationMyGroupProfile);
+        JLabel lRelationMakeGroup = new JLabel("関係性");
+		lRelationMakeGroup.setBounds(w/8,22*h/60,w/6,h/20);
+		lRelationMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lRelationMakeGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lRelationMakeGroup);
 
-        JTextField tfRelationMyGroupProfile = new JTextField("");
-        tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
-        tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(tfRelationMyGroupProfile);
+        tfRelationMakeGroup.setBounds(w/3,22*h/60,w/2,h/20);
+        tfRelationMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(tfRelationMakeGroup);
 
-        JLabel lPurposeMyGroupProfile = new JLabel("目的");
-		lPurposeMyGroupProfile.setBounds(w/8,26*h/60,w/6,h/20);
-		lPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lPurposeMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lPurposeMyGroupProfile);
+        JLabel lPurposeMakeGroup = new JLabel("目的");
+		lPurposeMakeGroup.setBounds(w/8,26*h/60,w/6,h/20);
+		lPurposeMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lPurposeMakeGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lPurposeMakeGroup);
 
-        JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
-        cbPurposeMyGroupProfile.setBounds(w/3,26*h/60,w/2,h/20);
-        cbPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(cbPurposeMyGroupProfile);
+        cbPurposeMakeGroup.setBounds(w/3,26*h/60,w/2,h/20);
+        cbPurposeMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(cbPurposeMakeGroup);
 
 
-        JLabel lCommentMyGroupProfile = new JLabel("ひとこと");
-		lCommentMyGroupProfile.setBounds(w/8,30*h/60,w/6,h/20);
-		lCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
-        card.add(lCommentMyGroupProfile);
+        JLabel lCommentMakeGroup = new JLabel("ひとこと");
+		lCommentMakeGroup.setBounds(w/8,30*h/60,w/6,h/20);
+		lCommentMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lCommentMakeGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lCommentMakeGroup);
 
-        JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
-        taCommentMyGroupProfile.setBounds(w/3,30*h/60,w/2,h/5);
-        taCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(taCommentMyGroupProfile);
+        taCommentMakeGroup.setBounds(w/3,30*h/60,w/2,h/5);
+        taCommentMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(taCommentMakeGroup);
 
-        JButton bQuitMyGroupProfile = new JButton("メンバーを選択");
-        bQuitMyGroupProfile.setBounds(w/3,44*h/60,w/3,h/15);
-        bQuitMyGroupProfile.addActionListener(this);
-        bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
-        bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(bQuitMyGroupProfile);
+        JButton bGatherMakeGroup = new JButton("メンバーを選択");
+        bGatherMakeGroup.setBounds(w/3,44*h/60,w/3,h/15);
+        bGatherMakeGroup.addActionListener(this);
+        bGatherMakeGroup.setActionCommand("選択MakeGroup");
+        bGatherMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(bGatherMakeGroup);
 
-        JButton bHomeViewGroup=new JButton("HOME");
-        bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeViewGroup.addActionListener(this);
-        bHomeViewGroup.setActionCommand("HOME");
-        bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeViewGroup);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
-        JButton bInformViewGroup=new JButton("通知");
-        bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
-        bInformViewGroup.addActionListener(this);
-        bInformViewGroup.setActionCommand("通知");
-        bInformViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bInformViewGroup);
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
 
-		cardPanel.add(card,"MakeGroup");
+		cardPanel.add(card,"makeGroup");
 	}
 
 	public void gathering() {
 
 		JPanel card=new JPanel();
 		card.setLayout(null);
+		
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
 		// タイトル
 		JLabel lTitleMatching = new JLabel("グループ作成");
-		lTitleMatching.setBounds(10*w/40,h/15,20*w/40,h/10);
-		lTitleMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lTitleMatching.setBounds(10*w/40,h/120,20*w/40,h/10);
+		lTitleMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/15));
 		lTitleMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatching);
 
@@ -1183,36 +1264,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lNumberGather.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(lNumberGather);
 
-      //入力欄
-        JTextField tfNumberGather1 = new JTextField("");
-        tfNumberGather1.setBounds(15*w/40,15*h/65,20*w/40,4*h/65);
-        tfNumberGather1.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfNumberGather1);
-
-      //入力欄
-        JTextField tfNumberGather2 = new JTextField("");
-        tfNumberGather2.setBounds(15*w/40,19*h/65,20*w/40,4*h/65);
-        tfNumberGather2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfNumberGather2);
-
-      //入力欄
-        JTextField tfNumberGather3 = new JTextField("");
-        tfNumberGather3.setBounds(15*w/40,23*h/65,20*w/40,4*h/65);
-        tfNumberGather3.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfNumberGather3);
-
-      //入力欄
-        JTextField tfNumberGather4 = new JTextField("");
-        tfNumberGather4.setBounds(15*w/40,27*h/65,20*w/40,4*h/65);
-        tfNumberGather4.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfNumberGather4);
-
-      //入力欄
-        JTextField tfNumberGather5 = new JTextField("");
-        tfNumberGather5.setBounds(15*w/40,31*h/65,20*w/40,4*h/65);
-        tfNumberGather5.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(tfNumberGather5);
-
+        for(int i=0;i<4;i++) {
+        	tfNumberGather[i] = new JTextField("");
+        	tfNumberGather[i].setBounds(15*w/40,(15+4*i)*h/65,20*w/40,4*h/65);
+            tfNumberGather[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            card.add(tfNumberGather[i]);
+        }
+        
         /* //確定ボタン
         JButton bAddGather = new JButton("入力欄を追加する");
         bAddGather.setBounds(15*w/40,add_height*h/65,20*w/40,3*h/65);
@@ -1229,18 +1287,33 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bConfGather.setActionCommand("確定");
         bConfGather.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bConfGather);
+        
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
-
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
 
 		cardPanel.add(card,"gathering");
 	}
 
-
-	
-
 	public void invite() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
+
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
 		//タイトル
 		JLabel ltitleinvite = new JLabel("グループ招待");
@@ -1250,11 +1323,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(ltitleinvite);
 
         //画像貼り付け
-        ImageIcon IIimageinvite = new ImageIcon("Black.jpg");
-        JLabel liconinvite = new JLabel(IIimageinvite);
-        liconinvite.setBounds(w/4,3*h/20,w/2,h/5);
-        liconinvite.setHorizontalAlignment(JLabel.CENTER);
-        card.add(liconinvite);
+        lIconInvite.setBounds(w/4,3*h/20,w/2,h/5);
+        lIconInvite.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lIconInvite);
 
         //プロフィール確認ボタン
         JButton bprofileinvite = new JButton("プロフィールを確認する");
@@ -1274,12 +1345,26 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         //bnoinvite.addActionListener(this);
         card.add(bnoinvite);
 
-        JLabel llabelinvite = new JLabel("〇〇さんに招待されました！");
-        llabelinvite.setBounds(0,13*h/20,w,h/20);
-        llabelinvite.setHorizontalAlignment(JLabel.CENTER);
-        card.add(llabelinvite);
+        lHostInvite.setBounds(0,13*h/20,w,h/20);
+        lHostInvite.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lHostInvite);
 
-        getContentPane().add(card,null);
+
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+        
+        //getContentPane().add(card,null);
         //menu
 
         //通知
@@ -1292,68 +1377,62 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JButton bBackViewGroup = new JButton("←");
-        bBackViewGroup.setBounds(w/30,h/30,w/6,h/15);
-        bBackViewGroup.addActionListener(this);
-        bBackViewGroup.setActionCommand("ヘルプmenu");
-        bBackViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackViewGroup);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
-		JLabel lGroupNameViewGroup = new JLabel("グループ名");
 		lGroupNameViewGroup.setBounds(w/4,h/60,w/2,h/20);
 		lGroupNameViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
 		lGroupNameViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupNameViewGroup);
 
-        JLabel lGroupPhotoViewGroup = new JLabel("グル写真");
-        lGroupPhotoViewGroup.setBounds(2*w/5,5*h/60,w/5,h/10);
+        lGroupPhotoViewGroup.setBounds(w/5,5*h/60,w/5,h/10);
         lGroupPhotoViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         lGroupPhotoViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupPhotoViewGroup);
 
-        JLabel lGroupProfileViewGroup=new JLabel("プロフィール");
-        lGroupProfileViewGroup.setBounds(3*w/5,7*h/60,w/3,h/15);
+        lGroupProfileViewGroup.setBounds(2*w/5,7*h/60,w/2,h/15);
         lGroupProfileViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         lGroupPhotoViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupProfileViewGroup);
 
-        JLabel[] lMemberPhotoViewGroup = new JLabel[5];
-        JButton[] bMemberProfileViewGroup = new JButton[5];
         for(int i=0;i<5;i++) {
-        	lMemberPhotoViewGroup[i] = new JLabel("メンバ写真");
-            lMemberPhotoViewGroup[i].setBounds(w/6,(11+7*i)*h/60,w/6,h/12);
-            lMemberPhotoViewGroup[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-            lMemberPhotoViewGroup[i].setHorizontalAlignment(JLabel.CENTER);
-            card.add(lMemberPhotoViewGroup[i]);
-
             bMemberProfileViewGroup[i]=new JButton("プロフィール");
-            bMemberProfileViewGroup[i].setBounds(w/3,(11+7*i)*h/60,2*w/5,h/12);
+            bMemberProfileViewGroup[i].setBounds(w/6,(11+7*i)*h/60,2*w/3,h/12);
             bMemberProfileViewGroup[i].addActionListener(this);
-            bMemberProfileViewGroup[i].setActionCommand("label");
+            bMemberProfileViewGroup[i].setActionCommand("メンバ"+Integer.toString(i)+"viewGroup");
             bMemberProfileViewGroup[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
             card.add(bMemberProfileViewGroup[i]);
         }
 
-        JButton bGoodViewGroup=new JButton("いいね");
         bGoodViewGroup.setBounds(2*w/5,45*h/60,w/5,h/15);
         bGoodViewGroup.addActionListener(this);
-        bGoodViewGroup.setActionCommand("label");
+        bGoodViewGroup.setActionCommand("いいねviewGrou@");
         bGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
+        bGoodViewGroup.setVisible(false);
         card.add(bGoodViewGroup);
+        
+        lGoodViewGroup.setBounds(w/5,45*h/60,3*w/5,h/15);
+        lGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        lGoodViewGroup.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lGoodViewGroup);
 
-        JButton bHomeViewGroup=new JButton("HOME");
-        bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeViewGroup.addActionListener(this);
-        bHomeViewGroup.setActionCommand("label");
-        bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeViewGroup);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
-        JButton bInformViewGroup=new JButton("通知");
-        bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
-        bInformViewGroup.addActionListener(this);
-        bInformViewGroup.setActionCommand("label");
-        bInformViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bInformViewGroup);
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
 
 		cardPanel.add(card,"viewGroup");
 	}
@@ -1362,12 +1441,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card = new JPanel();
 		card.setLayout(null);
 
-		JButton bBackMyGroupProfile = new JButton("←");
-        bBackMyGroupProfile.setBounds(w/30,h/60,w/6,h/15);
-        bBackMyGroupProfile.addActionListener(this);
-        bBackMyGroupProfile.setActionCommand("ヘルプmenu");
-        bBackMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bBackMyGroupProfile);
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
         JLabel lTitleMyGroupProfile = new JLabel("グループプロフィール");
 		lTitleMyGroupProfile.setBounds(w/5,h/60,3*w/5,h/15);
@@ -1375,7 +1453,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lTitleMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMyGroupProfile);
 
-        JButton bPhotoMyGroupProfile = new JButton("写真");
         bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
         bPhotoMyGroupProfile.addActionListener(this);
         bPhotoMyGroupProfile.setActionCommand("ヘルプmenu");
@@ -1388,7 +1465,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lNameMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMyGroupProfile);
 
-        JTextField tfNameMyGroupProfile = new JTextField("");
         tfNameMyGroupProfile.setBounds(w/3,18*h/60,w/2,h/20);
         tfNameMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(tfNameMyGroupProfile);
@@ -1399,7 +1475,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lRelationMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lRelationMyGroupProfile);
 
-        JTextField tfRelationMyGroupProfile = new JTextField("");
         tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
         tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(tfRelationMyGroupProfile);
@@ -1410,7 +1485,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lPurposeMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeMyGroupProfile);
 
-        JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
         cbPurposeMyGroupProfile.setBounds(w/3,26*h/60,w/2,h/20);
         cbPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(cbPurposeMyGroupProfile);
@@ -1422,12 +1496,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMyGroupProfile);
 
-        JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
         taCommentMyGroupProfile.setBounds(w/3,30*h/60,w/2,h/5);
         taCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(taCommentMyGroupProfile);
 
-        JButton bQuitMyGroupProfile = new JButton("解散");
         bQuitMyGroupProfile.setBounds(3*w/11,44*h/60,5*w/22,h/20);
         bQuitMyGroupProfile.addActionListener(this);
         bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
@@ -1441,21 +1513,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bChangeMyProfile);
 
-        JButton bHomeViewGroup=new JButton("HOME");
-        bHomeViewGroup.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeViewGroup.addActionListener(this);
-        bHomeViewGroup.setActionCommand("label");
-        bHomeViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeViewGroup);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
-        JButton bInformViewGroup=new JButton("通知");
-        bInformViewGroup.setBounds(3*w/5,51*h/60,w/5,h/15);
-        bInformViewGroup.addActionListener(this);
-        bInformViewGroup.setActionCommand("label");
-        bInformViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bInformViewGroup);
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
 
-		cardPanel.add(card,"MyGroupProfile");
+		cardPanel.add(card,"myGroupProfile");
 	}
 
 	public void setup() {
@@ -1474,8 +1546,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lProfileSetup);
-
-        JRadioButton rbProfileSetup = new JRadioButton("公開", true);
+        
         rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
         rbProfileSetup.addChangeListener(this);
         rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
@@ -1492,11 +1563,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bDeleteAccountSetup.addActionListener(this);
         bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
         card.add(bDeleteAccountSetup);
+        
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
 
         cardPanel.add(card,"setup");
 	}
-
-
 
 	public void howToUse() {
 		JPanel card=new JPanel();
@@ -1505,6 +1588,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		//使い方
 		String explain = "aaaaaaaaaaaa\naaaaaaaaa\naaaaaaa\naaa\na\na\n\na\naa\naa\naa\naa\naa\nb\na\nq\nww\nrr\nf";
 
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
+		
 		JLabel lTitleHtu = new JLabel("使い方");
 		lTitleHtu.setBounds(w/4,h/15,w/2,h/10);
 		lTitleHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
@@ -1525,10 +1614,239 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         rect.setBounds(0,0,w,h);
         card.add(rect);
 
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+        
         cardPanel.add(card,"howToUse");
 	}
 
+	public void inform() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lTitleInform = new JLabel("通知");
+		lTitleInform.setBounds(w/4,2*h/30,w/2,3*h/30);
+		lTitleInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/20));
+		lTitleInform.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleInform);
+
+        JButton bProfileInform=new JButton("グループへの招待");
+        bProfileInform.setBounds(w/4,8*h/30,w/2,4*h/30);
+        bProfileInform.addActionListener(this);
+        bProfileInform.setActionCommand("招待inform");
+        bProfileInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bProfileInform);
+
+        JButton bChangeAccountInform=new JButton("いいねを押した人");
+        bChangeAccountInform.setBounds(w/4,13*h/30,w/2,4*h/30);
+        bChangeAccountInform.addActionListener(this);
+        bChangeAccountInform.setActionCommand("いいねinform");
+        bChangeAccountInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bChangeAccountInform);
+
+        JButton bConfigInform=new JButton("マッチングした人");
+        bConfigInform.setBounds(w/4,18*h/30,w/2,4*h/30);
+        bConfigInform.addActionListener(this);
+        bConfigInform.setActionCommand("マッチングinform");
+        bConfigInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(bConfigInform);
+
+        JButton bHomeGood=new JButton("HOME");
+        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
+        bHomeGood.addActionListener(this);
+        bHomeGood.setActionCommand("HOME");
+        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHomeGood);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+		cardPanel.add(card,"inform");
+	}
+	
+	public void inviteInform() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lTitleInviteInform = new JLabel("通知");
+		lTitleInviteInform.setBounds(w/4,h/50,w/2,h/10);
+		lTitleInviteInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleInviteInform.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleInviteInform);
+
+        for(int i=0;i<3;i++) {
+        	bIconInviteInform[i]=new JButton("プロフィール",iRight);
+        	bIconInviteInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
+        	bIconInviteInform[i].addActionListener(this);
+        	bIconInviteInform[i].setActionCommand("プロフィール"+Integer.toString(i)+"inviteInform");
+        	bIconInviteInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	card.add(bIconInviteInform[i]);
+        }
+
+        JLabel lbackInviteInform = new JLabel("back");
+        lbackInviteInform.setBounds(w/6,15*h/20,w/2,h/20);
+        card.add(lbackInviteInform);
+
+        JButton bLeftInviteInform = new JButton(iLeft);
+        bLeftInviteInform.setBounds(w/4,15*h/20,w/11,h/20);
+        bLeftInviteInform.addActionListener(this);
+    	bLeftInviteInform.setActionCommand("前のページinviteInform");
+        card.add(bLeftInviteInform);
+
+        JButton bRightInviteInform = new JButton(iRight);
+        bRightInviteInform.setBounds(2*w/3,15*h/20,w/11,h/20);
+        bRightInviteInform.addActionListener(this);
+    	bRightInviteInform.setActionCommand("次のページinviteInform");
+        card.add(bRightInviteInform);
+
+        JLabel lnextInviteInform = new JLabel("next");
+        lnextInviteInform.setBounds(7*w/9,15*h/20,w/2,h/20);
+        card.add(lnextInviteInform);
+
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+        cardPanel.add(card,"inviteInform");
+	}
+	
+	public void goodInform() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lTitleGoodInform = new JLabel("通知");
+		lTitleGoodInform.setBounds(w/4,h/50,w/2,h/10);
+		lTitleGoodInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleGoodInform.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleGoodInform);
+
+        for(int i=0;i<3;i++) {
+        	bIconGoodInform[i]=new JButton("プロフィール",iRight);
+        	bIconGoodInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
+        	bIconGoodInform[i].addActionListener(this);
+        	bIconGoodInform[i].setActionCommand("プロフィール"+Integer.toString(i)+"goodInform");
+        	bIconGoodInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	card.add(bIconGoodInform[i]);
+        }
+
+        JLabel lbackGoodInform = new JLabel("back");
+        lbackGoodInform.setBounds(w/6,15*h/20,w/2,h/20);
+        card.add(lbackGoodInform);
+
+        JButton bLeftGoodInform = new JButton(iLeft);
+        bLeftGoodInform.setBounds(w/4,15*h/20,w/11,h/20);
+        bLeftGoodInform.addActionListener(this);
+    	bLeftGoodInform.setActionCommand("前のページgoodInform");
+        card.add(bLeftGoodInform);
+
+        JButton bRightGoodInform = new JButton(iRight);
+        bRightGoodInform.setBounds(2*w/3,15*h/20,w/11,h/20);
+        bRightGoodInform.addActionListener(this);
+    	bRightGoodInform.setActionCommand("次のページGoodInform");
+        card.add(bRightGoodInform);
+
+        JLabel lnextGoodInform = new JLabel("next");
+        lnextGoodInform.setBounds(7*w/9,15*h/20,w/2,h/20);
+        card.add(lnextGoodInform);
+
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+        cardPanel.add(card,"goodInform");
+	}
+	
+	public void matchingInform() {
+		JPanel card=new JPanel();
+		card.setLayout(null);
+
+		JLabel lTitleMatchingInform = new JLabel("通知");
+		lTitleMatchingInform.setBounds(w/4,h/50,w/2,h/10);
+		lTitleMatchingInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleMatchingInform.setHorizontalAlignment(JLabel.CENTER);
+        card.add(lTitleMatchingInform);
+
+        for(int i=0;i<3;i++) {
+        	bIconMatchingInform[i]=new JButton("プロフィール",iRight);
+        	bIconMatchingInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
+        	bIconMatchingInform[i].addActionListener(this);
+        	bIconMatchingInform[i].setActionCommand("プロフィール"+Integer.toString(i)+"matchingInform");
+        	bIconMatchingInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	card.add(bIconMatchingInform[i]);
+        }
+
+        JLabel lbackMatchingInform = new JLabel("back");
+        lbackMatchingInform.setBounds(w/6,15*h/20,w/2,h/20);
+        card.add(lbackMatchingInform);
+
+        JButton bLeftMatchingInform = new JButton(iLeft);
+        bLeftMatchingInform.setBounds(w/4,15*h/20,w/11,h/20);
+        bLeftMatchingInform.addActionListener(this);
+    	bLeftMatchingInform.setActionCommand("前のページmatchingInform");
+        card.add(bLeftMatchingInform);
+
+        JButton bRightMatchingInform = new JButton(iRight);
+        bRightMatchingInform.setBounds(2*w/3,15*h/20,w/11,h/20);
+        bRightMatchingInform.addActionListener(this);
+    	bRightMatchingInform.setActionCommand("次のページmatchingInform");
+        card.add(bRightMatchingInform);
+
+        JLabel lnextMatchingInform = new JLabel("next");
+        lnextMatchingInform.setBounds(7*w/9,15*h/20,w/2,h/20);
+        card.add(lnextMatchingInform);
+
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
+
+        JButton bInform=new JButton("通知");
+        bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
+        bInform.addActionListener(this);
+        bInform.setActionCommand("通知");
+        bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bInform);
+
+        cardPanel.add(card,"matchingInform");
+	}
+	
 	public void actionPerformed(ActionEvent ae) {
 	}
 
@@ -1545,7 +1863,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
     public static void main(String[] args) {
-    	new Client();
+    	Client client=new Client();
+    	//client.new Notification();
     }
 
 
