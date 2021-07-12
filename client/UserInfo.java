@@ -150,11 +150,11 @@ public class UserInfo implements Serializable{
 		return matchedUser;
 	}
 
-	public void setJoiningGroop(UUID[] jg) {
+	public void setJoiningGroup(UUID[] jg) {
 		joiningGroup=jg;
 	}
 
-	public void setJoiningGroop(UUID jg,int n) {
+	public void setJoiningGroup(UUID jg,int n) {
 		joiningGroup[n]=jg;
 	}
 
@@ -162,11 +162,11 @@ public class UserInfo implements Serializable{
 		return joiningGroup;
 	}
 
-	public void setInvitedGroop(UUID[] ig) {
+	public void setInvitedGroup(UUID[] ig) {
 		invitedGroup=ig;
 	}
 
-	public void setInvitedGroop(UUID ig,int n) {
+	public void setInvitedGroup(UUID ig,int n) {
 		invitedGroup[n]=ig;
 	}
 

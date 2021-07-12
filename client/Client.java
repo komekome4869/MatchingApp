@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -43,6 +44,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	int w=400;
 	int h=650;
+	int MAX=100;
 	UserInfo myUserInfo=new UserInfo();
 	GroupInfo myGroupInfo= new GroupInfo();
 	UserInfo[] nowShowingUsers=new UserInfo[3];//ホーム画面や通知画面で使う
@@ -61,6 +63,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String[] Circle = {"テニス", "運動", "文化"};
 	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
 	String[] HowMany = {"2","3","4","5"};
+	String[] yesNo= {"はい","いいえ"};
 
 	//画像
 	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
@@ -1408,7 +1411,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bConfGather = new JButton("確定");
         bConfGather.setBounds(15*w/40,42*h/65,w/5,h/15);
         bConfGather.addActionListener(this);
-        bConfGather.setActionCommand("確定");
+        bConfGather.setActionCommand("確定gathering");
         bConfGather.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bConfGather);
 
@@ -1454,19 +1457,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         //プロフィール確認ボタン
         JButton bprofileinvite = new JButton("プロフィールを確認する");
         bprofileinvite.setBounds(w/4,7*h/20,w/2,h/20);
-        //bprofileinvite.addActionListener(this);
+        bprofileinvite.addActionListener(this);
+        bprofileinvite.setActionCommand("確認invite");
         card.add(bprofileinvite);
 
         //参加するボタン
         JButton bokinvite = new JButton("参加する！");
         bokinvite.setBounds(w/4,9*h/20,w/2,h/20);
-        //bokinvite.addActionListener(this);
+        bokinvite.addActionListener(this);
+        bprofileinvite.setActionCommand("参加invite");
         card.add(bokinvite);
 
         //参加しないボタン
         JButton bnoinvite = new JButton("参加しない");
         bnoinvite.setBounds(w/4,11*h/20,w/2,h/20);
-        //bnoinvite.addActionListener(this);
+        bnoinvite.addActionListener(this);
+        bnoinvite.setActionCommand("断るinvite");
         card.add(bnoinvite);
 
         lHostInvite.setBounds(0,13*h/20,w,h/20);
@@ -1573,7 +1579,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
         bPhotoMyGroupProfile.addActionListener(this);
-        bPhotoMyGroupProfile.setActionCommand("ヘルプmenu");
+        bPhotoMyGroupProfile.setActionCommand("メインmyGroupProfile");
         bPhotoMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bPhotoMyGroupProfile);
 
@@ -1620,14 +1626,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bQuitMyGroupProfile.setBounds(3*w/11,44*h/60,5*w/22,h/20);
         bQuitMyGroupProfile.addActionListener(this);
-        bQuitMyGroupProfile.setActionCommand("ヘルプmenu");
+        bQuitMyGroupProfile.setActionCommand("削除myGroupProfile");
         bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bQuitMyGroupProfile);
 
         JButton bChangeMyProfile = new JButton("変更確定");
         bChangeMyProfile.setBounds(w/2,44*h/60,5*w/22,h/20);
         bChangeMyProfile.addActionListener(this);
-        bChangeMyProfile.setActionCommand("ヘルプmenu");
+        bChangeMyProfile.setActionCommand("確定myGroupProfile");
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bChangeMyProfile);
 
@@ -1679,6 +1685,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bDeleteAccountSetup = new JButton("削除");
         bDeleteAccountSetup.setBounds(7*w/10,21*h/65,w/7,h/20);
         bDeleteAccountSetup.addActionListener(this);
+        bDeleteAccountSetup.setActionCommand("削除setup");
         bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
         card.add(bDeleteAccountSetup);
 
@@ -2003,6 +2010,82 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel,"home");
 	}
 
+	public void goViewGroup() {
+		lGroupNameViewGroup.setText(nowShowingGroup.getName());
+		try {
+			lGroupPhotoViewGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
+			lGroupProfileViewGroup.setText("<html><body>"+nowShowingGroup.getPurpose()+"<br />"+nowShowingGroup.getComment()+"</body></html>");
+			//TODO 一言は何文字まで？
+
+			//UserInfoの取得(nowShowingGroup.getHostUser())
+			//bMemberProfileViewGroup[0].setIcon(scaleImage(,w/3,h/12));
+			//bMemberProfileViewGroup[0].setText(ホストの名前)
+
+			/*for(int i=1;i<5;i++) {
+				//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
+				if(nonhostUserの情報!=null) {
+					bMemberProfileViewGroup[i].setIcon(scaleImage(,w/3,h/12));
+					bMemberProfileViewGroup[i].setText(ノンホストの名前)
+				}
+			}*/
+
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		boolean flag=false;
+		for(int i=0;i<myGroupInfo.getSendGood().length;i++) {
+			if(myGroupInfo.getSendGood()[i]==nowShowingGroup.getStudentNumber()) {
+				flag=true;
+			}
+		}
+		if(flag) {
+			lGoodViewGroup.setVisible(true);
+			bGoodViewGroup.setVisible(false);
+		}
+		else {
+			lGoodViewGroup.setVisible(false);
+			bGoodViewGroup.setVisible(true);
+		}
+
+		layout.show(cardPanel, "viewGroup");
+	}
+
+	public void goGood() {
+		lNameGood.setText(nowShowingUser.getName());
+		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
+		lGradeGood2.setText(String.valueOf(nowShowingUser.getGrade()));
+		lFacultyGood2.setText(Faculty[nowShowingUser.getFaculty()]);
+		lBirthGood2.setText(Birthplace[nowShowingUser.getBirth()]);
+		lCircleGood2.setText(Circle[nowShowingUser.getCircle()]);
+		lHobbyGood2.setText(nowShowingUser.getHobby());
+
+		try {
+			lMainPhotoGood.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/6));
+			for(int i=0;i<4;i++) {
+				lSubPhotoGood[i].setIcon(scaleImage(nowShowingUser.getSubPhoto()[i],w/6,h/10));
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		boolean flag=false;
+		for(int i=0;i<myUserInfo.getSendGood().length;i++) {
+			if(myUserInfo.getSendGood()[i]==nowShowingUser.getStudentNumber()) {
+				flag=true;
+			}
+		}
+		if(flag) {
+			lGoodGood.setVisible(true);
+			bGoodGood.setVisible(false);
+		}
+		else {
+			lGoodGood.setVisible(false);
+			bGoodGood.setVisible(true);
+		}
+		layout.show(cardPanel,"good");
+	}
+
 
 	public void actionPerformed(ActionEvent ae) {
 		String cmd = ae.getActionCommand();
@@ -2153,98 +2236,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール0home":
 		case "プロフィール1home":
 		case "プロフィール2home":
-
-
 			if(isNowUsingGroupAccount) {
-				if(cmd=="プロフィール0home") {
-					nowShowingGroup=nowShowingGroups[0];
-				}
-				else if(cmd=="プロフィール1home") {
-					nowShowingGroup=nowShowingGroups[1];
-				}
-				else {
-					nowShowingGroup=nowShowingGroups[2];
-				}
-				lGroupNameViewGroup.setText(nowShowingGroup.getName());
-				try {
-					lGroupPhotoViewGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
-					lGroupProfileViewGroup.setText("<html><body>"+nowShowingGroup.getPurpose()+"<br />"+nowShowingGroup.getComment()+"</body></html>");
-					//TODO 一言は何文字まで？
-
-					//UserInfoの取得(nowShowingGroup.getHostUser())
-					/*bMemberProfileViewGroup[0].setIcon(scaleImage(,w/3,h/12));
-					for(int i=1;i<5;i++) {
-						//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
-						if(nonhostUserの情報!=null) {
-							bMemberProfileViewGroup[i].setIcon(scaleImage(,w/3,h/12));
-						}
-					}*/
-
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				flag=false;
-				for(int i=0;i<myGroupInfo.getSendGood().length;i++) {
-					if(myGroupInfo.getSendGood()[i]==nowShowingGroup.getStudentNumber()) {
-						flag=true;
+				for(int i=0;i<3;i++) {
+					if(cmd=="プロフィール"+String.valueOf(i)+"home") {
+						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
-				if(flag) {
-					lGoodViewGroup.setVisible(true);
-					bGoodViewGroup.setVisible(false);
-				}
-				else {
-					lGoodViewGroup.setVisible(false);
-					bGoodViewGroup.setVisible(true);
-				}
-
-				layout.show(cardPanel, "viewGroup");
+				goViewGroup();
 			}
 			else {
-				if(cmd=="プロフィール0home") {
-					nowShowingUser=nowShowingUsers[0];
-				}
-				else if(cmd=="プロフィール1home") {
-					nowShowingUser=nowShowingUsers[1];
-				}
-				else {
-					nowShowingUser=nowShowingUsers[2];
-				}
-				lNameGood.setText(nowShowingUser.getName());
-				lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
-				lGradeGood2.setText(String.valueOf(nowShowingUser.getGrade()));
-				lFacultyGood2.setText(Faculty[nowShowingUser.getFaculty()]);
-				lBirthGood2.setText(Birthplace[nowShowingUser.getBirth()]);
-				lCircleGood2.setText(Circle[nowShowingUser.getCircle()]);
-				lHobbyGood2.setText(nowShowingUser.getHobby());
-
-				try {
-					lMainPhotoGood.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/6));
-					for(int i=0;i<4;i++) {
-						lSubPhotoGood[i].setIcon(scaleImage(nowShowingUser.getSubPhoto()[i],w/6,h/10));
+				for(int i=0;i<3;i++) {
+					if(cmd=="プロフィール"+String.valueOf(i)+"home") {
+						nowShowingUser=nowShowingUsers[i];
 					}
 				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				flag=false;
-				for(int i=0;i<myUserInfo.getSendGood().length;i++) {
-					if(myUserInfo.getSendGood()[i]==nowShowingUser.getStudentNumber()) {
-						flag=true;
-					}
-				}
-				if(flag) {
-					lGoodGood.setVisible(true);
-					bGoodGood.setVisible(false);
-				}
-				else {
-					lGoodGood.setVisible(false);
-					bGoodGood.setVisible(true);
-				}
-				layout.show(cardPanel,"good");
+				goGood();
 			}
-
 			previousPage="HOME";
 			break;
 
@@ -2308,51 +2315,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case"確認matching":
 			if(isNowUsingGroupAccount) {
-				lGroupNameViewGroup.setText(nowShowingGroup.getName());
-				lGroupProfileViewGroup.setText("<html><body>"+nowShowingGroup.getPurpose()+"<br />"+nowShowingGroup.getComment()+"</body></html>");
-				//TODO 一言は何文字まで？
-
-				try {
-					lGroupPhotoViewGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
-					//UserInfoの取得(nowShowingGroup.getHostUser())
-					/*bMemberProfileViewGroup[0].setIcon(scaleImage(,w/3,h/12));
-					for(int i=1;i<5;i++) {
-						//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
-						if(nonhostUserの情報!=null) {
-							bMemberProfileViewGroup[i].setIcon(scaleImage(,w/3,h/12));
-						}
-					}*/
-
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				lGoodViewGroup.setVisible(true);
-				bGoodViewGroup.setVisible(false);
-
-				layout.show(cardPanel, "viewGroup");
+				goViewGroup();
 			}
 			else {
-				lNameGood.setText(nowShowingUser.getName());
-				lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
-				lGradeGood2.setText(String.valueOf(nowShowingUser.getGrade()));
-				lFacultyGood2.setText(Faculty[nowShowingUser.getFaculty()]);
-				lBirthGood2.setText(Birthplace[nowShowingUser.getBirth()]);
-				lCircleGood2.setText(Circle[nowShowingUser.getCircle()]);
-				lHobbyGood2.setText(nowShowingUser.getHobby());
-
-				try {
-					lMainPhotoGood.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/6));
-					for(int i=0;i<4;i++) {
-						lSubPhotoGood[i].setIcon(scaleImage(nowShowingUser.getSubPhoto()[i],w/6,h/10));
-					}
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				lGoodGood.setVisible(true);
-				bGoodGood.setVisible(false);
-				layout.show(cardPanel,"good");
+				goGood();
 			}
 			break;
 
@@ -2433,6 +2399,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[i]
 						bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 						bIconChange[i].setText(nowShowingGroups[i].getName());
+						bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
 					}
 				}
 
@@ -2473,7 +2440,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bMainPhotoMyProfile.setIcon(scaleImage(bi,w/2,h/6));
 				myUserInfo.setMainPhoto(bi);
-				//新プロフの作成
+				//新プロフの作成(myUsrInfo)
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -2501,6 +2468,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bSubPhotoMyProfile[temp] .setIcon(scaleImage(bi,w/6,h/10));
 				myUserInfo.setSubPhoto(bi,temp);
+				//新プロフの作成(myUserInfo)
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -2508,22 +2476,29 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "確定MyProfile":
-			//TODO
+		case "確定myProfile":
+			myUserInfo.setName(tfNameMyProfile.getText());
+			myUserInfo.setGender(cbGenderMyProfile.getSelectedIndex());
+			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
+			myUserInfo.setFaculty(cbFacultyMyProfile.getSelectedIndex());
+			myUserInfo.setBirth(cbBirthMyProfile.getSelectedIndex());
+			myUserInfo.setCircle(cbCircleMyProfile.getSelectedIndex());
+			myUserInfo.setHobby(tfHobbyMyProfile.getText());
+			myUserInfo.setLineId(tfLineIdMyProfile.getText());
 			//新プロフ(myUserInfo)
 			layout.show(cardPanel,"menu");
 			break;
 
 
 		case "グループ作成change":
-			myGroupInfo=new GroupInfo();
+			nowShowingGroup=new GroupInfo();
 
-			tfNameMakeGroup.setText(myGroupInfo.getName());
-			tfRelationMakeGroup.setText(myGroupInfo.getRelation());
+			tfNameMakeGroup.setText(nowShowingGroup.getName());
+			tfRelationMakeGroup.setText(nowShowingGroup.getRelation());
 			cbPurposeMakeGroup.setSelectedIndex(0);
-			taCommentMakeGroup.setText(myGroupInfo.getComment());
+			taCommentMakeGroup.setText(nowShowingGroup.getComment());
 			try {
-				bPhotoMakeGroup.setIcon(scaleImage(myGroupInfo.getMainPhoto(),w/2,h/6));
+				bPhotoMakeGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/6));
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -2545,7 +2520,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "グループ2change":
 			for(int i=0;i<3;i++) {
 				if(cmd=="グループ"+String.valueOf(i)+"change") {
-					//TODO myGroupInfo=グル情報を取得(nowShowingGroup[i]);
+					//TODO myGroupInfo=グル情報を取得(nowShowingGroups[i]);
 				}
 			}
 			isNowUsingGroupAccount=true;
@@ -2557,37 +2532,44 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case"前のページchange":
 			//検索情報の保存
 			nowPage--;
-			if(myUserInfo.getJoiningGroup().length>3*(nowPage-1)-1){
-				try {
-					bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
-					bPersonalChange.setText(myUserInfo.getName());
+			if(3*(nowPage-1)<0) {
+				nowPage++;
+			}
+			else {
+				if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]==null){
+					try {
+						bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
+						bPersonalChange.setText(myUserInfo.getName());
 
-					for(int i=0;i<3;i++) {
-						if(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i]==null) {
-							bIconChange[i].setVisible(false);
+						for(int i=0;i<3;i++) {
+							if(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i]==null) {
+								bIconChange[i].setVisible(false);
+							}
+							else {
+								//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
+								bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
+								bIconChange[i].setText(nowShowingGroups[i].getName());
+								bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
+							}
 						}
-						else {
-							//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
-							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
-							bIconChange[i].setText(nowShowingGroups[i].getName());
-						}
+
 					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				else{
+			  		nowPage++;
+				}
+			}
 
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			else{
-		  		nowPage++;
-			}
 			break;
 
 
 		case "次のページchange":
 			//TODO 検索情報の保存
 			nowPage++;
-			if(myUserInfo.getJoiningGroup().length>3*(nowPage-1)-1){
+			if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]==null){
 				try {
 					bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
 					bPersonalChange.setText(myUserInfo.getName());
@@ -2600,6 +2582,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
 							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 							bIconChange[i].setText(nowShowingGroups[i].getName());
+							bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
 						}
 					}
 
@@ -2622,31 +2605,29 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			try {
 				f = new File(fd.getDirectory()+"/"+fd.getFile());
 				bi=ImageIO.read(f);
+				nowShowingGroup.setMainPhoto(bi);
+				//TODO グル情報新プロフ
+				bPhotoMakeGroup.setIcon(scaleImage(bi,w/2,h/6));
 			}
 			catch (IOException e) {
 				e.printStackTrace();
-			}
-
-			if(bi!=null) {
-				try {
-					bPhotoMakeGroup.setIcon(scaleImage(bi,w/2,h/6));
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
 			break;
 
 
 		case "選択makeGroup":
 			//TODO 各値の最大文字数とかどうする？
-			if(tfNameMyProfile.getText().length()>0) {
-				myUserInfo.setName(tfNameMyProfile.getText());
+			if(tfNameMakeGroup.getText().length()>0) {
+				nowShowingGroup.setName(tfNameMakeGroup.getText());
 			}
 
-			for(int i=0;i<Sex.length;i++) {
-				if(cbGenderMyProfile.getSelectedItem()==Sex[i]) {
-					myUserInfo.setGender(i);
+			if(tfRelationMakeGroup.getText().length()>0) {
+				nowShowingGroup.setName(tfRelationMakeGroup.getText());
+			}
+
+			for(int i=0;i<Purpose.length;i++) {
+				if(cbPurposeMakeGroup.getSelectedItem()==Purpose[i]) {
+					nowShowingGroup.setPurpose(i);
 				}
 			}
 
@@ -2656,36 +2637,151 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 
-			for(int i=0;i<Faculty.length;i++) {
-				if(cbFacultyMyProfile.getSelectedItem()==Faculty[i]) {
-					myUserInfo.setGrade(i);
+			if(taCommentMakeGroup.getText().length()>0) {
+				nowShowingGroup.setName(taCommentMakeGroup.getText());
+			}
+			layout.show(cardPanel,"gathering");
+			break;
+
+
+		case "確定gathering":
+			nowShowingGroup.setHostUser(myUserInfo.getStudentNumber());
+			temp=0;
+			for(int i=0;i<4;i++) {
+				if(tfNumberGather[i].getText()!=null) {
+					nowShowingGroup.setNonhostUser(Integer.valueOf(tfNumberGather[i].getText()),temp);
+					temp++;
 				}
 			}
+			nowShowingGroup.setNumberOfMember(temp+1);
+			//グルの作成(nowShowingGroup)
+			goHome();
+			break;
 
-			for(int i=0;i<Birthplace.length;i++) {
-				if(cbBirthMyProfile.getSelectedItem()==Birthplace[i]) {
-					myUserInfo.setGrade(i);
+
+		case "確認invite":
+			goViewGroup();
+			break;
+
+
+		case "参加invite":
+			//TODO 参加メソッド？
+
+			/*int i=0;
+			flag=false;
+			while(i<MAX && flag==false) {
+				if(myUserInfo.getJoiningGroup()[i]==null) {
+					myUserInfo.setJoiningGroop(nowShowingGroup.getStudentNumber(),i);
+					flag=true;
+				}
+				i++;
+			}
+
+			if(flag) {
+				i=0;
+				flag=false;
+				while(i<MAX && flag==false) {
+					if(myUserInfo.getInvitedGroup()[i]==nowShowingGroup.getStudentNumber()) {
+						myUserInfo.setInvitedGroup(null,i);
+						flag=true;
+					}
+					i++;
+				}
+
+				if(flag) {
+
+				}
+			}*/
+			//戻る
+			break;
+
+
+		case "断るinvite":
+			//TODO 断るメソッド？
+			//戻る
+			break;
+
+
+		case "メンバ0viewGroup":
+		case "メンバ1viewGroup":
+		case "メンバ2viewGroup":
+		case "メンバ3viewGroup":
+		case "メンバ4viewGroup":
+			if(cmd=="メンバ0viewGroup") {
+				//nowShowigUser=情報を取得(nowShowingGroup.getHostUser())
+			}
+			else {
+				for(int i=1;i<5;i++) {
+					if(cmd=="メンバ"+String.valueOf(i)+"viewGroup") {
+						//nowShowigUser=情報を取得(nowShowingGroup.getHostUser())
+					}
 				}
 			}
+			goGood();
+			break;
 
-			for(int i=0;i<Circle.length;i++) {
-				if(cbCircleMyProfile.getSelectedItem()==Circle[i]) {
-					myUserInfo.setGrade(i);
-				}
-			}
 
-			if(tfHobbyMyProfile.getText().length()>0) {
-				myUserInfo.setHobby(tfHobbyMyProfile.getText());
-			}
+		case "いいねviewGroup":
+			//いいねメソッド(myGroupInfo.getStudentNumber())
+			bGoodViewGroup.setVisible(false);
+			lGoodViewGroup.setVisible(true);
+			break;
 
-			if(tfLineIdMyProfile.getText().length()>0) {
-				myUserInfo.setLineId(tfLineIdMyProfile.getText());
+
+		case"メインmyGroupProfile":
+			fd = new FileDialog(this,"Open File",FileDialog.LOAD);
+			fd.setVisible(true);
+			bi = null;
+
+			try {
+				f = new File(fd.getDirectory()+"/"+fd.getFile());
+				bi=ImageIO.read(f);
+				bPhotoMyGroupProfile.setIcon(scaleImage(bi,w/2,h/6));
+				myUserInfo.setMainPhoto(bi);
+				//新プロフの作成
 			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+
+
+		case "確定myGroupProfile":
+			myGroupInfo.setName(tfNameMyGroupProfile.getText());
+			myGroupInfo.setRelation(tfRelationMyGroupProfile.getText());
+			myGroupInfo.setPurpose(cbPurposeMyGroupProfile.getSelectedIndex());
+			myGroupInfo.setComment(taCommentMyGroupProfile.getText());
 			//新プロフ(myUserInfo)
 			layout.show(cardPanel,"menu");
 			break;
 
+
+		case "削除myGroupProfile":
+			temp = JOptionPane.showOptionDialog(this,"本当に削除しますか？","最終確認",JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
+
+			if (temp == 0){
+				//削除メソッド(myGroupProfile.getStudentNumber)
+				isNowUsingGroupAccount=false;
+				nowPage=1;
+				goHome();
+			}
+			break;
+
+
+		case "削除setup":
+			temp = JOptionPane.showOptionDialog(this,"本当に削除しますか？","最終確認",JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
+			if (temp == 0){
+				//削除メソッド(myGroupProfile.getStudentNumber)
+				layout.show(cardPanel,"login");
+			}
+			break;
+
+
+
 		}
+
 	}
 
 	public void stateChanged(ChangeEvent e) {
@@ -2694,8 +2790,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		if(message=="公開" || message=="非公開") {
 			if (cb.isSelected()) {
 				cb.setText("公開");
+				myUserInfo.setIsPublic(true);
+				//新プロフ(myUserInfo.getStudentNumber())
 			} else {
 				cb.setText("非公開");
+				myUserInfo.setIsPublic(false);
+				//新プロフ(myUserInfo.getStudentNumber())
 			}
 		}
 	}

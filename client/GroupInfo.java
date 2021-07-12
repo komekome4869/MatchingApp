@@ -33,7 +33,7 @@ public class GroupInfo implements Serializable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setStudentNumber(UUID gn) {
 		groupNumber=gn;
 	}
@@ -61,7 +61,7 @@ public class GroupInfo implements Serializable{
 	public void setSendGood(UUID[] sg) {
 		sendGood=sg;
 	}
-	
+
 	public void setSendGood(UUID sg,int n) {
 		sendGood[n]=sg;
 	}
@@ -73,10 +73,10 @@ public class GroupInfo implements Serializable{
 	public void setRecieveGood(UUID[] rg) {
 		recieveGood=rg;
 	}
-	
+
 	public void setRecieveGood(UUID rg,int n) {
 		recieveGood[n]=rg;
-		
+
 	}
 
 	public UUID[] getRecieveGood() {
@@ -86,7 +86,7 @@ public class GroupInfo implements Serializable{
 	public void setMatchedGroup(UUID[] mg) {
 		matchedGroup=mg;
 	}
-	
+
 	public void setMatchedGroup(UUID mg,int n) {
 		matchedGroup[n]=mg;
 	}
@@ -114,7 +114,7 @@ public class GroupInfo implements Serializable{
 	public void setNonhostUser(int[] nu) {
 		nonhostUser=nu;
 	}
-	
+
 	public void setNonhostUser(int nu,int n) {
 		nonhostUser[n]=nu;
 	}
