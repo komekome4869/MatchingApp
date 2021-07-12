@@ -28,7 +28,7 @@ public class UserInfo implements Serializable{
 	static int isAuthentificated=0;		//0:認証されていない,1:認証された,2:認証されたが「認証されました画面」を見ていない
 	static BufferedImage mainPhoto;	//メインの写真
 	static BufferedImage[] subPhoto=new BufferedImage[4];		//サブの写真
-	static String lineId="";	//ラインID
+	static String lineId="未登録";	//ラインID
 	static boolean isPublic=true;		//プロフの非公開を希望するユーザはfalseに。falseだと検索に引っかからなくなる。
 
 	UserInfo(){
@@ -118,12 +118,20 @@ public class UserInfo implements Serializable{
 		sendGood=sg;
 	}
 
+	public void setSendGood(int sg,int n) {
+		sendGood[n]=sg;
+	}
+
 	public int[] getSendGood() {
 		return sendGood;
 	}
 
 	public void setRecieveGood(int[] rg) {
 		recieveGood=rg;
+	}
+
+	public void setRecieveGood(int rg,int n) {
+		recieveGood[n]=rg;
 	}
 
 	public int[] getRecieveGood() {
@@ -134,12 +142,20 @@ public class UserInfo implements Serializable{
 		matchedUser=mu;
 	}
 
+	public void setMatchedUser(int mu,int n) {
+		matchedUser[n]=mu;
+	}
+
 	public int[] getMatchedUser() {
 		return matchedUser;
 	}
 
 	public void setJoiningGroop(UUID[] jg) {
 		joiningGroup=jg;
+	}
+
+	public void setJoiningGroop(UUID jg,int n) {
+		joiningGroup[n]=jg;
 	}
 
 	public UUID[] getJoiningGroup() {
@@ -150,9 +166,14 @@ public class UserInfo implements Serializable{
 		invitedGroup=ig;
 	}
 
+	public void setInvitedGroop(UUID ig,int n) {
+		invitedGroup[n]=ig;
+	}
+
 	public UUID[] getInvitedGroup() {
 		return invitedGroup;
 	}
+
 
 	public void setStudentCard(BufferedImage sc) {
 		studentCard=sc;
@@ -180,6 +201,10 @@ public class UserInfo implements Serializable{
 
 	public void setSubPhoto(BufferedImage[] sp) {
 		subPhoto=sp;
+	}
+
+	public void setSubPhoto(BufferedImage sp,int n) {
+		subPhoto[n]=sp;
 	}
 
 	public BufferedImage[] getSubPhoto() {
