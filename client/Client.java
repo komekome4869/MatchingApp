@@ -213,7 +213,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"change");
+	    //layout.show(cardPanel,"finishAuthen");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -451,7 +451,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bnextFinishAuthen=new JButton("すすむ");
         bnextFinishAuthen.setBounds(w/4,3*h/4,w/2,h/10);
         bnextFinishAuthen.addActionListener(this);
-        bnextFinishAuthen.setActionCommand("すすむfinishAuthenl");
+        bnextFinishAuthen.setActionCommand("すすむfinishAuthen");
         bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bnextFinishAuthen);
 
@@ -1866,7 +1866,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		JLabel lTitleGoodInform = new JLabel("いいねが送られました");
 		lTitleGoodInform.setBounds(w/4,h/50,w/2,h/10);
-		lTitleGoodInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleGoodInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/50));
 		lTitleGoodInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleGoodInform);
 
@@ -1922,7 +1922,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		JLabel lTitleMatchingInform = new JLabel("マッチングしました");
 		lTitleMatchingInform.setBounds(w/4,h/50,w/2,h/10);
-		lTitleMatchingInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleMatchingInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/50));
 		lTitleMatchingInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatchingInform);
 
@@ -2179,7 +2179,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 		}
-		layout.show(cardPanel, "matchedInform");
+		layout.show(cardPanel, "matchingInform");
 	}
 
 	public void actionPerformed(ActionEvent ae) {
@@ -2207,7 +2207,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				lMessageLogin.setVisible(true);
 			}
 
-			boolean canLogin=true;
+			boolean canLogin=false;
 			//canLogin=ログイン確認のメソッド
 
 			if(canLogin) {
@@ -2241,7 +2241,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				try {
 					myUserInfo.setStudentNumber(Integer.valueOf(tfIdNew_r.getText()));
 
-					if(tfPasswordNew_r.getText()==tfPasswordConfNew_r.getText()) {
+					if(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText())) {
 						myUserInfo.setPassword(tfPasswordNew_r.getText());
 						layout.show(cardPanel,"judge");
 					}
@@ -2252,6 +2252,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				catch(NumberFormatException e) {
 					lMessageNew_r.setVisible(true);
 				}
+			}
+			else {
+				lMessageNew_r.setVisible(true);
 			}
 			break;
 
@@ -2711,6 +2714,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				nowShowingGroup.setMainPhoto(bi);
 				//TODO グル情報新プロフ
 				bPhotoMakeGroup.setIcon(scaleImage(bi,w/2,h/6));
+				bPhotoMakeGroup.setText("");
 			}
 			catch (IOException e) {
 				e.printStackTrace();
