@@ -1808,9 +1808,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleInviteInform = new JLabel("通知");
+		JLabel lTitleInviteInform = new JLabel("グループに招待されました");
 		lTitleInviteInform.setBounds(w/4,h/50,w/2,h/10);
-		lTitleInviteInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
+		lTitleInviteInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 2*w/50));
 		lTitleInviteInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleInviteInform);
 
@@ -1864,7 +1864,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleGoodInform = new JLabel("通知");
+		JLabel lTitleGoodInform = new JLabel("いいねが送られました");
 		lTitleGoodInform.setBounds(w/4,h/50,w/2,h/10);
 		lTitleGoodInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
 		lTitleGoodInform.setHorizontalAlignment(JLabel.CENTER);
@@ -1920,7 +1920,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleMatchingInform = new JLabel("通知");
+		JLabel lTitleMatchingInform = new JLabel("マッチングしました");
 		lTitleMatchingInform.setBounds(w/4,h/50,w/2,h/10);
 		lTitleMatchingInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/50));
 		lTitleMatchingInform.setHorizontalAlignment(JLabel.CENTER);
@@ -1975,24 +1975,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
-			//nページ目グルの情報取得
+			//nowShowingGroups=nページ目グルの情報取得
 			for(int i=0;i<3;i++) {
 				if(nowShowingGroups[i]==null) {
 					bIconHome[i].setVisible(false);
 				}
 				else {
-				    try {
-						bIconHome[i].setIcon(scaleImage(myGroupInfo.getMainPhoto(),w/6,h/15));
+					try {
+						bIconHome[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/6,h/15));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				    bIconHome[i].setText(nowShowingGroups[i].getName());
+				    bIconHome[i].setVisible(true);
 				}
 			}
 		}
 		else {
-			//nページ目のユーザ情報取得
 			for(int i=0;i<3;i++) {
+				//nowShowingUsers[i]=nページ目のユーザ情報取得
 				if(nowShowingUsers[i]==null) {
 					bIconHome[i].setVisible(false);
 				}
@@ -2003,6 +2004,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						e.printStackTrace();
 					}
 				    bIconHome[i].setText(nowShowingUsers[i].getName());
+				    bIconHome[i].setVisible(true);
 				}
 			}
 		}
@@ -2086,6 +2088,99 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel,"good");
 	}
 
+	public void goInviteInform() {
+
+		for(int i=0;i<3;i++) {
+			//nowShowingGroups[i]=グル情報取得(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
+			if(nowShowingGroups[i]==null) {
+				bIconInviteInform[i].setVisible(false);
+			}
+			else {
+			    try {
+			    	bIconInviteInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/20));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			    bIconInviteInform[i].setText(nowShowingGroups[i].getName());
+			    bIconInviteInform[i].setVisible(true);
+			}
+		}
+		layout.show(cardPanel, "inviteInform");
+	}
+
+	public void goGoodInform() {
+		if(isNowUsingGroupAccount) {
+			for(int i=0;i<3;i++) {
+				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				if(nowShowingGroups[i]==null) {
+					bIconGoodInform[i].setVisible(false);
+				}
+				else {
+				    try {
+				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/20));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				    bIconInviteInform[i].setText(nowShowingGroups[i].getName());
+				    bIconGoodInform[i].setVisible(true);
+				}
+			}
+		}
+		else {
+			for(int i=0;i<3;i++) {
+				//nowShowingUsers[i]=ユーザ情報取得(myUserInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				if(nowShowingUsers[i]==null) {
+					bIconGoodInform[i].setVisible(false);
+				}
+				else {
+				    try {
+				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				    bIconGoodInform[i].setText(nowShowingUsers[i].getName());
+				    bIconGoodInform[i].setVisible(true);
+				}
+			}
+		}
+		layout.show(cardPanel, "goodInform");
+	}
+
+	public void goMatchingInform() {
+		if(isNowUsingGroupAccount) {
+			for(int i=0;i<3;i++) {
+				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
+				if(nowShowingGroups[i]==null) {
+					bIconMatchingInform[i].setVisible(false);
+				}
+				else {
+				    try {
+				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/20));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				    bIconMatchingInform[i].setText(nowShowingGroups[i].getName());
+				}
+			}
+		}
+		else {
+			for(int i=0;i<3;i++) {
+				//nowShowingUsers[i]=グル情報取得(myUserInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				if(nowShowingUsers[i]==null) {
+					bIconMatchingInform[i].setVisible(false);
+				}
+				else {
+				    try {
+				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				    bIconMatchingInform[i].setText(nowShowingUsers[i].getName());
+				}
+			}
+		}
+		layout.show(cardPanel, "matchedInform");
+	}
 
 	public void actionPerformed(ActionEvent ae) {
 		String cmd = ae.getActionCommand();
@@ -2257,28 +2352,43 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case"前のページhome":
-			//検索情報の保存
 			nowPage--;
-			/*nowページの情報を取得
-			if(取得できた){
-		  		goHome();
+			if(nowPage<1) {
+				nowPage++;
 			}
-			else{
-		  		nowPage++;
-			}*/
+			else {
+				if(isNowUsingGroupAccount) {
+					//nowShowingGroups=条件検索
+					goHome();
+				}
+				else {
+					//nowShowingUsers=条件検索
+					goHome();
+				}
+			}
 			break;
 
 
-		case "次のページhome":
-			//TODO 検索情報の保存
+		case"次のページhome":
 			nowPage++;
-			/*nowページの情報を取得
-			if(取得できた){
-		  		goHome();
+			if(isNowUsingGroupAccount) {
+				//nowShowingGroups=条件検索
+				if(nowShowingGroups!=null) {
+					goHome();
+				}
+				else {
+					nowPage--;
+				}
 			}
-			else{
-		  		nowPage--;
-			}*/
+			else {
+				//nowShowingUserss=条件検索
+				if(nowShowingUsers!=null) {
+					goHome();
+				}
+				else {
+					nowPage--;
+				}
+			}
 			break;
 
 
@@ -2530,46 +2640,38 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case"前のページchange":
-			//検索情報の保存
 			nowPage--;
-			if(3*(nowPage-1)<0) {
+			if(nowPage<1) {
 				nowPage++;
 			}
 			else {
-				if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]==null){
-					try {
-						bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
-						bPersonalChange.setText(myUserInfo.getName());
+				try {
+					bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
+					bPersonalChange.setText(myUserInfo.getName());
 
-						for(int i=0;i<3;i++) {
-							if(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i]==null) {
-								bIconChange[i].setVisible(false);
-							}
-							else {
-								//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
-								bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
-								bIconChange[i].setText(nowShowingGroups[i].getName());
-								bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
-							}
+					for(int i=0;i<3;i++) {
+						if(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i]==null) {
+							bIconChange[i].setVisible(false);
 						}
-
-					}
-					catch (IOException e) {
-						e.printStackTrace();
+						else {
+							//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
+							bIconChange[i].setVisible(true);
+							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
+							bIconChange[i].setText(nowShowingGroups[i].getName());
+							bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
+						}
 					}
 				}
-				else{
-			  		nowPage++;
+				catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
-
 			break;
 
 
 		case "次のページchange":
-			//TODO 検索情報の保存
 			nowPage++;
-			if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]==null){
+			if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]!=null){
 				try {
 					bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
 					bPersonalChange.setText(myUserInfo.getName());
@@ -2583,6 +2685,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 							bIconChange[i].setText(nowShowingGroups[i].getName());
 							bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
+							bIconChange[i].setVisible(true);
 						}
 					}
 
@@ -2778,8 +2881,110 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			break;
 
+		//TODO 通知の配列がとびとびになっていないこと前提
+		case "招待inform":
+			nowPage=1;
+			goInviteInform();
+			break;
 
 
+		case "いいねinform":
+			nowPage=1;
+			goGoodInform();
+			break;
+
+
+
+		case "マッチングinform":
+			nowPage=1;
+			goMatchingInform();
+			break;
+
+
+		case"前のページinviteInform":
+			nowPage--;
+			if(nowPage<1) {
+				nowPage++;
+			}
+			else {
+				goInviteInform();
+			}
+			break;
+
+
+		case "次のページinviteInform":
+			nowPage++;
+			if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]!=null){
+				goInviteInform();
+			}
+			else{
+		  		nowPage--;
+			}
+			break;
+
+
+		case"前のページgoodInform":
+			nowPage--;
+			if(nowPage<1) {
+				nowPage++;
+			}
+			else {
+				goGoodInform();
+			}
+			break;
+
+
+		case "次のページgoodInform":
+			nowPage++;
+			if(isNowUsingGroupAccount) {
+				if(myGroupInfo.getRecieveGood()[3*(nowPage-1)]!=null){
+					goInviteInform();
+				}
+				else{
+			  		nowPage--;
+				}
+			}
+			else {
+				if(myUserInfo.getRecieveGood()[3*(nowPage-1)]!=0){
+					goInviteInform();
+				}
+				else{
+			  		nowPage--;
+				}
+			}
+			break;
+
+
+		case"前のページmatchingInform":
+			nowPage--;
+			if(nowPage<1) {
+				nowPage++;
+			}
+			else {
+				goMatchingInform();
+			}
+			break;
+
+
+		case "次のページmatchingInform":
+			nowPage++;
+			if(isNowUsingGroupAccount) {
+				if(myGroupInfo.getMatchedGroup()[3*(nowPage-1)]!=null){
+					goInviteInform();
+				}
+				else{
+			  		nowPage--;
+				}
+			}
+			else {
+				if(myUserInfo.getMatchedUser()[3*(nowPage-1)]!=0){
+					goInviteInform();
+				}
+				else{
+			  		nowPage--;
+				}
+			}
+			break;
 		}
 
 	}
