@@ -214,7 +214,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    //layout.show(cardPanel,"finishAuthen");
+	    layout.show(cardPanel,"howToUse");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1657,6 +1657,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
+		JButton bPrePage = new JButton(iLeft);
+        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+        bPrePage.addActionListener(this);
+        bPrePage.setActionCommand("戻る");
+        card.add(bPrePage);
 
 		JLabel lTitleSetup = new JLabel("設定");
 		lTitleSetup.setBounds(w/4,h/15,w/2,h/10);
@@ -1734,9 +1739,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		card.add(sp);
         //card.add(taexpHtu);
 
-        Rect rect = new Rect();
+        /*Rect rect = new Rect();
         rect.setBounds(0,0,w,h);
-        card.add(rect);
+        card.add(rect);*/
 
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);

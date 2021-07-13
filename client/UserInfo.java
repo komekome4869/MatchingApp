@@ -31,6 +31,8 @@ public class UserInfo implements Serializable{
 	static String lineId="未登録";	//ラインID
 	static boolean isPublic=true;		//プロフの非公開を希望するユーザはfalseに。falseだと検索に引っかからなくなる。
 
+	static final long serialVersionUID=1000;
+
 	UserInfo(){
 		try {
 			mainPhoto=ImageIO.read(new File("./img/test.jpg"));
