@@ -3294,7 +3294,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     }
 	
 	/***************サーバー関連のメソッド・クラス群************************************************************/
-	//サーバーに送るメソッド
+	/*//サーバーに送るメソッド
 	public void connectServer(String ipAddress, int port){	// サーバに接続
 		//Socket socket = null;
 		try {
@@ -3363,9 +3363,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							br = new BufferedReader(sisr);
 							String inputLine = br.readLine();//データを一行分読み込む
 							receiveMessage(inputLine);
-						}catch (ClassNotFoundException e) {
-							System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 						}
+					}catch (ClassNotFoundException e) {
+							System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					}
 				}
 			} catch (IOException e){
 				System.err.println("データ受信時にエラーが発生しました: " + e);
@@ -3378,7 +3379,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
 		//受け取ったメッセージによって異なる処理を記述
 
-	}
+	}*/
 
 	/***************ここまで***************/
 }
