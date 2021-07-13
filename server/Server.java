@@ -132,9 +132,14 @@ public class Server extends JFrame implements ActionListener{
 						}
 						break;
 
-					case "":
+					case "ug": //ユーザにいいねを送る
 
 						break;
+
+					case "gg": //グループにいいねを送る
+
+						break;
+
 					}
 				}
 		}
