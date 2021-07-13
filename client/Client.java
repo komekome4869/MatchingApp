@@ -3294,4 +3294,94 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     	    g2.draw(rect);
     	}
     }
+	
+	/***************サーバー関連のメソッド・クラス群************************************************************/
+	/*//サーバーに送るメソッド
+	public void connectServer(String ipAddress, int port){	// サーバに接続
+		//Socket socket = null;
+		try {
+			socket = new Socket(ipAddress, port); //サーバ(ipAddress, port)に接続
+			out = new ObjectOutputStream(socket.getOutputStream()); //データ送信用オブジェクトの用意
+
+			receiver = new Receiver(socket); //受信用オブジェクトの準備
+			receiver.start();//受信用オブジェクト(スレッド)起動
+		} catch (UnknownHostException e) {
+			System.err.println("ホストのIPアドレスが判定できません: " + e);
+			System.exit(-1);
+		} catch (IOException e) {
+			System.err.println("サーバ接続時にエラーが発生しました: " + e);
+			//updateDisp(topScreenPanel,connectionRefusedPanel);
+			System.exit(-1);
+		}
+	}
+
+	//ソケットを閉じるメソッド
+	public void closeSocket() {
+		try {
+			System.out.println("Socekt Close");//確認用
+			socket.close();
+		}catch(IOException ioe) {
+			ioe.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
+	// サーバにオブジェクトを送信
+	public void sendUserInfo(Object obj) {
+		out.writeObject(obj);
+	}
+
+	// データ受信用スレッド(内部クラス)
+	class Receiver extends Thread {
+
+		// 内部クラスReceiverのコンストラクタ
+		Receiver (Socket socket){
+			try{
+				ois = new ObjectInputStream(socket.getInputStream()); //受信したバイトデータを文字ストリームに
+				sisr = new InputStreamReader(socket.getInputStream());
+			} catch (IOException e) {
+				System.err.println("データ受信時にエラーが発生しました: " + e);
+			}
+		}
+		// 内部クラス Receiverのメソッド
+		public void run(){
+			try{
+				while(true) {
+					try {
+						//UserInfo型なら
+						if(ois.readObject() instanceof UserInfo) {
+							UserInfo ui = new UserInfo();
+							ui = (UserInfo)ois.readObject();
+						}
+
+						//GroupInfo型なら
+						else if(ois.readObject() instanceof GroupInfo) {
+							GroupInfo gi = new GroupInfo();
+							gi = (GroupInfo)ois.readObject();
+						}
+
+						//その他ならreceiveMessage()
+						else {
+							br = new BufferedReader(sisr);
+							String inputLine = br.readLine();//データを一行分読み込む
+							receiveMessage(inputLine);
+						}
+					}catch (ClassNotFoundException e) {
+							System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					}
+				}
+			} catch (IOException e){
+				System.err.println("データ受信時にエラーが発生しました: " + e);
+			}
+		}
+	}
+
+	// メッセージの受信
+	public void receiveMessage(Object msg){
+		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
+		//受け取ったメッセージによって異なる処理を記述
+
+	}*/
+
+	/***************ここまで***************/
 }
