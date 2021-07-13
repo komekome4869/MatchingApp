@@ -2314,8 +2314,33 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "戻る":
-			layout.show(cardPanel,previousPage);
+		case "いいね通知へ":
+			layout.show(cardPanel,"goodInform");
+			break;
+
+
+		case "ホームへ":
+			layout.show(cardPanel,"home");
+			break;
+
+
+		case "メニューへ":
+			layout.show(cardPanel,"menu");
+			break;
+
+
+		case "切り替えへ":
+			layout.show(cardPanel,"change");
+			break;
+
+
+		case "グル作成へ":
+			layout.show(cardPanel,"makeGroup");
+			break;
+
+
+		case "招待通知へ":
+			layout.show(cardPanel,"inviteInform");
 			break;
 
 

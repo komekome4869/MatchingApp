@@ -7,22 +7,22 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 
 public class GroupInfo implements Serializable{
-	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
-	static int state;		//グル作成なら0,プロフ更新なら1
+	int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
+	int state;		//グル作成なら0,プロフ更新なら1
 
-	static UUID groupNumber;	//このグルの識別番号。クライアントがグルを作ったのち、サーバが割り振る
-	static String name="";		//グループ名
-	static String relation="";		//グルのメンバの関係性
-	static UUID[] sendGood=new UUID[MAX];		//このグルがイイネを送った相手のグルの識別番号
-	static UUID[] recieveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
-	static UUID[] matchedGroup=new UUID[MAX];		//このグルとマッチングした相手のグルの識別番号
-	static BufferedImage mainPhoto;		//グルの写真
-	static int hostUser=0;		//グルのホストユーザ(=グルを作った人)
-	static int[] nonhostUser=new int[4];		//グルのホストでないユーザ。グルに招待されている時点で追加する
-	static int purpose=0;			//グルの目的。Client.javaの配列Purposeで文字列に変える
-	static String comment="";		//グルの一言コメント
-	static int numberOfMember=1;	//グルの人数。グループから抜ける機能はなくなったので、招待した時点で固定。
-	static boolean isGathered=false;	//グルが全員集まったならtrueに変換し、検索に引っかかるようになる。
+	UUID groupNumber;	//このグルの識別番号。クライアントがグルを作ったのち、サーバが割り振る
+	String name="";		//グループ名
+	String relation="";		//グルのメンバの関係性
+	UUID[] sendGood=new UUID[MAX];		//このグルがイイネを送った相手のグルの識別番号
+	UUID[] recieveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
+	UUID[] matchedGroup=new UUID[MAX];		//このグルとマッチングした相手のグルの識別番号
+	BufferedImage mainPhoto;		//グルの写真
+	int hostUser=0;		//グルのホストユーザ(=グルを作った人)
+	int[] nonhostUser=new int[4];		//グルのホストでないユーザ。グルに招待されている時点で追加する
+	int purpose=0;			//グルの目的。Client.javaの配列Purposeで文字列に変える
+	String comment="";		//グルの一言コメント
+	int numberOfMember=1;	//グルの人数。グループから抜ける機能はなくなったので、招待した時点で固定。
+	boolean isGathered=false;	//グルが全員集まったならtrueに変換し、検索に引っかかるようになる。
 	//グルから抜ける機能がない以上、誰かが招待を断った時点でグルは削除
 
 	static final long serialVersionUID=1L;
