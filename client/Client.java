@@ -2520,7 +2520,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					e.printStackTrace();
 				}
 
-				layout.show(cardPanel,"myGroupProfile");
+				layout.show(cardPanel,"myProfile");
 			}
 
 			break;
