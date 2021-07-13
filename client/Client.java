@@ -115,6 +115,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JButton bGoodGood = new JButton("いいね");
     JLabel lGoodGood = new JLabel("既にいいねしました");
 
+    JLabel lIconMatching = new JLabel(iTest);
     JLabel lNameMatching = new JLabel("○○さんとマッチしました！");
     JLabel lIdMatching = new JLabel("LINEID:aaaaaaaaa");
 
@@ -856,8 +857,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bPrePage.setActionCommand("戻る");
         card.add(bPrePage);
 
-        ImageIcon icon = new ImageIcon("test.jpeg");
-        JLabel lIconMatching = new JLabel(icon);
         lIconMatching.setBounds(w/5,h/7,w/2,h/5);
         lIconMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIconMatching);
@@ -2988,6 +2987,128 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			  		nowPage--;
 				}
 			}
+			break;
+
+
+		case "プロフィール0inviteInform":
+		case "プロフィール1inviteInform":
+		case "プロフィール2inviteInform":
+			for(int i=0;i<3;i++) {
+				if(cmd=="プロフィール"+String.valueOf(i)+"inviteInform") {
+					nowShowingGroup=nowShowingGroups[i];
+				}
+			}
+
+			try {
+				lIconInvite.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//lHostInvite.setText("<html><body>"+//ユーザ情報(nowShowingGroup.getHostUser).getName()
+			//+"<br/>に招待されました</html></body>");
+			layout.show(cardPanel,"invite");
+			break;
+
+
+		case "プロフィール0goodInform":
+		case "プロフィール1goodInform":
+		case "プロフィール2goodInform":
+			if(isNowUsingGroupAccount) {
+				for(int i=0;i<3;i++) {
+					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+						nowShowingGroup=nowShowingGroups[i];
+					}
+				}
+				lGroupNameReplyGroup.setText(nowShowingGroup.getName());
+				try {
+					lGroupPhotoReplyGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
+					lGroupProfileReplyGroup.setText("<html><body>"+nowShowingGroup.getPurpose()+"<br />"+nowShowingGroup.getComment()+"</body></html>");
+					//TODO 一言は何文字まで？
+
+					//UserInfoの取得(nowShowingGroup.getHostUser())
+					//bMemberProfileReplyGroup[0].setIcon(scaleImage(,w/3,h/12));
+					//bMemberProfileReplyGroup[0].setText(ホストの名前)
+
+					/*for(int i=1;i<5;i++) {
+						//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
+						if(nonhostUserの情報!=null) {
+							bMemberProfileReplyGroup[i].setIcon(scaleImage(,w/3,h/12));
+							bMemberProfileReplyGroup[i].setText(ノンホストの名前)
+						}
+					}*/
+
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+				layout.show(cardPanel,"replyGroup");
+
+			}
+			else {
+				for(int i=0;i<3;i++) {
+					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+						nowShowingUser=nowShowingUsers[i];
+					}
+				}
+				lNameReply.setText(nowShowingUser.getName());
+				lGenderReply2.setText(Sex[nowShowingUser.getGender()]);
+				lGradeReply2.setText(String.valueOf(nowShowingUser.getGrade()));
+				lFacultyReply2.setText(Faculty[nowShowingUser.getFaculty()]);
+				lBirthReply2.setText(Birthplace[nowShowingUser.getBirth()]);
+				lCircleReply2.setText(Circle[nowShowingUser.getCircle()]);
+				lHobbyReply2.setText(nowShowingUser.getHobby());
+
+				try {
+					lMainPhotoReply.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/6));
+					for(int i=0;i<4;i++) {
+						lSubPhotoReply[i].setIcon(scaleImage(nowShowingUser.getSubPhoto()[i],w/6,h/10));
+					}
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				layout.show(cardPanel,"reply");
+			}
+			break;
+
+
+		case "プロフィール0matchingInform":
+		case "プロフィール1matchingInform":
+		case "プロフィール2matchingInform":
+			if(isNowUsingGroupAccount) {
+				for(int i=0;i<3;i++) {
+					if(cmd=="プロフィール"+String.valueOf(i)+"matchingInform") {
+						nowShowingGroup=nowShowingGroups[i];
+					}
+				}
+
+				try {
+					lIconMatching.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
+					lNameMatching.setText("<html><body>"+nowShowingGroup.getName()+"<br+nowSh />とマッチングしました！</body></html>");
+					//lIdMatching.setText("LINE ID:"+//ユーザ情報の取得(nowShowingGroup.getHost()).getLineId());
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+			else {
+				for(int i=0;i<3;i++) {
+					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+						nowShowingUser=nowShowingUsers[i];
+					}
+				}
+				try {
+					lIconMatching.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/5));
+					lNameMatching.setText("<html><body>"+nowShowingUser.getName()+"<br+nowSh />とマッチングしました！</body></html>");
+					lIdMatching.setText("LINE ID:"+nowShowingUser.getLineId());
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			layout.show(cardPanel,"matching");
 			break;
 		}
 
