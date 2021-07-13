@@ -5,6 +5,15 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,6 +28,10 @@ import javax.swing.event.ChangeListener;
 
 
 public class Server extends JFrame implements ActionListener{
+
+	static PrintWriter out; //データ送信用オブジェクト
+	static Receiver receiver; //データ受信用オブジェクト
+	static ServerSocket ss;
 
 	int w = 400;
 	int h = 650;
@@ -56,6 +69,12 @@ public class Server extends JFrame implements ActionListener{
 		setVisible(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		try {
+			ss = new ServerSocket(50);
+		} catch (IOException e) {
+			System.err.println("エラーが発生しました: " + e);
+		}
 	}
 
 	public static void main(String args[]) {
@@ -75,6 +94,140 @@ public class Server extends JFrame implements ActionListener{
 			System.exit(0);
 		}
 	}
+
+	// データ受信用スレッド(内部クラス)
+	static class Receiver extends Thread {
+		private InputStreamReader sisr; //受信データ用文字ストリーム
+		private BufferedReader br; //文字ストリーム用のバッファ
+		private ObjectInputStream ois;
+		private PrintWriter out_buf; //送信先を記録
+		private Receiver receiver_buf; //受信元を記録
+
+		// 内部クラスReceiverのコンストラクタ
+		Receiver (Socket socket){
+			try{
+				out_buf = out;
+				receiver_buf = receiver;
+				ois = new ObjectInputStream(socket.getInputStream());
+				sisr = new InputStreamReader(socket.getInputStream());
+			} catch (IOException e) {
+					System.err.println("データ受信時にエラーが発生しました: " + e);
+			}
+		}
+
+		//メッセージの処理
+		public void receiveMessage(String inputLine) {
+				if (inputLine != null){ //データを受信したら
+					String act[] = inputLine.split(","); //カンマの前後で文字列を分割
+
+					switch(act[0]){
+					case "lg": //新規登録する
+						if(checkPassword(act[1],act[2] /*(学籍番号,パスワード)*/) == true) {
+							out_buf.print("1");
+							out_buf.flush();
+						}
+						else {
+							out_buf.print("0");
+							out_buf.flush();
+						}
+						break;
+
+					case "":
+
+						break;
+					}
+				}
+		}
+
+		// 内部クラス Receiverのメソッド
+		public void run(){
+			try {
+				while(true) {
+					//オブジェクトを受信
+					Object obj = null;
+					try {
+						obj = ois.readObject();
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+
+					//UserInfo型なら
+					if(obj instanceof UserInfo) {
+
+					}
+
+					//GroupInfo型なら
+					else if(obj instanceof GroupInfo) {
+
+					}
+
+					//その他ならreceiveMessage()
+					else {
+						br = new BufferedReader(sisr);
+						String inputLine = br.readLine();//データを一行分読み込む
+						receiveMessage(inputLine);
+					}
+
+
+				}
+			}catch(IOException e) {
+				System.err.println("クライアントが切断しました");
+			}
+		}
+	}
+
+	//クライアントに接続
+	public void acceptClient(){ //クライアントの接続(サーバの起動)
+		try {
+			while (true) {
+				Socket socket = ss.accept(); //新規接続を受け付ける
+				System.out.println("クライアントと接続しました．"); //テスト用出力
+				out = new PrintWriter(socket.getOutputStream(), true);//データ送信オブジェクトを用意
+				receiver = new Receiver(socket);//データ受信オブジェクト(スレッド)を用意
+				receiver.start();//データ送信オブジェクト(スレッド)を起動
+			}
+		} catch (Exception e) {
+			System.err.println("ソケット作成時にエラーが発生しました: " + e);
+		}
+	}
+
+	//パスワードチェック
+	public static boolean checkPassword(String num, String pass) {
+		String path = System.getProperty("user.dir") + "\\ID" + "\\" + num; //ディレクトリ
+		File LoginFile = new File(path + "\\" + num + ".txt"); //ユーザファイル
+		File dir = new File(path);
+		BufferedReader br = null;
+		FileReader fr = null;
+
+		//ディレクトリまたはユーザファイルが存在しない場合
+		if(!dir.exists() || !LoginFile.exists()) return false;
+		//ディレクトリおよびユーザファイルが存在する場合
+		else {
+			try {
+				fr = new FileReader(LoginFile);
+				br = new BufferedReader(fr);
+				String str = br.readLine();				//1行目読み込み
+				br.close();
+				String res[] = str.split(" ");			//空白で分割
+
+				//もしパスワードが一致していればtrue
+				if(res[1] == pass) return true;
+				//そうでなければfalse
+				else return false;
+
+			}catch(IOException e) {
+				System.err.println("エラーが発生しました：" + e);
+				return false;
+			}
+		}
+	}
+
+	//新規登録
+	public static void signUp() {
+
+	}
+
+	//
 
 	class Authentificate extends JFrame implements ActionListener{
 
@@ -328,4 +481,3 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 }
-
