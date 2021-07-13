@@ -22,9 +22,9 @@ public class GroupInfo implements Serializable{
 	static String comment="";		//グルの一言コメント
 	static int numberOfMember=1;	//グルの人数。グループから抜ける機能はなくなったので、招待した時点で固定。
 	static boolean isGathered=false;	//グルが全員集まったならtrueに変換し、検索に引っかかるようになる。
-
 	//グルから抜ける機能がない以上、誰かが招待を断った時点でグルは削除
 
+	static final long serialVersionUID=1L;
 
 	GroupInfo(){
 		try {
