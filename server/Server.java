@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -15,6 +16,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -153,6 +155,9 @@ public class Server extends JFrame implements ActionListener{
 						if(ois.readObject() instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)ois.readObject();
+							if(ui.state == 0) {
+								signUp(ui);
+							}
 						}
 
 						//GroupInfo型なら
@@ -197,7 +202,7 @@ public class Server extends JFrame implements ActionListener{
 
 	//パスワードチェック
 	public static boolean checkPassword(String num, String pass) {
-		String path = System.getProperty("user.dir") + "\\ID" + "\\" + num; //ディレクトリ
+		String path = System.getProperty("user.dir") + "\\ID"; //ディレクトリ
 		File LoginFile = new File(path + "\\" + num + ".txt"); //ユーザファイル
 		File dir = new File(path);
 		BufferedReader br = null;
@@ -227,8 +232,70 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//新規登録
-	public static void signUp(UserInfo u) {
+	public static void signUp(UserInfo ui) {
+		String path = System.getProperty("user.dir") + "\\ID"; //ディレクトリ
+		File LoginFile = new File(path + "\\" + ui.studentNumber + ".txt"); //ユーザファイル
+		File dir = new File(path);
+		File image_dir = new File(path + "\\images");
+		File image_user_dir = new File(path + "\\images" + "\\" + ui.studentNumber);
+		File main_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_main.png");
+		File sub1_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub1.png");
+		File sub2_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub2.png");
+		File sub3_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub3.png");
+		File sub4_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub4.png");
 
+
+		//ディレクトリの作成
+		if(!dir.exists()) {
+			dir.mkdir();
+			image_dir.mkdir();
+		}
+
+		//ファイルの作成
+		if(!LoginFile.exists()) {
+			try {
+				LoginFile.createNewFile();
+				image_user_dir.mkdir();
+			} catch (IOException e) {
+				System.err.println("ファイル作成時に予期せぬエラーが発生しました");
+				return;
+			}
+		}
+
+		try {
+			//ユーザ情報ファイルを作成
+			FileWriter fw = new FileWriter(LoginFile);
+			fw.write(ui.studentNumber + "\n" +
+					 ui.password + "\n" +
+					 ui.name + "\n" +
+					 ui.gender + "\n" +
+					 ui.grade + "\n" +
+					 ui.faculty + "\n" +
+					 ui.birth + "\n" +
+					 ui.circle + "\n" +
+					 ui.hobby + "\n" +
+					 /*学籍番号*/"\n" +
+					 /*学籍番号*/"\n" +
+					 /*学籍番号*/"\n" +
+					 /*UUID*/"\n" +
+					 /*UUID*/"\n" +
+					 ui.isAuthentificated +"\n"+
+					 ui.lineId + "\n" +
+					 ui.isPublic + "\n"
+					 );
+			fw.close();
+
+			//画像を保存
+			ImageIO.write(ui.mainPhoto, "png", main_image);
+			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
+			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
+			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
+			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
+
+		} catch (IOException e) {
+			System.err.print("新規登録の際にエラーが発生しました：" + e);
+			return;
+		}
 	}
 
 	//
