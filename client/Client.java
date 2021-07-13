@@ -2501,6 +2501,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				layout.show(cardPanel, "myGroupProfile");
 			}
 			else {
+				//TODO 学年0
 				tfNameMyProfile.setText(myUserInfo.getName());
 				cbGenderMyProfile.setSelectedIndex(myUserInfo.getGender());
 				cbGradeMyProfile.setSelectedIndex(myUserInfo.getGrade());
@@ -2781,6 +2782,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "確定gathering":
+			//TODO 赤文字出てる
 			nowShowingGroup.setHostUser(myUserInfo.getStudentNumber());
 			temp=0;
 			for(int i=0;i<4;i++) {
