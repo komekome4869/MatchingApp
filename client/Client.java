@@ -536,7 +536,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("いいね通知へ");
         card.add(bPrePage);
 
 		lNameReply.setBounds(w/4,h/60,w/2,h/15);
@@ -659,7 +659,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("いいね通知へ");
         card.add(bPrePage);
 
 		lGroupNameReplyGroup.setBounds(w/4,h/60,w/2,h/20);
@@ -854,7 +854,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("マッチング通知へ");
         card.add(bPrePage);
 
         lIconMatching.setBounds(w/5,h/7,w/2,h/5);
@@ -902,7 +902,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("ホームへ");
         card.add(bPrePage);
 
 		JLabel lTitleSearchUser = new JLabel("検索");
@@ -978,7 +978,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("ホームへ");
         card.add(bPrePage);
 
 		JLabel lTitleSearchGroup = new JLabel("検索");
@@ -1079,7 +1079,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("メニューへ");
         card.add(bPrePage);
 
         JLabel lTitleMyProfile = new JLabel("Myプロフィール");
@@ -1220,7 +1220,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("メニューへ");
         card.add(bPrePage);
 
         JButton bMakeGroupChange = new JButton("グループ作成",iAdd);
@@ -1286,7 +1286,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("切り替えへ");
         card.add(bPrePage);
 
         JLabel lTitleMakeGroup = new JLabel("グループプロフィール");
@@ -1374,7 +1374,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("グル作成へ");
         card.add(bPrePage);
 
 		// タイトル
@@ -1438,7 +1438,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("招待通知へ");
         card.add(bPrePage);
 
 		//タイトル
@@ -1567,7 +1567,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("メニューへ");
         card.add(bPrePage);
 
         JLabel lTitleMyGroupProfile = new JLabel("グループプロフィール");
@@ -1660,7 +1660,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("メニューへ");
         card.add(bPrePage);
 
 		JLabel lTitleSetup = new JLabel("設定");
@@ -1720,7 +1720,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("メニューへ");
         card.add(bPrePage);
 
 		JLabel lTitleHtu = new JLabel("使い方");

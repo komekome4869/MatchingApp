@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 public class UserInfo implements Serializable{
 	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
+	static int state;		//新規登録なら0,プロフ更新なら1
 
 	static int studentNumber=0;	//学籍番号
 	static String password="";
@@ -42,6 +43,14 @@ public class UserInfo implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int s) {
+		state=s;
 	}
 
 	public void setStudentNumber(int sn) {
