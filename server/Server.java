@@ -143,29 +143,28 @@ public class Server extends JFrame implements ActionListener{
 		public void run(){
 			try {
 				while(true) {
-					//オブジェクトを受信
-					Object obj = null;
 					try {
-						obj = ois.readObject();
+						//UserInfo型なら
+						if(ois.readObject() instanceof UserInfo) {
+							UserInfo ui = new UserInfo();
+							ui = (UserInfo)ois.readObject();
+						}
+
+						//GroupInfo型なら
+						else if(ois.readObject() instanceof GroupInfo) {
+							GroupInfo gi = new GroupInfo();
+							gi = (GroupInfo)ois.readObject();
+						}
+
+						//その他ならreceiveMessage()
+						else {
+							br = new BufferedReader(sisr);
+							String inputLine = br.readLine();//データを一行分読み込む
+							receiveMessage(inputLine);
+						}
+
 					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					}
-
-					//UserInfo型なら
-					if(obj instanceof UserInfo) {
-
-					}
-
-					//GroupInfo型なら
-					else if(obj instanceof GroupInfo) {
-
-					}
-
-					//その他ならreceiveMessage()
-					else {
-						br = new BufferedReader(sisr);
-						String inputLine = br.readLine();//データを一行分読み込む
-						receiveMessage(inputLine);
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					}
 
 
@@ -223,7 +222,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//新規登録
-	public static void signUp() {
+	public static void signUp(UserInfo u) {
 
 	}
 
