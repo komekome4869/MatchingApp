@@ -81,7 +81,8 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	public static void main(String args[]) {
-		Server Server = new Server("MS_Server");
+		Server server = new Server("MS_Server");
+		server.acceptClient();
 	}
 
 	@Override
