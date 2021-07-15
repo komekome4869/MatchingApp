@@ -85,7 +85,7 @@ public class Server extends JFrame implements ActionListener{
 	//メインメソッド
 	public static void main(String args[]) {
 		Server server = new Server("MS_Server");
-		//server.acceptClient();
+		server.acceptClient();
 	}
 
 	//ボタン操作
