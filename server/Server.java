@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -80,7 +81,8 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	public static void main(String args[]) {
-		Server Server = new Server("MS_Server");
+		Server server = new Server("MS_Server");
+		server.acceptClient();
 	}
 
 	@Override
@@ -142,6 +144,14 @@ public class Server extends JFrame implements ActionListener{
 
 						break;
 
+					case "jg": //グループに参加
+						joinGroup(act[1], act[2]);
+						break;
+
+					case "rg": //グループ参加拒否
+
+						break;
+
 					}
 				}
 		}
@@ -155,15 +165,21 @@ public class Server extends JFrame implements ActionListener{
 						if(ois.readObject() instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)ois.readObject();
+							//新規登録
 							if(ui.state == 0) {
 								signUp(ui);
 							}
+							//
 						}
 
 						//GroupInfo型なら
 						else if(ois.readObject() instanceof GroupInfo) {
 							GroupInfo gi = new GroupInfo();
 							gi = (GroupInfo)ois.readObject();
+							//グループ作成
+							if(gi.state == 0) {
+								makeGroup(gi);
+							}
 						}
 
 						//その他ならreceiveMessage()
@@ -244,7 +260,6 @@ public class Server extends JFrame implements ActionListener{
 		File sub3_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub3.png");
 		File sub4_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub4.png");
 
-
 		//ディレクトリの作成
 		if(!dir.exists()) {
 			dir.mkdir();
@@ -298,8 +313,123 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
-	//
+	//グループ作成
+	public static void makeGroup(GroupInfo gi) {
 
+		String path = System.getProperty("user.dir") + "\\Group"; //ディレクトリ
+		gi.groupNumber = UUID.randomUUID(); //UUIDの作成
+		File GroupFile = new File(path + "\\" + gi.groupNumber.toString() + ".txt");
+		File dir = new File(path);
+		File image_dir = new File(path + "\\images");
+		File main_image = new File(path + "\\images" + "\\" + gi.groupNumber + "_main.png");
+
+		//ディレクトリの作成
+		if(!dir.exists()) {
+			dir.mkdir();
+			image_dir.mkdir();
+		}
+
+		//ファイルの作成
+		if(!GroupFile.exists()) {
+			try {
+				GroupFile.createNewFile();
+			} catch (IOException e) {
+				System.err.println("ファイル作成時に予期せぬエラーが発生しました");
+				return;
+			}
+		}
+
+		try {
+			//グループ情報ファイルを作成
+			FileWriter fw = new FileWriter(GroupFile);
+			fw.write(gi.name + "\n" +
+					 gi.relation + "\n" +
+					 /*UUID*/ "\n" +
+					 /*UUID*/ "\n" +
+					 /*UUID*/ "\n" +
+					 gi.hostUser + "\n" +
+					 gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3] + "\n" +
+					 gi.comment + "\n" +
+					 gi.numberOfMember + "\n"
+					 );
+			fw.close();
+
+			//画像を保存
+			ImageIO.write(gi.mainPhoto, "png", main_image);
+
+		} catch (IOException e) {
+			System.err.print("新規登録の際にエラーが発生しました：" + e);
+			return;
+		}
+	}
+
+	//グループ参加
+	public static boolean joinGroup(String studentNum, String uuid) {
+        BufferedReader br = null;
+        FileReader fr = null;
+        FileWriter fw = null;
+        String line;
+        StringBuffer strbuf = new StringBuffer("");
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				strbuf.append(line + "\n");
+				if(line_counter == 13) break;
+			}
+
+			//参加しているグループ(13行目)に追加
+			if(line == "") { //今まで参加してなかった場合
+				strbuf.append(uuid + "\n");
+			}else {				//すでに参加したことがある場合
+				strbuf.append(line + " " + uuid + "\n");
+			}
+
+			line = br.readLine(); //次の行
+
+			//誘われているグループ(14行目)から削除
+			line = line.replace(uuid, ""); //UUIDを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+		}catch(IOException e) {
+			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
+			return false;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
 
 		public Authentificate() {
@@ -393,6 +523,7 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
+	//会員検索内部クラス
 	class searchUsers extends JFrame implements ActionListener,ChangeListener{
 		JPanel cardPanel;
 		CardLayout cardLayout;
