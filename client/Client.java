@@ -53,7 +53,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	GroupInfo nowShowingGroup=new GroupInfo();
 	int nowPage=1;
 	boolean isNowUsingGroupAccount=false;
-	String previousPage="HOME";
+	String prePageForGood="home";
+	String prePageForViewGroup="home";
 
 	//プロフィールの検索で選ぶやつ
 	String[] Sex = {"男性", "女性", "その他"};
@@ -727,7 +728,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("戻るgood");
         card.add(bPrePage);
 
 		lNameGood.setBounds(w/4,h/60,w/2,h/15);
@@ -1503,7 +1504,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("戻る");
+        bPrePage.setActionCommand("戻るviewGroup");
         card.add(bPrePage);
 
 		lGroupNameViewGroup.setBounds(w/4,h/60,w/2,h/20);
@@ -2020,7 +2021,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lGroupNameViewGroup.setText(nowShowingGroup.getName());
 		try {
 			lGroupPhotoViewGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
-			lGroupProfileViewGroup.setText("<html><body>"+nowShowingGroup.getPurpose()+"<br />"+nowShowingGroup.getComment()+"</body></html>");
+			lGroupProfileViewGroup.setText("<html><body>"+Purpose[nowShowingGroup.getPurpose()]+"<br />"+nowShowingGroup.getComment()+"</body></html>");
 			//TODO 一言は何文字まで？
 
 			//UserInfoの取得(nowShowingGroup.getHostUser())
@@ -2060,7 +2061,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goGood() {
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
-		lGradeGood2.setText(String.valueOf(nowShowingUser.getGrade()));
+		lGradeGood2.setText(String.valueOf(Grade[nowShowingUser.getGrade()]));
 		lFacultyGood2.setText(Faculty[nowShowingUser.getFaculty()]);
 		lBirthGood2.setText(Birthplace[nowShowingUser.getBirth()]);
 		lCircleGood2.setText(Circle[nowShowingUser.getCircle()]);
@@ -2235,12 +2236,19 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "アカウント作成login":
+			lMessageNew_r.setVisible(false);
+			tfIdNew_r.setText("");
+			tfPasswordNew_r.setText("");
+			tfPasswordConfNew_r.setText("");
 			layout.show(cardPanel,"new_regis");
-
 			break;
 
 
 		case "登録new_regis":
+			lPicOutputJudge.setIcon(null);
+			lPicOutputJudge.setText("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
+			tfNumberJudge.setText("");
+			tfNameJudge.setText("");
 			if(tfIdNew_r.getText().length()!=0&&tfPasswordNew_r.getText().length()!=0) {
 				try {
 					myUserInfo.setStudentNumber(Integer.valueOf(tfIdNew_r.getText()));
@@ -2319,6 +2327,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
+		case "マッチング通知へ":
+			layout.show(cardPanel,"matchingInform");
+			break;
+
+
 		case "ホームへ":
 			layout.show(cardPanel,"home");
 			break;
@@ -2344,8 +2357,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
+		case "戻るgood":
+			layout.show(cardPanel,prePageForGood);
+			break;
+
+
+		case "戻るviewGroup":
+			layout.show(cardPanel,prePageForViewGroup);
+			break;
+
+
 		case "検索home":
-			previousPage="HOME";
 			if(isNowUsingGroupAccount) {
 				layout.show(cardPanel, "searchGroup");
 			}
@@ -2369,6 +2391,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
+				prePageForViewGroup="home";
 				goViewGroup();
 			}
 			else {
@@ -2377,9 +2400,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
+				prePageForGood="home";
 				goGood();
 			}
-			previousPage="HOME";
 			break;
 
 
@@ -2457,9 +2480,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case"確認matching":
 			if(isNowUsingGroupAccount) {
+				prePageForViewGroup="matching";
 				goViewGroup();
 			}
 			else {
+				prePageForGood="matching";
 				goGood();
 			}
 			break;
@@ -2501,7 +2526,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				layout.show(cardPanel, "myGroupProfile");
 			}
 			else {
-				//TODO 学年0
 				tfNameMyProfile.setText(myUserInfo.getName());
 				cbGenderMyProfile.setSelectedIndex(myUserInfo.getGender());
 				cbGradeMyProfile.setSelectedIndex(myUserInfo.getGrade());
@@ -2798,6 +2822,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "確認invite":
+			prePageForViewGroup="invite";
 			goViewGroup();
 			break;
 
@@ -2855,6 +2880,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					}
 				}
 			}
+			prePageForGood="vewGroup";
 			goGood();
 			break;
 
@@ -2912,6 +2938,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 			if (temp == 0){
 				//削除メソッド(myGroupProfile.getStudentNumber)
+				myUserInfo=new UserInfo();
+				isNowUsingGroupAccount=false;
+				lMessageLogin.setVisible(false);
+				tfIdLogin.setText("");
+				tfPasswordLogin.setText("");
 				layout.show(cardPanel,"login");
 			}
 			break;
@@ -3054,7 +3085,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				lGroupNameReplyGroup.setText(nowShowingGroup.getName());
 				try {
 					lGroupPhotoReplyGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
-					lGroupProfileReplyGroup.setText("<html><body>"+nowShowingGroup.getPurpose()+"<br />"+nowShowingGroup.getComment()+"</body></html>");
+					lGroupProfileReplyGroup.setText("<html><body>"+Purpose[nowShowingGroup.getPurpose()]+"<br />"+nowShowingGroup.getComment()+"</body></html>");
 					//TODO 一言は何文字まで？
 
 					//UserInfoの取得(nowShowingGroup.getHostUser())
@@ -3084,7 +3115,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 				lNameReply.setText(nowShowingUser.getName());
 				lGenderReply2.setText(Sex[nowShowingUser.getGender()]);
-				lGradeReply2.setText(String.valueOf(nowShowingUser.getGrade()));
+				lGradeReply2.setText(String.valueOf(Grade[nowShowingUser.getGrade()]));
 				lFacultyReply2.setText(Faculty[nowShowingUser.getFaculty()]);
 				lBirthReply2.setText(Birthplace[nowShowingUser.getBirth()]);
 				lCircleReply2.setText(Circle[nowShowingUser.getCircle()]);
@@ -3188,6 +3219,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         return new ImageIcon(dst);
     }
 
+
+    //TODO 多分もういらない
 	//通知ウィンドウ内部クラスですよ
     public class Notification extends JFrame implements ActionListener{
 
@@ -3294,7 +3327,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     	    g2.draw(rect);
     	}
     }
-	
+
 	/***************サーバー関連のメソッド・クラス群************************************************************/
 	/*//サーバーに送るメソッド
 	public void connectServer(String ipAddress, int port){	// サーバに接続
