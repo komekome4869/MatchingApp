@@ -477,6 +477,9 @@ public class Server extends JFrame implements ActionListener{
 			//グループファイル削除
 			file.delete();
 
+			//画像削除
+			main_image.delete();
+
 		}catch(IOException e) {
 			System.err.print("グループ参加拒否に関する処理でエラーが発生しました：" + e);
 			return false;
