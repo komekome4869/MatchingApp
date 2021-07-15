@@ -40,6 +40,7 @@ public class Server extends JFrame implements ActionListener{
 	int w = 400;
 	int h = 650;
 
+	//コンストラクタ
 	public Server(String title){
 		setTitle(title);
 
@@ -77,15 +78,17 @@ public class Server extends JFrame implements ActionListener{
 		try {
 			ss = new ServerSocket(50);
 		} catch (IOException e) {
-			System.err.println("エラーが発生しました: " + e);
+			System.err.println("サーバソケット作成時にエラーが発生しました: " + e);
 		}
 	}
 
+	//メインメソッド
 	public static void main(String args[]) {
 		Server server = new Server("MS_Server");
 		//server.acceptClient();
 	}
 
+	//ボタン操作
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
@@ -101,7 +104,7 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
-	// データ受信用スレッド(内部クラス)
+	//データ受信用スレッド(内部クラス)
 	static class Receiver extends Thread {
 		private InputStreamReader sisr; //受信データ用文字ストリーム
 		private BufferedReader br; //文字ストリーム用のバッファ
@@ -151,7 +154,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case "rg": //グループ参加拒否
-
+						refuseGroup(act[2]);
 						break;
 
 					}
@@ -429,6 +432,136 @@ public class Server extends JFrame implements ActionListener{
 
 		return true;
 
+	}
+
+	//グループ参加拒否
+	public static boolean refuseGroup(String uuid) {
+        BufferedReader br = null;
+        FileReader fr = null;
+        String line;
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\Group\\" + uuid + ".txt");
+			File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + uuid + "_main.png");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 7) break;
+			}
+
+			//ホストユーザのグループに関する記録を削除
+			deleteInvitation(line,uuid);
+
+			//次の行
+			line = br.readLine();
+
+			//文字列をスペースで分割
+			String nonhoststudents[] = line.split(" ");
+
+			//人数の行までスキップ
+			for(int i = 0; i<3; i++) {
+				line = br.readLine();
+			}
+
+			//グループの人数を記録
+			int num = Integer.parseInt(line);
+
+			//ユーザ情報からグループに関する記録を削除
+			for(int i = 0; i < num - 1; i++) {
+				deleteInvitation(nonhoststudents[num],uuid);
+			}
+
+			//グループファイル削除
+			file.delete();
+
+			//画像削除
+			main_image.delete();
+
+		}catch(IOException e) {
+			System.err.print("グループ参加拒否に関する処理でエラーが発生しました：" + e);
+			return false;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+	//ユーザのグループの招待を削除
+	public static void deleteInvitation(String studentNum, String uuid) {
+	       BufferedReader br = null;
+	        FileReader fr = null;
+	        FileWriter fw = null;
+	        String line;
+	        StringBuffer strbuf = new StringBuffer("");
+
+			try {
+				//ファイルを読み込み
+				File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+				fr = new FileReader(file);
+				br = new BufferedReader(fr);
+				int line_counter = 0;
+
+				//該当行を検索
+				while((line = br.readLine()) != null) {
+					line_counter++;
+					strbuf.append(line + "\n");
+					if(line_counter == 13) break;
+				}
+
+				//すでに参加している場合
+				if(line.contains(uuid)) {
+					line = line.replace(uuid, ""); //UUIDを削除
+					line = line.replace("  "," "); //並んだ空白を削除
+					if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+					if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+					strbuf.append(line + "\n");
+				}
+
+				line = br.readLine(); //次の行
+
+				//誘われている段階の場合
+				if(line.contains(uuid)) {
+					line = line.replace(uuid, ""); //UUIDを削除
+					line = line.replace("  "," "); //並んだ空白を削除
+					if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+					if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+					strbuf.append(line + "\n");
+				}
+
+				//最後まで読み込み
+				while((line = br.readLine()) != null) {
+					strbuf.append(line + "\n");
+				}
+
+				//書き込み
+				fw = new FileWriter(file);
+				fw.write(strbuf.toString());
+
+			}catch(IOException e) {
+				System.err.print("グループ招待削除に関する処理でエラーが発生しました：" + e);
+			}finally {
+				try {
+					fr.close();
+					br.close();
+					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 	}
 
 	//認証内部クラス
