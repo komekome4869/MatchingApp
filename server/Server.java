@@ -77,7 +77,7 @@ public class Server extends JFrame implements ActionListener{
 		try {
 			ss = new ServerSocket(50);
 		} catch (IOException e) {
-			System.err.println("エラーが発生しました: " + e);
+			System.err.println("サーバソケット作成時にエラーが発生しました: " + e);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
-	// データ受信用スレッド(内部クラス)
+	//データ受信用スレッド(内部クラス)
 	static class Receiver extends Thread {
 		private InputStreamReader sisr; //受信データ用文字ストリーム
 		private BufferedReader br; //文字ストリーム用のバッファ
@@ -152,7 +152,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case "rg": //グループ参加拒否
-
+						refuseGroup(act[2]);
 						break;
 
 					}
