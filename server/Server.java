@@ -18,6 +18,7 @@ import java.net.Socket;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -82,13 +83,14 @@ public class Server extends JFrame implements ActionListener{
 
 	public static void main(String args[]) {
 		Server server = new Server("MS_Server");
-		server.acceptClient();
+		//server.acceptClient();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if(cmd.equals("新規会員認証")) {
+
 			new Authentificate();
 		}
 		if(cmd.equals("会員検索")) {
@@ -431,95 +433,257 @@ public class Server extends JFrame implements ActionListener{
 
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
+		JPanel cardPanel;
+		CardLayout cardLayout;
 
-		public Authentificate() {
-			super("新規会員認証");
-			JPanel p1 = new JPanel();
-			p1.setLayout(null);
-			pack();
+		int pageAuthen=-1;
+		File[] notAuthentificatededUsers;
+
+	    JTextField tfStudentNumberSearch = new JTextField(20);
+		JLabel lUserNameAuthen = new JLabel("");
+	    JLabel lStudentCardAuthen = new JLabel("");
+	    JLabel lUserNumberAuthen = new JLabel("");
+	    JLabel lUserLineIdAuthen = new JLabel("");
+
+
+		public Authentificate(){
+
+			super("ユーザー認証");
+			cardPanel = new JPanel();
+		    cardLayout = new CardLayout();
+		    cardPanel.setLayout(cardLayout);
+
+		    prepareAuthen();
+		    commitAuthen();
+		    nextPage();
+
+		    cardLayout.show(cardPanel,"commitAuthen");
+		    getContentPane().add(cardPanel, BorderLayout.CENTER);
+		    setSize(w,h);
+			setResizable(false);
+		    setVisible(true);
+		}
+
+		public void prepareAuthen() {
+			String path = System.getProperty("user.dir") + "\\ID"; //ディレクトリ
+			File[] fileList = new File(path).listFiles();
+
+			if (fileList != null) {
+				File file = null;
+				BufferedReader br = null;
+		        FileReader fr = null;
+		        String line;
+		        int j=0;
+
+		        for (int i = 0; i < fileList.length; i++) {
+		            try {
+						//ファイルを読み込み
+						file = fileList[i];
+						fr = new FileReader(file);
+						br = new BufferedReader(fr);
+						int line_counter = 0;
+
+						//該当行を検索
+						while((line = br.readLine()) != null) {
+							line_counter++;
+
+							if(line_counter == 15) {
+								if(line=="0") {
+									notAuthentificatededUsers[j]=file;
+									j++;
+								}
+								break;
+							}
+						}
+					}
+		            catch(IOException e) {
+						System.err.print("認証に関する処理でエラーが発生しました：" + e);
+
+					}
+		            finally {
+		            	try {
+							fr.close();
+							br.close();
+						}
+						catch (IOException e) {
+							e.printStackTrace();
+						}
+		            }
+		        }
+			}
+		}
+
+		public void nextPage() {
+			File file = null;
+			BufferedReader br = null;
+	        FileReader fr = null;
+	        String line;
+
+			pageAuthen++;
+
+			try {
+				//ファイルを読み込み
+				file = notAuthentificatededUsers[pageAuthen];
+				fr = new FileReader(file);
+				br = new BufferedReader(fr);
+
+				line = br.readLine(); //次の行
+				lUserNumberAuthen.setText(line);
+
+				line = br.readLine(); //次の行
+				line = br.readLine(); //次の行
+				lUserNameAuthen.setText(line);
+
+				//該当行を検索
+				int line_counter = 3;
+				while((line = br.readLine()) != null) {
+					line_counter++;
+					if(line_counter == 16) {
+						lUserNameAuthen.setText(line);
+						break;
+					}
+				}
+			}
+            catch(IOException e) {
+				System.err.print("認証に関する処理でエラーが発生しました：" + e);
+
+			}
+			finally {
+            	try {
+					fr.close();
+					br.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+
+		}
+
+		public void commitAuthen() {
+			JPanel card=new JPanel();
+			card.setLayout(null);
 
 			JLabel lTitleAuthen = new JLabel("認証");
 			lTitleAuthen.setBounds(w/4,h/15,w/2,h/15);
 			lTitleAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/10));
 			lTitleAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lTitleAuthen);
+	        card.add(lTitleAuthen);
 
-	        JLabel lStudentCardAuthen = new JLabel("");
+
 	        lStudentCardAuthen.setBounds(w/10,h/3,9*w/10,h/5);
 	        lStudentCardAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lStudentCardAuthen);
+	        card.add(lStudentCardAuthen);
 
 	        JLabel lNameAuthen = new JLabel("名前");
 	        lNameAuthen.setBounds(w/10,7*h/15,w/5,h/15);
 	        lNameAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lNameAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lNameAuthen);
+	        card.add(lNameAuthen);
 
-	        JLabel lUserNameAuthen = new JLabel("");
 	        lUserNameAuthen.setBounds(2*w/5,7*h/15,3*w/5,h/15);
 	        lUserNameAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lUserNameAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lUserNameAuthen);
+	        card.add(lUserNameAuthen);
 
 	        JLabel lNumberAuthen = new JLabel("学籍番号");
 	        lNumberAuthen.setBounds(w/10,8*h/15,w/5,h/15);
 	        lNumberAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lNumberAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lNumberAuthen);
+	        card.add(lNumberAuthen);
 
-	        JLabel lUserNumberAuthen = new JLabel("");
 	        lUserNumberAuthen.setBounds(2*w/5,8*h/15,3*w/5,h/15);
 	        lUserNumberAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lUserNumberAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lUserNumberAuthen);
+	        card.add(lUserNumberAuthen);
 
-	        JLabel lGenderAuthen = new JLabel("性別");
-	        lGenderAuthen.setBounds(w/10,9*h/15,w/5,h/15);
-	        lGenderAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        lGenderAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lGenderAuthen);
+	        JLabel lLineIdAuthen = new JLabel("LINEのID");
+	        lLineIdAuthen.setBounds(w/10,9*h/15,w/5,h/15);
+	        lLineIdAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+	        lLineIdAuthen.setHorizontalAlignment(JLabel.CENTER);
+	        card.add(lLineIdAuthen);
 
-	        JLabel lUserGenderAuthen = new JLabel("");
-	        lUserGenderAuthen.setBounds(2*w/5,9*h/15,3*w/5,h/15);
-	        lUserGenderAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        lUserGenderAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lUserGenderAuthen);
-
-	        JLabel lGradeAuthen = new JLabel("学年");
-	        lGradeAuthen.setBounds(w/10,10*h/15,w/5,h/15);
-	        lGradeAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        lGradeAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lGradeAuthen);
-
-	        JLabel lUserGradeAuthen = new JLabel("");
-	        lUserGradeAuthen.setBounds(2*w/5,10*h/15,3*w/5,h/15);
-	        lUserGradeAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        lUserGradeAuthen.setHorizontalAlignment(JLabel.CENTER);
-	        p1.add(lUserGradeAuthen);
+	        lUserLineIdAuthen.setBounds(2*w/5,9*h/15,3*w/5,h/15);
+	        lUserLineIdAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+	        lUserLineIdAuthen.setHorizontalAlignment(JLabel.CENTER);
+	        card.add(lUserLineIdAuthen);
 
 	        JButton bAcceptAuthen=new JButton("認証");
 	        bAcceptAuthen.setBounds(w/5,5*h/6,w/4,h/15);
 	        bAcceptAuthen.addActionListener(this);
 	        bAcceptAuthen.setActionCommand("認証");
 	        bAcceptAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        p1.add(bAcceptAuthen);
+	        card.add(bAcceptAuthen);
 
 	        JButton bRejectAuthen=new JButton("却下");
 	        bRejectAuthen.setBounds(11*w/20,5*h/6,w/4,h/15);
 	        bRejectAuthen.addActionListener(this);
 	        bRejectAuthen.setActionCommand("却下");
 	        bRejectAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        p1.add(bRejectAuthen);
+	        card.add(bRejectAuthen);
 
-	        getContentPane().add(p1, null);
-	        setSize(w,h);
-		    setResizable(false);
-		    setVisible(true);
-
+	        cardPanel.add(card,"Authen");
 		}
 
 		public void actionPerformed(ActionEvent ae) {
+			String cmd=ae.getActionCommand();
 
+			if(cmd=="認証") {
+				 BufferedReader br = null;
+			        FileReader fr = null;
+			        FileWriter fw = null;
+			        String line;
+			        StringBuffer strbuf = new StringBuffer("");
+
+					try {
+						//ファイルを読み込み
+						File file = notAuthentificatededUsers[pageAuthen];
+						fr = new FileReader(file);
+						br = new BufferedReader(fr);
+						int line_counter = 0;
+
+						//該当行を検索
+						while((line = br.readLine()) != null) {
+							line_counter++;
+							if(line_counter == 15) {
+								strbuf.append("2\n");
+							}
+							else {
+								strbuf.append(line + "\n");
+							}
+						}
+
+						//最後まで読み込み
+						while((line = br.readLine()) != null) {
+							strbuf.append(line + "\n");
+						}
+
+						//書き込み
+						fw = new FileWriter(file);
+						fw.write(strbuf.toString());
+
+					}
+					catch(IOException e) {
+						System.err.print("認証に関する処理でエラーが発生しました：" + e);
+
+					}
+					if(pageAuthen==notAuthentificatededUsers.length-1) {
+						this.dispose();
+						//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
+					}
+					else {
+						nextPage();
+					}
+			}
+			else if(cmd=="却下") {
+				if(pageAuthen==notAuthentificatededUsers.length-1) {
+					this.dispose();
+					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
+				}
+				else {
+					nextPage();
+				}
+			}
 		}
 	}
 
@@ -527,6 +691,17 @@ public class Server extends JFrame implements ActionListener{
 	class searchUsers extends JFrame implements ActionListener,ChangeListener{
 		JPanel cardPanel;
 		CardLayout cardLayout;
+
+		 JTextField tfStudentNumberSearch = new JTextField(20);
+
+		 JLabel lMainPhotoUserInfo = new JLabel("");
+	     JLabel[] lSubPhotoUserInfo = new JLabel[4];
+	     JToggleButton tbDeleteUserInfo = new JToggleButton("No");
+
+		 String[] items = {"名前","性別","学年","学部","出身","サークル","趣味","LINEのID"};
+		 int row = items.length;// 表の行数
+
+	     JTable tTableUserInfo = new JTable(row,2); // プロフィールの表
 
 		public searchUsers(){
 
@@ -538,10 +713,11 @@ public class Server extends JFrame implements ActionListener{
 		    search();
 		    aboutUser();
 
-		    cardLayout.show(cardPanel,"UserInfo");
+		    cardLayout.show(cardPanel,"search");
 		    pack();
 		    getContentPane().add(cardPanel, BorderLayout.CENTER);
 		    setSize(w,h);
+			setResizable(false);
 		    setVisible(true);
 		}
 
@@ -561,7 +737,6 @@ public class Server extends JFrame implements ActionListener{
 	        lStudentNumberSearch.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lStudentNumberSearch);
 
-	        JTextField tfStudentNumberSearch = new JTextField(20);
 	        tfStudentNumberSearch.setBounds(3*w/10,2*h/5,3*w/5,h/15);
 	        tfStudentNumberSearch.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        card.add(tfStudentNumberSearch);
@@ -580,21 +755,16 @@ public class Server extends JFrame implements ActionListener{
 
 		public void aboutUser() {
 
-
-			// 項目
-			String[] items = {"名前","性別","学年","学科","出身","趣味"};
-			// 表の行数
-			int row = items.length;
-
 			JPanel card = new JPanel();
 			card.setLayout(null);
 
-			JButton bBackUserInfo = new JButton("←");
-	        bBackUserInfo.setBounds(w/30,h/60,w/6,h/15);
-	        bBackUserInfo.addActionListener(this);
-	        bBackUserInfo.setActionCommand("ヘルプmenu");
-	        bBackUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-	        card.add(bBackUserInfo);
+			ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
+
+			JButton bPrePage = new JButton(iLeft);
+	        bPrePage.setBounds(w/14,h/30,w/11,h/20);
+	        bPrePage.addActionListener(this);
+	        bPrePage.setActionCommand("戻る");
+	        card.add(bPrePage);
 
 	        JLabel lTitleUserInfo = new JLabel("ユーザ情報");
 			lTitleUserInfo.setBounds(w/4,h/60,w/2,h/15);
@@ -602,25 +772,16 @@ public class Server extends JFrame implements ActionListener{
 			lTitleUserInfo.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lTitleUserInfo);
 
-	        JButton bMainPhotoUserInfo = new JButton("");
-	        bMainPhotoUserInfo.setBounds(w/4,6*h/60,w/2,h/6);
-	        bMainPhotoUserInfo.addActionListener(this);
-	        bMainPhotoUserInfo.setActionCommand("ヘルプmenu");
-	        bMainPhotoUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	        card.add(bMainPhotoUserInfo);
+	        lMainPhotoUserInfo.setBounds(w/4,6*h/60,w/2,h/6);
+	        lMainPhotoUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+	        card.add(lMainPhotoUserInfo);
 
-	        JButton[] bSubPhotoUserInfo = new JButton[4];
 	        for(int i=0;i<4;i++) {
-	        	bSubPhotoUserInfo[i] = new JButton();
-	        	bSubPhotoUserInfo[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-	            bSubPhotoUserInfo[i].addActionListener(this);
-	            bSubPhotoUserInfo[i].setActionCommand("ヘルプmenu");
-	            bSubPhotoUserInfo[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-	            card.add(bSubPhotoUserInfo[i]);
+	        	lSubPhotoUserInfo[i] = new JLabel();
+	        	lSubPhotoUserInfo[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
+	            lSubPhotoUserInfo[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+	            card.add(lSubPhotoUserInfo[i]);
 	        }
-
-	        // プロフィールの表
-	        JTable tTableUserInfo = new JTable(row,2);
 
 	        for(int i=0;i<row;i++) {
 	        	tTableUserInfo.setValueAt(items[i], i, 0);
@@ -635,34 +796,21 @@ public class Server extends JFrame implements ActionListener{
 			card.add(sp);
 
 			// アカウント削除
-			JLabel lDeleteUserInfo = new JLabel("アカウント削除");
+			/*JLabel lDeleteUserInfo = new JLabel("アカウント削除");
 			lDeleteUserInfo.setBounds(w/10,40*h/60,w/2,h/15);
 			lDeleteUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 			lDeleteUserInfo.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lDeleteUserInfo);
 
-	        JToggleButton tbDeleteUserInfo = new JToggleButton("OFF");
 	        tbDeleteUserInfo.setBounds(6*w/10,41*h/60,w/7,h/20);
 	        tbDeleteUserInfo.addChangeListener(this);
 	        tbDeleteUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
-			card.add(tbDeleteUserInfo);
+			card.add(tbDeleteUserInfo);*/
 
-	        JLabel lBanUserInfo = new JLabel("BAN");
-			lBanUserInfo.setBounds(w/10,44*h/60,w/2,h/15);
-			lBanUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-			lBanUserInfo.setHorizontalAlignment(JLabel.CENTER);
-	        card.add(lBanUserInfo);
-
-	        JToggleButton tbBanUserInfo = new JToggleButton("OFF");
-	        tbBanUserInfo.setBounds(6*w/10,45*h/60,w/7,h/20);
-	        tbBanUserInfo.addChangeListener(this);
-	        tbBanUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
-			card.add(tbBanUserInfo);
-
-			JButton bDecideUserInfo=new JButton("確定");
+			JButton bDecideUserInfo=new JButton("BAN");
 			bDecideUserInfo.setBounds(w/4,24*h/30,w/2,h/15);
 			bDecideUserInfo.addActionListener(this);
-			bDecideUserInfo.setActionCommand("確定");
+			bDecideUserInfo.setActionCommand("BAN");
 			bDecideUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        card.add(bDecideUserInfo);
 
@@ -672,12 +820,56 @@ public class Server extends JFrame implements ActionListener{
 		public void stateChanged(ChangeEvent e) {
 			JToggleButton btn = (JToggleButton)e.getSource();
 			if (btn.isSelected()) {
-				btn.setText("ON");
+				btn.setText("Yes");
 			} else {
-				btn.setText("OFF");
+				btn.setText("No");
 			}
 		}
+
 		public void actionPerformed(ActionEvent ae) {
+			String cmd=ae.getActionCommand();
+
+			if(cmd=="検索") {
+				String studentNum=tfStudentNumberSearch.getText();
+				BufferedReader br = null;
+		        FileReader fr = null;
+		        String line;
+
+				try {
+					//ファイルを読み込み
+					File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+					fr = new FileReader(file);
+					br = new BufferedReader(fr);
+
+					//該当行を検索
+					line = br.readLine();
+					line = br.readLine();
+					for(int i=0;i<7;i++) {
+						line = br.readLine();
+						tTableUserInfo.setValueAt(line, i, 1);
+					}
+
+					int line_counter = 9;
+					while((line = br.readLine()) != null) {
+						line_counter++;
+						if(line_counter == 16) {
+							tTableUserInfo.setValueAt(line, 7, 1);
+							break;
+						}
+					}
+				}
+				catch(IOException e) {
+					System.err.print("ユーザ検索に関する処理でエラーが発生しました：" + e);
+
+				}
+			}
+			else if(cmd=="BAN") {
+				//ユーザ赤削除メソッド
+				cardLayout.show(cardPanel,"search");
+			}
+			else if(cmd=="戻る") {
+				cardLayout.show(cardPanel,"search");
+			}
 
 		}
 	}

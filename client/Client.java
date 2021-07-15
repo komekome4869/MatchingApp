@@ -219,6 +219,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 	    setSize(w,h);
 	    setVisible(true);
 
@@ -372,7 +373,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		tfNameJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 		card.add(tfNameJudge);
 
-		JLabel lNumberJudge = new JLabel("学籍番号");
+		JLabel lNumberJudge = new JLabel("LINEのID");
 		lNumberJudge.setBounds(w/5,h/3,w/5,h/15);
 		lNumberJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
 		lNumberJudge.setHorizontalAlignment(JLabel.CENTER);
@@ -2216,7 +2217,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					flag=false;
 				}
 			}
-			
+
 			if(flag) {
 				boolean canLogin=false;
 				//canLogin=ログイン確認のメソッド
@@ -2257,7 +2258,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			lPicOutputJudge.setText("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
 			tfNumberJudge.setText("");
 			tfNameJudge.setText("");
-			
+
 			flag=false;
 			if(tfIdNew_r.getText().length()==0 || tfIdNew_r.getText().length()>10) {
 			}
@@ -2276,7 +2277,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					flag=false;
 				}
 			}
-			
+
 			if(!flag) {
 				lMessageNew_r.setVisible(true);
 			}
@@ -2306,13 +2307,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			flag=false;
 			if(tfNameJudge.getText().length()==0 || tfNameJudge.getText().length()>0) {
 			}
-			else if(tfNumberJudge.getText().length()==0 || tfNumberJudge.getText().length()>10) {
+			else if(tfNumberJudge.getText().length()==0 || tfNumberJudge.getText().length()>25) {
 			}
 			else if(lPicOutputJudge.getIcon()==null) {
 			}
 			else {
 				myUserInfo.setName(tfNameJudge.getText());
-				//TODO 学籍番号の登録が2回目？
+				myUserInfo.setLineId(tfNumberJudge.getText());
 				//新規登録メソッド
 				layout.show(cardPanel,"pleaseWait");
 			}
