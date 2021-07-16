@@ -128,7 +128,8 @@ public class Server extends JFrame implements ActionListener{
 		public void receiveMessage(String inputLine) {
 				if (inputLine != null){ //データを受信したら
 					String act[] = inputLine.split(","); //カンマの前後で文字列を分割
-
+					System.out.println("receiveMessageが起動:"+inputLine);	//確認用
+					
 					switch(act[0]){
 					case "lg": //新規登録する
 						if(checkPassword(act[1],act[2] /*(学籍番号,パスワード)*/) == true) {
@@ -165,9 +166,10 @@ public class Server extends JFrame implements ActionListener{
 		public void run(){
 			try {
 				while(true) {
-					try {
+					try {	
+						Object inputObj = ois.readObject();
 						//UserInfo型なら
-						if(ois.readObject() instanceof UserInfo) {
+						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)ois.readObject();
 							//新規登録
@@ -178,7 +180,7 @@ public class Server extends JFrame implements ActionListener{
 						}
 
 						//GroupInfo型なら
-						else if(ois.readObject() instanceof GroupInfo) {
+						else if(inputObj instanceof GroupInfo) {
 							GroupInfo gi = new GroupInfo();
 							gi = (GroupInfo)ois.readObject();
 							//グループ作成
@@ -189,8 +191,10 @@ public class Server extends JFrame implements ActionListener{
 
 						//その他ならreceiveMessage()
 						else {
-							br = new BufferedReader(sisr);
-							String inputLine = br.readLine();//データを一行分読み込む
+							//br = new BufferedReader(sisr);
+							//String inputLine = br.readLine();//データを一行分読み込む
+							String inputLine = inputObj.toString();
+							System.out.println(inputLine);	//確認用
 							receiveMessage(inputLine);
 						}
 
