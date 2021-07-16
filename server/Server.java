@@ -576,6 +576,7 @@ public class Server extends JFrame implements ActionListener{
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
+		File image_user_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\" + studentNum);
 		String line;
 		String SentGoodStudents[] = new String[100]; //いいねをしたひと、とりあえず100人まで
 		String BeingSentGoodStudents[] = new String[100]; //いいねをくれた人、100人
@@ -634,6 +635,7 @@ public class Server extends JFrame implements ActionListener{
 
 				//削除
 				file.delete();
+				image_user_dir.delete();
 
 			}catch(IOException e) {
 				System.err.print("グループ招待削除に関する処理でエラーが発生しました：" + e);
