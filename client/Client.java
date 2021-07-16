@@ -215,10 +215,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"howToUse");
+	    layout.show(cardPanel,"myProfile");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 	    setSize(w,h);
 	    setVisible(true);
 
@@ -226,6 +227,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    	nowShowingUsers[i]=new UserInfo();
 	    	nowShowingGroups[i]=new GroupInfo();
 	    }
+	    myUserInfo=new UserInfo();
 
 	    //goHome();
 	}
@@ -371,7 +373,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		tfNameJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 		card.add(tfNameJudge);
 
-		JLabel lNumberJudge = new JLabel("学籍番号");
+		JLabel lNumberJudge = new JLabel("LINEのID");
 		lNumberJudge.setBounds(w/5,h/3,w/5,h/15);
 		lNumberJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
 		lNumberJudge.setHorizontalAlignment(JLabel.CENTER);
@@ -2199,39 +2201,46 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		switch(cmd) {
 
 		case "ログインlogin":
-			if(tfIdLogin.getText().length()!=0&&tfPasswordLogin.getText().length()!=0) {
+			flag=false;
+			if(tfIdLogin.getText().length()==0 || tfIdLogin.getText().length()>10) {
+			}
+			else if(tfPasswordLogin.getText().length()==0 || tfPasswordLogin.getText().length()>10) {
+			}
+			else {
 				try {
 					int loginId=Integer.valueOf(tfIdLogin.getText());
+					String loginPassword=tfPasswordLogin.getText();
+					flag=true;
 				}
 				catch(NumberFormatException e) {
 					lMessageLogin.setVisible(true);
+					flag=false;
 				}
-				String loginPassword=tfPasswordLogin.getText();
-			}
-			else {
-				lMessageLogin.setVisible(true);
 			}
 
-			boolean canLogin=false;
-			//canLogin=ログイン確認のメソッド
-
-			if(canLogin) {
-				//myUserInfoの設定
-				temp=myUserInfo.getIsAuthentificated();
-				if(temp==0) {
-					layout.show(cardPanel,"pleaseWait");
-				}
-				else if(temp==1) {
-					goHome();
+			if(flag) {
+				boolean canLogin=false;
+				//canLogin=ログイン確認のメソッド
+				if(canLogin) {
+					//myUserInfoの設定
+					temp=myUserInfo.getIsAuthentificated();
+					if(temp==0) {
+						layout.show(cardPanel,"pleaseWait");
+					}
+					else if(temp==1) {
+						goHome();
+					}
+					else {
+						layout.show(cardPanel,"finishAuthen");
+					}
 				}
 				else {
-					layout.show(cardPanel,"finishAuthen");
+					lMessageLogin.setVisible(true);
 				}
 			}
 			else {
 				lMessageLogin.setVisible(true);
 			}
-
 			break;
 
 
@@ -2249,23 +2258,27 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			lPicOutputJudge.setText("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
 			tfNumberJudge.setText("");
 			tfNameJudge.setText("");
-			if(tfIdNew_r.getText().length()!=0&&tfPasswordNew_r.getText().length()!=0) {
-				try {
-					myUserInfo.setStudentNumber(Integer.valueOf(tfIdNew_r.getText()));
 
-					if(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText())) {
-						myUserInfo.setPassword(tfPasswordNew_r.getText());
-						layout.show(cardPanel,"judge");
-					}
-					else {
-						lMessageNew_r.setVisible(true);
-					}
-				}
-				catch(NumberFormatException e) {
-					lMessageNew_r.setVisible(true);
-				}
+			flag=false;
+			if(tfIdNew_r.getText().length()==0 || tfIdNew_r.getText().length()>10) {
+			}
+			else if(tfPasswordNew_r.getText().length()==0 || tfPasswordNew_r.getText().length()>10) {
+			}
+			else if(tfPasswordConfNew_r.getText().length()==0 || tfPasswordConfNew_r.getText().length()>10) {
+			}
+			else if(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText())){
 			}
 			else {
+				try {
+					myUserInfo.setStudentNumber(Integer.valueOf(tfIdNew_r.getText()));
+					myUserInfo.setPassword(tfPasswordNew_r.getText());
+				}
+				catch(NumberFormatException e) {
+					flag=false;
+				}
+			}
+
+			if(!flag) {
 				lMessageNew_r.setVisible(true);
 			}
 			break;
@@ -2284,19 +2297,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				lPicOutputJudge.setText("");
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				lPicOutputJudge.setIcon(null);
+				lPicOutputJudge.setText("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
 			}
 			break;
 
 
 		case "送信judge":
-			if(tfNameJudge.getText().length()==0||tfNumberJudge.getText().length()==0||lPicOutputJudge.getIcon()==null) {
-				lErrorJudge.setVisible(true);
+			flag=false;
+			if(tfNameJudge.getText().length()==0 || tfNameJudge.getText().length()>0) {
+			}
+			else if(tfNumberJudge.getText().length()==0 || tfNumberJudge.getText().length()>25) {
+			}
+			else if(lPicOutputJudge.getIcon()==null) {
 			}
 			else {
 				myUserInfo.setName(tfNameJudge.getText());
-				myUserInfo.setStudentNumber(Integer.valueOf(tfNumberJudge.getText()));
-				//TODO 学籍番号の登録が2回目？
+				myUserInfo.setLineId(tfNumberJudge.getText());
 				//新規登録メソッド
 				layout.show(cardPanel,"pleaseWait");
 			}
@@ -2621,7 +2638,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "サブ3myProfile":
 		case "サブ4myProfile":
 			for(int i=0;i<5;i++) {
-				if(cmd=="サブ"+String.valueOf(i)+"Profile") {
+				if(cmd.equals("サブ"+String.valueOf(i)+"myProfile")) {
 					temp=i;
 				}
 			}
@@ -2644,14 +2661,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "確定myProfile":
-			myUserInfo.setName(tfNameMyProfile.getText());
+			if(tfNameMyProfile.getText().length()!=0 && tfNameMyProfile.getText().length()<11) {
+				myUserInfo.setName(tfNameMyProfile.getText());
+			}
 			myUserInfo.setGender(cbGenderMyProfile.getSelectedIndex());
 			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
 			myUserInfo.setFaculty(cbFacultyMyProfile.getSelectedIndex());
 			myUserInfo.setBirth(cbBirthMyProfile.getSelectedIndex());
 			myUserInfo.setCircle(cbCircleMyProfile.getSelectedIndex());
-			myUserInfo.setHobby(tfHobbyMyProfile.getText());
-			myUserInfo.setLineId(tfLineIdMyProfile.getText());
+			if(tfHobbyMyProfile.getText().length()!=0 && tfHobbyMyProfile.getText().length()<16){
+				myUserInfo.setHobby(tfHobbyMyProfile.getText());
+			}
+			if(tfLineIdMyProfile.getText().length()<20) {
+				myUserInfo.setLineId(tfLineIdMyProfile.getText());
+			}
 			//新プロフ(myUserInfo)
 			layout.show(cardPanel,"menu");
 			break;
