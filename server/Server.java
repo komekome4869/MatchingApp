@@ -39,7 +39,7 @@ public class Server extends JFrame implements ActionListener{
 	static Receiver receiver; //データ受信用オブジェクト
 	static ServerSocket ss;
 	static UserInfo users[] = new UserInfo[1000];
-	static int file_num = 0;	//ユーザファイル数
+	static int userFileNum = 0;	//ユーザファイル数
 	static HashMap<String, UserInfo> activeUsers =new HashMap<>();
 
 	int w = 400;
@@ -81,7 +81,7 @@ public class Server extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//ファイルを読み込んでハッシュマップに追加
-		readFolder();
+		readAllUserFiles();
 
 		try {
 			ss = new ServerSocket(50);
@@ -113,8 +113,8 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//ユーザファイルを全て読み込み
-	public static void readFolder() {
-		file_num = 0;
+	public static void readAllUserFiles() {
+		userFileNum = 0;
 		users = null;
 		activeUsers.clear();
 
@@ -136,7 +136,7 @@ public class Server extends JFrame implements ActionListener{
 				readUserFile(file);
 			}
 		}
-		file_num--;
+		userFileNum--;
 	}
 
 	//ユーザファイル読み込み
@@ -154,7 +154,7 @@ public class Server extends JFrame implements ActionListener{
 				switch(line_counter) {
 
 					case 1 :
-						users[file_num].studentNumber = Integer.parseInt(line);
+						users[userFileNum].studentNumber = Integer.parseInt(line);
 
 						//画像の読み込み
 						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
@@ -170,98 +170,98 @@ public class Server extends JFrame implements ActionListener{
 						BufferedImage sub3 = ImageIO.read(sub3_image);
 						BufferedImage sub4 = ImageIO.read(sub4_image);
 
-						users[file_num].studentCard = card;
-						users[file_num].mainPhoto = main;
-						users[file_num].subPhoto[0] = sub1;
-						users[file_num].subPhoto[1] = sub2;
-						users[file_num].subPhoto[2] = sub3;
-						users[file_num].subPhoto[3] = sub4
+						users[userFileNum].studentCard = card;
+						users[userFileNum].mainPhoto = main;
+						users[userFileNum].subPhoto[0] = sub1;
+						users[userFileNum].subPhoto[1] = sub2;
+						users[userFileNum].subPhoto[2] = sub3;
+						users[userFileNum].subPhoto[3] = sub4
 								;
 						break;
 
 					case 2 :
-						users[file_num].password = line;
+						users[userFileNum].password = line;
 						break;
 
 					case 3 :
-						users[file_num].name = line;
+						users[userFileNum].name = line;
 						break;
 
 					case 4 :
-						users[file_num].gender = Integer.parseInt(line);
+						users[userFileNum].gender = Integer.parseInt(line);
 						break;
 
 					case 5 :
-						users[file_num].grade = Integer.parseInt(line);
+						users[userFileNum].grade = Integer.parseInt(line);
 						break;
 
 					case 6 :
-						users[file_num].faculty = Integer.parseInt(line);
+						users[userFileNum].faculty = Integer.parseInt(line);
 						break;
 
 					case 7 :
-						users[file_num].birth = Integer.parseInt(line);
+						users[userFileNum].birth = Integer.parseInt(line);
 						break;
 
 					case 8 :
-						users[file_num].circle = Integer.parseInt(line);
+						users[userFileNum].circle = Integer.parseInt(line);
 						break;
 
 					case 9 :
-						users[file_num].hobby = line;
+						users[userFileNum].hobby = line;
 						break;
 
 					case 10 :
 						String sendStudents[] = line.split(" ");
 						for(int i=0; i<sendStudents.length; i++) {
-							users[file_num].sendGood[i] = Integer.parseInt(sendStudents[i]);
+							users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
 						}
 						break;
 
 					case 11 :
 						String receiveStudents[] = line.split(" ");
 						for(int i=0; i<receiveStudents.length; i++) {
-							users[file_num].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
+							users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
 						}
 						break;
 
 					case 12 :
 						String matchingStudents[] = line.split(" ");
 						for(int i=0; i<matchingStudents.length; i++) {
-							users[file_num].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
+							users[userFileNum].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
 						}
 						break;
 
 					case 13 :
 						String joiningGroups[] = line.split(" ");
 						for(int i=0; i<joiningGroups.length; i++) {
-							users[file_num].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
+							users[userFileNum].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
 						}
 						break;
 
 					case 14 :
 						String invitedGroups[] = line.split(" ");
 						for(int i=0; i<invitedGroups.length; i++) {
-							users[file_num].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
+							users[userFileNum].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
 						}
 						break;
 
 					case 15 :
-						users[file_num].isAuthentificated = Integer.parseInt(line);
+						users[userFileNum].isAuthentificated = Integer.parseInt(line);
 						break;
 
 					case 16 :
-						users[file_num].lineId = line;
+						users[userFileNum].lineId = line;
 						break;
 
 					case 17 :
-						users[file_num].isPublic = Boolean.parseBoolean(line);
+						users[userFileNum].isPublic = Boolean.parseBoolean(line);
 						break;
 
 				}
 
-				activeUsers.put(String.valueOf(users[file_num].studentNumber),users[file_num]);
-				file_num++;
+				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
+				userFileNum++;
 
 			}
 		} catch (IOException e) {
@@ -547,7 +547,7 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(gi.mainPhoto, "png", main_image);
 
 			//再度読み込み
-			readFolder();
+			readAllUserFiles();
 
 		} catch (IOException e) {
 			System.err.print("新規登録の際にエラーが発生しました：" + e);
@@ -603,7 +603,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.write(strbuf.toString());
 
 			//再度読み込み
-			readFolder();
+			readAllUserFiles();
 
 		}catch(IOException e) {
 			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
@@ -652,7 +652,7 @@ public class Server extends JFrame implements ActionListener{
 			for(int j = 0; j < Groups.length; j++) //refuseGood(uuid,Groups[i]); //いいねされたグループのファイルから自分にいいねした記録を消す(自分,いいねしたグループ)
 
 			//ホストユーザのグループに関する記録を削除
-			deleteLog(line,uuid);
+			deleteGroupLog(line,uuid);
 
 			//次の行
 			line = br.readLine();
@@ -670,7 +670,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//ユーザ情報からグループに関する記録を削除
 			for(int i = 0; i < num - 1; i++) {
-				deleteLog(nonhoststudents[num],uuid);
+				deleteGroupLog(nonhoststudents[num],uuid);
 			}
 
 			//グループファイル削除
@@ -680,7 +680,7 @@ public class Server extends JFrame implements ActionListener{
 			main_image.delete();
 
 			//再度読み込み
-			readFolder();
+			readAllUserFiles();
 
 		}catch(IOException e) {
 			System.err.print("グループ参加拒否に関する処理でエラーが発生しました：" + e);
@@ -701,7 +701,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//ユーザのグループのログを削除
-	public static void deleteLog(String studentNum, String uuid) {
+	public static void deleteGroupLog(String studentNum, String uuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
@@ -752,7 +752,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.write(strbuf.toString());
 
 				//再度読み込み
-				readFolder();
+				readAllUserFiles();
 
 			}catch(IOException e) {
 				System.err.print("グループ招待削除に関する処理でエラーが発生しました：" + e);
@@ -833,18 +833,18 @@ public class Server extends JFrame implements ActionListener{
 //				int index = ArrayUtils.indexOf(users,activeUsers.get(studentNum));
 //
 //				//配列をずらす
-//				for(int i=index; i<=file_num - 1; i++) {
+//				for(int i=index; i<=userFileNum - 1; i++) {
 //					users[i] = users[i+1];
 //				}
-//				users[file_num] = null;
-//				file_num--;
+//				users[userFileNum] = null;
+//				userFileNum--;
 
 				//削除
 				file.delete();
 				image_user_dir.delete();
 
 				//再度読み込み
-				readFolder();
+				readAllUserFiles();
 
 			}catch(IOException e) {
 				System.err.print("ユーザ削除に関する処理でエラーが発生しました：" + e);
