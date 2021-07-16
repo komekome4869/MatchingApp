@@ -152,7 +152,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case "rg": //グループ参加拒否
-						refuseGroup(act[2]);
+						deleteGroup(act[2]);
 						break;
 
 					}
@@ -432,8 +432,8 @@ public class Server extends JFrame implements ActionListener{
 
 	}
 
-	//グループ参加拒否
-	public static boolean refuseGroup(String uuid) {
+	//グループ参加拒否・グループ削除
+	public static boolean deleteGroup(String uuid) {
         BufferedReader br = null;
         FileReader fr = null;
         String line;
@@ -449,8 +449,15 @@ public class Server extends JFrame implements ActionListener{
 			//該当行を検索
 			while((line = br.readLine()) != null) {
 				line_counter++;
-				if(line_counter == 7) break;
+				if(line_counter == 4) break;
 			}
+
+			//いいねしたグループ達
+			String Groups[] = line.split(" ");
+
+			//ここでいいねを送った・送られたグループファイルのいいねからこのグループを削除
+			for(int i = 0; i < Groups.length; i++) refuseGood(Groups[i],uuid); //いいねしたグループのファイルから自分が送ったいいねを消す(いいねされたグループ,自分)
+			for(int i = 0; i < Groups.length; i++) refuseGood(uuid,Groups[i]); //いいねされたグループのファイルから自分にいいねした記録を消す(自分,いいねしたグループ)
 
 			//ホストユーザのグループに関する記録を削除
 			deleteInvitation(line,uuid);
