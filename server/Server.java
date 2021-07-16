@@ -458,11 +458,11 @@ public class Server extends JFrame implements ActionListener{
 			String Groups[] = line.split(" ");
 
 			//ここでいいねを送った・送られたグループファイルのいいねからこのグループを削除
-			for(int i = 0; i < Groups.length; i++) refuseGood(Groups[i],uuid); //いいねしたグループのファイルから自分が送ったいいねを消す(いいねされたグループ,自分)
-			for(int i = 0; i < Groups.length; i++) refuseGood(uuid,Groups[i]); //いいねされたグループのファイルから自分にいいねした記録を消す(自分,いいねしたグループ)
+			for(int i = 0; i < Groups.length; i++) //refuseGood(Groups[i],uuid); //いいねしたグループのファイルから自分が送ったいいねを消す(いいねされたグループ,自分)
+			for(int j = 0; j < Groups.length; j++) //refuseGood(uuid,Groups[i]); //いいねされたグループのファイルから自分にいいねした記録を消す(自分,いいねしたグループ)
 
 			//ホストユーザのグループに関する記録を削除
-			deleteInvitation(line,uuid);
+			deleteLog(line,uuid);
 
 			//次の行
 			line = br.readLine();
@@ -480,7 +480,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//ユーザ情報からグループに関する記録を削除
 			for(int i = 0; i < num - 1; i++) {
-				deleteInvitation(nonhoststudents[num],uuid);
+				deleteLog(nonhoststudents[num],uuid);
 			}
 
 			//グループファイル削除
@@ -507,13 +507,13 @@ public class Server extends JFrame implements ActionListener{
 
 	}
 
-	//ユーザのグループの招待を削除
-	public static void deleteInvitation(String studentNum, String uuid) {
-	       BufferedReader br = null;
-	        FileReader fr = null;
-	        FileWriter fw = null;
-	        String line;
-	        StringBuffer strbuf = new StringBuffer("");
+	//ユーザのグループのログを削除
+	public static void deleteLog(String studentNum, String uuid) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
 
 			try {
 				//ファイルを読み込み
@@ -565,6 +565,82 @@ public class Server extends JFrame implements ActionListener{
 					fr.close();
 					br.close();
 					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+	}
+
+	//ユーザ削除
+	public static void deleteUser(String studentNum) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		String line;
+		String SentGoodStudents[] = new String[100]; //いいねをしたひと、とりあえず100人まで
+		String BeingSentGoodStudents[] = new String[100]; //いいねをくれた人、100人
+		String MatchingStudents[] = new String[100]; //マッチングした人、100人
+		String Groups[] = new String[100]; //参加してるグループ、とりあえず100個まで
+		String InvitedGroups[] = new String[100]; //誘われてるグループ、とりあえず100個まで
+
+			try {
+				//ファイルを読み込み
+				File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+				fr = new FileReader(file);
+				br = new BufferedReader(fr);
+				int line_counter = 0;
+
+				//該当行を検索
+				while((line = br.readLine()) != null) {
+					line_counter++;
+					if(line_counter == 10) break;
+				}
+
+				//空白で分割して保存、いいねを送ったひと
+				SentGoodStudents = line.split(" ");
+				//ここでいいね削除
+
+				//次の行
+				line = br.readLine();
+
+				//空白で分割して保存、いいねをくれた人
+				BeingSentGoodStudents = line.split(" ");
+				//ここでいいね削除
+
+				//次の行
+				line = br.readLine();
+
+				//空白で分割して保存、マッチングした人
+				MatchingStudents = line.split(" ");
+				//deleteMatching(); マッチングしてる相手を消す
+
+				//次の行
+				line = br.readLine();
+
+				//空白で分割して保存、参加してるグループ
+				Groups = line.split(" ");
+				for(int i=0; i<Groups.length; i++) {
+					deleteGroup(Groups[i]);
+				}
+
+				//次の行
+				line = br.readLine();
+
+				//空白で分割して保存、誘われてるグループ
+				InvitedGroups = line.split(" ");
+				for(int i=0; i<InvitedGroups.length; i++) {
+					deleteGroup(InvitedGroups[i]);
+				}
+
+				//削除
+				file.delete();
+
+			}catch(IOException e) {
+				System.err.print("グループ招待削除に関する処理でエラーが発生しました：" + e);
+			}finally {
+				try {
+					fr.close();
+					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
