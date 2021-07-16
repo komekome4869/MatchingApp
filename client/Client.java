@@ -186,7 +186,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	JPanel cardPanel;
 	CardLayout layout;
-	
+
 	//サーバとの通信に必要な変数
 	static Socket socket;
 	static ObjectOutputStream oos;
@@ -1995,7 +1995,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         cardPanel.add(card,"matchingInform");
 	}
-
 
 	public void goHome() {
 		if(isNowUsingGroupAccount) {

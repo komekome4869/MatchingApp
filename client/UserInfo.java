@@ -21,7 +21,7 @@ public class UserInfo implements Serializable{
 	int circle=0;	//サークル
 	String hobby="";	//趣味
 	int[] sendGood=new int[MAX];	//自分がイイネを送った相手の学籍番号
-	int[] recieveGood=new int[MAX];	//自分にイイネを送った相手の学籍番号
+	int[] receiveGood=new int[MAX];	//自分にイイネを送った相手の学籍番号
 	int[] matchedUser=new int[MAX];	//マッチングした相手の学籍番号
 	UUID[] joiningGroup=new UUID[MAX];		//参加しているグルの識別番号
 	UUID[] invitedGroup=new UUID[MAX];		//誘われているグルの識別番号
@@ -138,15 +138,15 @@ public class UserInfo implements Serializable{
 	}
 
 	public void setRecieveGood(int[] rg) {
-		recieveGood=rg;
+		receiveGood=rg;
 	}
 
 	public void setRecieveGood(int rg,int n) {
-		recieveGood[n]=rg;
+		receiveGood[n]=rg;
 	}
 
 	public int[] getRecieveGood() {
-		return recieveGood;
+		return receiveGood;
 	}
 
 	public void setMatchedUser(int[] mu) {
