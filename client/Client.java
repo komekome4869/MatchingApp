@@ -77,7 +77,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
-	ImageIcon iTest=new ImageIcon("./img/test.jpg");
+	ImageIcon iTest=new ImageIcon("./img/初期アイコン.png");
 	ImageIcon backNoButton=new ImageIcon("./img/ボタンなし背景.png");
 	ImageIcon backWithButton=new ImageIcon("./img/ボタンあり背景.png");
 
@@ -109,12 +109,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JLabel lHobbyReply2 = new JLabel("○○");
 
     JLabel lGroupNameReplyGroup = new JLabel("グループ名");
-    JLabel lGroupPhotoReplyGroup = new JLabel("グル写真");
+    JLabel lGroupPhotoReplyGroup = new JLabel();
     JLabel lGroupProfileReplyGroup=new JLabel("プロフィール");
     JButton[] bMemberProfileReplyGroup = new JButton[5];
 
     JLabel lNameGood = new JLabel("○○");
-    JLabel lMainPhotoGood = new JLabel("");
+    JLabel lMainPhotoGood = new JLabel();
     JLabel[] lSubPhotoGood = new JLabel[4];
     JLabel lGenderGood2 = new JLabel("○○");
     JLabel lGradeGood2 = new JLabel("○○");
@@ -125,7 +125,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JButton bGoodGood = new JButton("いいね");
     JLabel lGoodGood = new JLabel("既にいいねしました");
 
-    JLabel lIconMatching = new JLabel(iTest);
+    JLabel lIconMatching = new JLabel();
     JLabel lNameMatching = new JLabel("○○さんとマッチしました！");
     JLabel lIdMatching = new JLabel("LINEID:aaaaaaaaa");
 
@@ -152,7 +152,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JButton bPersonalChange = new JButton("個人アカウント",iAdd);
     JButton[] bIconChange=new JButton[3];
 
-    JButton bPhotoMakeGroup = new JButton("プロフィール写真を選択");
+    JButton bPhotoMakeGroup = new JButton("");
     JTextField tfNameMakeGroup = new JTextField("");
     JTextField tfRelationMakeGroup = new JTextField("");
     JComboBox<String> cbPurposeMakeGroup = new JComboBox<String>(Purpose);
@@ -207,7 +207,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    
 	    try {
 			backNoButton=scaleImage(ImageIO.read(new File("./img/ボタンなし背景.png")),w+30,h+30);
-			backWithButton=scaleImage(ImageIO.read(new File("./img/ボタンあり背景.png")),w+5,h);
+			backWithButton=scaleImage(ImageIO.read(new File("./img/ボタンあり背景.png")),w+10,h);
+			System.out.println(ImageIO.read(new File("./img/ボタンあり背景.png")).getWidth()+"*"+ImageIO.read(new File("./img/ボタンあり背景.png")).getHeight());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -254,8 +255,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    	nowShowingGroups[i]=new GroupInfo();
 	    }
 	    myUserInfo=new UserInfo();
-	    
-	    //goHome();
 	}
 
 	
@@ -577,7 +576,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"home");
@@ -601,12 +600,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         lMainPhotoReply.setBounds(w/4,6*h/60,w/2,h/6);
         lMainPhotoReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lMainPhotoReply.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMainPhotoReply);
 
         for(int i=0;i<4;i++) {
         	lSubPhotoReply[i] = new JLabel();
         	lSubPhotoReply[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             lSubPhotoReply[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            lSubPhotoReply[i].setHorizontalAlignment(JLabel.CENTER);
             card.add(lSubPhotoReply[i]);
         }
 
@@ -705,7 +706,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"reply");
@@ -776,7 +777,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"replyGroup");
@@ -799,12 +800,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         lMainPhotoGood.setBounds(w/4,6*h/60,w/2,h/6);
         lMainPhotoGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        lMainPhotoGood.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMainPhotoGood);
 
         for(int i=0;i<4;i++) {
         	lSubPhotoGood[i] = new JLabel();
         	lSubPhotoGood[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             lSubPhotoGood[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            lSubPhotoGood[i].setHorizontalAlignment(JLabel.CENTER);
             card.add(lSubPhotoGood[i]);
         }
 
@@ -901,7 +904,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"good");
@@ -923,7 +926,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bPrePage.setActionCommand("マッチング通知へ");
         card.add(bPrePage);
 
-        lIconMatching.setBounds(w/5,h/7,w/2,h/5);
+        lIconMatching.setBounds(w/5,h/7,3*w/5,h/5);
         lIconMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIconMatching);
 
@@ -959,7 +962,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"matching");
@@ -1148,7 +1151,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"menu");
@@ -1287,7 +1290,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"myProfile");
@@ -1363,7 +1366,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
         
         cardPanel.add(card,"change");
@@ -1389,6 +1392,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bPhotoMakeGroup.addActionListener(this);
         bPhotoMakeGroup.setActionCommand("メインmakeGroup");
         bPhotoMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        bPhotoMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(bPhotoMakeGroup);
 
         JLabel lNameMakeGroup = new JLabel("グループ名");
@@ -1454,7 +1458,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"makeGroup");
@@ -1523,7 +1527,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"gathering");
@@ -1592,7 +1596,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"invite");
@@ -1659,7 +1663,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"viewGroup");
@@ -1756,7 +1760,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"myGroupProfile");
@@ -1817,7 +1821,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"setup");
@@ -1871,7 +1875,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
         
         cardPanel.add(card,"howToUse");
@@ -1923,7 +1927,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"inform");
@@ -1983,7 +1987,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"inviteInform");
@@ -2043,7 +2047,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"goodInform");
@@ -2103,7 +2107,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(bInform);
         
         JLabel background=new JLabel(backWithButton);
-		background.setBounds(-11,0,w,h);
+		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"matchingInform");
