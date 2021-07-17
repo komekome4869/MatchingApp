@@ -2285,10 +2285,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"matchingInform");
 	}
 
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
 			//TODO myUserInfo=SgetUserprof(myUswerInfo.getStudentNumber);
@@ -2524,7 +2521,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				try {
-<<<<<<< HEAD
 					loginId=Integer.valueOf(tfIdLogin.getText());
 					loginPassword=tfPasswordLogin.getText();
 
@@ -2546,13 +2542,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					else {
 						lMessageLogin.setVisible(true);
 					}
-=======
-					int loginId=Integer.valueOf(tfIdLogin.getText());
-					String loginPassword=tfPasswordLogin.getText();
-					Scheck(loginId,loginPassword);
-					System.out.println(flag);
-					flag = true;
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 				}
 				catch(NumberFormatException e) {
 					lMessageLogin.setVisible(true);
