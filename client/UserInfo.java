@@ -10,7 +10,7 @@ public class UserInfo implements Serializable{
 	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
 	int state;		//新規登録なら0,プロフ更新なら1
 
-	int studentNumber=0;	//学籍番号
+	int studentNumber=1;	//学籍番号
 	String password="";
 	String name="国大太郎";		//ユーザ名。認証時は氏名として使う。
 	//性別～サークルはClient.java内の配列で文字に変換する
