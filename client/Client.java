@@ -3713,11 +3713,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザのプロフィール変更
 	public void SchangeProf(UserInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "uc,"+Integer.toString(myUserInfo.getStudentNumber());
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 			System.out.println(outLine+"を送信しました。");  //確認用
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
