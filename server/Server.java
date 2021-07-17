@@ -295,7 +295,7 @@ public class Server extends JFrame implements ActionListener{
 				if (inputLine != null){ //データを受信したら
 					String act[] = inputLine.split(","); //カンマの前後で文字列を分割
 					System.out.println("receiveMessageが起動:"+inputLine);	//確認用
-					
+
 					try {
 						switch(act[0]){
 						case "lg": //新規登録する

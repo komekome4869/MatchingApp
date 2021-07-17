@@ -46,7 +46,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	int w=400;
@@ -4329,4 +4328,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	/***************ここまで***************/
+
 }
+
+
