@@ -78,6 +78,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
 	ImageIcon iTest=new ImageIcon("./img/test.jpg");
+	ImageIcon backNoButton=new ImageIcon("./img/ボタンなし背景.png");
+	ImageIcon backWithButton=new ImageIcon("./img/ボタンあり背景.png");
 
 	//アクションリスナーでいじるために一部の変数を外部変数に
 	JTextField tfIdLogin = new JTextField(20);
@@ -202,6 +204,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel = new JPanel();
 	    layout = new CardLayout();
 	    cardPanel.setLayout(layout);
+	    
+	    try {
+			backNoButton=scaleImage(ImageIO.read(new File("./img/ボタンなし背景.png")),w+30,h+30);
+			backWithButton=scaleImage(ImageIO.read(new File("./img/ボタンあり背景.png")),w+5,h);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	    //自分が作る画面のメソッド名をここに書く
 	    login();
@@ -232,7 +241,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"login");
+	    layout.show(cardPanel,"finishAuthen");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -245,10 +254,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    	nowShowingGroups[i]=new GroupInfo();
 	    }
 	    myUserInfo=new UserInfo();
-
+	    
 	    //goHome();
 	}
 
+	
 	public void login() {
 		//↓2行はコピペでOK
 		JPanel card=new JPanel();
@@ -261,7 +271,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		 *
 		 * 文字のフォントは、とりあえずMS明朝にしてるけど、アプリの雰囲気に合わせて後で変えよう
 		 */
-
+		
+		
 		JLabel lTitleLogin = new JLabel("TITLE");
 		lTitleLogin.setBounds(w/4,h/10,w/2,h/10);
 		lTitleLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
@@ -310,10 +321,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lMessageLogin);
 
 
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
+		
         //自分が作る画面に名前付け。メソッド名と同じじゃなくても大丈夫だけど、同じのほうが分かりやすいかも。
 		cardPanel.add(card,"login");
 	}
-
+	
 	public void new_regis() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -364,10 +379,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lMessageNew_r.setForeground(Color.RED);
         lMessageNew_r.setVisible(false);
         card.add(lMessageNew_r);
+        
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
 		cardPanel.add(card,"new_regis");
 	}
-
+	
 	public void judging() {
 
 		JPanel card=new JPanel();
@@ -431,10 +450,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lErrorJudge.setHorizontalAlignment(JLabel.CENTER);
 		lErrorJudge.setVisible(false);
 		card.add(lErrorJudge);
+		
+		JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
 		cardPanel.add(card,"judge");
 		}
-
+	
 	public void pleaseWait() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -456,6 +479,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		manual.setHorizontalAlignment(JLabel.CENTER);
 		card.add(manual);
 
+		JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
+		
 		cardPanel.add(card,"pleaseWait");
 	}
 
@@ -475,10 +502,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bnextFinishAuthen.setActionCommand("すすむfinishAuthen");
         bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bnextFinishAuthen);
+        
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
 		cardPanel.add(card,"finishAuthen");
 	}
-
+	
 	public void home() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -544,11 +575,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"home");
 
 	}
-
+	
 	public void reply() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -668,10 +703,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"reply");
 	}
-
+	
 	public void replyGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -735,11 +774,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"replyGroup");
 	}
-
+	
 	public void good() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -857,10 +899,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"good");
 	}
-
+	
 	public void matching() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -911,6 +957,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"matching");
 	}
@@ -987,10 +1037,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchSeachUser.setActionCommand("検索searchUser");
         bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bSearchSeachUser);
+        
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
         cardPanel.add(card,"searchUser");
 	}
-
+	
 	public void searchGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1033,10 +1087,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchSeachGroup.setActionCommand("検索searchGroup");
         bSearchSeachGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bSearchSeachGroup);
+        
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
         cardPanel.add(card,"searchGroup");
 	}
-
+	
 	public void menu() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1088,10 +1146,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"menu");
 	}
-
+	
 	public void myProfile() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1223,10 +1285,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"myProfile");
 	}
-
+	
 	public void change() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1296,9 +1362,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
+        
         cardPanel.add(card,"change");
 	}
-
+	
 	public void makeGroup() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1382,10 +1452,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"makeGroup");
 	}
-
+	
 	public void gathering() {
 
 		JPanel card=new JPanel();
@@ -1447,10 +1521,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"gathering");
 	}
-
+	
 	public void invite() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1512,10 +1590,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"invite");
 	}
-
+	
 	public void viewGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1576,10 +1658,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"viewGroup");
 	}
-
+	
 	public void myGroupProfile() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1669,10 +1754,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"myGroupProfile");
 	}
-
+	
 	public void setup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1726,10 +1815,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"setup");
 	}
-
+	
 	public void howToUse() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1777,9 +1870,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
+        
         cardPanel.add(card,"howToUse");
 	}
-
+	
 	public void inform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1824,10 +1921,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"inform");
 	}
-
+	
 	public void inviteInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1880,10 +1981,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"inviteInform");
 	}
-
+	
 	public void goodInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1936,10 +2041,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"goodInform");
 	}
-
+	
 	public void matchingInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1992,10 +2101,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+        
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-11,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"matchingInform");
 	}
-
+	
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
 			//nowShowingGroups=nページ目グルの情報取得
@@ -2034,7 +2147,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		layout.show(cardPanel,"home");
 	}
-
+	
 	public void goViewGroup() {
 		lGroupNameViewGroup.setText(nowShowingGroup.getName());
 		try {
@@ -2075,7 +2188,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		layout.show(cardPanel, "viewGroup");
 	}
-
+	
 	public void goGood() {
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
@@ -2110,7 +2223,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		layout.show(cardPanel,"good");
 	}
-
+	
 	public void goInviteInform() {
 
 		for(int i=0;i<3;i++) {
@@ -2134,7 +2247,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goGoodInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
 				if(nowShowingGroups[i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2151,7 +2264,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//nowShowingUsers[i]=ユーザ情報取得(myUserInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				//nowShowingUsers[i]=ユーザ情報取得(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
 				if(nowShowingUsers[i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2188,7 +2301,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//nowShowingUsers[i]=グル情報取得(myUserInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				//nowShowingUsers[i]=グル情報取得(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
 				if(nowShowingUsers[i]==null) {
 					bIconMatchingInform[i].setVisible(false);
 				}
@@ -3044,7 +3157,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "次のページgoodInform":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
-				if(myGroupInfo.getRecieveGood()[3*(nowPage-1)]!=null){
+				if(myGroupInfo.getReceiveGood()[3*(nowPage-1)]!=null){
 					goInviteInform();
 				}
 				else{
@@ -3052,7 +3165,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 			else {
-				if(myUserInfo.getRecieveGood()[3*(nowPage-1)]!=0){
+				if(myUserInfo.getReceiveGood()[3*(nowPage-1)]!=0){
 					goInviteInform();
 				}
 				else{
@@ -3236,7 +3349,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-	client.connectServer();
+    	//client.connectServer();
     	//client.new Notification();
     }
 

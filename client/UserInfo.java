@@ -36,9 +36,9 @@ public class UserInfo implements Serializable{
 
 	UserInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/test.jpg"));
+			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
 			for(int i=0;i<4;i++) {
-				subPhoto[i]=ImageIO.read(new File("./img/test.jpg"));
+				subPhoto[i]=ImageIO.read(new File("./img/初期アイコン.png"));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -137,15 +137,15 @@ public class UserInfo implements Serializable{
 		return sendGood;
 	}
 
-	public void setRecieveGood(int[] rg) {
+	public void setReceiveGood(int[] rg) {
 		receiveGood=rg;
 	}
 
-	public void setRecieveGood(int rg,int n) {
+	public void setReceiveGood(int rg,int n) {
 		receiveGood[n]=rg;
 	}
 
-	public int[] getRecieveGood() {
+	public int[] getReceiveGood() {
 		return receiveGood;
 	}
 

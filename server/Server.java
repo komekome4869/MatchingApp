@@ -1088,6 +1088,7 @@ public class Server extends JFrame implements ActionListener{
 						//書き込み
 						fw = new FileWriter(file);
 						fw.write(strbuf.toString());
+						readAllUserFiles();
 
 					}
 					catch(IOException e) {
@@ -1291,7 +1292,7 @@ public class Server extends JFrame implements ActionListener{
 				}
 			}
 			else if(cmd=="BAN") {
-				//ユーザ赤削除メソッド
+				deleteUser(tfStudentNumberSearch.getText());
 				cardLayout.show(cardPanel,"search");
 			}
 			else if(cmd=="戻る") {

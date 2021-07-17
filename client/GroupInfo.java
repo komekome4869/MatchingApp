@@ -14,7 +14,7 @@ public class GroupInfo implements Serializable{
 	String name="";		//グループ名
 	String relation="";		//グルのメンバの関係性
 	UUID[] sendGood=new UUID[MAX];		//このグルがイイネを送った相手のグルの識別番号
-	UUID[] recieveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
+	UUID[] receiveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
 	UUID[] matchedGroup=new UUID[MAX];		//このグルとマッチングした相手のグルの識別番号
 	BufferedImage mainPhoto;		//グルの写真
 	int hostUser=0;		//グルのホストユーザ(=グルを作った人)
@@ -29,7 +29,7 @@ public class GroupInfo implements Serializable{
 
 	GroupInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/test.jpg"));
+			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,17 +79,17 @@ public class GroupInfo implements Serializable{
 		return sendGood;
 	}
 
-	public void setRecieveGood(UUID[] rg) {
-		recieveGood=rg;
+	public void setReceiveGood(UUID[] rg) {
+		receiveGood=rg;
 	}
 
-	public void setRecieveGood(UUID rg,int n) {
-		recieveGood[n]=rg;
+	public void setReceiveGood(UUID rg,int n) {
+		receiveGood[n]=rg;
 
 	}
 
-	public UUID[] getRecieveGood() {
-		return recieveGood;
+	public UUID[] getReceiveGood() {
+		return receiveGood;
 	}
 
 	public void setMatchedGroup(UUID[] mg) {
