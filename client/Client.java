@@ -192,9 +192,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//サーバとの通信に必要な変数
 	static Socket socket;
 	static ObjectOutputStream oos;
-	static Receiver receiver;
 	static OutputStreamWriter out;
+	static ObjectInputStream ois;
 	static BufferedWriter bw;
+	static Object inputObj;
 	String ipAddress = "localhost";	//ipアドレス設定
 	int port = 50;  //port番号設定
 	String inputLine = "0";
@@ -204,7 +205,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel = new JPanel();
 	    layout = new CardLayout();
 	    cardPanel.setLayout(layout);
-	    
+
 	    try {
 			backNoButton=scaleImage(ImageIO.read(new File("./img/ボタンなし背景.png")),w+30,h+30);
 			backWithButton=scaleImage(ImageIO.read(new File("./img/ボタンあり背景.png")),w+10,h);
@@ -242,7 +243,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"finishAuthen");
+	    layout.show(cardPanel,"login");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -257,7 +258,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    myUserInfo=new UserInfo();
 	}
 
-	
+
 	public void login() {
 		//↓2行はコピペでOK
 		JPanel card=new JPanel();
@@ -270,8 +271,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		 *
 		 * 文字のフォントは、とりあえずMS明朝にしてるけど、アプリの雰囲気に合わせて後で変えよう
 		 */
-		
-		
+
+
 		JLabel lTitleLogin = new JLabel("TITLE");
 		lTitleLogin.setBounds(w/4,h/10,w/2,h/10);
 		lTitleLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
@@ -323,11 +324,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
-		
+
         //自分が作る画面に名前付け。メソッド名と同じじゃなくても大丈夫だけど、同じのほうが分かりやすいかも。
 		cardPanel.add(card,"login");
 	}
-	
+
 	public void new_regis() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -378,14 +379,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lMessageNew_r.setForeground(Color.RED);
         lMessageNew_r.setVisible(false);
         card.add(lMessageNew_r);
-        
+
         JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
 		cardPanel.add(card,"new_regis");
 	}
-	
+
 	public void judging() {
 
 		JPanel card=new JPanel();
@@ -449,14 +450,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lErrorJudge.setHorizontalAlignment(JLabel.CENTER);
 		lErrorJudge.setVisible(false);
 		card.add(lErrorJudge);
-		
+
 		JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
 		cardPanel.add(card,"judge");
 		}
-	
+
 	public void pleaseWait() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -481,7 +482,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
-		
+
 		cardPanel.add(card,"pleaseWait");
 	}
 
@@ -501,14 +502,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bnextFinishAuthen.setActionCommand("すすむfinishAuthen");
         bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bnextFinishAuthen);
-        
+
         JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
 		cardPanel.add(card,"finishAuthen");
 	}
-	
+
 	public void home() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -574,7 +575,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
@@ -582,7 +583,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"home");
 
 	}
-	
+
 	public void reply() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -704,14 +705,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"reply");
 	}
-	
+
 	public void replyGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -775,14 +776,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"replyGroup");
 	}
-	
+
 	public void good() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -902,14 +903,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"good");
 	}
-	
+
 	public void matching() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -960,7 +961,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
@@ -1040,14 +1041,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchSeachUser.setActionCommand("検索searchUser");
         bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bSearchSeachUser);
-        
+
         JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
         cardPanel.add(card,"searchUser");
 	}
-	
+
 	public void searchGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1090,14 +1091,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchSeachGroup.setActionCommand("検索searchGroup");
         bSearchSeachGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bSearchSeachGroup);
-        
+
         JLabel background=new JLabel(backNoButton);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
         cardPanel.add(card,"searchGroup");
 	}
-	
+
 	public void menu() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1149,14 +1150,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"menu");
 	}
-	
+
 	public void myProfile() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1288,14 +1289,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"myProfile");
 	}
-	
+
 	public void change() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1368,10 +1369,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
-        
+
         cardPanel.add(card,"change");
 	}
-	
+
 	public void makeGroup() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1456,14 +1457,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"makeGroup");
 	}
-	
+
 	public void gathering() {
 
 		JPanel card=new JPanel();
@@ -1525,14 +1526,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"gathering");
 	}
-	
+
 	public void invite() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1594,14 +1595,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"invite");
 	}
-	
+
 	public void viewGroup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1668,7 +1669,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		cardPanel.add(card,"viewGroup");
 	}
-	
+
 	public void myGroupProfile() {
 		JPanel card = new JPanel();
 		card.setLayout(null);
@@ -1758,14 +1759,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"myGroupProfile");
 	}
-	
+
 	public void setup() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1819,14 +1820,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"setup");
 	}
-	
+
 	public void howToUse() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1877,10 +1878,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
-        
+
         cardPanel.add(card,"howToUse");
 	}
-	
+
 	public void inform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1925,14 +1926,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
 		cardPanel.add(card,"inform");
 	}
-	
+
 	public void inviteInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -1985,14 +1986,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"inviteInform");
 	}
-	
+
 	public void goodInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -2045,14 +2046,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"goodInform");
 	}
-	
+
 	public void matchingInform() {
 		JPanel card=new JPanel();
 		card.setLayout(null);
@@ -2105,14 +2106,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
-        
+
         JLabel background=new JLabel(backWithButton);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
         cardPanel.add(card,"matchingInform");
 	}
-	
+
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
 			//nowShowingGroups=nページ目グルの情報取得
@@ -2151,7 +2152,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		layout.show(cardPanel,"home");
 	}
-	
+
 	public void goViewGroup() {
 		lGroupNameViewGroup.setText(nowShowingGroup.getName());
 		try {
@@ -2192,7 +2193,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		layout.show(cardPanel, "viewGroup");
 	}
-	
+
 	public void goGood() {
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
@@ -2227,7 +2228,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		layout.show(cardPanel,"good");
 	}
-	
+
 	public void goInviteInform() {
 
 		for(int i=0;i<3;i++) {
@@ -2343,7 +2344,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				try {
 					int loginId=Integer.valueOf(tfIdLogin.getText());
 					String loginPassword=tfPasswordLogin.getText();
-					flag=Scheck(loginId,loginPassword);
+					Scheck(loginId,loginPassword);
 					System.out.println(flag);
 					flag = true;
 				}
@@ -3496,9 +3497,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.out.println("サーバと接続しました。"); //テスト用出力
 			oos = new ObjectOutputStream(socket.getOutputStream()); //オブジェクトデータ送信用オブジェクトの用意
 			out = new OutputStreamWriter(socket.getOutputStream());
-
-			receiver = new Receiver(socket); //受信用オブジェクトの準備
-			receiver.start();//受信用オブジェクト(スレッド)起動
+			ois = new ObjectInputStream(socket.getInputStream());
+			//receiver = new Receiver(socket); //受信用オブジェクトの準備
+			//receiver.start();//受信用オブジェクト(スレッド)起動
 		} catch (UnknownHostException e) {
 			System.err.println("ホストのIPアドレスが判定できません: " + e);
 			System.exit(-1);
@@ -3521,28 +3522,55 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	/****  送信用 ****/
 	//パスワードの確認
-	public boolean Scheck(int number, String password) {
+	public void Scheck(int number, String password) {
 		try {
+			connectServer();
 			String outLine = "lg,"+Integer.toString(number)+","+password;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
-			if(inputLine=="1")	return true;
-			else	return false;
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
+			/*if(inputLine=="1")	return true;
+			else	return false;*/
 			}catch(IOException e) {
-				System.err.println("データ送信時ににエラーが発生しました: " + e);
+				System.err.println("データ送受信時にエラーが発生しました: " + e);
 				System.exit(-1);
-				return false;
+				//return false;
 			}
 	}
 
 	//ホーム画面nページ目のユーザ情報の取得
 	public void Shome(int page) {
 		try{
+			connectServer();	//サーバと接続
+			// データ送信
 			String outLine = "us,"+Integer.toString(page);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+					nowShowingUsers[1] = (UserInfo)ois.readObject();
+					nowShowingUsers[2] = (UserInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3552,10 +3580,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//条件検索
 	public void Ssearch(int page, int cond) {
 		try{
+			connectServer();
 			String outLine = "us,"+Integer.toString(page)+","+Integer.toString(cond);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+					nowShowingUsers[1] = (UserInfo)ois.readObject();
+					nowShowingUsers[2] = (UserInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3565,8 +3608,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	// 新規登録
 	public void sendUserInfo(UserInfo obj) {
 		try{
+			connectServer();
 			oos.writeObject(obj);
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3577,10 +3632,26 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ホーム画面nページ目のグループ情報を取得
 	public void Sgroup_home(int page) {
 		try{
+			connectServer();
 			String outLine = "gs,"+Integer.toString(page);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingGroups[0] = (GroupInfo)inputObj;
+					nowShowingGroups[1] = (GroupInfo)ois.readObject();
+					nowShowingGroups[2] = (GroupInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3590,10 +3661,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザにいいねを送る
 	public void Sgood(int number) {
 		try{
+			connectServer();
 			String outLine = "ug,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3603,10 +3688,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グルにいいねを送る
 	public void Sgroup_good(int uuid) {
 		try{
+			connectServer();
 			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+Integer.toString(uuid);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3631,12 +3728,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループのプロフィール変更
 	public void SchangeGroupProf(UserInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(outLine+"を送信しました。");  //確認用
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3646,12 +3755,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ作成
 	public void SmakeGroup(GroupInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "gm,";
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(outLine+"を送信しました。");  //確認用
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3674,10 +3795,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ情報の取得
 	public void SgetGroupprof(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gi,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3687,10 +3821,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザアカウント削除
 	public void SdeleteUser(int number) {
 		try{
+			connectServer();
 			String outLine = "ud,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3700,10 +3847,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループアカウント削除
 	public void SdeleteGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gd,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3713,10 +3873,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ参加
 	public void SjoinGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "jg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3726,10 +3899,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ参加拒否
 	public void SrejectJoinGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "rg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3739,10 +3925,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザからのいいねを断る
 	public void SrejectGood(int number) {
 		try{
+			connectServer();
 			String outLine = "ur,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3752,10 +3951,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループからのいいねを断る
 	public void SrejectGoodfromGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gr,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3763,58 +3975,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 
-	/**** 受信用 ****/
-	// データ受信用スレッド(内部クラス)
-	class Receiver extends Thread {
 
-		private ObjectInputStream ois;
-		/* InputStreamReader sisr;
-		BufferedReader br;*/
-
-		// 内部クラスReceiverのコンストラクタ
-		Receiver (Socket socket){
-			try{
-				ois = new ObjectInputStream(socket.getInputStream());
-				//sisr = new InputStreamReader(socket.getInputStream());
-			} catch (IOException e) {
-				System.err.println("データ受信ストリーム作成時にエラーが発生しました: " + e);
-			}
-		}
-		// 内部クラス Receiverのメソッド
-		public void run(){
-			try{
-				while(true) {
-					try {
-						Object inputObj = ois.readObject();
-
-						//UserInfo型なら
-						if(inputObj instanceof UserInfo) {
-							UserInfo ui = new UserInfo();
-							ui = (UserInfo)inputObj;
-						}
-
-						//GroupInfo型なら
-						else if(inputObj instanceof GroupInfo) {
-							GroupInfo gi = new GroupInfo();
-							gi = (GroupInfo)inputObj;
-						}
-
-						//その他ならreceiveMessage()
-						else {
-							/* br = new BufferedReader(sisr);
-							inputLine = br.readLine();//データを一行分読み込む*/
-							inputLine = inputObj.toString();
-							receiveMessage(inputLine);
-						}
-					}catch (ClassNotFoundException e) {
-							System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					}
-				}
-			} catch (IOException e){
-				System.err.println("データ受信時にエラーが発生しました: " + e);
-			}
-		}
-	}
 
 	// メッセージの受信
 	public void receiveMessage(String msg){
