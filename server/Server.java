@@ -508,6 +508,111 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
+	//ユーザの情報変更
+	public static void userinfoChange(String studentNum, UserInfo ui) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		PrintWriter pw = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
+
+		String newinfo = new String(ui.studentNumber + "\n" +
+							ui.password + "\n" +
+							ui.name + "\n" +
+							ui.gender + "\n" +
+							ui.grade + "\n" +
+							ui.faculty + "\n" +
+							ui.birth + "\n" +
+							ui.circle + "\n" +
+							ui.hobby + "\n" +
+							/*学籍番号*/"\n" +
+							/*学籍番号*/"\n" +
+							/*学籍番号*/"\n" +
+							/*UUID*/"\n" +
+							/*UUID*/"\n" +
+							ui.isAuthentificated +"\n"+
+							ui.lineId + "\n" +
+							ui.isPublic + "\n");
+
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			pw = new PrintWriter(file);
+
+			while((line = br.readLine())!=null)
+				pw.println(line.replaceAll(line, newinfo));
+
+
+
+		}catch(IOException e) {
+			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
+			return;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+				pw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			return;
+			}
+		}
+
+		return;
+
+	}
+
+	//グループの情報変更
+	public static void groupinfoChange(String uuid, GroupInfo gi) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		PrintWriter pw = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
+
+		String newinfo = new String(gi.name + "\n" +
+					 gi.relation + "\n" +
+					 /*UUID*/ "\n" +
+					 /*UUID*/ "\n" +
+					 /*UUID*/ "\n" +
+					 gi.hostUser + "\n" +
+					 gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3] + "\n" +
+					 gi.comment + "\n" +
+					 gi.numberOfMember + "\n");
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\Group\\" + uuid + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			pw = new PrintWriter(file);
+
+			while((line = br.readLine())!=null)
+				line = line.replaceAll(line, newinfo);
+		}catch(IOException e) {
+			System.err.print("グループ情報変更に関する処理でエラーが発生しました：" + e);
+			return;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+				pw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			return;
+			}
+		}
+
+		return;
+
+
+	}
+
 	//グループ作成
 	public static void makeGroup(GroupInfo gi) {
 
