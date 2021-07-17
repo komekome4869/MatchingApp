@@ -295,44 +295,50 @@ public class Server extends JFrame implements ActionListener{
 				if (inputLine != null){ //データを受信したら
 					String act[] = inputLine.split(","); //カンマの前後で文字列を分割
 					System.out.println("receiveMessageが起動:"+inputLine);	//確認用
+					
+					try {
+						switch(act[0]){
+						case "lg": //新規登録する
+							if(checkPassword(act[1],act[2] /*(学籍番号,パスワード)*/) == true) {
+								oos.writeObject("1");
+								oos.flush();
+							}
+							else {
+								oos.writeObject("0");
+								oos.flush();
+								/*out_buf.print("0");
+								out_buf.flush();*/
+							}
+							break;
 
-					switch(act[0]){
-					case "lg": //新規登録する
-						if(checkPassword(act[1],act[2] /*(学籍番号,パスワード)*/) == true) {
-							out_buf.print("1");
-							out_buf.flush();
+						case "ui": //ユーザ情報の取得
+							try {
+								oos.writeObject(activeUsers.get(act[1]));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
+						case "ug": //ユーザにいいねを送る
+
+							break;
+
+						case "gg": //グループにいいねを送る
+
+							break;
+
+						case "jg": //グループに参加
+							joinGroup(act[1], act[2]);
+							break;
+
+						case "rg": //グループ参加拒否
+							deleteGroup(act[2]);
+							break;
+
 						}
-						else {
-							out_buf.print("0");
-							out_buf.flush();
-						}
-						break;
-
-					case "ui": //ユーザ情報の取得
-						try {
-							oos.writeObject(activeUsers.get(act[1]));
-							oos.flush();
-						} catch (IOException e) {
-							System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
-						}
-						break;
-
-					case "ug": //ユーザにいいねを送る
-
-						break;
-
-					case "gg": //グループにいいねを送る
-
-						break;
-
-					case "jg": //グループに参加
-						joinGroup(act[1], act[2]);
-						break;
-
-					case "rg": //グループ参加拒否
-						deleteGroup(act[2]);
-						break;
-
+					}catch(IOException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					}
 				}
 		}

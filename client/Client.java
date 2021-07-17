@@ -194,9 +194,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//サーバとの通信に必要な変数
 	static Socket socket;
 	static ObjectOutputStream oos;
-	static Receiver receiver;
 	static OutputStreamWriter out;
+	static ObjectInputStream ois;
 	static BufferedWriter bw;
+	static Object inputObj;
 	String ipAddress = "localhost";	//ipアドレス設定
 	int port = 50;  //port番号設定
 	String inputLine = "0";
@@ -244,7 +245,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"finishAuthen");
+	    layout.show(cardPanel,"login");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -2284,7 +2285,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"matchingInform");
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
 			//TODO myUserInfo=SgetUserprof(myUswerInfo.getStudentNumber);
@@ -2520,6 +2524,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				try {
+<<<<<<< HEAD
 					loginId=Integer.valueOf(tfIdLogin.getText());
 					loginPassword=tfPasswordLogin.getText();
 
@@ -2541,6 +2546,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					else {
 						lMessageLogin.setVisible(true);
 					}
+=======
+					int loginId=Integer.valueOf(tfIdLogin.getText());
+					String loginPassword=tfPasswordLogin.getText();
+					Scheck(loginId,loginPassword);
+					System.out.println(flag);
+					flag = true;
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 				}
 				catch(NumberFormatException e) {
 					lMessageLogin.setVisible(true);
@@ -3827,9 +3839,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.out.println("サーバと接続しました。"); //テスト用出力
 			oos = new ObjectOutputStream(socket.getOutputStream()); //オブジェクトデータ送信用オブジェクトの用意
 			out = new OutputStreamWriter(socket.getOutputStream());
-
-			receiver = new Receiver(socket); //受信用オブジェクトの準備
-			receiver.start();//受信用オブジェクト(スレッド)起動
+			ois = new ObjectInputStream(socket.getInputStream());
+			//receiver = new Receiver(socket); //受信用オブジェクトの準備
+			//receiver.start();//受信用オブジェクト(スレッド)起動
 		} catch (UnknownHostException e) {
 			System.err.println("ホストのIPアドレスが判定できません: " + e);
 			System.exit(-1);
@@ -3852,28 +3864,55 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	/****  送信用 ****/
 	//パスワードの確認
-	public boolean Scheck(int number, String password) {
+	public void Scheck(int number, String password) {
 		try {
+			connectServer();
 			String outLine = "lg,"+Integer.toString(number)+","+password;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
-			if(inputLine=="1")	return true;
-			else	return false;
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
+			/*if(inputLine=="1")	return true;
+			else	return false;*/
 			}catch(IOException e) {
-				System.err.println("データ送信時ににエラーが発生しました: " + e);
+				System.err.println("データ送受信時にエラーが発生しました: " + e);
 				System.exit(-1);
-				return false;
+				//return false;
 			}
 	}
 
 	//ホーム画面nページ目のユーザ情報の取得
 	public void Shome(int page) {
 		try{
+			connectServer();	//サーバと接続
+			// データ送信
 			String outLine = "us,"+Integer.toString(page);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+					nowShowingUsers[1] = (UserInfo)ois.readObject();
+					nowShowingUsers[2] = (UserInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3883,10 +3922,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//条件検索
 	public void Ssearch(int page, int cond) {
 		try{
+			connectServer();
 			String outLine = "us,"+Integer.toString(page)+","+Integer.toString(cond);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+					nowShowingUsers[1] = (UserInfo)ois.readObject();
+					nowShowingUsers[2] = (UserInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3896,8 +3950,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	// 新規登録
 	public void sendUserInfo(UserInfo obj) {
 		try{
+			connectServer();
 			oos.writeObject(obj);
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3908,10 +3974,26 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ホーム画面nページ目のグループ情報を取得
 	public void Sgroup_home(int page) {
 		try{
+			connectServer();
 			String outLine = "gs,"+Integer.toString(page);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingGroups[0] = (GroupInfo)inputObj;
+					nowShowingGroups[1] = (GroupInfo)ois.readObject();
+					nowShowingGroups[2] = (GroupInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3921,10 +4003,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザにいいねを送る
 	public void Sgood(int number) {
 		try{
+			connectServer();
 			String outLine = "ug,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3934,10 +4030,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グルにいいねを送る
 	public void Sgroup_good(int uuid) {
 		try{
+			connectServer();
 			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+Integer.toString(uuid);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3947,11 +4055,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザのプロフィール変更
 	public void SchangeProf(UserInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "uc,"+Integer.toString(myUserInfo.getStudentNumber());
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 			System.out.println(outLine+"を送信しました。");  //確認用
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3962,12 +4083,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループのプロフィール変更
 	public void SchangeGroupProf(UserInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(outLine+"を送信しました。");  //確認用
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3977,12 +4110,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ作成
 	public void SmakeGroup(GroupInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "gm,";
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(outLine+"を送信しました。");  //確認用
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4005,10 +4150,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ情報の取得
 	public void SgetGroupprof(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gi,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4018,10 +4176,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザアカウント削除
 	public void SdeleteUser(int number) {
 		try{
+			connectServer();
 			String outLine = "ud,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4031,10 +4202,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループアカウント削除
 	public void SdeleteGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gd,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4044,10 +4228,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ参加
 	public void SjoinGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "jg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4057,10 +4254,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ参加拒否
 	public void SrejectJoinGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "rg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4070,10 +4280,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザからのいいねを断る
 	public void SrejectGood(int number) {
 		try{
+			connectServer();
 			String outLine = "ur,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4083,10 +4306,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループからのいいねを断る
 	public void SrejectGoodfromGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gr,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4094,58 +4330,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 
-	/**** 受信用 ****/
-	// データ受信用スレッド(内部クラス)
-	class Receiver extends Thread {
 
-		private ObjectInputStream ois;
-		/* InputStreamReader sisr;
-		BufferedReader br;*/
-
-		// 内部クラスReceiverのコンストラクタ
-		Receiver (Socket socket){
-			try{
-				ois = new ObjectInputStream(socket.getInputStream());
-				//sisr = new InputStreamReader(socket.getInputStream());
-			} catch (IOException e) {
-				System.err.println("データ受信ストリーム作成時にエラーが発生しました: " + e);
-			}
-		}
-		// 内部クラス Receiverのメソッド
-		public void run(){
-			try{
-				while(true) {
-					try {
-						Object inputObj = ois.readObject();
-
-						//UserInfo型なら
-						if(inputObj instanceof UserInfo) {
-							UserInfo ui = new UserInfo();
-							ui = (UserInfo)inputObj;
-						}
-
-						//GroupInfo型なら
-						else if(inputObj instanceof GroupInfo) {
-							GroupInfo gi = new GroupInfo();
-							gi = (GroupInfo)inputObj;
-						}
-
-						//その他ならreceiveMessage()
-						else {
-							/* br = new BufferedReader(sisr);
-							inputLine = br.readLine();//データを一行分読み込む*/
-							inputLine = inputObj.toString();
-							receiveMessage(inputLine);
-						}
-					}catch (ClassNotFoundException e) {
-							System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					}
-				}
-			} catch (IOException e){
-				System.err.println("データ受信時にエラーが発生しました: " + e);
-			}
-		}
-	}
 
 	// メッセージの受信
 	public void receiveMessage(String msg){
