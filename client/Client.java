@@ -52,7 +52,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	int h=650;
 	int MAX=100;
 	UserInfo myUserInfo=new UserInfo();
+	UserInfo yourUserInfo=new UserInfo();
 	GroupInfo myGroupInfo= new GroupInfo();
+	GroupInfo yourGroupInfo=new GroupInfo();
 	UserInfo[] nowShowingUsers=new UserInfo[3];//ホーム画面や通知画面で使う
 	GroupInfo[] nowShowingGroups=new GroupInfo[3];
 	UserInfo nowShowingUser=new UserInfo();//イイネ画面とかで使う
@@ -4001,7 +4003,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;
@@ -4108,7 +4109,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			inputObj = null;
 			while(inputObj==null) {
 				try {
-					inputObj = ois.readObject();
+					inputObj = ois.readObject();	//新しいUUIDを取得
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;
@@ -4122,24 +4123,61 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 	}
 
-	//ユーザ情報の取得
-	public void SgetUserprof(int number) {
+	//自分のユーザ情報の取得
+	public void SgetmyUserprof(int number) {
 		try{
-			String outLine = "ui,"+Integer.toString(number);
+			String outLine = "mui,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();	//自分のユーザ情報を取得
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			myUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
 		}
 	}
+	
+	//相手のユーザ情報の取得
+		public void SgetyourUserprof(int number) {
+			try{
+				String outLine = "yui,"+Integer.toString(number);
+				oos.writeObject(outLine);
+				System.out.println(outLine+"を送信しました。");  //確認用
+				oos.flush();
+				inputObj = null;
+				while(inputObj==null) {
+					try {
+						inputObj = ois.readObject();	//自分のユーザ情報を取得
+					}catch(ClassNotFoundException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+						break;
+					}
+				}
+				System.out.println(inputObj);
+				yourUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
+				closeSocket();
+			}catch(IOException e) {
+				System.err.println("サーバ接続時にエラーが発生しました: " + e);
+				System.exit(-1);
+			}
+		}
 
-	//グループ情報の取得
-	public void SgetGroupprof(UUID number) {
+	//自分のグループ情報の取得
+	public void SgetmyGroupprof(UUID number) {
 		try{
 			connectServer();
-			String outLine = "gi,"+number.toString();
+			String outLine = "mgi,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
@@ -4147,19 +4185,47 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			inputObj = null;
 			while(inputObj==null) {
 				try {
-					inputObj = ois.readObject();
+					inputObj = ois.readObject();	//自分のグループ情報を取得
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
+			myGroupInfo = (GroupInfo)inputObj;	//GroupInfo型に変換して代入
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
 		}
 	}
+	
+	//相手のグループ情報の取得
+		public void SgetyourGroupprof(UUID number) {
+			try{
+				connectServer();
+				String outLine = "mgi,"+number.toString();
+				oos.writeObject(outLine);
+				System.out.println(outLine+"を送信しました。");  //確認用
+				oos.flush();
+				//データを受信
+				inputObj = null;
+				while(inputObj==null) {
+					try {
+						inputObj = ois.readObject();	//自分のグループ情報を取得
+					}catch(ClassNotFoundException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+						break;
+					}
+				}
+				System.out.println(inputObj);
+				yourGroupInfo = (GroupInfo)inputObj;	//GroupInfo型に変換して代入
+				closeSocket();
+			}catch(IOException e) {
+				System.err.println("サーバ接続時にエラーが発生しました: " + e);
+				System.exit(-1);
+			}
+		}
 
 	//ユーザアカウント削除
 	public void SdeleteUser(int number) {
