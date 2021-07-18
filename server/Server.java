@@ -49,10 +49,10 @@ public class Server extends JFrame implements ActionListener{
 	static int groupFileNum = 0;	//ユーザファイル数
 
 	//検索用
-	static ArrayList<UserInfo> userlist;
-	static ArrayList<UserInfo> user_buf;
-	static ArrayList<GroupInfo> grouplist;
-	static ArrayList<GroupInfo> group_buf;
+	static ArrayList<UserInfo> userlist = new ArrayList<UserInfo>();
+	static ArrayList<UserInfo> user_buf = new ArrayList<UserInfo>();
+	static ArrayList<GroupInfo> grouplist = new ArrayList<GroupInfo>();
+	static ArrayList<GroupInfo> group_buf = new ArrayList<GroupInfo>();
 
 	int w = 400;
 	int h = 650;
@@ -172,25 +172,25 @@ public class Server extends JFrame implements ActionListener{
 						users[userFileNum].studentNumber = Integer.parseInt(line);
 
 						//画像の読み込み
-//						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
-//						File main_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_main.png");
-//						File sub1_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub1.png");
-//						File sub2_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub2.png");
-//						File sub3_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub3.png");
-//						File sub4_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub4.png");
-//						BufferedImage card = ImageIO.read(studentCard);
-//						BufferedImage main = ImageIO.read(main_image);
-//						BufferedImage sub1 = ImageIO.read(sub1_image);
-//						BufferedImage sub2 = ImageIO.read(sub2_image);
-//						BufferedImage sub3 = ImageIO.read(sub3_image);
-//						BufferedImage sub4 = ImageIO.read(sub4_image);
-//
-//						users[userFileNum].studentCard = card;
-//						users[userFileNum].mainPhoto = main;
-//						users[userFileNum].subPhoto[0] = sub1;
-//						users[userFileNum].subPhoto[1] = sub2;
-//						users[userFileNum].subPhoto[2] = sub3;
-//						users[userFileNum].subPhoto[3] = sub4;
+						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
+						File main_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_main.png");
+						File sub1_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub1.png");
+						File sub2_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub2.png");
+						File sub3_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub3.png");
+						File sub4_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub4.png");
+						BufferedImage card = ImageIO.read(studentCard);
+						BufferedImage main = ImageIO.read(main_image);
+						BufferedImage sub1 = ImageIO.read(sub1_image);
+						BufferedImage sub2 = ImageIO.read(sub2_image);
+						BufferedImage sub3 = ImageIO.read(sub3_image);
+						BufferedImage sub4 = ImageIO.read(sub4_image);
+
+						users[userFileNum].studentCard = card;
+						users[userFileNum].mainPhoto = main;
+						users[userFileNum].subPhoto[0] = sub1;
+						users[userFileNum].subPhoto[1] = sub2;
+						users[userFileNum].subPhoto[2] = sub3;
+						users[userFileNum].subPhoto[3] = sub4;
 						break;
 
 					case 2 :
