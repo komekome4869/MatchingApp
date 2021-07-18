@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -968,6 +969,75 @@ public class Server extends JFrame implements ActionListener{
 				}
 			}
 	}
+	
+	 //いいね
+ 	public static boolean  goodUser(String my_num, String your_num) {
+  		try {
+   			File file = new File(my_num + ".txt");
+   			FileReader filereader = new FileReader(file);
+   			BufferedReader br = new BufferedReader(filereader);
+   
+   			int count = 0;
+   			int flag = 0;
+   			String[] str = new String[100];
+   
+   
+  			while(str[count] != null) {
+	  			str[count] = br.readLine();
+	 		  	count++;
+   			}
+    
+    			int check = str[10].indexOf(your_num);
+    			if(check!=-1) {    //いいねされてた
+    				str[10] = str[10].replace(your_num,"");
+    				flag = 1;
+    			}
+    			else
+    				str[9] += " your_num";
+    	
+    			if(flag == 1)   //マッチした
+    				str[11] += " your_num";
+   
+   			FileWriter filewriter = new FileWriter(file);  //書き換え
+   			BufferedWriter bw = new BufferedWriter(filewriter);
+   			for (int i=0;i<17;i++) {
+	   			bw.write(str[i]);
+	   			bw.newLine();
+   			}
+   
+   			File file2 = new File(your_num + ".txt");
+   			FileReader filereader2 = new FileReader(file2);
+   			BufferedReader br2 = new BufferedReader(filereader2);
+   
+   			int count2 = 1;
+   			String[] str2 = new String[100];
+   			str2[count-1] = br2.readLine();
+   			while(str2[count2-1] != null) {
+	   			count2++;
+	   			str2[count2-1] = br.readLine();
+   			}
+   			if(flag == 1) { //マッチしたら
+	   			str[9] = str[9].replace(your_num,"");
+	   			str[11] += " your_num";
+   			}
+   			else {
+	   			str[10] += " your_num";
+   			}
+   
+   			FileWriter filewriter2 = new FileWriter(file2);  //書き換え
+   			BufferedWriter bw2 = new BufferedWriter(filewriter2);
+   			for (int i=0;i<17;i++) {
+	   			bw2.write(str[i]);
+	   			bw2.newLine();
+   			}
+			
+   			readFolder();
+   
+  		}catch(FileNotFoundException e) {
+   			System.out.println(e);
+   		}
+  
+ 	}
 
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
