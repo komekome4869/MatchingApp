@@ -3684,7 +3684,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	//client.connectServer();
+    	client.connectServer();
     	//client.new Notification();
     }
 
