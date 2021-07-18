@@ -553,10 +553,13 @@ public class Server extends JFrame implements ActionListener{
 						//UserInfo型なら
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
-							ui = (UserInfo)ois.readObject();
+							ui = (UserInfo)inputObj;
+							ui.studentCard = ui.getImageByArray(ui.buf, 100, 100);
+							ImageIO.write(ui.studentCard, "png", new File("T.png"));//検証でファイル保存
 							//新規登録
 							if(ui.state == 0) {
-								signUp(ui);
+								//signUp(ui);
+								oos.writeObject("1");
 							}
 							//
 						}
@@ -1493,14 +1496,8 @@ public class Server extends JFrame implements ActionListener{
 
  		return true;
  	}
-<<<<<<< HEAD
-
 	//グループいいね
 
-=======
-
-	//グループいいね
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
  	public static boolean goodGroup(String my_num, String your_num) {
  		try {
  			File file = new File(my_num + ".txt");

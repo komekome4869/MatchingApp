@@ -199,11 +199,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
-<<<<<<< HEAD
-	String ipAddress = "";	//ipアドレス設定
-=======
-	String ipAddress = "182.170.133.46";	//ipアドレス設定
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
+	String ipAddress = "localhost";	//ipアドレス設定
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
@@ -3651,7 +3647,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	client.connectServer();
+    	//client.connectServer();
     	//client.new Notification();
     }
 
@@ -3906,7 +3902,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void sendUserInfo(UserInfo obj) {
 		try{
 			connectServer();
-			oos.writeObject(obj);
+			UserInfo a = obj;
+			a.buf = UserInfo.getArrayByImage(a.studentCard, 100, 100);
+			oos.writeObject(a);
 			oos.flush();
 			inputObj = null;
 			while(inputObj==null) {
