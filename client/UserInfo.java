@@ -10,7 +10,7 @@ public class UserInfo implements Serializable{
 	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
 	int state;		//新規登録なら0,プロフ更新なら1
 
-	int studentNumber=0;	//学籍番号
+	int studentNumber=1;	//学籍番号
 	String password="";
 	String name="国大太郎";		//ユーザ名。認証時は氏名として使う。
 	//性別～サークルはClient.java内の配列で文字に変換する
@@ -36,9 +36,9 @@ public class UserInfo implements Serializable{
 
 	UserInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/test.jpg"));
+			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
 			for(int i=0;i<4;i++) {
-				subPhoto[i]=ImageIO.read(new File("./img/test.jpg"));
+				subPhoto[i]=ImageIO.read(new File("./img/初期アイコン.png"));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -137,15 +137,15 @@ public class UserInfo implements Serializable{
 		return sendGood;
 	}
 
-	public void setRecieveGood(int[] rg) {
+	public void setReceiveGood(int[] rg) {
 		receiveGood=rg;
 	}
 
-	public void setRecieveGood(int rg,int n) {
+	public void setReceiveGood(int rg,int n) {
 		receiveGood[n]=rg;
 	}
 
-	public int[] getRecieveGood() {
+	public int[] getReceiveGood() {
 		return receiveGood;
 	}
 

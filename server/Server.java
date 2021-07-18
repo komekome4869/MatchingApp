@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -300,43 +301,49 @@ public class Server extends JFrame implements ActionListener{
 					String act[] = inputLine.split(","); //カンマの前後で文字列を分割
 					System.out.println("receiveMessageが起動:"+inputLine);	//確認用
 
-					switch(act[0]){
-					case "lg": //新規登録する
-						if(checkPassword(act[1],act[2] /*(学籍番号,パスワード)*/) == true) {
-							out_buf.print("1");
-							out_buf.flush();
+					try {
+						switch(act[0]){
+						case "lg": //新規登録する
+							if(checkPassword(act[1],act[2] /*(学籍番号,パスワード)*/) == true) {
+								oos.writeObject("1");
+								oos.flush();
+							}
+							else {
+								oos.writeObject("0");
+								oos.flush();
+								/*out_buf.print("0");
+								out_buf.flush();*/
+							}
+							break;
+
+						case "ui": //ユーザ情報の取得
+							try {
+								oos.writeObject(activeUsers.get(act[1]));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
+						case "ug": //ユーザにいいねを送る
+
+							break;
+
+						case "gg": //グループにいいねを送る
+
+							break;
+
+						case "jg": //グループに参加
+							joinGroup(act[1], act[2]);
+							break;
+
+						case "rg": //グループ参加拒否
+							deleteGroup(act[2]);
+							break;
+
 						}
-						else {
-							out_buf.print("0");
-							out_buf.flush();
-						}
-						break;
-
-					case "ui": //ユーザ情報の取得
-						try {
-							oos.writeObject(activeUsers.get(act[1]));
-							oos.flush();
-						} catch (IOException e) {
-							System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
-						}
-						break;
-
-					case "ug": //ユーザにいいねを送る
-
-						break;
-
-					case "gg": //グループにいいねを送る
-
-						break;
-
-					case "jg": //グループに参加
-						joinGroup(act[1], act[2]);
-						break;
-
-					case "rg": //グループ参加拒否
-						deleteGroup(act[2]);
-						break;
-
+					}catch(IOException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					}
 				}
 		}
@@ -504,6 +511,111 @@ public class Server extends JFrame implements ActionListener{
 			System.err.print("新規登録の際にエラーが発生しました：" + e);
 			return;
 		}
+	}
+
+	//ユーザの情報変更
+	public static void userinfoChange(String studentNum, UserInfo ui) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		PrintWriter pw = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
+
+		String newinfo = new String(ui.studentNumber + "\n" +
+							ui.password + "\n" +
+							ui.name + "\n" +
+							ui.gender + "\n" +
+							ui.grade + "\n" +
+							ui.faculty + "\n" +
+							ui.birth + "\n" +
+							ui.circle + "\n" +
+							ui.hobby + "\n" +
+							/*学籍番号*/"\n" +
+							/*学籍番号*/"\n" +
+							/*学籍番号*/"\n" +
+							/*UUID*/"\n" +
+							/*UUID*/"\n" +
+							ui.isAuthentificated +"\n"+
+							ui.lineId + "\n" +
+							ui.isPublic + "\n");
+
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			pw = new PrintWriter(file);
+
+			while((line = br.readLine())!=null)
+				pw.println(line.replaceAll(line, newinfo));
+
+
+
+		}catch(IOException e) {
+			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
+			return;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+				pw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			return;
+			}
+		}
+
+		return;
+
+	}
+
+	//グループの情報変更
+	public static void groupinfoChange(String uuid, GroupInfo gi) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		PrintWriter pw = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
+
+		String newinfo = new String(gi.name + "\n" +
+					 gi.relation + "\n" +
+					 /*UUID*/ "\n" +
+					 /*UUID*/ "\n" +
+					 /*UUID*/ "\n" +
+					 gi.hostUser + "\n" +
+					 gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3] + "\n" +
+					 gi.comment + "\n" +
+					 gi.numberOfMember + "\n");
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\Group\\" + uuid + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			pw = new PrintWriter(file);
+
+			while((line = br.readLine())!=null)
+				line = line.replaceAll(line, newinfo);
+		}catch(IOException e) {
+			System.err.print("グループ情報変更に関する処理でエラーが発生しました：" + e);
+			return;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+				pw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			return;
+			}
+		}
+
+		return;
+
+
 	}
 
 	//グループ作成
@@ -862,6 +974,143 @@ public class Server extends JFrame implements ActionListener{
 			}
 	}
 
+	//いいね
+ 	public static boolean goodUser(String my_num, String your_num) {
+  		try {
+   			File file = new File(my_num + ".txt");
+   			FileReader filereader = new FileReader(file);
+   			BufferedReader br = new BufferedReader(filereader);
+
+   			int count = 0;
+   			int flag = 0;
+   			String[] str = new String[100];
+
+
+  			while(str[count] != null) {
+	  			str[count] = br.readLine();
+	 		  	count++;
+   			}
+
+    			int check = str[10].indexOf(your_num);
+    			if(check!=-1) {    //いいねされてた
+    				str[10] = str[10].replace(your_num,"");
+    				flag = 1;
+    			}
+    			else
+    				str[9] += " your_num";
+
+    			if(flag == 1)   //マッチした
+    				str[11] += " your_num";
+
+   			FileWriter filewriter = new FileWriter(file);  //書き換え
+   			BufferedWriter bw = new BufferedWriter(filewriter);
+   			for (int i=0;i<17;i++) {
+	   			bw.write(str[i]);
+	   			bw.newLine();
+   			}
+
+   			File file2 = new File(your_num + ".txt");
+   			FileReader filereader2 = new FileReader(file2);
+   			BufferedReader br2 = new BufferedReader(filereader2);
+
+   			int count2 = 1;
+   			String[] str2 = new String[100];
+   			str2[count-1] = br2.readLine();
+   			while(str2[count2-1] != null) {
+	   			count2++;
+	   			str2[count2-1] = br.readLine();
+   			}
+   			if(flag == 1) { //マッチしたら
+	   			str[9] = str[9].replace(your_num,"");
+	   			str[11] += " your_num";
+   			}
+   			else {
+	   			str[10] += " your_num";
+   			}
+
+   			FileWriter filewriter2 = new FileWriter(file2);  //書き換え
+   			BufferedWriter bw2 = new BufferedWriter(filewriter2);
+   			for (int i=0;i<17;i++) {
+	   			bw2.write(str[i]);
+	   			bw2.newLine();
+   			}
+
+   			readAllUserFiles();
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}
+
+ 	}
+
+	//グループいいね
+ 	public static boolean goodGroup(String my_num, String your_num) {
+		try {
+		  	File file = new File(my_num + ".txt");
+		  	FileReader filereader = new FileReader(file);
+		  	BufferedReader br = new BufferedReader(filereader);
+
+		   	int count = 0;
+		  	int flag = 0;
+		   	String[] str = new String[100];
+
+
+		   	while(str[count] != null) {
+				str[count] = br.readLine();
+				count++;
+		   	}
+
+		    int check = str[4].indexOf(your_num);
+		    if(check!=-1) {    //いいねされてた
+		    	str[4] = str[10].replace(your_num,"");
+		    	flag = 1;
+		    }
+		    else
+		    	str[3] += " your_num";
+
+		    if(flag == 1)   //マッチした
+		    	str[5] += " your_num";
+
+		   FileWriter filewriter = new FileWriter(file);  //書き換え
+		   BufferedWriter bw = new BufferedWriter(filewriter);
+		   for (int i=0;i<11;i++) {
+			   bw.write(str[i]);
+			   bw.newLine();
+		   }
+
+		   File file2 = new File(your_num + ".txt");
+		   FileReader filereader2 = new FileReader(file2);
+		   BufferedReader br2 = new BufferedReader(filereader2);
+
+		   int count2 = 1;
+		   String[] str2 = new String[100];
+		   str2[count-1] = br2.readLine();
+		   while(str2[count2-1] != null) {
+			   count2++;
+			   str2[count2-1] = br.readLine();
+		   }
+		   if(flag == 1) { //マッチしたら
+			   str[9] = str[9].replace(your_num,"");
+			   str[11] += " your_num";
+		   }
+		   else {
+			   str[10] += " your_num";
+		   }
+
+		   FileWriter filewriter2 = new FileWriter(file2);  //書き換え
+		   BufferedWriter bw2 = new BufferedWriter(filewriter2);
+		   for (int i=0;i<11;i++) {
+			   bw2.write(str[i]);
+			   bw2.newLine();
+		   }
+		   readAllUserFiles();
+
+		  }catch(IOException e) {
+		   System.out.println(e);
+		   }
+
+		 }
+
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
 		JPanel cardPanel;
@@ -1092,6 +1341,7 @@ public class Server extends JFrame implements ActionListener{
 						//書き込み
 						fw = new FileWriter(file);
 						fw.write(strbuf.toString());
+						readAllUserFiles();
 
 					}
 					catch(IOException e) {
@@ -1295,7 +1545,7 @@ public class Server extends JFrame implements ActionListener{
 				}
 			}
 			else if(cmd=="BAN") {
-				//ユーザ赤削除メソッド
+				deleteUser(tfStudentNumberSearch.getText());
 				cardLayout.show(cardPanel,"search");
 			}
 			else if(cmd=="戻る") {

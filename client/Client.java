@@ -46,7 +46,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	int w=400;
@@ -59,16 +58,18 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	UserInfo nowShowingUser=new UserInfo();//イイネ画面とかで使う
 	GroupInfo nowShowingGroup=new GroupInfo();
 	int nowPage=1;
-	boolean isNowUsingGroupAccount=false;
+	boolean isNowUsingGroupAccount=true;
 	String prePageForGood="home";
 	String prePageForViewGroup="home";
+	String groupSearchCondition="";
+	String userSearchCondition="";
 
 	//プロフィールの検索で選ぶやつ
 	String[] Sex = {"男性", "女性", "その他"};
 	String[] Grade = {"1", "2", "3", "4"};
 	String[] Faculty = {"経営", "経済", "教育", "理工", "都市科学"};
 	String[] Birthplace = {"北海道・東北", "関東", "中部", "近畿", "中国", "四国", "九州", "海外"};
-	String[] Circle = {"テニス", "運動", "文化"};
+	String[] Circle = {"テニス", "運動", "文化","所属していない"};
 	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
 	String[] HowMany = {"2","3","4","5"};
 	String[] yesNo= {"はい","いいえ"};
@@ -77,7 +78,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
-	ImageIcon iTest=new ImageIcon("./img/test.jpg");
+	ImageIcon backNoButton=new ImageIcon("./img/ボタンなし背景.png");
+	ImageIcon backWithButton=new ImageIcon("./img/ボタンあり背景.png");
+	BufferedImage defaultBi;
 
 	//アクションリスナーでいじるために一部の変数を外部変数に
 	JTextField tfIdLogin = new JTextField(20);
@@ -106,13 +109,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JLabel lCircleReply2 = new JLabel("○○");
     JLabel lHobbyReply2 = new JLabel("○○");
 
-    JLabel lGroupNameReplyGroup = new JLabel("グループ名");
-    JLabel lGroupPhotoReplyGroup = new JLabel("グル写真");
-    JLabel lGroupProfileReplyGroup=new JLabel("プロフィール");
+    JLabel lGroupNameReplyGroup = new JLabel();
+    JLabel lGroupPhotoReplyGroup = new JLabel();
+    JLabel lGroupProfileReplyGroup=new JLabel();
     JButton[] bMemberProfileReplyGroup = new JButton[5];
 
     JLabel lNameGood = new JLabel("○○");
-    JLabel lMainPhotoGood = new JLabel("");
+    JLabel lMainPhotoGood = new JLabel();
     JLabel[] lSubPhotoGood = new JLabel[4];
     JLabel lGenderGood2 = new JLabel("○○");
     JLabel lGradeGood2 = new JLabel("○○");
@@ -123,9 +126,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JButton bGoodGood = new JButton("いいね");
     JLabel lGoodGood = new JLabel("既にいいねしました");
 
-    JLabel lIconMatching = new JLabel(iTest);
-    JLabel lNameMatching = new JLabel("○○さんとマッチしました！");
-    JLabel lIdMatching = new JLabel("LINEID:aaaaaaaaa");
+    JLabel lIconMatching = new JLabel();
+    JLabel lNameMatching = new JLabel();
+    JLabel lIdMatching = new JLabel();
 
     JComboBox<String> cbGenderSearchUser = new JComboBox<String>(Sex);
     JComboBox<String> cbGradeSearchUser = new JComboBox<String>(Grade);
@@ -150,29 +153,29 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JButton bPersonalChange = new JButton("個人アカウント",iAdd);
     JButton[] bIconChange=new JButton[3];
 
-    JButton bPhotoMakeGroup = new JButton("プロフィール写真を選択");
+    JButton bPhotoMakeGroup = new JButton("");
     JTextField tfNameMakeGroup = new JTextField("");
     JTextField tfRelationMakeGroup = new JTextField("");
     JComboBox<String> cbPurposeMakeGroup = new JComboBox<String>(Purpose);
-    JTextArea taCommentMakeGroup = new JTextArea("",15,3);
+    JTextField tfCommentMakeGroup = new JTextField(20);
 
     JTextField tfNumberGather[]=new JTextField[5];
 
-    JLabel lIconInvite = new JLabel(iTest);
+    JLabel lIconInvite = new JLabel();
     JLabel lHostInvite = new JLabel("〇〇さんに招待されました！");
 
-    JLabel lGroupNameViewGroup = new JLabel("グループ名");
-    JLabel lGroupPhotoViewGroup = new JLabel("グル写真");
-    JLabel lGroupProfileViewGroup=new JLabel("プロフィール");
+    JLabel lGroupNameViewGroup = new JLabel();
+    JLabel lGroupPhotoViewGroup = new JLabel();
+    JLabel lGroupProfileViewGroup=new JLabel();
     JButton[] bMemberProfileViewGroup = new JButton[5];
     JButton bGoodViewGroup=new JButton("いいね");
     JLabel lGoodViewGroup=new JLabel("すでに いいね しています");
 
-    JButton bPhotoMyGroupProfile = new JButton("写真");
+    JButton bPhotoMyGroupProfile = new JButton();
     JTextField tfNameMyGroupProfile = new JTextField("");
     JTextField tfRelationMyGroupProfile = new JTextField("");
     JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
-    JTextArea taCommentMyGroupProfile = new JTextArea("",15,3);
+    JTextField tfCommentMyGroupProfile = new JTextField(20);
     JButton bQuitMyGroupProfile = new JButton("解散");
 
     JRadioButton rbProfileSetup = new JRadioButton("公開", true);
@@ -190,9 +193,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//サーバとの通信に必要な変数
 	static Socket socket;
 	static ObjectOutputStream oos;
-	static Receiver receiver;
 	static OutputStreamWriter out;
+	static ObjectInputStream ois;
 	static BufferedWriter bw;
+	static Object inputObj;
 	String ipAddress = "localhost";	//ipアドレス設定
 	int port = 50;  //port番号設定
 	String inputLine = "0";
@@ -202,6 +206,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel = new JPanel();
 	    layout = new CardLayout();
 	    cardPanel.setLayout(layout);
+
+	    try {
+			backNoButton=scaleImage(ImageIO.read(new File("./img/ボタンなし背景.png")),w+30,h+30);
+			backWithButton=scaleImage(ImageIO.read(new File("./img/ボタンあり背景.png")),w+10,h);
+		}
+	    catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	    //自分が作る画面のメソッド名をここに書く
 	    login();
@@ -246,8 +258,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    }
 	    myUserInfo=new UserInfo();
 
-	    //goHome();
+		try {
+			BufferedImage defaultBi=ImageIO.read(new File("./img/初期アイコン.png"));
+		} catch (IOException e) {
+			System.out.println("初期アイコンの取得に失敗");
+		}
 	}
+
 
 	public void login() {
 		//↓2行はコピペでOK
@@ -261,6 +278,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		 *
 		 * 文字のフォントは、とりあえずMS明朝にしてるけど、アプリの雰囲気に合わせて後で変えよう
 		 */
+
 
 		JLabel lTitleLogin = new JLabel("TITLE");
 		lTitleLogin.setBounds(w/4,h/10,w/2,h/10);
@@ -291,6 +309,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLoginLogin=new JButton("ログイン");
         bLoginLogin.setBounds(w/4,19*h/30,w/2,h/15);
         bLoginLogin.addActionListener(this);
+        bLoginLogin.setBackground(Color.blue);
+        bLoginLogin.setForeground(Color.white);
         bLoginLogin.setActionCommand("ログインlogin");//ボタンにラベル付け、ここのルールも決めたほうがいい
         bLoginLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bLoginLogin);
@@ -298,6 +318,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bNewAccountLogin=new JButton("新規作成");
         bNewAccountLogin.setBounds(w/4,22*h/30,w/2,h/15);
         bNewAccountLogin.addActionListener(this);
+        bNewAccountLogin.setBackground(Color.blue);
+        bNewAccountLogin.setForeground(Color.white);
         bNewAccountLogin.setActionCommand("アカウント作成login");
         bNewAccountLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bNewAccountLogin);
@@ -309,6 +331,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lMessageLogin.setVisible(false);
         card.add(lMessageLogin);
 
+
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
         //自分が作る画面に名前付け。メソッド名と同じじゃなくても大丈夫だけど、同じのほうが分かりやすいかも。
 		cardPanel.add(card,"login");
@@ -354,6 +380,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bNewAccountNew_r=new JButton("登録");
         bNewAccountNew_r.setBounds(w/4,23*h/30,w/2,h/15);
         bNewAccountNew_r.addActionListener(this);
+        bNewAccountNew_r.setBackground(Color.blue);
+        bNewAccountNew_r.setForeground(Color.white);
         bNewAccountNew_r.setActionCommand("登録new_regis");
         bNewAccountNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bNewAccountNew_r);
@@ -364,6 +392,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lMessageNew_r.setForeground(Color.RED);
         lMessageNew_r.setVisible(false);
         card.add(lMessageNew_r);
+
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
 		cardPanel.add(card,"new_regis");
 	}
@@ -380,7 +412,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lTitleJudge.setHorizontalAlignment(JLabel.CENTER);
 		card.add(lTitleJudge);
 
-		JLabel lIdJudge = new JLabel("氏名");
+		JLabel lIdJudge = new JLabel("名前");
 		lIdJudge.setBounds(w/5,h/5,w/5,h/15);
 		lIdJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
 		lIdJudge.setHorizontalAlignment(JLabel.CENTER);
@@ -409,6 +441,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bChoiceJudge=new JButton("選択");
 		bChoiceJudge.setBounds(9*w/40,9*h/15,3*w/20,h/15);
 		bChoiceJudge.addActionListener(this);
+		bChoiceJudge.setBackground(Color.blue);
+        bChoiceJudge.setForeground(Color.white);
 		bChoiceJudge.setActionCommand("選択judge");
 		bChoiceJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/50));
 		card.add(bChoiceJudge);
@@ -421,6 +455,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bSendJudge=new JButton("送信");
 		bSendJudge.setBounds(w/4,23*h/30,w/2,h/15);
 		bSendJudge.addActionListener(this);
+		bSendJudge.setBackground(Color.blue);
+        bSendJudge.setForeground(Color.white);
 		bSendJudge.setActionCommand("送信judge");
 		bSendJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 		card.add(bSendJudge);
@@ -431,6 +467,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lErrorJudge.setHorizontalAlignment(JLabel.CENTER);
 		lErrorJudge.setVisible(false);
 		card.add(lErrorJudge);
+
+		JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
 		cardPanel.add(card,"judge");
 		}
@@ -456,6 +496,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		manual.setHorizontalAlignment(JLabel.CENTER);
 		card.add(manual);
 
+		JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
+
 		cardPanel.add(card,"pleaseWait");
 	}
 
@@ -472,9 +516,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bnextFinishAuthen=new JButton("すすむ");
         bnextFinishAuthen.setBounds(w/4,3*h/4,w/2,h/10);
         bnextFinishAuthen.addActionListener(this);
+		bnextFinishAuthen.setBackground(Color.blue);
+        bnextFinishAuthen.setForeground(Color.white);
         bnextFinishAuthen.setActionCommand("すすむfinishAuthen");
         bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bnextFinishAuthen);
+
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
 		cardPanel.add(card,"finishAuthen");
 	}
@@ -492,12 +542,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bSearchHome = new JButton("Search");
         bSearchHome.setBounds(w/12,h/30,w/5,h/15);
         bSearchHome.addActionListener(this);
+		bSearchHome.setBackground(new Color(128,0,128));
+        bSearchHome.setForeground(Color.white);
         bSearchHome.setActionCommand("検索home");
         card.add(bSearchHome);
 
         JButton bMenuHome = new JButton("MENU");
         bMenuHome.setBounds(5*w/7,h/30,w/5,h/15);
         bMenuHome.addActionListener(this);
+		bMenuHome.setBackground(new Color(128,0,128));
+        bMenuHome.setForeground(Color.white);
         bMenuHome.setActionCommand("メニューhome");
         card.add(bMenuHome);
 
@@ -506,8 +560,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bIconHome[i]=new JButton("プロフィール",iRight);
         	bIconHome[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconHome[i].addActionListener(this);
+        	bIconHome[i].setContentAreaFilled(false);
         	bIconHome[i].setActionCommand("プロフィール"+String.valueOf(i)+"home");
-        	bIconHome[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	bIconHome[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
         	card.add(bIconHome[i]);
         }
 
@@ -535,15 +590,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
         bHome.setActionCommand("HOME");
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
 
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"home");
 
@@ -566,12 +629,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         lMainPhotoReply.setBounds(w/4,6*h/60,w/2,h/6);
         lMainPhotoReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+		lMainPhotoReply.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMainPhotoReply);
 
         for(int i=0;i<4;i++) {
         	lSubPhotoReply[i] = new JLabel();
         	lSubPhotoReply[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             lSubPhotoReply[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            lSubPhotoReply[i].setHorizontalAlignment(JLabel.CENTER);
             card.add(lSubPhotoReply[i]);
         }
 
@@ -632,7 +697,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         JLabel lHobbyReply = new JLabel("趣味");
 		lHobbyReply.setBounds(0,40*h/60,w/3,h/30);
-		lHobbyReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+		lHobbyReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
 		lHobbyReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lHobbyReply);
 
@@ -644,6 +709,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bGoodReply = new JButton("いいね");
         bGoodReply.setBounds(w/4,46*h/60,w/4,h/20);
         bGoodReply.addActionListener(this);
+        bGoodReply.setBackground(Color.blue);
+        bGoodReply.setForeground(Color.white);
         bGoodReply.setActionCommand("いいねreply");
         bGoodReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bGoodReply);
@@ -651,6 +718,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bBadReply = new JButton("断る");
         bBadReply.setBounds(w/2,46*h/60,w/4,h/20);
         bBadReply.addActionListener(this);
+        bBadReply.setBackground(Color.blue);
+        bBadReply.setForeground(Color.white);
         bBadReply.setActionCommand("断るreply");
         bBadReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bBadReply);
@@ -658,6 +727,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -665,9 +736,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"reply");
 	}
@@ -709,6 +786,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bGoodReplyGroup=new JButton("いいね");
         bGoodReplyGroup.setBounds(w/4,45*h/60,w/4,h/15);
         bGoodReplyGroup.addActionListener(this);
+        bGoodReplyGroup.setBackground(Color.blue);
+        bGoodReplyGroup.setForeground(Color.white);
         bGoodReplyGroup.setActionCommand("いいねreplyGroup");
         bGoodReplyGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
         bGoodReplyGroup.setVisible(false);
@@ -717,6 +796,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bBadReplyGroup=new JButton("断る");
         bBadReplyGroup.setBounds(w/2,45*h/60,w/4,h/15);
         bBadReplyGroup.addActionListener(this);
+        bBadReplyGroup.setBackground(Color.blue);
+        bBadReplyGroup.setForeground(Color.white);
         bBadReplyGroup.setActionCommand("断るreplyGroup");
         bBadReplyGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
         bBadReplyGroup.setVisible(false);
@@ -725,6 +806,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -732,10 +815,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"replyGroup");
 	}
@@ -757,12 +845,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         lMainPhotoGood.setBounds(w/4,6*h/60,w/2,h/6);
         lMainPhotoGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        lMainPhotoGood.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMainPhotoGood);
 
         for(int i=0;i<4;i++) {
         	lSubPhotoGood[i] = new JLabel();
         	lSubPhotoGood[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             lSubPhotoGood[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            lSubPhotoGood[i].setHorizontalAlignment(JLabel.CENTER);
             card.add(lSubPhotoGood[i]);
         }
 
@@ -828,12 +918,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lHobbyGood);
 
         lHobbyGood2.setBounds(w/2,40*h/60,w/3,h/30);
-        lHobbyGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        lHobbyGood2.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
         lHobbyGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lHobbyGood2);
 
         bGoodGood.setBounds(w/4,46*h/60,w/2,h/20);
         bGoodGood.addActionListener(this);
+        bGoodGood.setBackground(Color.blue);
+        bGoodGood.setForeground(Color.white);
         bGoodGood.setActionCommand("いいねgood");
         bGoodGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bGoodGood);
@@ -844,19 +936,27 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lGoodGood.setVisible(false);
         card.add(lGoodGood);
 
-        JButton bHomeGood=new JButton("HOME");
-        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeGood.addActionListener(this);
-        bHomeGood.setActionCommand("HOME");
-        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeGood);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"good");
 	}
@@ -877,7 +977,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bPrePage.setActionCommand("マッチング通知へ");
         card.add(bPrePage);
 
-        lIconMatching.setBounds(w/5,h/7,w/2,h/5);
+        lIconMatching.setBounds(w/5,h/7,3*w/5,h/5);
         lIconMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIconMatching);
 
@@ -886,14 +986,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lNameMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMatching);
 
-        lIdMatching.setBounds(0,13*h/20,w,h/15);
-        lIdMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        lIdMatching.setBounds(0,13*h/20,w,h/7);
+        lIdMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         lIdMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIdMatching);
 
         JButton bProfMatching=new JButton("プロフィールを確認する");
         bProfMatching.setBounds(w/4,8*h/20,w/2,h/15);
         bProfMatching.addActionListener(this);
+        bProfMatching.setBackground(Color.blue);
+        bProfMatching.setForeground(Color.white);
         bProfMatching.setActionCommand("確認matching");
         bProfMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bProfMatching);
@@ -901,6 +1003,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -908,9 +1012,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"matching");
 	}
@@ -937,6 +1047,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lGenderSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGenderSearchUser);
 
+        cbGenderSearchUser.addItem("選択しない");
         cbGenderSearchUser.setBounds(w/3,5*h/25,w/2,2*h/25);
 		cbGenderSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbGenderSearchUser);
@@ -947,6 +1058,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lGradeSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGradeSearchUser);
 
+        cbGradeSearchUser.addItem("選択しない");
         cbGradeSearchUser.setBounds(w/3,8*h/25,w/2,2*h/25);
 		cbGradeSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbGradeSearchUser);
@@ -957,6 +1069,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lFacultySearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lFacultySearchUser);
 
+        cbFacultySearchUser.addItem("選択しない");
         cbFacultySearchUser.setBounds(w/3,11*h/25,w/2,2*h/25);
 		cbFacultySearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbFacultySearchUser);
@@ -967,6 +1080,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lBirthSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lBirthSearchUser);
 
+        cbBirthSearchUser.addItem("選択しない");
         cbBirthSearchUser.setBounds(w/3,14*h/25,w/2,2*h/25);
         cbBirthSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbBirthSearchUser);
@@ -977,6 +1091,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lCircleSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCircleSearchUser);
 
+        cbCircleSearchUser.addItem("選択しない");
         cbCircleSearchUser.setBounds(w/3,17*h/25,w/2,2*h/25);
         cbCircleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbCircleSearchUser);
@@ -984,9 +1099,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bSearchSeachUser = new JButton("検索");
         bSearchSeachUser.setBounds(3*w/10,20*h/25,2*w/5,h/10);
         bSearchSeachUser.addActionListener(this);
+        bSearchSeachUser.setBackground(Color.blue);
+        bSearchSeachUser.setForeground(Color.white);
         bSearchSeachUser.setActionCommand("検索searchUser");
         bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bSearchSeachUser);
+
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
         cardPanel.add(card,"searchUser");
 	}
@@ -1013,6 +1134,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lPurposeSearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeSearchGroup);
 
+        cbPurposeSearchGroup.addItem("選択しない");
         cbPurposeSearchGroup.setBounds(w/3,5*h/20,w/2,2*h/20);
 		cbPurposeSearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(cbPurposeSearchGroup);
@@ -1023,6 +1145,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lHowManySearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lHowManySearchGroup);
 
+        cbHowManySearchGroup.addItem("選択しない");
         cbHowManySearchGroup.setBounds(w/3,10*h/20,w/2,2*h/20);
         cbHowManySearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbHowManySearchGroup);
@@ -1030,9 +1153,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bSearchSeachGroup = new JButton("検索");
         bSearchSeachGroup.setBounds(3*w/10,15*h/20,2*w/5,h/8);
         bSearchSeachGroup.addActionListener(this);
+        bSearchSeachGroup.setBackground(Color.blue);
+        bSearchSeachGroup.setForeground(Color.white);
         bSearchSeachGroup.setActionCommand("検索searchGroup");
         bSearchSeachGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bSearchSeachGroup);
+
+        JLabel background=new JLabel(backNoButton);
+		background.setBounds(-15,-15,w+30,h+30);
+		card.add(background);
 
         cardPanel.add(card,"searchGroup");
 	}
@@ -1050,6 +1179,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bProfileMenu=new JButton("Myプロフィール");
         bProfileMenu.setBounds(w/4,8*h/30,w/2,3*h/30);
         bProfileMenu.addActionListener(this);
+        bProfileMenu.setBackground(Color.blue);
+        bProfileMenu.setForeground(Color.white);
         bProfileMenu.setActionCommand("Myプロフィールmenu");
         bProfileMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bProfileMenu);
@@ -1057,6 +1188,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bChangeAccountMenu=new JButton("アカウント切り替え");
         bChangeAccountMenu.setBounds(w/4,12*h/30,w/2,3*h/30);
         bChangeAccountMenu.addActionListener(this);
+        bChangeAccountMenu.setBackground(Color.blue);
+        bChangeAccountMenu.setForeground(Color.white);
         bChangeAccountMenu.setActionCommand("アカウント切り替えmenu");
         bChangeAccountMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bChangeAccountMenu);
@@ -1064,6 +1197,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bConfigMenu=new JButton("設定");
         bConfigMenu.setBounds(w/4,16*h/30,w/2,3*h/30);
         bConfigMenu.addActionListener(this);
+        bConfigMenu.setBackground(Color.blue);
+        bConfigMenu.setForeground(Color.white);
         bConfigMenu.setActionCommand("設定menu");
         bConfigMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bConfigMenu);
@@ -1071,23 +1206,33 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHelpMenu=new JButton("ヘルプ");
         bHelpMenu.setBounds(w/4,20*h/30,w/2,3*h/30);
         bHelpMenu.addActionListener(this);
+        bHelpMenu.setBackground(Color.blue);
+        bHelpMenu.setForeground(Color.white);
         bHelpMenu.setActionCommand("ヘルプmenu");
         bHelpMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bHelpMenu);
 
-        JButton bHomeGood=new JButton("HOME");
-        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeGood.addActionListener(this);
-        bHomeGood.setActionCommand("HOME");
-        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeGood);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"menu");
 	}
@@ -1110,6 +1255,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bMainPhotoMyProfile.setBounds(w/4,6*h/60,w/2,h/6);
         bMainPhotoMyProfile.addActionListener(this);
+        bMainPhotoMyProfile.setContentAreaFilled(false);
         bMainPhotoMyProfile.setActionCommand("メインmyProfile");
         bMainPhotoMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bMainPhotoMyProfile);
@@ -1118,6 +1264,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bSubPhotoMyProfile[i] = new JButton();
         	bSubPhotoMyProfile[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             bSubPhotoMyProfile[i].addActionListener(this);
+            bSubPhotoMyProfile[i].setContentAreaFilled(false);
             bSubPhotoMyProfile[i].setActionCommand("サブ"+String.valueOf(i)+"myProfile");
             bSubPhotoMyProfile[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
             card.add(bSubPhotoMyProfile[i]);
@@ -1206,6 +1353,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bChangeMyProfile = new JButton("変更確定");
         bChangeMyProfile.setBounds(w/4,92*h/120,w/2,h/20);
         bChangeMyProfile.addActionListener(this);
+        bChangeMyProfile.setBackground(Color.blue);
+        bChangeMyProfile.setForeground(Color.white);
         bChangeMyProfile.setActionCommand("確定myProfile");
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bChangeMyProfile);
@@ -1213,6 +1362,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1220,9 +1371,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"myProfile");
 	}
@@ -1246,11 +1403,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bMakeGroupChange = new JButton("グループ作成",iAdd);
         bMakeGroupChange.setBounds(w/4,9*h/60,w/2,h/10);
         bMakeGroupChange.addActionListener(this);
+        bMakeGroupChange.setContentAreaFilled(false);
+        bMakeGroupChange.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         bMakeGroupChange.setActionCommand("グループ作成change");
         card.add(bMakeGroupChange);
 
         bPersonalChange.setBounds(w/4,16*h/60,w/2,h/10);
         bPersonalChange.addActionListener(this);
+        bPersonalChange.setContentAreaFilled(false);
+        bPersonalChange.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/40));
         bPersonalChange.setActionCommand("個人アカウントchange");
         card.add(bPersonalChange);
 
@@ -1258,6 +1419,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bIconChange[i]=new JButton();
         	bIconChange[i].setBounds(w/4,(24+7*i)*h/60,w/2,h/10);
         	bIconChange[i].addActionListener(this);
+        	bIconChange[i].setContentAreaFilled(false);
+        	bIconChange[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/40));
         	bIconChange[i].setActionCommand("グループ"+String.valueOf(i)+"change");
         	card.add(bIconChange[i]);
         }
@@ -1282,19 +1445,27 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lnextchange.setBounds(7*w/9,46*h/60,w/2,h/20);
         card.add(lnextchange);
 
-        JButton bHomeGood=new JButton("HOME");
-        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeGood.addActionListener(this);
-        bHomeGood.setActionCommand("HOME");
-        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeGood);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"change");
 	}
@@ -1318,7 +1489,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bPhotoMakeGroup.setBounds(w/4,6*h/60,w/2,h/6);
         bPhotoMakeGroup.addActionListener(this);
         bPhotoMakeGroup.setActionCommand("メインmakeGroup");
+        bPhotoMakeGroup.setContentAreaFilled(false);
         bPhotoMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        bPhotoMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(bPhotoMakeGroup);
 
         JLabel lNameMakeGroup = new JLabel("グループ名");
@@ -1332,39 +1505,41 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(tfNameMakeGroup);
 
         JLabel lRelationMakeGroup = new JLabel("関係性");
-		lRelationMakeGroup.setBounds(w/8,22*h/60,w/6,h/20);
+		lRelationMakeGroup.setBounds(w/8,23*h/60,w/6,h/20);
 		lRelationMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 		lRelationMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lRelationMakeGroup);
 
-        tfRelationMakeGroup.setBounds(w/3,22*h/60,w/2,h/20);
+        tfRelationMakeGroup.setBounds(w/3,23*h/60,w/2,h/20);
         tfRelationMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(tfRelationMakeGroup);
 
         JLabel lPurposeMakeGroup = new JLabel("目的");
-		lPurposeMakeGroup.setBounds(w/8,26*h/60,w/6,h/20);
+		lPurposeMakeGroup.setBounds(w/8,28*h/60,w/6,h/20);
 		lPurposeMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 		lPurposeMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeMakeGroup);
 
-        cbPurposeMakeGroup.setBounds(w/3,26*h/60,w/2,h/20);
+        cbPurposeMakeGroup.setBounds(w/3,28*h/60,w/2,h/20);
         cbPurposeMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(cbPurposeMakeGroup);
 
 
         JLabel lCommentMakeGroup = new JLabel("ひとこと");
-		lCommentMakeGroup.setBounds(w/8,30*h/60,w/6,h/20);
+		lCommentMakeGroup.setBounds(w/8,33*h/60,w/6,h/20);
 		lCommentMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 		lCommentMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMakeGroup);
 
-        taCommentMakeGroup.setBounds(w/3,30*h/60,w/2,h/5);
-        taCommentMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(taCommentMakeGroup);
+        tfCommentMakeGroup.setBounds(w/3,33*h/60,w/2,h/20);
+        tfCommentMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(tfCommentMakeGroup);
 
         JButton bGatherMakeGroup = new JButton("メンバーを選択");
         bGatherMakeGroup.setBounds(w/3,44*h/60,w/3,h/15);
         bGatherMakeGroup.addActionListener(this);
+        bGatherMakeGroup.setBackground(Color.blue);
+        bGatherMakeGroup.setForeground(Color.white);
         bGatherMakeGroup.setActionCommand("選択makeGroup");
         bGatherMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bGatherMakeGroup);
@@ -1372,6 +1547,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1379,9 +1556,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"makeGroup");
 	}
@@ -1413,7 +1596,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         for(int i=0;i<4;i++) {
         	tfNumberGather[i] = new JTextField("");
         	tfNumberGather[i].setBounds(15*w/40,(15+4*i)*h/65,20*w/40,4*h/65);
-            tfNumberGather[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+            tfNumberGather[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
             card.add(tfNumberGather[i]);
         }
 
@@ -1430,6 +1613,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bConfGather = new JButton("確定");
         bConfGather.setBounds(15*w/40,42*h/65,w/5,h/15);
         bConfGather.addActionListener(this);
+        bConfGather.setBackground(Color.blue);
+        bConfGather.setForeground(Color.white);
         bConfGather.setActionCommand("確定gathering");
         bConfGather.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bConfGather);
@@ -1437,6 +1622,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1444,9 +1631,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"gathering");
 	}
@@ -1477,6 +1670,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bprofileinvite = new JButton("プロフィールを確認する");
         bprofileinvite.setBounds(w/4,7*h/20,w/2,h/20);
         bprofileinvite.addActionListener(this);
+        bprofileinvite.setBackground(Color.blue);
+        bprofileinvite.setForeground(Color.white);
         bprofileinvite.setActionCommand("確認invite");
         card.add(bprofileinvite);
 
@@ -1484,6 +1679,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bokinvite = new JButton("参加する！");
         bokinvite.setBounds(w/4,9*h/20,w/2,h/20);
         bokinvite.addActionListener(this);
+        bokinvite.setBackground(Color.blue);
+        bokinvite.setForeground(Color.white);
         bprofileinvite.setActionCommand("参加invite");
         card.add(bokinvite);
 
@@ -1491,6 +1688,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bnoinvite = new JButton("参加しない");
         bnoinvite.setBounds(w/4,11*h/20,w/2,h/20);
         bnoinvite.addActionListener(this);
+        bnoinvite.setBackground(Color.blue);
+        bnoinvite.setForeground(Color.white);
         bnoinvite.setActionCommand("断るinvite");
         card.add(bnoinvite);
 
@@ -1502,6 +1701,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1509,9 +1710,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"invite");
 	}
@@ -1542,16 +1749,19 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lGroupProfileViewGroup);
 
         for(int i=0;i<5;i++) {
-            bMemberProfileViewGroup[i]=new JButton("プロフィール");
+            bMemberProfileViewGroup[i]=new JButton();
             bMemberProfileViewGroup[i].setBounds(w/6,(11+7*i)*h/60,2*w/3,h/12);
             bMemberProfileViewGroup[i].addActionListener(this);
+            bMemberProfileViewGroup[i].setContentAreaFilled(false);
             bMemberProfileViewGroup[i].setActionCommand("メンバ"+String.valueOf(i)+"viewGroup");
-            bMemberProfileViewGroup[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+            bMemberProfileViewGroup[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/40));
             card.add(bMemberProfileViewGroup[i]);
         }
 
         bGoodViewGroup.setBounds(2*w/5,45*h/60,w/5,h/15);
         bGoodViewGroup.addActionListener(this);
+        bGoodViewGroup.setBackground(Color.blue);
+        bGoodViewGroup.setForeground(Color.white);
         bGoodViewGroup.setActionCommand("いいねviewGroup");
         bGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
         bGoodViewGroup.setVisible(false);
@@ -1565,6 +1775,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1572,10 +1784,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"viewGroup");
 	}
@@ -1598,6 +1815,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
         bPhotoMyGroupProfile.addActionListener(this);
+        bPhotoMyGroupProfile.setContentAreaFilled(false);
         bPhotoMyGroupProfile.setActionCommand("メインmyGroupProfile");
         bPhotoMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bPhotoMyGroupProfile);
@@ -1613,35 +1831,35 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(tfNameMyGroupProfile);
 
         JLabel lRelationMyGroupProfile = new JLabel("関係性");
-		lRelationMyGroupProfile.setBounds(w/8,22*h/60,w/6,h/20);
+		lRelationMyGroupProfile.setBounds(w/8,23*h/60,w/6,h/20);
 		lRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 		lRelationMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lRelationMyGroupProfile);
 
-        tfRelationMyGroupProfile.setBounds(w/3,22*h/60,w/2,h/20);
+        tfRelationMyGroupProfile.setBounds(w/3,23*h/60,w/2,h/20);
         tfRelationMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(tfRelationMyGroupProfile);
 
         JLabel lPurposeMyGroupProfile = new JLabel("目的");
-		lPurposeMyGroupProfile.setBounds(w/8,26*h/60,w/6,h/20);
+		lPurposeMyGroupProfile.setBounds(w/8,28*h/60,w/6,h/20);
 		lPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 		lPurposeMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeMyGroupProfile);
 
-        cbPurposeMyGroupProfile.setBounds(w/3,26*h/60,w/2,h/20);
+        cbPurposeMyGroupProfile.setBounds(w/3,28*h/60,w/2,h/20);
         cbPurposeMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(cbPurposeMyGroupProfile);
 
 
         JLabel lCommentMyGroupProfile = new JLabel("ひとこと");
-		lCommentMyGroupProfile.setBounds(w/8,30*h/60,w/6,h/20);
+		lCommentMyGroupProfile.setBounds(w/8,33*h/60,w/6,h/20);
 		lCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
 		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMyGroupProfile);
 
-        taCommentMyGroupProfile.setBounds(w/3,30*h/60,w/2,h/5);
-        taCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
-        card.add(taCommentMyGroupProfile);
+        tfCommentMyGroupProfile.setBounds(w/3,33*h/60,w/2,h/5);
+        tfCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        card.add(tfCommentMyGroupProfile);
 
         bQuitMyGroupProfile.setBounds(3*w/11,44*h/60,5*w/22,h/20);
         bQuitMyGroupProfile.addActionListener(this);
@@ -1652,6 +1870,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bChangeMyProfile = new JButton("変更確定");
         bChangeMyProfile.setBounds(w/2,44*h/60,5*w/22,h/20);
         bChangeMyProfile.addActionListener(this);
+        bChangeMyProfile.setBackground(Color.blue);
+        bChangeMyProfile.setForeground(Color.white);
         bChangeMyProfile.setActionCommand("確定myGroupProfile");
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bChangeMyProfile);
@@ -1659,6 +1879,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1666,9 +1888,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"myGroupProfile");
 	}
@@ -1697,6 +1925,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
         rbProfileSetup.addChangeListener(this);
+        rbProfileSetup.setContentAreaFilled(false);
         rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(rbProfileSetup);
 
@@ -1709,6 +1938,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bDeleteAccountSetup = new JButton("削除");
         bDeleteAccountSetup.setBounds(7*w/10,21*h/65,w/7,h/20);
         bDeleteAccountSetup.addActionListener(this);
+        bDeleteAccountSetup.setBackground(Color.blue);
+        bDeleteAccountSetup.setForeground(Color.white);
         bDeleteAccountSetup.setActionCommand("削除setup");
         bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
         card.add(bDeleteAccountSetup);
@@ -1716,6 +1947,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1723,9 +1956,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"setup");
 	}
@@ -1766,6 +2005,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1773,9 +2014,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"howToUse");
 	}
@@ -1793,13 +2040,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInviteInform=new JButton("グループへの招待");
         bInviteInform.setBounds(w/4,8*h/30,w/2,4*h/30);
         bInviteInform.addActionListener(this);
+        bInviteInform.setBackground(Color.blue);
+        bInviteInform.setForeground(Color.white);
         bInviteInform.setActionCommand("招待inform");
         bInviteInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bInviteInform);
 
-        JButton bGoodInform=new JButton("いいねを押した人");
+        JButton bGoodInform=new JButton("いいねをした人");
         bGoodInform.setBounds(w/4,13*h/30,w/2,4*h/30);
         bGoodInform.addActionListener(this);
+        bGoodInform.setBackground(Color.blue);
+        bGoodInform.setForeground(Color.white);
         bGoodInform.setActionCommand("いいねinform");
         bGoodInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bGoodInform);
@@ -1807,23 +2058,33 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bMatchedInform=new JButton("マッチングした人");
         bMatchedInform.setBounds(w/4,18*h/30,w/2,4*h/30);
         bMatchedInform.addActionListener(this);
+        bMatchedInform.setBackground(Color.blue);
+        bMatchedInform.setForeground(Color.white);
         bMatchedInform.setActionCommand("マッチングinform");
         bMatchedInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bMatchedInform);
 
-        JButton bHomeGood=new JButton("HOME");
-        bHomeGood.setBounds(w/5,51*h/60,w/5,h/15);
-        bHomeGood.addActionListener(this);
-        bHomeGood.setActionCommand("HOME");
-        bHomeGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-        card.add(bHomeGood);
+        JButton bHome=new JButton("HOME");
+        bHome.setBounds(w/5,51*h/60,w/5,h/15);
+        bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
+        bHome.setActionCommand("HOME");
+        bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
+        card.add(bHome);
 
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
 		cardPanel.add(card,"inform");
 	}
@@ -1839,11 +2100,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lTitleInviteInform);
 
         for(int i=0;i<3;i++) {
-        	bIconInviteInform[i]=new JButton("プロフィール",iRight);
+        	bIconInviteInform[i]=new JButton();
         	bIconInviteInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconInviteInform[i].addActionListener(this);
+        	bIconInviteInform[i].setContentAreaFilled(false);
         	bIconInviteInform[i].setActionCommand("プロフィール"+String.valueOf(i)+"inviteInform");
-        	bIconInviteInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	bIconInviteInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/40));
         	card.add(bIconInviteInform[i]);
         }
 
@@ -1870,6 +2132,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1877,9 +2141,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"inviteInform");
 	}
@@ -1895,11 +2165,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lTitleGoodInform);
 
         for(int i=0;i<3;i++) {
-        	bIconGoodInform[i]=new JButton("プロフィール",iRight);
+        	bIconGoodInform[i]=new JButton();
         	bIconGoodInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconGoodInform[i].addActionListener(this);
+        	bIconGoodInform[i].setContentAreaFilled(false);
         	bIconGoodInform[i].setActionCommand("プロフィール"+String.valueOf(i)+"goodInform");
-        	bIconGoodInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	bIconGoodInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/40));
         	card.add(bIconGoodInform[i]);
         }
 
@@ -1926,6 +2197,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1933,9 +2206,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
+
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
 
         cardPanel.add(card,"goodInform");
 	}
@@ -1951,11 +2230,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lTitleMatchingInform);
 
         for(int i=0;i<3;i++) {
-        	bIconMatchingInform[i]=new JButton("プロフィール",iRight);
+        	bIconMatchingInform[i]=new JButton();
         	bIconMatchingInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconMatchingInform[i].addActionListener(this);
+        	bIconMatchingInform[i].setContentAreaFilled(false);
         	bIconMatchingInform[i].setActionCommand("プロフィール"+String.valueOf(i)+"matchingInform");
-        	bIconMatchingInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        	bIconMatchingInform[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/40));
         	card.add(bIconMatchingInform[i]);
         }
 
@@ -1982,6 +2262,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
+        bHome.setBackground(Color.blue);
+        bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -1989,15 +2271,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
+        bInform.setBackground(Color.blue);
+        bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
+        JLabel background=new JLabel(backWithButton);
+		background.setBounds(-7,0,w,h);
+		card.add(background);
+
         cardPanel.add(card,"matchingInform");
 	}
 
+
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
+			//TODO myUserInfo=SgetUserprof(myUswerInfo.getStudentNumber);
 			//nowShowingGroups=nページ目グルの情報取得
 			for(int i=0;i<3;i++) {
 				if(nowShowingGroups[i]==null) {
@@ -2016,6 +2306,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
+				//TODO myGroupInfo=SgetGroupprof(myGroupInfo.getStudentNumber());
 				//nowShowingUsers[i]=nページ目のユーザ情報取得
 				if(nowShowingUsers[i]==null) {
 					bIconHome[i].setVisible(false);
@@ -2040,7 +2331,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		try {
 			lGroupPhotoViewGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
 			lGroupProfileViewGroup.setText("<html><body>"+Purpose[nowShowingGroup.getPurpose()]+"<br />"+nowShowingGroup.getComment()+"</body></html>");
-			//TODO 一言は何文字まで？
 
 			//UserInfoの取得(nowShowingGroup.getHostUser())
 			//bMemberProfileViewGroup[0].setIcon(scaleImage(,w/3,h/12));
@@ -2050,7 +2340,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
 				if(nonhostUserの情報!=null) {
 					bMemberProfileViewGroup[i].setIcon(scaleImage(,w/3,h/12));
-					bMemberProfileViewGroup[i].setText(ノンホストの名前)
+					bMemberProfileViewGroup[i].setText(ノンホストの名前);
+					bMemberProfileViewGroup[i].setVisible(true);
+				}
+				else{
+					bMemberProfileViewGroup[i].setVisible(false);
 				}
 			}*/
 
@@ -2120,7 +2414,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 			    try {
-			    	bIconInviteInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/20));
+			    	bIconInviteInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -2134,13 +2428,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goGoodInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
 				if(nowShowingGroups[i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
 				else {
 				    try {
-				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/20));
+				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -2151,7 +2445,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//nowShowingUsers[i]=ユーザ情報取得(myUserInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				//nowShowingUsers[i]=ユーザ情報取得(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
 				if(nowShowingUsers[i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2178,7 +2472,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 				else {
 				    try {
-				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/20));
+				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -2188,7 +2482,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//nowShowingUsers[i]=グル情報取得(myUserInfo.getRecieveGood()[3*(nowPage-1)+i]);
+				//nowShowingUsers[i]=グル情報取得(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
 				if(nowShowingUsers[i]==null) {
 					bIconMatchingInform[i].setVisible(false);
 				}
@@ -2205,6 +2499,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel, "matchingInform");
 	}
 
+
 	public void actionPerformed(ActionEvent ae) {
 		String cmd = ae.getActionCommand();
 		System.out.println(cmd);//TODO debug用
@@ -2213,51 +2508,43 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		FileDialog fd ;
 		BufferedImage bi = null;
 		File f;
+		int loginId=0;
+		String loginPassword;
 
 		switch(cmd) {
 
 		case "ログインlogin":
-			flag=false;
 			if(tfIdLogin.getText().length()==0 || tfIdLogin.getText().length()>10) {
 			}
-			else if(tfPasswordLogin.getText().length()==0 || tfPasswordLogin.getText().length()>10) {
+			else if(tfPasswordLogin.getText().length()==0 || tfPasswordLogin.getText().length()>15) {
 			}
 			else {
 				try {
-					int loginId=Integer.valueOf(tfIdLogin.getText());
-					String loginPassword=tfPasswordLogin.getText();
-					flag=Scheck(loginId,loginPassword);
-					System.out.println(flag);
-					flag = true;
+					loginId=Integer.valueOf(tfIdLogin.getText());
+					loginPassword=tfPasswordLogin.getText();
+
+					boolean canLogin=false;
+					//TODO canLogin=Scheck(loginId,loginPassword);
+					if(canLogin) {
+						//TODO myUserInfo=SgetUserprof(loginId);
+						temp=myUserInfo.getIsAuthentificated();
+						if(temp==0) {
+							layout.show(cardPanel,"pleaseWait");
+						}
+						else if(temp==1) {
+							goHome();
+						}
+						else {
+							layout.show(cardPanel,"finishAuthen");
+						}
+					}
+					else {
+						lMessageLogin.setVisible(true);
+					}
 				}
 				catch(NumberFormatException e) {
 					lMessageLogin.setVisible(true);
-					flag=false;
 				}
-			}
-
-			if(flag) {
-				boolean canLogin=false;
-				//canLogin=ログイン確認のメソッド
-				if(canLogin) {
-					//myUserInfoの設定
-					temp=myUserInfo.getIsAuthentificated();
-					if(temp==0) {
-						layout.show(cardPanel,"pleaseWait");
-					}
-					else if(temp==1) {
-						goHome();
-					}
-					else {
-						layout.show(cardPanel,"finishAuthen");
-					}
-				}
-				else {
-					lMessageLogin.setVisible(true);
-				}
-			}
-			else {
-				lMessageLogin.setVisible(true);
 			}
 			break;
 
@@ -2272,32 +2559,37 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "登録new_regis":
-			lPicOutputJudge.setIcon(null);
-			lPicOutputJudge.setText("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
-			tfNumberJudge.setText("");
-			tfNameJudge.setText("");
-
-			flag=false;
 			if(tfIdNew_r.getText().length()==0 || tfIdNew_r.getText().length()>10) {
+				lMessageNew_r.setText("学籍番号が正しくありません");
+				lMessageNew_r.setVisible(true);
 			}
-			else if(tfPasswordNew_r.getText().length()==0 || tfPasswordNew_r.getText().length()>10) {
+			else if(tfPasswordNew_r.getText().length()==0 || tfPasswordNew_r.getText().length()>15) {
+				lMessageNew_r.setText("パスワードは15文字以下です");
+				lMessageNew_r.setVisible(true);
 			}
-			else if(tfPasswordConfNew_r.getText().length()==0 || tfPasswordConfNew_r.getText().length()>10) {
+			else if(tfPasswordConfNew_r.getText().length()==0 || tfPasswordConfNew_r.getText().length()>15) {
+				lMessageNew_r.setText("パスワードが一致していません");
+				lMessageNew_r.setVisible(true);
 			}
 			else if(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText())){
+				lMessageNew_r.setText("パスワードが一致していません");
+				lMessageNew_r.setVisible(true);
 			}
 			else {
 				try {
 					myUserInfo.setStudentNumber(Integer.valueOf(tfIdNew_r.getText()));
 					myUserInfo.setPassword(tfPasswordNew_r.getText());
+
+					lPicOutputJudge.setIcon(null);
+					lPicOutputJudge.setText("<html><body>本人確認に<br />学生証を使用します<br />選択ボタンを押して<br />学生証の写真を<br />送信してください</body></html>");
+					tfNumberJudge.setText("");
+					tfNameJudge.setText("");
+					layout.show(cardPanel, "judge");
 				}
 				catch(NumberFormatException e) {
-					flag=false;
+					lMessageNew_r.setText("学籍番号が正しくありません");
+					lMessageNew_r.setVisible(true);
 				}
-			}
-
-			if(!flag) {
-				lMessageNew_r.setVisible(true);
 			}
 			break;
 
@@ -2322,17 +2614,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "送信judge":
-			flag=false;
-			if(tfNameJudge.getText().length()==0 || tfNameJudge.getText().length()>0) {
+			tfNameJudge.setForeground(Color.BLACK);
+			tfNumberJudge.setForeground(Color.BLACK);
+			lPicOutputJudge.setForeground(Color.BLACK);
+
+			if(tfNameJudge.getText().length()==0 || tfNameJudge.getText().length()>10) {
+				tfNameJudge.setText("入力は上限10文字です");
+				tfNameJudge.setForeground(Color.RED);
 			}
-			else if(tfNumberJudge.getText().length()==0 || tfNumberJudge.getText().length()>25) {
+			else if(tfNumberJudge.getText().length()==0 || tfNumberJudge.getText().length()>20) {
+				tfNumberJudge.setText("入力は上限20文字です");
+				tfNumberJudge.setForeground(Color.RED);
 			}
 			else if(lPicOutputJudge.getIcon()==null) {
+				lPicOutputJudge.setForeground(Color.RED);
 			}
 			else {
 				myUserInfo.setName(tfNameJudge.getText());
 				myUserInfo.setLineId(tfNumberJudge.getText());
-				//新規登録メソッド
+				//TODO sendUserInfo(myUserInfo);
 				layout.show(cardPanel,"pleaseWait");
 			}
 			break;
@@ -2340,9 +2640,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "すすむfinishAuthen":
 			myUserInfo.setIsAuthentificated(1);
-			//新プロフの送信
+			//TODO SchangeProf(myUserInfo);
 			goHome();
-
 			break;
 
 
@@ -2404,9 +2703,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "検索home":
 			if(isNowUsingGroupAccount) {
+				cbPurposeSearchGroup.setSelectedIndex(Purpose.length);
+				cbHowManySearchGroup.setSelectedIndex(HowMany.length);
 				layout.show(cardPanel, "searchGroup");
 			}
 			else {
+				cbGenderSearchUser.setSelectedIndex(Sex.length);
+				cbGradeSearchUser.setSelectedIndex(Grade.length);
+				cbFacultySearchUser.setSelectedIndex(Faculty.length);
+				cbBirthSearchUser.setSelectedIndex(Birthplace.length);
+				cbCircleSearchUser.setSelectedIndex(Circle.length);
 				layout.show(cardPanel,"searchUser");
 			}
 			break;
@@ -2448,11 +2754,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				if(isNowUsingGroupAccount) {
-					//nowShowingGroups=条件検索
+					//TODO nowShowingGroups=sSearch(nowPage,"9,9");
 					goHome();
 				}
 				else {
-					//nowShowingUsers=条件検索
+					//TODO nowShowingUsers=sSearch(nowPage,"9,9,9,9,9");
 					goHome();
 				}
 			}
@@ -2462,7 +2768,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case"次のページhome":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
-				//nowShowingGroups=条件検索
+				//TODO nowShowingGroups=sSearch(nowPage,"9,9");
 				if(nowShowingGroups!=null) {
 					goHome();
 				}
@@ -2471,7 +2777,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 			else {
-				//nowShowingUserss=条件検索
+				//TODO nowShowingUsers=sSearch(nowPage,"9,9,9,9,9");
 				if(nowShowingUsers!=null) {
 					goHome();
 				}
@@ -2483,31 +2789,30 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case"いいねreply":
-			//いいねメソッド(nowShowingUser.getStudentNumber())
-			//TODO メッセージ出したほうがいい?
-			layout.show(cardPanel,"goodInform");
+			//TODO Sgood(nowShowingUser.getStudentNumber());
+			goGoodInform();
 			break;
 
 
 		case"断るreply":
-			//TODO
+			//TODO SrejectGood(nowShowingUser.getStudentNumber());
+			goGoodInform();
 			break;
 
 
 		case"いいねreplyGroup":
-			//いいねメソッド(nowShowingGroup.getStudentNumber())
-			//TODO メッセージ出したほうがいい?
+			//TODO Sgroup_good(nowShowingGroup.getStudentNumber());
 			layout.show(cardPanel, "goodInform");
 			break;
 
 
 		case"断るreplyGroup":
-			//TODO
+			//TODO SrejectGoodfromGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
 		case "いいねgood":
-			//いいねメソッド(nowShowingUser.getStudentNumber())
+			//TODO Sgood(nowShowingUser.getStudentNumber());
 			bGoodGood.setVisible(false);
 			lGoodGood.setVisible(true);
 			break;
@@ -2526,29 +2831,87 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "検索searchUser":
+			userSearchCondition="";
 
-			//TODO
+			if(cbGenderSearchUser.getSelectedIndex()==Sex.length) {
+				userSearchCondition="9,";
+			}
+			else {
+				userSearchCondition=String.valueOf(cbGenderSearchUser.getSelectedIndex())+",";
+			}
+
+			if(cbGradeSearchUser.getSelectedIndex()==Grade.length) {
+				userSearchCondition=userSearchCondition+"9,";
+			}
+			else {
+				userSearchCondition=userSearchCondition+String.valueOf(cbGradeSearchUser.getSelectedIndex())+",";
+			}
+
+			if(cbFacultySearchUser.getSelectedIndex()==Faculty.length) {
+				userSearchCondition=userSearchCondition+"9,";
+			}
+			else {
+				userSearchCondition=userSearchCondition+String.valueOf(cbFacultySearchUser.getSelectedIndex())+",";
+			}
+
+			if(cbBirthSearchUser.getSelectedIndex()==Birthplace.length) {
+				userSearchCondition=userSearchCondition+"9,";
+			}
+			else {
+				userSearchCondition=userSearchCondition+String.valueOf(cbBirthSearchUser.getSelectedIndex())+",";
+			}
+
+			if(cbCircleSearchUser.getSelectedIndex()==Circle.length) {
+				userSearchCondition=userSearchCondition+"9";
+			}
+			else {
+				userSearchCondition=userSearchCondition+String.valueOf(cbCircleSearchUser.getSelectedIndex());
+			}
+
+			nowPage=1;
+			//TODO Ssearch(nowPage,userSeachCondition);
 			goHome();
 			break;
 
 
 		case "検索searchGroup":
-			//TODO
+			groupSearchCondition="";
+
+			if(cbPurposeSearchGroup.getSelectedIndex()==Purpose.length) {
+				groupSearchCondition="9,";
+			}
+			else {
+				groupSearchCondition=String.valueOf(cbPurposeSearchGroup.getSelectedIndex())+",";
+			}
+
+			if(cbHowManySearchGroup.getSelectedIndex()==HowMany.length) {
+				groupSearchCondition=groupSearchCondition+"9";
+			}
+			else {
+				groupSearchCondition=groupSearchCondition+String.valueOf(cbPurposeSearchGroup.getSelectedIndex()+2);
+			}
+
+			nowPage=1;
+			//TODO Ssearch(nowPage,groupSeachCondition);
 			goHome();
 			break;
 
 
 		case "Myプロフィールmenu":
 			if(isNowUsingGroupAccount) {
+				tfNameMyGroupProfile.setForeground(Color.BLACK);
+				tfRelationMyGroupProfile.setForeground(Color.BLACK);
+				tfCommentMyGroupProfile.setForeground(Color.BLACK);
+
 				tfNameMyGroupProfile.setText(myGroupInfo.getName());
 				tfRelationMyGroupProfile.setText(myGroupInfo.getRelation());
 				cbPurposeMyGroupProfile.setSelectedIndex(myGroupInfo.getPurpose());
-				taCommentMyGroupProfile.setText(myGroupInfo.getComment());
+				tfCommentMyGroupProfile.setText(myGroupInfo.getComment());
 				try {
 					bPhotoMyGroupProfile.setIcon(scaleImage(myGroupInfo.getMainPhoto(),w/2,h/6));
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("グループアイコンの取得に失敗");
 				}
 
 				if(myGroupInfo.getHostUser()==myUserInfo.getStudentNumber()) {
@@ -2561,23 +2924,30 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				layout.show(cardPanel, "myGroupProfile");
 			}
 			else {
-				tfNameMyProfile.setText(myUserInfo.getName());
-				cbGenderMyProfile.setSelectedIndex(myUserInfo.getGender());
-				cbGradeMyProfile.setSelectedIndex(myUserInfo.getGrade());
-				cbFacultyMyProfile.setSelectedIndex(myUserInfo.getFaculty());
-				cbBirthMyProfile.setSelectedIndex(myUserInfo.getBirth());
-				cbCircleMyProfile.setSelectedIndex(myUserInfo.getCircle());
-				tfHobbyMyProfile.setText(myUserInfo.getHobby());
-				tfLineIdMyProfile.setText(myUserInfo.getLineId());
+				tfNameMyProfile.setForeground(Color.BLACK);
+				tfHobbyMyProfile.setForeground(Color.BLACK);
+				tfLineIdMyProfile.setForeground(Color.BLACK);
 
 				try {
+					tfNameMyProfile.setText(myUserInfo.getName());
+					cbGenderMyProfile.setSelectedIndex(myUserInfo.getGender());
+					cbGradeMyProfile.setSelectedIndex(myUserInfo.getGrade());
+					cbFacultyMyProfile.setSelectedIndex(myUserInfo.getFaculty());
+					cbBirthMyProfile.setSelectedIndex(myUserInfo.getBirth());
+					cbCircleMyProfile.setSelectedIndex(myUserInfo.getCircle());
+					tfHobbyMyProfile.setText(myUserInfo.getHobby());
+					tfLineIdMyProfile.setText(myUserInfo.getLineId());
+
 					bMainPhotoMyProfile.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/2,h/6));
 					for(int i=0;i<4;i++) {
 						bSubPhotoMyProfile[i].setIcon(scaleImage(myUserInfo.getSubPhoto()[i],w/6,h/10));
 					}
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("ユーザアイコンの取得に失敗");
+				}
+				catch(IllegalArgumentException e) {
+					System.out.println("コンボボックスの値の取得に失敗");
 				}
 
 				layout.show(cardPanel,"myProfile");
@@ -2588,26 +2958,28 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "アカウント切り替えmenu":
 			nowPage=1;
+			//TODO myUserInfo=SgetUserprof(myUserInfo.getStudentNumber())
 
 			try {
 				bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
 				bPersonalChange.setText(myUserInfo.getName());
 
 				for(int i=0;i<3;i++) {
-					if(myUserInfo.getJoiningGroup()[i]==null) {
+					if(myUserInfo.getJoiningGroup()[i+3*(nowPage-1)]==null) {
 						bIconChange[i].setVisible(false);
 					}
 					else {
-						//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[i]
+						//TODO nowShowingGroups[i]=SgetGroupprof(myUserInfo.getJoiningGroup()[i+3*(nowPage-1))]
 						bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 						bIconChange[i].setText(nowShowingGroups[i].getName());
 						bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
+						bIconChange[i].setVisible(true);
 					}
 				}
 
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("切り替えアカウントのアイコンの取得に失敗");
 			}
 			layout.show(cardPanel,"change");
 			break;
@@ -2642,10 +3014,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bMainPhotoMyProfile.setIcon(scaleImage(bi,w/2,h/6));
 				myUserInfo.setMainPhoto(bi);
-				//新プロフの作成(myUsrInfo)
+				//TODO myUserInfo=SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("正しくファイルが選択されませんでした");
 			}
 			break;
 
@@ -2670,31 +3042,57 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bSubPhotoMyProfile[temp] .setIcon(scaleImage(bi,w/6,h/10));
 				myUserInfo.setSubPhoto(bi,temp);
-				//新プロフの作成(myUserInfo)
+				//TODO myUserInfo=SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("正しくファイルが選択されませんでした");
 			}
 			break;
 
 
 		case "確定myProfile":
+			flag=true;
+			tfNameMyProfile.setForeground(Color.BLACK);
+			tfHobbyMyProfile.setForeground(Color.BLACK);
+			tfLineIdMyProfile.setForeground(Color.BLACK);
+
 			if(tfNameMyProfile.getText().length()!=0 && tfNameMyProfile.getText().length()<11) {
 				myUserInfo.setName(tfNameMyProfile.getText());
 			}
+			else {
+				tfNameMyProfile.setText("入力は上限10文字です");
+				tfNameMyProfile.setForeground(Color.RED);
+				flag=false;
+			}
+
+			if(tfHobbyMyProfile.getText().length()<11){
+				myUserInfo.setHobby(tfHobbyMyProfile.getText());
+			}
+			else {
+				tfHobbyMyProfile.setText("入力は上限10文字です");
+				tfHobbyMyProfile.setForeground(Color.RED);
+				flag=false;
+			}
+
+			if(tfLineIdMyProfile.getText().length()!=0 && tfLineIdMyProfile.getText().length()<21) {
+				myUserInfo.setLineId(tfLineIdMyProfile.getText());
+			}
+			else {
+				tfLineIdMyProfile.setText("入力は上限20文字です");
+				tfLineIdMyProfile.setForeground(Color.RED);
+				flag=false;
+			}
+
 			myUserInfo.setGender(cbGenderMyProfile.getSelectedIndex());
 			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
 			myUserInfo.setFaculty(cbFacultyMyProfile.getSelectedIndex());
 			myUserInfo.setBirth(cbBirthMyProfile.getSelectedIndex());
 			myUserInfo.setCircle(cbCircleMyProfile.getSelectedIndex());
-			if(tfHobbyMyProfile.getText().length()!=0 && tfHobbyMyProfile.getText().length()<16){
-				myUserInfo.setHobby(tfHobbyMyProfile.getText());
+
+			if(flag) {
+				//TODO SchangeProf(myUserInfo.getStudentNumber());
+				layout.show(cardPanel,"menu");
 			}
-			if(tfLineIdMyProfile.getText().length()<20) {
-				myUserInfo.setLineId(tfLineIdMyProfile.getText());
-			}
-			//新プロフ(myUserInfo)
-			layout.show(cardPanel,"menu");
 			break;
 
 
@@ -2704,14 +3102,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			tfNameMakeGroup.setText(nowShowingGroup.getName());
 			tfRelationMakeGroup.setText(nowShowingGroup.getRelation());
 			cbPurposeMakeGroup.setSelectedIndex(0);
-			taCommentMakeGroup.setText(nowShowingGroup.getComment());
+			tfCommentMakeGroup.setText(nowShowingGroup.getComment());
 			try {
 				bPhotoMakeGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/6));
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("初期アイコンの取得に失敗");
 			}
 
+			tfNameMakeGroup.setForeground(Color.BLACK);
+			tfRelationMakeGroup.setForeground(Color.BLACK);
+			tfCommentMakeGroup.setForeground(Color.BLACK);
 			layout.show(cardPanel,"makeGroup");
 			break;
 
@@ -2728,7 +3129,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "グループ2change":
 			for(int i=0;i<3;i++) {
 				if(cmd=="グループ"+String.valueOf(i)+"change") {
-					//TODO myGroupInfo=グル情報を取得(nowShowingGroups[i]);
+					//TODO myGroupInfo=SgetGroupprof(nowShowingGroups[i]);
 				}
 			}
 			isNowUsingGroupAccount=true;
@@ -2752,7 +3153,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							bIconChange[i].setVisible(false);
 						}
 						else {
-							//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
+							//TODO nowShowingGroup[i]=SgetGroupprof(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
 							bIconChange[i].setVisible(true);
 							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 							bIconChange[i].setText(nowShowingGroups[i].getName());
@@ -2761,7 +3162,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					}
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("切り替えアカウントのアイコンの取得に失敗");
 				}
 			}
 			break;
@@ -2779,7 +3180,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							bIconChange[i].setVisible(false);
 						}
 						else {
-							//nowShowingGroups[i]=グル情報の取得(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
+							//TODO nowShowingGroups[i]=SgetGroupprof(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
 							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 							bIconChange[i].setText(nowShowingGroups[i].getName());
 							bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
@@ -2789,7 +3190,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("切り替えアカウントのアイコンの取得に失敗");
 				}
 			}
 			else{
@@ -2807,58 +3208,96 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				f = new File(fd.getDirectory()+"/"+fd.getFile());
 				bi=ImageIO.read(f);
 				nowShowingGroup.setMainPhoto(bi);
-				//TODO グル情報新プロフ
 				bPhotoMakeGroup.setIcon(scaleImage(bi,w/2,h/6));
 				bPhotoMakeGroup.setText("");
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("正しくファイルが選択されませんでした");
 			}
 			break;
 
 
 		case "選択makeGroup":
-			//TODO 各値の最大文字数とかどうする？
-			if(tfNameMakeGroup.getText().length()>0) {
+			flag=true;
+			tfNameMakeGroup.setForeground(Color.BLACK);
+			tfRelationMakeGroup.setForeground(Color.BLACK);
+			tfCommentMakeGroup.setForeground(Color.BLACK);
+
+			if(tfNameMakeGroup.getText().length()!=0 && tfNameMakeGroup.getText().length()<11) {
 				nowShowingGroup.setName(tfNameMakeGroup.getText());
 			}
+			else {
+				tfNameMakeGroup.setText("入力の上限は10文字です");
+				tfNameMakeGroup.setForeground(Color.RED);
+				flag=false;
+			}
 
-			if(tfRelationMakeGroup.getText().length()>0) {
+			if(tfRelationMakeGroup.getText().length()!=0) {
 				nowShowingGroup.setName(tfRelationMakeGroup.getText());
 			}
-
-			for(int i=0;i<Purpose.length;i++) {
-				if(cbPurposeMakeGroup.getSelectedItem()==Purpose[i]) {
-					nowShowingGroup.setPurpose(i);
-				}
+			else {
+				tfRelationMakeGroup.setText("入力の上限は10文字です");
+				tfRelationMakeGroup.setForeground(Color.RED);
+				flag=false;
 			}
 
-			for(int i=0;i<Grade.length;i++) {
-				if(cbGradeMyProfile.getSelectedItem()==Grade[i]) {
-					myUserInfo.setGrade(i);
-				}
+			if(tfCommentMakeGroup.getText().length()!=0 && tfCommentMakeGroup.getText().length()<16) {
+				nowShowingGroup.setName(tfCommentMakeGroup.getText());
+			}
+			else {
+				tfCommentMakeGroup.setText("入力の上限は15文字です");
+				tfCommentMakeGroup.setForeground(Color.RED);
+				flag=false;
 			}
 
-			if(taCommentMakeGroup.getText().length()>0) {
-				nowShowingGroup.setName(taCommentMakeGroup.getText());
+			nowShowingGroup.setPurpose(cbPurposeMakeGroup.getSelectedIndex());
+			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
+
+			for(int i=0;i<4;i++) {
+				tfNumberGather[i].setForeground(Color.BLACK);
 			}
-			layout.show(cardPanel,"gathering");
+
+			if(flag) {
+				layout.show(cardPanel,"gathering");
+			}
 			break;
 
 
 		case "確定gathering":
-			//TODO 赤文字出てる
 			nowShowingGroup.setHostUser(myUserInfo.getStudentNumber());
 			temp=0;
+			flag=true;
 			for(int i=0;i<4;i++) {
-				if(tfNumberGather[i].getText()!=null) {
-					nowShowingGroup.setNonhostUser(Integer.valueOf(tfNumberGather[i].getText()),temp);
-					temp++;
-				}
+				tfNumberGather[i].setForeground(Color.BLACK);
+					if(tfNumberGather[i].getText().length()!=0) {
+						try {
+							if(tfNumberGather[i].getText().length()<11) {
+								nowShowingGroup.setNonhostUser(Integer.valueOf(tfNumberGather[i].getText()),temp);
+								temp++;
+							}
+							else {
+								tfNumberGather[i].setText("学籍番号が正しくありません");
+								tfNumberGather[i].setForeground(Color.RED);
+								flag=false;
+							}
+						}
+						catch(NumberFormatException e) {
+							tfNumberGather[i].setText("学籍番号を入力してください");
+							tfNumberGather[i].setForeground(Color.RED);
+							flag=false;
+						}
+					}
 			}
-			nowShowingGroup.setNumberOfMember(temp+1);
-			//グルの作成(nowShowingGroup)
-			goHome();
+
+			if(temp==0) {
+				tfNumberGather[0].setText("学籍番号を入力してください");
+				tfNumberGather[0].setForeground(Color.RED);
+			}
+			else if(flag) {
+				nowShowingGroup.setNumberOfMember(temp+2);
+				//TODO SmakeGroup(nowShowingGroup);
+				goHome();
+			}
 			break;
 
 
@@ -2869,40 +3308,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "参加invite":
-			//TODO 参加メソッド？
-
-			/*int i=0;
-			flag=false;
-			while(i<MAX && flag==false) {
-				if(myUserInfo.getJoiningGroup()[i]==null) {
-					myUserInfo.setJoiningGroop(nowShowingGroup.getStudentNumber(),i);
-					flag=true;
-				}
-				i++;
-			}
-
-			if(flag) {
-				i=0;
-				flag=false;
-				while(i<MAX && flag==false) {
-					if(myUserInfo.getInvitedGroup()[i]==nowShowingGroup.getStudentNumber()) {
-						myUserInfo.setInvitedGroup(null,i);
-						flag=true;
-					}
-					i++;
-				}
-
-				if(flag) {
-
-				}
-			}*/
-			//戻る
+			//TODO SjoinGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
 		case "断るinvite":
-			//TODO 断るメソッド？
-			//戻る
+			//TODO SrejectJoinGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
@@ -2912,22 +3323,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "メンバ3viewGroup":
 		case "メンバ4viewGroup":
 			if(cmd=="メンバ0viewGroup") {
-				//nowShowigUser=情報を取得(nowShowingGroup.getHostUser())
+				//TODO nowShowingUser=SgetUserprof(nowShowingGroup.getHostUser());
 			}
 			else {
 				for(int i=1;i<5;i++) {
 					if(cmd=="メンバ"+String.valueOf(i)+"viewGroup") {
-						//nowShowigUser=情報を取得(nowShowingGroup.getHostUser())
+						//TODO nowShowingUser=SgetUserprof(nowShowingGroup.getNonhostUser()[i]);
 					}
 				}
 			}
-			prePageForGood="vewGroup";
+			prePageForGood="viewGroup";
 			goGood();
 			break;
 
 
 		case "いいねviewGroup":
-			//いいねメソッド(myGroupInfo.getStudentNumber())
+			//TODO Sgroup_good(nowShowingGroup.getStudentNumber());
 			bGoodViewGroup.setVisible(false);
 			lGoodViewGroup.setVisible(true);
 			break;
@@ -2943,21 +3354,55 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bPhotoMyGroupProfile.setIcon(scaleImage(bi,w/2,h/6));
 				myUserInfo.setMainPhoto(bi);
-				//新プロフの作成
+				//TODO SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("ファイルが正しく選択されませんでした");
 			}
 			break;
 
 
 		case "確定myGroupProfile":
-			myGroupInfo.setName(tfNameMyGroupProfile.getText());
-			myGroupInfo.setRelation(tfRelationMyGroupProfile.getText());
+			flag=true;
+			tfNameMyGroupProfile.setForeground(Color.BLACK);
+			tfRelationMyGroupProfile.setForeground(Color.BLACK);
+			tfCommentMyGroupProfile.setForeground(Color.BLACK);
+
+			nowShowingGroup.setPurpose(cbPurposeMakeGroup.getSelectedIndex());
+			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
 			myGroupInfo.setPurpose(cbPurposeMyGroupProfile.getSelectedIndex());
-			myGroupInfo.setComment(taCommentMyGroupProfile.getText());
-			//新プロフ(myUserInfo)
-			layout.show(cardPanel,"menu");
+
+			if(tfNameMyGroupProfile.getText().length()!=0 && tfNameMyGroupProfile.getText().length()<11) {
+				myGroupInfo.setName(tfNameMyGroupProfile.getText());
+			}
+			else {
+				tfNameMyGroupProfile.setText("入力は上限10文字です");
+				tfNameMyGroupProfile.setForeground(Color.RED);
+				flag=false;
+			}
+
+			if(tfRelationMyGroupProfile.getText().length()!=0 && tfRelationMyGroupProfile.getText().length()<11) {
+				myGroupInfo.setRelation(tfRelationMyGroupProfile.getText());
+			}
+			else {
+				tfRelationMyGroupProfile.setText("入力は上限10文字です");
+				tfRelationMyGroupProfile.setForeground(Color.RED);
+				flag=false;
+			}
+
+			if(tfCommentMyGroupProfile.getText().length()!=0 && tfCommentMyGroupProfile.getText().length()<16) {
+				myGroupInfo.setComment(tfCommentMyGroupProfile.getText());
+			}
+			else {
+				tfCommentMyGroupProfile.setText("入力は上限15文字です");
+				tfCommentMyGroupProfile.setForeground(Color.RED);
+				flag=false;
+			}
+
+			if(flag) {
+				//TODO SchangeGroupProf(myGroupInfo);
+				layout.show(cardPanel,"menu");
+			}
 			break;
 
 
@@ -2966,7 +3411,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 
 			if (temp == 0){
-				//削除メソッド(myGroupProfile.getStudentNumber)
+				//TODO SdeleteGroup=(myGroupProfile.getStudentNumber);
 				isNowUsingGroupAccount=false;
 				nowPage=1;
 				goHome();
@@ -2978,9 +3423,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			temp = JOptionPane.showOptionDialog(this,"本当に削除しますか？","最終確認",JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 			if (temp == 0){
-				//削除メソッド(myGroupProfile.getStudentNumber)
+				//TODO SdeleteUser(myGroupProfile.getStudentNumber);
 				myUserInfo=new UserInfo();
 				isNowUsingGroupAccount=false;
+
 				lMessageLogin.setVisible(false);
 				tfIdLogin.setText("");
 				tfPasswordLogin.setText("");
@@ -2988,7 +3434,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			break;
 
-		//TODO 通知の配列がとびとびになっていないこと前提
+
 		case "招待inform":
 			nowPage=1;
 			goInviteInform();
@@ -3044,7 +3490,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "次のページgoodInform":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
-				if(myGroupInfo.getRecieveGood()[3*(nowPage-1)]!=null){
+				if(myGroupInfo.getReceiveGood()[3*(nowPage-1)]!=null){
 					goInviteInform();
 				}
 				else{
@@ -3052,7 +3498,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 			else {
-				if(myUserInfo.getRecieveGood()[3*(nowPage-1)]!=0){
+				if(myUserInfo.getReceiveGood()[3*(nowPage-1)]!=0){
 					goInviteInform();
 				}
 				else{
@@ -3105,10 +3551,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 			try {
 				lIconInvite.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-			//lHostInvite.setText("<html><body>"+//ユーザ情報(nowShowingGroup.getHostUser).getName()
+			catch (IOException e) {
+				System.out.println("アイコンの取得に失敗");
+			}
+			//TODO lHostInvite.setText("<html><body>"+//SgetGroupprof(nowShowingGroup.getHostUser).getName()
 			//+"<br/>に招待されました</html></body>");
 			layout.show(cardPanel,"invite");
 			break;
@@ -3117,6 +3564,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール0goodInform":
 		case "プロフィール1goodInform":
 		case "プロフィール2goodInform":
+			UserInfo tempUser;
+
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
 					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
@@ -3127,23 +3576,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				try {
 					lGroupPhotoReplyGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
 					lGroupProfileReplyGroup.setText("<html><body>"+Purpose[nowShowingGroup.getPurpose()]+"<br />"+nowShowingGroup.getComment()+"</body></html>");
-					//TODO 一言は何文字まで？
 
-					//UserInfoの取得(nowShowingGroup.getHostUser())
-					//bMemberProfileReplyGroup[0].setIcon(scaleImage(,w/3,h/12));
-					//bMemberProfileReplyGroup[0].setText(ホストの名前)
+					//TODO tempUser=SgetUserprof(nowShowingGroup.getHostUser());
+					//bMemberProfileReplyGroup[0].setIcon(scaleImage(tempUser.getMainPhoto,w/3,h/12));
+					//bMemberProfileReplyGroup[0].setText(tempUser.getName);
 
 					/*for(int i=1;i<5;i++) {
-						//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
-						if(nonhostUserの情報!=null) {
-							bMemberProfileReplyGroup[i].setIcon(scaleImage(,w/3,h/12));
-							bMemberProfileReplyGroup[i].setText(ノンホストの名前)
+						//TODO tempUser=SgetUserprof(nowShowingGroup.getNonHostUser()[i-1]);
+						if(tempUser!=null) {
+							bMemberProfileReplyGroup[i].setIcon(scaleImage(tempUser.getMainPhoto,w/3,h/12));
+							bMemberProfileReplyGroup[i].setText(tempUser.getName);
 						}
 					}*/
 
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("アイコンの取得に失敗");
 				}
 				layout.show(cardPanel,"replyGroup");
 
@@ -3169,7 +3617,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					}
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("アイコンの取得に失敗");
 				}
 
 				layout.show(cardPanel,"reply");
@@ -3189,11 +3637,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 				try {
 					lIconMatching.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
-					lNameMatching.setText("<html><body>"+nowShowingGroup.getName()+"<br+nowSh />とマッチングしました！</body></html>");
-					//lIdMatching.setText("LINE ID:"+//ユーザ情報の取得(nowShowingGroup.getHost()).getLineId());
+					lNameMatching.setText("<html><body>"+nowShowingGroup.getName()+"<br />とマッチングしました！</body></html>");
+					//TODO lIdMatching.setText("<html><body>LINE ID:<br />"+SgetGroupprof(nowShowingGroup.getHostUser()).getLineId()+"</body></html>");
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("アイコンの取得に失敗");
 				}
 
 			}
@@ -3206,10 +3654,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				try {
 					lIconMatching.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/5));
 					lNameMatching.setText("<html><body>"+nowShowingUser.getName()+"<br+nowSh />とマッチングしました！</body></html>");
-					lIdMatching.setText("LINE ID:"+nowShowingUser.getLineId());
+					lIdMatching.setText("<html><body>LINE ID:<br />"+nowShowingUser.getLineId()+"</body></html>");
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("アイコンの取得に失敗");
 				}
 			}
 			layout.show(cardPanel,"matching");
@@ -3236,7 +3684,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-	client.connectServer();
+    	//client.connectServer();
     	//client.new Notification();
     }
 
@@ -3379,9 +3827,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.out.println("サーバと接続しました。"); //テスト用出力
 			oos = new ObjectOutputStream(socket.getOutputStream()); //オブジェクトデータ送信用オブジェクトの用意
 			out = new OutputStreamWriter(socket.getOutputStream());
-
-			receiver = new Receiver(socket); //受信用オブジェクトの準備
-			receiver.start();//受信用オブジェクト(スレッド)起動
+			ois = new ObjectInputStream(socket.getInputStream());
+			//receiver = new Receiver(socket); //受信用オブジェクトの準備
+			//receiver.start();//受信用オブジェクト(スレッド)起動
 		} catch (UnknownHostException e) {
 			System.err.println("ホストのIPアドレスが判定できません: " + e);
 			System.exit(-1);
@@ -3404,28 +3852,55 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	/****  送信用 ****/
 	//パスワードの確認
-	public boolean Scheck(int number, String password) {
+	public void Scheck(int number, String password) {
 		try {
+			connectServer();
 			String outLine = "lg,"+Integer.toString(number)+","+password;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
-			if(inputLine=="1")	return true;
-			else	return false;
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
+			/*if(inputLine=="1")	return true;
+			else	return false;*/
 			}catch(IOException e) {
-				System.err.println("データ送信時ににエラーが発生しました: " + e);
+				System.err.println("データ送受信時にエラーが発生しました: " + e);
 				System.exit(-1);
-				return false;
+				//return false;
 			}
 	}
 
 	//ホーム画面nページ目のユーザ情報の取得
 	public void Shome(int page) {
 		try{
+			connectServer();	//サーバと接続
+			// データ送信
 			String outLine = "us,"+Integer.toString(page);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+					nowShowingUsers[1] = (UserInfo)ois.readObject();
+					nowShowingUsers[2] = (UserInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3435,10 +3910,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//条件検索
 	public void Ssearch(int page, int cond) {
 		try{
+			connectServer();
 			String outLine = "us,"+Integer.toString(page)+","+Integer.toString(cond);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+					nowShowingUsers[1] = (UserInfo)ois.readObject();
+					nowShowingUsers[2] = (UserInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3448,8 +3938,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	// 新規登録
 	public void sendUserInfo(UserInfo obj) {
 		try{
+			connectServer();
 			oos.writeObject(obj);
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3460,10 +3962,26 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ホーム画面nページ目のグループ情報を取得
 	public void Sgroup_home(int page) {
 		try{
+			connectServer();
 			String outLine = "gs,"+Integer.toString(page);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingGroups[0] = (GroupInfo)inputObj;
+					nowShowingGroups[1] = (GroupInfo)ois.readObject();
+					nowShowingGroups[2] = (GroupInfo)ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3473,10 +3991,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザにいいねを送る
 	public void Sgood(int number) {
 		try{
+			connectServer();
 			String outLine = "ug,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			// データ受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+					nowShowingUsers[0] = (UserInfo)inputObj;
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3486,10 +4018,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グルにいいねを送る
 	public void Sgroup_good(int uuid) {
 		try{
+			connectServer();
 			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+Integer.toString(uuid);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3499,11 +4043,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザのプロフィール変更
 	public void SchangeProf(UserInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "uc,"+Integer.toString(myUserInfo.getStudentNumber());
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 			System.out.println(outLine+"を送信しました。");  //確認用
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3514,12 +4071,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループのプロフィール変更
 	public void SchangeGroupProf(UserInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(outLine+"を送信しました。");  //確認用
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3529,12 +4098,24 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ作成
 	public void SmakeGroup(GroupInfo newprof) {
 		try{
+			connectServer();
 			String outLine = "gm,";
 			oos.writeObject(outLine);
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(outLine+"を送信しました。");  //確認用
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3557,10 +4138,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ情報の取得
 	public void SgetGroupprof(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gi,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3570,10 +4164,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザアカウント削除
 	public void SdeleteUser(int number) {
 		try{
+			connectServer();
 			String outLine = "ud,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3583,10 +4190,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループアカウント削除
 	public void SdeleteGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gd,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3596,10 +4216,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ参加
 	public void SjoinGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "jg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3609,10 +4242,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループ参加拒否
 	public void SrejectJoinGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "rg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3622,10 +4268,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//ユーザからのいいねを断る
 	public void SrejectGood(int number) {
 		try{
+			connectServer();
 			String outLine = "ur,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3635,10 +4294,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グループからのいいねを断る
 	public void SrejectGoodfromGroup(UUID number) {
 		try{
+			connectServer();
 			String outLine = "gr,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
+			//データを受信
+			inputObj = null;
+			while(inputObj==null) {
+				try {
+					inputObj = ois.readObject();
+				}catch(ClassNotFoundException e) {
+					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					break;
+				}
+			}
+			System.out.println(inputObj);
+			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3646,58 +4318,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 
-	/**** 受信用 ****/
-	// データ受信用スレッド(内部クラス)
-	class Receiver extends Thread {
 
-		private ObjectInputStream ois;
-		/* InputStreamReader sisr;
-		BufferedReader br;*/
-
-		// 内部クラスReceiverのコンストラクタ
-		Receiver (Socket socket){
-			try{
-				ois = new ObjectInputStream(socket.getInputStream());
-				//sisr = new InputStreamReader(socket.getInputStream());
-			} catch (IOException e) {
-				System.err.println("データ受信ストリーム作成時にエラーが発生しました: " + e);
-			}
-		}
-		// 内部クラス Receiverのメソッド
-		public void run(){
-			try{
-				while(true) {
-					try {
-						Object inputObj = ois.readObject();
-
-						//UserInfo型なら
-						if(inputObj instanceof UserInfo) {
-							UserInfo ui = new UserInfo();
-							ui = (UserInfo)inputObj;
-						}
-
-						//GroupInfo型なら
-						else if(inputObj instanceof GroupInfo) {
-							GroupInfo gi = new GroupInfo();
-							gi = (GroupInfo)inputObj;
-						}
-
-						//その他ならreceiveMessage()
-						else {
-							/* br = new BufferedReader(sisr);
-							inputLine = br.readLine();//データを一行分読み込む*/
-							inputLine = inputObj.toString();
-							receiveMessage(inputLine);
-						}
-					}catch (ClassNotFoundException e) {
-							System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					}
-				}
-			} catch (IOException e){
-				System.err.println("データ受信時にエラーが発生しました: " + e);
-			}
-		}
-	}
 
 	// メッセージの受信
 	public void receiveMessage(String msg){
@@ -3707,4 +4328,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	/***************ここまで***************/
+
 }
+
+

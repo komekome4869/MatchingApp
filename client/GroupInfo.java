@@ -11,16 +11,16 @@ public class GroupInfo implements Serializable{
 	int state;		//グル作成なら0,プロフ更新なら1
 
 	UUID groupNumber;	//このグルの識別番号。クライアントがグルを作ったのち、サーバが割り振る
-	String name="";		//グループ名
-	String relation="";		//グルのメンバの関係性
+	String name="グループ名";		//グループ名
+	String relation="友達";		//グルのメンバの関係性
 	UUID[] sendGood=new UUID[MAX];		//このグルがイイネを送った相手のグルの識別番号
-	UUID[] recieveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
+	UUID[] receiveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
 	UUID[] matchedGroup=new UUID[MAX];		//このグルとマッチングした相手のグルの識別番号
 	BufferedImage mainPhoto;		//グルの写真
 	int hostUser=0;		//グルのホストユーザ(=グルを作った人)
 	int[] nonhostUser=new int[4];		//グルのホストでないユーザ。グルに招待されている時点で追加する
 	int purpose=0;			//グルの目的。Client.javaの配列Purposeで文字列に変える
-	String comment="";		//グルの一言コメント
+	String comment="仲良くしてね！";		//グルの一言コメント
 	int numberOfMember=1;	//グルの人数。グループから抜ける機能はなくなったので、招待した時点で固定。
 	boolean isGathered=false;	//グルが全員集まったならtrueに変換し、検索に引っかかるようになる。
 	//グルから抜ける機能がない以上、誰かが招待を断った時点でグルは削除
@@ -29,7 +29,7 @@ public class GroupInfo implements Serializable{
 
 	GroupInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/test.jpg"));
+			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,17 +79,17 @@ public class GroupInfo implements Serializable{
 		return sendGood;
 	}
 
-	public void setRecieveGood(UUID[] rg) {
-		recieveGood=rg;
+	public void setReceiveGood(UUID[] rg) {
+		receiveGood=rg;
 	}
 
-	public void setRecieveGood(UUID rg,int n) {
-		recieveGood[n]=rg;
+	public void setReceiveGood(UUID rg,int n) {
+		receiveGood[n]=rg;
 
 	}
 
-	public UUID[] getRecieveGood() {
-		return recieveGood;
+	public UUID[] getReceiveGood() {
+		return receiveGood;
 	}
 
 	public void setMatchedGroup(UUID[] mg) {
