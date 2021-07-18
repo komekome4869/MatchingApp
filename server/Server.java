@@ -147,6 +147,7 @@ public class Server extends JFrame implements ActionListener{
 					continue;
 				else if( file.isFile() ) {
 					readUserFile(file);
+					userFileNum++;
 				}
 			}
 			userFileNum--;
@@ -276,7 +277,6 @@ public class Server extends JFrame implements ActionListener{
 
 				userlist.add(users[userFileNum]);
 				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
-				userFileNum++;
 
 			}
 		} catch (IOException e) {
@@ -307,7 +307,7 @@ public class Server extends JFrame implements ActionListener{
 				continue;
 			else if( file.isFile() ) {
 				readGroupFile(file);
-				userFileNum++;
+				groupFileNum++;
 			}
 		}
 		groupFileNum--; //要素と一致させる
