@@ -49,10 +49,10 @@ public class Server extends JFrame implements ActionListener{
 	static int groupFileNum = 0;	//ユーザファイル数
 
 	//検索用
-	static ArrayList<UserInfo> userlist;
-	static ArrayList<UserInfo> user_buf;
-	static ArrayList<GroupInfo> grouplist;
-	static ArrayList<GroupInfo> group_buf;
+	static ArrayList<UserInfo> userlist = new ArrayList<UserInfo>();
+	static ArrayList<UserInfo> user_buf = new ArrayList<UserInfo>();
+	static ArrayList<GroupInfo> grouplist = new ArrayList<GroupInfo>();
+	static ArrayList<GroupInfo> group_buf = new ArrayList<GroupInfo>();
 
 	int w = 400;
 	int h = 650;
@@ -137,18 +137,21 @@ public class Server extends JFrame implements ActionListener{
 		if(!image_dir.exists()) image_dir.mkdir();
 
 		File[] files = dir.listFiles();
-		if( files == null )
+		if( files == null ) {
 			return;
-		for( File file : files ) {
-			if( !file.exists() )
-				continue;
-			else if( file.isDirectory() )
-				continue;
-			else if( file.isFile() ) {
-				readUserFile(file);
+		}else{
+			for( File file : files ) {
+				if( !file.exists() )
+					continue;
+				else if( file.isDirectory() )
+					continue;
+				else if( file.isFile() ) {
+					readUserFile(file);
+					userFileNum++;
+				}
 			}
+			userFileNum--;
 		}
-		userFileNum--;
 	}
 
 	//ユーザファイル読み込み
@@ -224,37 +227,50 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 10 :
-						String sendStudents[] = line.split(" ");
-						for(int i=0; i<sendStudents.length; i++) {
-							users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
+						if(line.length()>2) {
+							System.out.println(line+"a");
+							String sendStudents[] = line.split(" ");
+							//System.out.println(line+"a");
+							System.out.println(sendStudents[0]+"a");
+							for(int i=0; i<sendStudents.length; i++) {
+								users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
+							}
 						}
 						break;
 
 					case 11 :
-						String receiveStudents[] = line.split(" ");
-						for(int i=0; i<receiveStudents.length; i++) {
-							users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
+						if(line.length()>2) {
+							String receiveStudents[] = line.split(" ");
+							for(int i=0; i<receiveStudents.length; i++) {
+								users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
+							}
 						}
 						break;
 
 					case 12 :
-						String matchingStudents[] = line.split(" ");
-						for(int i=0; i<matchingStudents.length; i++) {
-							users[userFileNum].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
+						if(line.length()>2) {
+							String matchingStudents[] = line.split(" ");
+							for(int i=0; i<matchingStudents.length; i++) {
+								users[userFileNum].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
+							}
 						}
 						break;
 
 					case 13 :
-						String joiningGroups[] = line.split(" ");
-						for(int i=0; i<joiningGroups.length; i++) {
-							users[userFileNum].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
+						if(line.length()>2) {
+							String joiningGroups[] = line.split(" ");
+							for(int i=0; i<joiningGroups.length; i++) {
+								users[userFileNum].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
+							}
 						}
 						break;
 
 					case 14 :
-						String invitedGroups[] = line.split(" ");
-						for(int i=0; i<invitedGroups.length; i++) {
-							users[userFileNum].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
+						if(line.length()>2) {
+							String invitedGroups[] = line.split(" ");
+							for(int i=0; i<invitedGroups.length; i++) {
+								users[userFileNum].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
+							}
 						}
 						break;
 
@@ -274,7 +290,6 @@ public class Server extends JFrame implements ActionListener{
 
 				userlist.add(users[userFileNum]);
 				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
-				userFileNum++;
 
 			}
 		} catch (IOException e) {
@@ -305,6 +320,7 @@ public class Server extends JFrame implements ActionListener{
 				continue;
 			else if( file.isFile() ) {
 				readGroupFile(file);
+				groupFileNum++;
 			}
 		}
 		groupFileNum--; //要素と一致させる
@@ -344,23 +360,29 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 4 :
-							String sendGood[] = line.split(" ");
-							for(int i=0; i<sendGood.length; i++) {
-								groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
+							if(line.length()>2) {
+								String sendGood[] = line.split(" ");
+								for(int i=0; i<sendGood.length; i++) {
+									groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
+								}
 							}
 							break;
 
 						case 5 :
-							String receiveGood[] = line.split(" ");
-							for(int i=0; i<receiveGood.length; i++) {
-								groups[groupFileNum].receiveGood[i] = UUID.fromString(receiveGood[i]);
+							if(line.length()>2) {
+								String receiveGood[] = line.split(" ");
+								for(int i=0; i<receiveGood.length; i++) {
+									groups[groupFileNum].receiveGood[i] = UUID.fromString(receiveGood[i]);
+								}
 							}
 							break;
 
 						case 6 :
-							String matchedGood[] = line.split(" ");
-							for(int i=0; i<matchedGood.length; i++) {
-								groups[groupFileNum].matchedGroup[i] = UUID.fromString(matchedGood[i]);
+							if(line.length()>2) {
+								String matchedGood[] = line.split(" ");
+								for(int i=0; i<matchedGood.length; i++) {
+									groups[groupFileNum].matchedGroup[i] = UUID.fromString(matchedGood[i]);
+								}
 							}
 							break;
 
@@ -369,9 +391,11 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 8 :
-							String nonhostUser[] = line.split(" ");
-							for(int i=0; i<nonhostUser.length; i++) {
-								groups[groupFileNum].nonhostUser[i] = Integer.parseInt(nonhostUser[i]);
+							if(line.length()>2) {
+								String nonhostUser[] = line.split(" ");
+								for(int i=0; i<nonhostUser.length; i++) {
+									groups[groupFileNum].nonhostUser[i] = Integer.parseInt(nonhostUser[i]);
+								}
 							}
 							break;
 
@@ -395,7 +419,6 @@ public class Server extends JFrame implements ActionListener{
 
 					grouplist.add(groups[groupFileNum]);
 					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
-					userFileNum++;
 
 				}
 			} catch (IOException e) {

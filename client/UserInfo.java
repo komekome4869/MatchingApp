@@ -22,7 +22,10 @@ public class UserInfo implements Serializable{
 	int circle=0;	//サークル
 	int[] bufStudentCard;		//学生証バフ
 	int[] bufMainPhoto;
-	int[][] bufSubPhoto=new int[4][];
+	int[] bufSubPhoto1;
+	int[] bufSubPhoto2;
+	int[] bufSubPhoto3;
+	int[] bufSubPhoto4;
 	String hobby="";	//趣味
 	int[] sendGood=new int[MAX];	//自分がイイネを送った相手の学籍番号
 	int[] receiveGood=new int[MAX];	//自分にイイネを送った相手の学籍番号
@@ -48,12 +51,12 @@ public class UserInfo implements Serializable{
 
 	UserInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
+			setMainPhoto(ImageIO.read(new File("./img/初期アイコン.png")));
 			for(int i=0;i<4;i++) {
-				subPhoto[i]=ImageIO.read(new File("./img/初期アイコン.png"));
+				setSubPhoto(ImageIO.read(new File("./img/初期アイコン.png")),i);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("初期アイコンの取得に失敗");
 		}
 	}
 
@@ -248,30 +251,87 @@ public class UserInfo implements Serializable{
 	}
 
 	public void setSubPhoto(BufferedImage[] sp) {
+		int[] temp;
 		for(int i=0;i<4;i++) {
 			if(sp[i]!=null) {
 				widthOfSubPhoto[i]=sp[i].getWidth();
 				heightOfSubPhoto[i]=sp[i].getHeight();
-				bufSubPhoto[i] = getArrayByImage(sp[i], widthOfSubPhoto[i],heightOfSubPhoto[i]);
+				temp = getArrayByImage(sp[i], widthOfSubPhoto[i],heightOfSubPhoto[i]);
 				subPhoto[i]=sp[i];
 			}
 			else {
-				bufSubPhoto[i]=null;
+				temp=null;
 				sp[i]=null;
 			}
+			switch (i) {
+			case 0:
+				bufSubPhoto1=temp;
+				break;
+			case 1:
+				bufSubPhoto2=temp;
+				break;
+			case 2:
+				bufSubPhoto3=temp;
+				break;
+			case 3:
+				bufSubPhoto4=temp;
+				break;
+			}
 		}
+
 	}
 
 	public void setSubPhoto(BufferedImage sp,int i) {
+		int[] temp;
 		widthOfSubPhoto[i]=sp.getWidth();
 		heightOfSubPhoto[i]=sp.getHeight();
-		bufSubPhoto[i] = getArrayByImage(sp, widthOfSubPhoto[i],heightOfSubPhoto[i]);
+		temp = getArrayByImage(sp, widthOfSubPhoto[i],heightOfSubPhoto[i]);
 		subPhoto[i]=sp;
+
+		switch (i) {
+		case 0:
+			bufSubPhoto1=temp;
+			break;
+		case 1:
+			bufSubPhoto2=temp;
+			break;
+		case 2:
+			bufSubPhoto3=temp;
+			break;
+		case 3:
+			bufSubPhoto4=temp;
+			break;
+		}
 	}
 
 	public BufferedImage[] getSubPhoto() {
+		subPhoto=new BufferedImage[4];
+		int[] temp;
 		for(int i=0;i<4;i++) {
-			subPhoto[i]=getImageByArray(bufSubPhoto[i], widthOfSubPhoto[i],heightOfSubPhoto[i]);
+			switch (i) {
+			case 0:
+				temp=bufSubPhoto1;
+				break;
+			case 1:
+				temp=bufSubPhoto2;
+				break;
+			case 2:
+				temp=bufSubPhoto3;
+				break;
+			default:
+				temp=bufSubPhoto4;
+				break;
+			}
+			if(temp!=null) {
+				System.out.println(i+"の幅"+ widthOfSubPhoto[i]);
+				System.out.println(i+"の高さ"+heightOfSubPhoto[i]);
+				subPhoto[i]=getImageByArray(temp, widthOfSubPhoto[i],heightOfSubPhoto[i]);
+				System.out.println("sabu"+i+"はnullじゃない");
+			}
+			else {
+				subPhoto[i]=null;
+				System.out.println("sabu"+i+"はnull");
+			}
 		}
 		return subPhoto;
 	}
