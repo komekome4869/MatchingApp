@@ -17,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -39,9 +40,16 @@ public class Server extends JFrame implements ActionListener{
 	static PrintWriter out; //データ送信用オブジェクト
 	static Receiver receiver; //データ受信用オブジェクト
 	static ServerSocket ss;
+
 	static UserInfo users[] = new UserInfo[1000];
-	static int userFileNum = 0;	//ユーザファイル数
 	static HashMap<String, UserInfo> activeUsers =new HashMap<>();
+	static int userFileNum = 0;	//ユーザファイル数
+
+	//検索用
+	static forSearchData usersForSearch[] = new forSearchData[1000];
+	static ArrayList<UserInfo> list;
+	static ArrayList<UserInfo> user_buf;
+	static HashMap<String, forSearchData> bufferedUsers =new HashMap<>();
 
 	int w = 400;
 	int h = 650;
@@ -117,6 +125,7 @@ public class Server extends JFrame implements ActionListener{
 	public static void readAllUserFiles() {
 		userFileNum = 0;
 		users = null;
+		usersForSearch = null;
 		activeUsers.clear();
 
 		File dir = new File(System.getProperty("user.dir") + "\\ID");
@@ -148,6 +157,7 @@ public class Server extends JFrame implements ActionListener{
 			fr = new FileReader(file);
 	        br = new BufferedReader(fr);
 	        String line;
+	        String studentNum = null;
 			int line_counter = 0;
 
 			while((line = br.readLine()) != null) {
@@ -156,6 +166,7 @@ public class Server extends JFrame implements ActionListener{
 
 					case 1 :
 						users[userFileNum].studentNumber = Integer.parseInt(line);
+						studentNum = line;
 
 						//画像の読み込み
 						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
@@ -261,7 +272,8 @@ public class Server extends JFrame implements ActionListener{
 
 				}
 
-				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
+				list.add(users[userFileNum]);
+				//activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
 				userFileNum++;
 
 			}
@@ -409,6 +421,45 @@ public class Server extends JFrame implements ActionListener{
 		} catch (Exception e) {
 			System.err.println("ソケット作成時にエラーが発生しました: " + e);
 		}
+	}
+
+	//検索
+	public UserInfo[] searchUsers(int page, int gender, int grade, int faculty, int birth, int circle) {
+
+		user_buf.clear();
+
+		UserInfo res[] = new UserInfo[3];
+
+		for(int i = 0; i < list.size(); i++){
+			UserInfo user = list.get(i);
+
+			//完全一致
+		    if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
+		    	user_buf.add(user);
+		    }
+
+		}
+
+		//候補なしならnullを返す
+		if(user_buf == null) return null;
+
+		//候補がいる場合
+		else {
+			if(user_buf.get(3*page - 2) != null) res[0] = user_buf.get(3*page - 2);
+			else res[0] = null;
+
+			if(user_buf.get(3*page - 1) != null) res[1] = user_buf.get(3*page - 1);
+			else res[1] = null;
+
+			if(user_buf.get(3*page) != null) res[2] = user_buf.get(3*page);
+			else res[2] = null;
+
+		}
+
+		//そのページに検索結果がなければnullを返す
+		if(res[0] == null && res[1] == null && res[2] == null) return null;
+
+		return res;
 	}
 
 	//パスワードチェック
@@ -976,21 +1027,29 @@ public class Server extends JFrame implements ActionListener{
 
 
 	//いいね
+<<<<<<< HEAD
  	public static boolean goodUser(String my_num, String your_num) {
   		try {
    			File file = new File(my_num + ".txt");
    			FileReader filereader = new FileReader(file);
    			BufferedReader br = new BufferedReader(filereader);
+=======
+ 	public static boolean goodUser(String my_num, String your_num) {
+ 		try {
+ 			File file = new File(my_num + ".txt");
+ 			FileReader filereader = new FileReader(file);
+ 			BufferedReader br = new BufferedReader(filereader);
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 
-   			int count = 0;
-   			int flag = 0;
-   			String[] str = new String[100];
+ 			int count = 0;
+ 			int flag = 0;
+ 			String[] str = new String[100];
 
 
-  			while(str[count] != null) {
-	  			str[count] = br.readLine();
-	 		  	count++;
-   			}
+ 			while(str[count] != null) {
+ 				str[count] = br.readLine();
+ 				count++;
+ 			}
 
     			int check = str[10].indexOf(your_num);
     			if(check!=-1) {    //いいねされてた
@@ -1109,10 +1168,32 @@ public class Server extends JFrame implements ActionListener{
 		 }catch(IOException e) {
 		   System.out.println(e);
 		 }
+<<<<<<< HEAD
 
 	}
  	
  	
+=======
+
+ 	//検索用内部クラス
+ 	class forSearchData{
+ 		String gender;
+ 		String grade;
+ 		String faculty;
+ 		String birth;
+ 		String circle;
+
+ 		public forSearchData(String gender, String grade, String faculty, String birth, String circle) {
+ 			this.gender = gender;
+ 			this.grade = grade;
+ 			this.faculty = faculty;
+ 			this.birth = birth;
+ 			this.circle = circle;
+ 		}
+
+ 	}
+
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
 		JPanel cardPanel;
