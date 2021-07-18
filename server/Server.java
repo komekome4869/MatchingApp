@@ -272,6 +272,10 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
+	//グループファイルを全て読み込み
+
+	//グループファイル読み込み
+
 	//データ受信用スレッド(内部クラス)
 	class Receiver extends Thread {
 		//private InputStreamReader sisr; //受信データ用文字ストリーム
@@ -279,7 +283,7 @@ public class Server extends JFrame implements ActionListener{
 		private ObjectInputStream ois;
 		private ObjectOutputStream oos;
 		private PrintWriter out_buf; //送信先を記録
-		private Receiver receiver_buf; //受信元を記録
+		//private Receiver receiver_buf; //受信元を記録
 
 		// 内部クラスReceiverのコンストラクタ
 		Receiver (Socket socket){
@@ -971,8 +975,13 @@ public class Server extends JFrame implements ActionListener{
 			}
 	}
 
+<<<<<<< HEAD
 	 //いいね
  	public static boolean  goodUser(String my_num, String your_num) {
+=======
+	//いいね
+ 	public static boolean goodUser(String my_num, String your_num) {
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
   		try {
    			File file = new File(my_num + ".txt");
    			FileReader filereader = new FileReader(file);
@@ -1032,16 +1041,22 @@ public class Server extends JFrame implements ActionListener{
 	   			bw2.newLine();
    			}
 
+<<<<<<< HEAD
    			readFolder();
 
   		}catch(FileNotFoundException e) {
+=======
+   			readAllUserFiles();
+
+  		}catch(IOException e) {
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
    			System.out.println(e);
    		}
 
  	}
 
 	//グループいいね
- 	public static boolean  goodGroup(String my_num, String your_num) {
+ 	public static boolean goodGroup(String my_num, String your_num) {
 		try {
 		  	File file = new File(my_num + ".txt");
 		  	FileReader filereader = new FileReader(file);
@@ -1100,16 +1115,30 @@ public class Server extends JFrame implements ActionListener{
 			   bw2.write(str[i]);
 			   bw2.newLine();
 		   }
+<<<<<<< HEAD
 		   readFolder();
 
 
 		 }catch(FileNotFoundException e) {
+=======
+		   readAllUserFiles();
+
+		  }catch(IOException e) {
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 		   System.out.println(e);
+<<<<<<< HEAD
+=======
+		   }
+
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 		 }
 
+<<<<<<< HEAD
 	}
 
 
+=======
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
 		JPanel cardPanel;
