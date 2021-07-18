@@ -60,7 +60,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	UserInfo nowShowingUser=new UserInfo();//イイネ画面とかで使う
 	GroupInfo nowShowingGroup=new GroupInfo();
 	int nowPage=1;
-	boolean isNowUsingGroupAccount=true;
+	boolean isNowUsingGroupAccount=false;
 	String prePageForGood="home";
 	String prePageForViewGroup="home";
 	String groupSearchCondition="";
@@ -2530,7 +2530,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					loginPassword=tfPasswordLogin.getText();
 
 					Scheck(loginId,loginPassword);
-					if((boolean)inputObj) {
+					if(inputObj.equals("1")){
+						System.out.println("ログイン成功");
 						SgetmyUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
 						if(temp==0) {
@@ -4096,6 +4097,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//自分のユーザ情報の取得
 	public void SgetmyUserprof(int number) {
 		try{
+			connectServer();
 			String outLine = "ui,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
