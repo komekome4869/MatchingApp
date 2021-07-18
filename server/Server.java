@@ -270,6 +270,10 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
+	//グループファイルを全て読み込み
+
+	//グループファイル読み込み
+
 	//データ受信用スレッド(内部クラス)
 	class Receiver extends Thread {
 		//private InputStreamReader sisr; //受信データ用文字ストリーム
@@ -277,7 +281,7 @@ public class Server extends JFrame implements ActionListener{
 		private ObjectInputStream ois;
 		private ObjectOutputStream oos;
 		private PrintWriter out_buf; //送信先を記録
-		private Receiver receiver_buf; //受信元を記録
+		//private Receiver receiver_buf; //受信元を記録
 
 		// 内部クラスReceiverのコンストラクタ
 		Receiver (Socket socket){
