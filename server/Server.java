@@ -307,6 +307,7 @@ public class Server extends JFrame implements ActionListener{
 				continue;
 			else if( file.isFile() ) {
 				readGroupFile(file);
+				userFileNum++;
 			}
 		}
 		groupFileNum--; //要素と一致させる
@@ -397,7 +398,6 @@ public class Server extends JFrame implements ActionListener{
 
 					grouplist.add(groups[groupFileNum]);
 					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
-					userFileNum++;
 
 				}
 			} catch (IOException e) {
