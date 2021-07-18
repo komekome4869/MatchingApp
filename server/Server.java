@@ -818,12 +818,12 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(ui.studentCard, "png", studentCard);
-			ImageIO.write(ui.mainPhoto, "png", main_image);
-			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
-			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
-			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
-			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
+			ImageIO.write(ui.getStudentCard(), "png", studentCard);
+			ImageIO.write(ui.getMainPhoto(), "png", main_image);
+			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
+			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
+			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
+			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 			//配列に追加
 			readUserFile(LoginFile);
@@ -989,7 +989,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(gi.mainPhoto, "png", main_image);
+			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
 			//再度読み込み
 			readAllUserFiles();
