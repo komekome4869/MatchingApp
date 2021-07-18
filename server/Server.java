@@ -1496,6 +1496,78 @@ public class Server extends JFrame implements ActionListener{
  			return false;
  		}
 	}
+	
+		//いいね拒否
+	public static void badUser(String my_num, String your_num) {
+		try {
+			File file = new File(my_num + ".txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader br = new BufferedReader(filereader);
+
+			int count = 0;
+			int flag = 0;
+			String[] str = new String[100];
+
+
+			while(str[count] != null) {
+				str[count] = br.readLine();
+				count++;
+			}
+  
+ 				str[10] = str[10].replace(your_num,""); //された行から消す
+ 				str[10] = str[10].replace("  "," "); //並んだ空白を削除
+				if(str[10].charAt(0) == ' ')  str[10] = str[10].substring(1, str[10].length()); //先頭の空白を削除
+				if(str[10].charAt(str[10].length()) == ' ')  str[10] = str[10].substring(1, str[10].length()-1); //最後の空白を削除
+
+			FileWriter filewriter = new FileWriter(file);  //書き換え
+			BufferedWriter bw = new BufferedWriter(filewriter);
+			for (int i=0;i<17;i++) {
+	   			bw.write(str[i]);
+	   			bw.newLine();
+			}
+
+			readAllUserFiles();
+
+		}catch(IOException e) {
+			System.out.println(e);
+		}
+
+	}
+	
+	//グループいいね拒否
+		public static void badGroup(String my_num, String your_num) {
+			try {
+				File file = new File(my_num + ".txt");
+				FileReader filereader = new FileReader(file);
+				BufferedReader br = new BufferedReader(filereader);
+
+				int count = 0;
+				String[] str = new String[100];
+
+				while(str[count] != null) {
+					str[count] = br.readLine();
+					count++;
+				}
+	  
+	 				str[4] = str[4].replace(your_num,""); //された行から消す
+	 				str[4] = str[4].replace("  "," "); //並んだ空白を削除
+					if(str[4].charAt(0) == ' ')  str[4] = str[4].substring(1, str[4].length()); //先頭の空白を削除
+					if(str[4].charAt(str[4].length()) == ' ')  str[4] = str[4].substring(1, str[4].length()-1); //最後の空白を削除
+
+				FileWriter filewriter = new FileWriter(file);  //書き換え
+				BufferedWriter bw = new BufferedWriter(filewriter);
+				for (int i=0;i<11;i++) {
+		   			bw.write(str[i]);
+		   			bw.newLine();
+				}
+
+				readAllUserFiles();
+
+			}catch(IOException e) {
+				System.out.println(e);
+			}
+
+		}
 
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
