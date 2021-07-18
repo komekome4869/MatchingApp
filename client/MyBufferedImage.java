@@ -1,7 +1,6 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class MyBufferedImage implements Serializable{
@@ -25,7 +24,7 @@ public class MyBufferedImage implements Serializable{
 		return img;
 	}
 
-	private void writeObject(ObjectOutputStream stream) throws IOException {
+	/*private void writeObject(ObjectOutputStream stream) throws IOException {
 		//stream.putFields();
 		//stream.writeFields();//親クラスの情報出力
 		//上記この2行の代わりに、
@@ -39,7 +38,7 @@ public class MyBufferedImage implements Serializable{
 		for(int i=0; i < this.buf.使ったlength;  i++){
 			stream.writeInt(this.buf[i]);
 		}
-	}
+	}*/
 
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		//stream.readFields();
