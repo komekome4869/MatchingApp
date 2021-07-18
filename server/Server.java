@@ -1025,8 +1025,10 @@ public class Server extends JFrame implements ActionListener{
 			}
 	}
 
+
 	//いいね
- 	public static boolean goodUser(String my_num, String your_num) {
+
+ 	public static void goodUser(String my_num, String your_num) {
  		try {
  			File file = new File(my_num + ".txt");
  			FileReader filereader = new FileReader(file);
@@ -1095,7 +1097,7 @@ public class Server extends JFrame implements ActionListener{
  	}
 
 	//グループいいね
- 	public static boolean goodGroup(String my_num, String your_num) {
+ 	public static void goodGroup(String my_num, String your_num) {
 		try {
 		  	File file = new File(my_num + ".txt");
 		  	FileReader filereader = new FileReader(file);
@@ -1156,11 +1158,13 @@ public class Server extends JFrame implements ActionListener{
 		   }
 		   readAllUserFiles();
 
-		  }catch(IOException e) {
+		 }catch(IOException e) {
 		   System.out.println(e);
-		   }
-
 		 }
+
+	}
+
+
 
  	//検索用内部クラス
  	class forSearchData{

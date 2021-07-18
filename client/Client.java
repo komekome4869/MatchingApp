@@ -246,7 +246,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"login");
+	    layout.show(cardPanel,"finishAuthen");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1049,7 +1049,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lGenderSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGenderSearchUser);
 
-        cbGenderSearchUser.addItem("選択しない");
         cbGenderSearchUser.setBounds(w/3,5*h/25,w/2,2*h/25);
 		cbGenderSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbGenderSearchUser);
@@ -1060,7 +1059,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lGradeSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGradeSearchUser);
 
-        cbGradeSearchUser.addItem("選択しない");
         cbGradeSearchUser.setBounds(w/3,8*h/25,w/2,2*h/25);
 		cbGradeSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbGradeSearchUser);
@@ -1071,7 +1069,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lFacultySearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lFacultySearchUser);
 
-        cbFacultySearchUser.addItem("選択しない");
         cbFacultySearchUser.setBounds(w/3,11*h/25,w/2,2*h/25);
 		cbFacultySearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbFacultySearchUser);
@@ -1082,7 +1079,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lBirthSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lBirthSearchUser);
 
-        cbBirthSearchUser.addItem("選択しない");
         cbBirthSearchUser.setBounds(w/3,14*h/25,w/2,2*h/25);
         cbBirthSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbBirthSearchUser);
@@ -1093,7 +1089,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lCircleSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCircleSearchUser);
 
-        cbCircleSearchUser.addItem("選択しない");
         cbCircleSearchUser.setBounds(w/3,17*h/25,w/2,2*h/25);
         cbCircleSearchUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbCircleSearchUser);
@@ -1136,7 +1131,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lPurposeSearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeSearchGroup);
 
-        cbPurposeSearchGroup.addItem("選択しない");
         cbPurposeSearchGroup.setBounds(w/3,5*h/20,w/2,2*h/20);
 		cbPurposeSearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(cbPurposeSearchGroup);
@@ -1147,7 +1141,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lHowManySearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lHowManySearchGroup);
 
-        cbHowManySearchGroup.addItem("選択しない");
         cbHowManySearchGroup.setBounds(w/3,10*h/20,w/2,2*h/20);
         cbHowManySearchGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(cbHowManySearchGroup);
@@ -2289,8 +2282,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
-			//TODO myUserInfo=SgetUserprof(myUswerInfo.getStudentNumber);
-			//nowShowingGroups=nページ目グルの情報取得
+			//TODO 自分のユーザ情報取得 SgetUserprof(myUswerInfo.getStudentNumber);
+			if(groupSearchCondition==""){
+				//TODO Sgroup_home(nowPage);
+			}
+			else {
+				//TODO グル検索(nowPage,groupSearchCondition);
+			}
+
 			for(int i=0;i<3;i++) {
 				if(nowShowingGroups[i]==null) {
 					bIconHome[i].setVisible(false);
@@ -2308,8 +2307,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//TODO myGroupInfo=SgetGroupprof(myGroupInfo.getStudentNumber());
-				//nowShowingUsers[i]=nページ目のユーザ情報取得
+				//TODO 自分のグル情報の取得(myGroupInfo.getStudentNumber());
+				if(userSearchCondition==""){
+					//TODO Shome(nowPage);
+				}
+				else {
+					//TODO ユーザ検索(nowPage,userSearchCondition);
+				}
+
 				if(nowShowingUsers[i]==null) {
 					bIconHome[i].setVisible(false);
 				}
@@ -2525,15 +2530,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					loginId=Integer.valueOf(tfIdLogin.getText());
 					loginPassword=tfPasswordLogin.getText();
 
-					boolean canLogin=false;
-					//TODO canLogin=Scheck(loginId,loginPassword);
-					if(canLogin) {
+					//TODO Scheck(loginId,loginPassword);
+					if((boolean)inputObj) {
 						//TODO myUserInfo=SgetUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
 						if(temp==0) {
 							layout.show(cardPanel,"pleaseWait");
 						}
 						else if(temp==1) {
+							userSearchCondition="";
+							groupSearchCondition="";
+							nowPage=1;
 							goHome();
 						}
 						else {
@@ -2649,6 +2656,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "HOME":
 			nowPage=1;
+			userSearchCondition="";
+			groupSearchCondition="";
 			goHome();
 			break;
 
@@ -2705,16 +2714,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "検索home":
 			if(isNowUsingGroupAccount) {
-				cbPurposeSearchGroup.setSelectedIndex(Purpose.length);
-				cbHowManySearchGroup.setSelectedIndex(HowMany.length);
 				layout.show(cardPanel, "searchGroup");
 			}
 			else {
-				cbGenderSearchUser.setSelectedIndex(Sex.length);
-				cbGradeSearchUser.setSelectedIndex(Grade.length);
-				cbFacultySearchUser.setSelectedIndex(Faculty.length);
-				cbBirthSearchUser.setSelectedIndex(Birthplace.length);
-				cbCircleSearchUser.setSelectedIndex(Circle.length);
 				layout.show(cardPanel,"searchUser");
 			}
 			break;
@@ -2756,11 +2758,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				if(isNowUsingGroupAccount) {
-					//TODO nowShowingGroups=sSearch(nowPage,"9,9");
 					goHome();
 				}
 				else {
-					//TODO nowShowingUsers=sSearch(nowPage,"9,9,9,9,9");
 					goHome();
 				}
 			}
@@ -2770,7 +2770,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case"次のページhome":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
-				//TODO nowShowingGroups=sSearch(nowPage,"9,9");
 				if(nowShowingGroups!=null) {
 					goHome();
 				}
@@ -2779,7 +2778,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 			else {
-				//TODO nowShowingUsers=sSearch(nowPage,"9,9,9,9,9");
 				if(nowShowingUsers!=null) {
 					goHome();
 				}
@@ -2835,43 +2833,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "検索searchUser":
 			userSearchCondition="";
 
-			if(cbGenderSearchUser.getSelectedIndex()==Sex.length) {
-				userSearchCondition="9,";
-			}
-			else {
-				userSearchCondition=String.valueOf(cbGenderSearchUser.getSelectedIndex())+",";
-			}
-
-			if(cbGradeSearchUser.getSelectedIndex()==Grade.length) {
-				userSearchCondition=userSearchCondition+"9,";
-			}
-			else {
-				userSearchCondition=userSearchCondition+String.valueOf(cbGradeSearchUser.getSelectedIndex())+",";
-			}
-
-			if(cbFacultySearchUser.getSelectedIndex()==Faculty.length) {
-				userSearchCondition=userSearchCondition+"9,";
-			}
-			else {
-				userSearchCondition=userSearchCondition+String.valueOf(cbFacultySearchUser.getSelectedIndex())+",";
-			}
-
-			if(cbBirthSearchUser.getSelectedIndex()==Birthplace.length) {
-				userSearchCondition=userSearchCondition+"9,";
-			}
-			else {
-				userSearchCondition=userSearchCondition+String.valueOf(cbBirthSearchUser.getSelectedIndex())+",";
-			}
-
-			if(cbCircleSearchUser.getSelectedIndex()==Circle.length) {
-				userSearchCondition=userSearchCondition+"9";
-			}
-			else {
-				userSearchCondition=userSearchCondition+String.valueOf(cbCircleSearchUser.getSelectedIndex());
-			}
+			userSearchCondition=String.valueOf(cbGenderSearchUser.getSelectedIndex())+",";
+			userSearchCondition=userSearchCondition+String.valueOf(cbGradeSearchUser.getSelectedIndex())+",";
+			userSearchCondition=userSearchCondition+String.valueOf(cbFacultySearchUser.getSelectedIndex())+",";
+			userSearchCondition=userSearchCondition+String.valueOf(cbBirthSearchUser.getSelectedIndex())+",";
+			userSearchCondition=userSearchCondition+String.valueOf(cbCircleSearchUser.getSelectedIndex());
 
 			nowPage=1;
-			//TODO Ssearch(nowPage,userSeachCondition);
 			goHome();
 			break;
 
@@ -2879,22 +2847,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "検索searchGroup":
 			groupSearchCondition="";
 
-			if(cbPurposeSearchGroup.getSelectedIndex()==Purpose.length) {
-				groupSearchCondition="9,";
-			}
-			else {
-				groupSearchCondition=String.valueOf(cbPurposeSearchGroup.getSelectedIndex())+",";
-			}
-
-			if(cbHowManySearchGroup.getSelectedIndex()==HowMany.length) {
-				groupSearchCondition=groupSearchCondition+"9";
-			}
-			else {
-				groupSearchCondition=groupSearchCondition+String.valueOf(cbPurposeSearchGroup.getSelectedIndex()+2);
-			}
+			groupSearchCondition=String.valueOf(cbPurposeSearchGroup.getSelectedIndex())+",";
+			groupSearchCondition=groupSearchCondition+String.valueOf(cbPurposeSearchGroup.getSelectedIndex()+2);
 
 			nowPage=1;
-			//TODO Ssearch(nowPage,groupSeachCondition);
 			goHome();
 			break;
 
@@ -2960,6 +2916,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "アカウント切り替えmenu":
 			nowPage=1;
+			userSearchCondition="";
+			groupSearchCondition="";
+
 			//TODO myUserInfo=SgetUserprof(myUserInfo.getStudentNumber())
 
 			try {
@@ -3416,6 +3375,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				//TODO SdeleteGroup=(myGroupProfile.getStudentNumber);
 				isNowUsingGroupAccount=false;
 				nowPage=1;
+				userSearchCondition="";
+				groupSearchCondition="";
 				goHome();
 			}
 			break;
