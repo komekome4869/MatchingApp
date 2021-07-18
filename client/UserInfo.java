@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class UserInfo implements Serializable{
 	int faculty=0;	//学部
 	int birth=0;	//出身
 	int circle=0;	//サークル
+	int []buf;		//学生証バフ
 	String hobby="";	//趣味
 	int[] sendGood=new int[MAX];	//自分がイイネを送った相手の学籍番号
 	int[] receiveGood=new int[MAX];	//自分にイイネを送った相手の学籍番号
@@ -43,6 +45,23 @@ public class UserInfo implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int [] getArrayByImage(BufferedImage img,int w, int h){
+		BufferedImage subImg = img.getSubimage(0, 0, w, h);
+		WritableRaster raster = subImg.getRaster();
+		int size = raster.getNumBands() * w * h;
+//		System.out.println("getNumBands:" + size);
+		int [] buf = new int[ size ];
+		raster.getPixels(0, 0, w, h, buf);
+		return buf;
+	}
+
+	public  BufferedImage getImageByArray(int [] buf,int w, int h){
+		BufferedImage img = new BufferedImage(w,h,BufferedImage.TYPE_4BYTE_ABGR);
+		WritableRaster raster = img.getRaster();
+		raster.setPixels(0, 0, w, h, buf);
+		return img;
 	}
 
 	public int getState() {

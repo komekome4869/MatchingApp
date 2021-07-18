@@ -552,13 +552,17 @@ public class Server extends JFrame implements ActionListener{
 					try {
 						Object inputObj = ois.readObject();
 						System.out.println("データを受信しました");
+
 						//UserInfo型なら
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							//新規登録
+							ui.studentCard = ui.getImageByArray(ui.buf,100,100);
+
 							if(ui.state == 0) {
+								//新規登録
 								signUp(ui);
+								oos.writeObject("1");
 							}
 							//
 						}
@@ -1480,6 +1484,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
+
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
@@ -1536,6 +1541,7 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
+
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1917,7 +1923,7 @@ public class Server extends JFrame implements ActionListener{
 
  	}
 
-	//ユーザいいね拒否
+ 	//ユーザいいね拒否
 	public static boolean badUser(String my_num, String your_num) {
 		try {
 			File file = new File(my_num + ".txt");
