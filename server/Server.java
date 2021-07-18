@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -41,11 +40,11 @@ public class Server extends JFrame implements ActionListener{
 	static Receiver receiver; //データ受信用オブジェクト
 	static ServerSocket ss;
 
-	static UserInfo users[] = new UserInfo[1000];
+	static UserInfo[] users = new UserInfo[1000];
 	static HashMap<String, UserInfo> activeUsers =new HashMap<>();
 	static int userFileNum = 0;	//ユーザファイル数
 
-	static GroupInfo groups[] = new GroupInfo[1000];
+	static GroupInfo[] groups = new GroupInfo[1000];
 	static HashMap<UUID, GroupInfo> activeGroups =new HashMap<>();
 	static int groupFileNum = 0;	//ユーザファイル数
 
@@ -115,7 +114,6 @@ public class Server extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if(cmd.equals("新規会員認証")) {
-
 			new Authentificate();
 		}
 		if(cmd.equals("会員検索")) {
@@ -162,6 +160,7 @@ public class Server extends JFrame implements ActionListener{
 	        br = new BufferedReader(fr);
 	        String line;
 			int line_counter = 0;
+			users[userFileNum] = new UserInfo();
 
 			while((line = br.readLine()) != null) {
 				line_counter++;
@@ -410,7 +409,6 @@ public class Server extends JFrame implements ActionListener{
 	class Receiver extends Thread {
 		private ObjectInputStream ois;
 		private ObjectOutputStream oos;
-		private PrintWriter out_buf; //送信先を記録
 		// 内部クラスReceiverのコンストラクタ
 		Receiver (Socket socket){
 			try{
@@ -1364,6 +1362,9 @@ public class Server extends JFrame implements ActionListener{
 				//空白で分割して保存、いいねを送ったひと
 				SentGoodStudents = line.split(" ");
 				//ここでいいね削除
+				for(int i=0; i<SentGoodStudents.length; i++) {
+					deleteReceivedGood(SentGoodStudents[i], studentNum);
+				}
 
 				//次の行
 				line = br.readLine();
@@ -1371,13 +1372,18 @@ public class Server extends JFrame implements ActionListener{
 				//空白で分割して保存、いいねをくれた人
 				BeingSentGoodStudents = line.split(" ");
 				//ここでいいね削除
+				for(int i=0; i<BeingSentGoodStudents.length; i++) {
+					deleteGood(BeingSentGoodStudents[i], studentNum);
+				}
 
 				//次の行
 				line = br.readLine();
 
 				//空白で分割して保存、マッチングした人
 				MatchingStudents = line.split(" ");
-				//deleteMatching(); マッチングしてる相手を消す
+				for(int i=0; i<MatchingStudents.length; i++) {
+					deleteMatching(MatchingStudents[i], studentNum, false);
+				}
 
 				//次の行
 				line = br.readLine();
@@ -1919,89 +1925,115 @@ public class Server extends JFrame implements ActionListener{
  	}
 
  	//マッチング削除
- 	public static void deleteMatching() {
+ 	public static void deleteMatching(String myId, String yourId, boolean preventLoop) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myId + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 12) break;
+				strbuf.append(line + "\n");
+			}
+
+			line = line.replace(yourId, ""); //numを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			if(!preventLoop) {
+				matchUsers(yourId, myId, true);
+				readAllUserFiles();
+				readAllGroupFiles();
+			}
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
 
  	}
 
- 	//ユーザいいね拒否
-	public static boolean badUser(String my_num, String your_num) {
-		try {
-			File file = new File(my_num + ".txt");
-			FileReader filereader = new FileReader(file);
-			BufferedReader br = new BufferedReader(filereader);
+ 	//グループマッチング削除
+ 	public static void deleteGroupMatching(String myuuid, String youruuid, boolean preventLoop) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
 
-			int count = 0;
-			int flag = 0;
-			String[] str = new String[100];
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myuuid + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
 
-
-			while(str[count] != null) {
-				str[count] = br.readLine();
-				count++;
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 6) break;
+				strbuf.append(line + "\n");
 			}
 
- 				str[10] = str[10].replace(your_num,"");
- 				str[10] = str[10].replace("  "," ");
-				if(str[10].charAt(0) == ' ')  str[10] = str[10].substring(1, str[10].length());
-				if(str[10].charAt(str[10].length()) == ' ')  str[10] = str[10].substring(1, str[10].length()-1);
+			line = line.replace(youruuid, ""); //numを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
 
-			FileWriter filewriter = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(filewriter);
-			for (int i=0;i<17;i++) {
-	   			bw.write(str[i]);
-	   			bw.newLine();
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
 			}
 
-			readAllUserFiles();
-			readAllGroupFiles();
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
 
-			return true;
-
-		}catch(IOException e) {
-			System.out.println(e);
-			return false;
-		}
-
-	}
-
-	//グループいいね拒否
-	public static boolean badGroup(String my_num, String your_num) {
-			try {
-				File file = new File(my_num + ".txt");
-				FileReader filereader = new FileReader(file);
-				BufferedReader br = new BufferedReader(filereader);
-
-				int count = 0;
-				String[] str = new String[100];
-
-				while(str[count] != null) {
-					str[count] = br.readLine();
-					count++;
-				}
-
-	 				str[4] = str[4].replace(your_num,"");
-	 				str[4] = str[4].replace("  "," ");
-					if(str[4].charAt(0) == ' ')  str[4] = str[4].substring(1, str[4].length());
-					if(str[4].charAt(str[4].length()) == ' ')  str[4] = str[4].substring(1, str[4].length()-1);
-
-				FileWriter filewriter = new FileWriter(file);
-				BufferedWriter bw = new BufferedWriter(filewriter);
-				for (int i=0;i<11;i++) {
-		   			bw.write(str[i]);
-		   			bw.newLine();
-				}
-
+			if(!preventLoop) {
+				matchUsers(youruuid, myuuid, true);
 				readAllUserFiles();
 				readAllGroupFiles();
-
-				return true;
-
-			}catch(IOException e) {
-				System.out.println(e);
-				return false;
 			}
 
-		}
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+ 	}
 
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{

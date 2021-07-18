@@ -199,8 +199,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
+<<<<<<< HEAD
 	//String ipAddress = "182.170.133.46";	//ipアドレス設定
 	String ipAddress = "localhost";
+=======
+	String ipAddress = "localhost";	//ipアドレス設定
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
