@@ -414,7 +414,6 @@ public class Server extends JFrame implements ActionListener{
 			try{
 				oos = new ObjectOutputStream(socket.getOutputStream()); //オブジェクトデータ送信用オブジェクトの用意
 				ois = new ObjectInputStream(socket.getInputStream()); //オブジェクトデータ受信用オブジェクトの用意
-				//sisr = new InputStreamReader(socket.getInputStream());
 			} catch (IOException e) {
 					System.err.println("データ受信時にエラーが発生しました: " + e);
 			}
@@ -536,6 +535,46 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
+						case "ud": //ユーザ情報削除
+							if(deleteUser(act[1])){
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
+							break;
+
+						case "gd": //グループ情報削除
+							if(deleteGroup(act[1])){
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
+							break;
+
+						case "ur": //いいね拒否
+							if(deleteReceivedGood(act[1], act[2])){
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
+							break;
+
+						case "gr": //グループいいね拒否
+							if(deleteReceivedGroupGood(act[1], act[2])){
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
+							break;
+
 						}
 					}catch(IOException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
@@ -557,12 +596,30 @@ public class Server extends JFrame implements ActionListener{
 							ui = (UserInfo)inputObj;
 							ui.studentCard = ui.getImageByArray(ui.buf,100,100);
 
+							//新規登録
 							if(ui.state == 0) {
-								//新規登録
-								signUp(ui);
-								oos.writeObject("1");
+								try{
+									signUp(ui);
+									oos.writeObject("1");
+									oos.flush();
+								}catch(IOException e) {
+									oos.writeObject("0");
+									oos.flush();
+									System.err.print("サインアップでエラーが発生しました：" + e);
+								}
 							}
-							//
+							//プロフ変更
+							if(ui.state == 1) {
+								try{
+									changeUserInfo(ui);
+									oos.writeObject("1");
+									oos.flush();
+								}catch(IOException e) {
+									oos.writeObject("0");
+									oos.flush();
+									System.err.print("ユーザ情報変更時にエラーが発生しました：" + e);
+								}
+							}
 						}
 
 						//GroupInfo型なら
@@ -571,14 +628,32 @@ public class Server extends JFrame implements ActionListener{
 							gi = (GroupInfo)inputObj;
 							//グループ作成
 							if(gi.state == 0) {
-								makeGroup(gi);
+								try{
+									makeGroup(gi);
+									oos.writeObject("1");
+									oos.flush();
+								}catch(IOException e) {
+									oos.writeObject("0");
+									oos.flush();
+									System.err.print("グループ作成時にエラーが発生しました：" + e);
+								}
+							}
+							//プロフ変更
+							if(gi.state == 1) {
+								try{
+									changeGroupInfo(gi);
+									oos.writeObject("1");
+									oos.flush();
+								}catch(IOException e) {
+									oos.writeObject("0");
+									oos.flush();
+									System.err.print("グループ情報変更時にエラーが発生しました：" + e);
+								}
 							}
 						}
 
 						//その他ならreceiveMessage()
 						else {
-							//br = new BufferedReader(sisr);
-							//String inputLine = br.readLine();//データを一行分読み込む
 							String inputLine = inputObj.toString();
 							System.out.println(inputLine);	//確認用
 							receiveMessage(inputLine);
@@ -769,13 +844,13 @@ public class Server extends JFrame implements ActionListener{
 		File LoginFile = new File(path + "\\" + ui.studentNumber + ".txt"); //ユーザファイル
 		File dir = new File(path);
 		File image_dir = new File(path + "\\images");
-		File image_user_dir = new File(path + "\\images" + "\\" + ui.studentNumber);
-		File studentCard = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_card.png");
-		File main_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_main.png");
-		File sub1_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub1.png");
-		File sub2_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub2.png");
-		File sub3_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub3.png");
-		File sub4_image = new File(path + "\\images" + "\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub4.png");
+		File image_user_dir = new File(path + "\\images\\" + ui.studentNumber);
+		File studentCard = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_card.png");
+		File main_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_main.png");
+		File sub1_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub1.png");
+		File sub2_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub2.png");
+		File sub3_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub3.png");
+		File sub4_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub4.png");
 
 		//ディレクトリの作成
 		if(!dir.exists()) {
@@ -835,108 +910,141 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//ユーザの情報変更
-	public static void userinfoChange(String studentNum, UserInfo ui) {
+	public static void changeUserInfo(UserInfo ui) {
+
 		BufferedReader br = null;
 		FileReader fr = null;
-		PrintWriter pw = null;
 		String line;
-		StringBuffer strbuf = new StringBuffer("");
-
-		String newinfo = new String(ui.studentNumber + "\n" +
-							ui.password + "\n" +
-							ui.name + "\n" +
-							ui.gender + "\n" +
-							ui.grade + "\n" +
-							ui.faculty + "\n" +
-							ui.birth + "\n" +
-							ui.circle + "\n" +
-							ui.hobby + "\n" +
-							/*学籍番号*/"\n" +
-							/*学籍番号*/"\n" +
-							/*学籍番号*/"\n" +
-							/*UUID*/"\n" +
-							/*UUID*/"\n" +
-							ui.isAuthentificated +"\n"+
-							ui.lineId + "\n" +
-							ui.isPublic + "\n");
-
+		int line_counter = 0;
 
 		try {
 			//ファイルを読み込み
-			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+			File file = new File(System.getProperty("user.dir") + "\\ID\\" + ui.studentNumber + ".txt");
+			File main_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_main.png");
+			File sub1_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub1.png");
+			File sub2_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub2.png");
+			File sub3_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub3.png");
+			File sub4_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub4.png");
+
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
-			pw = new PrintWriter(file);
 
-			while((line = br.readLine())!=null)
-				pw.println(line.replaceAll(line, newinfo));
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 10) break;
+			}
 
+			//いいね系列を保存
+			String line10 = line;
+			line = br.readLine();
+			String line11 = line;
+			line = br.readLine();
+			String line12 = line;
+			line = br.readLine();
+			String line13 = line;
+			line = br.readLine();
+			String line14 = line;
+			br.close();
 
+			file.delete();
+			file.createNewFile();
+
+			//ユーザ情報ファイルを作成
+			FileWriter fw = new FileWriter(file);
+			fw.write(ui.studentNumber + "\n" +
+					 ui.password + "\n" +
+					 ui.name + "\n" +
+					 ui.gender + "\n" +
+					 ui.grade + "\n" +
+					 ui.faculty + "\n" +
+					 ui.birth + "\n" +
+					 ui.circle + "\n" +
+					 ui.hobby + "\n" +
+					 line10 + "\n" +
+					 line11 + "\n" +
+					 line12 + "\n" +
+					 line13 + "\n" +
+					 line14 + "\n" +
+					 ui.isAuthentificated +"\n"+
+					 ui.lineId + "\n" +
+					 ui.isPublic + "\n"
+					 );
+			fw.close();
+
+			//画像を保存
+			ImageIO.write(ui.mainPhoto, "png", main_image);
+			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
+			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
+			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
+			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
 			return;
-
-		}finally {
-			try {
-				fr.close();
-				br.close();
-				pw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			return;
-			}
 		}
-
 		return;
-
 	}
 
 	//グループの情報変更
-	public static void groupinfoChange(String uuid, GroupInfo gi) {
+	public static void changeGroupInfo(GroupInfo gi) {
+
 		BufferedReader br = null;
 		FileReader fr = null;
-		PrintWriter pw = null;
 		String line;
-		StringBuffer strbuf = new StringBuffer("");
-
-		String newinfo = new String(gi.name + "\n" +
-					 gi.relation + "\n" +
-					 /*UUID*/ "\n" +
-					 /*UUID*/ "\n" +
-					 /*UUID*/ "\n" +
-					 gi.hostUser + "\n" +
-					 gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3] + "\n" +
-					 gi.comment + "\n" +
-					 gi.numberOfMember + "\n");
+		int line_counter = 0;
 
 		try {
 			//ファイルを読み込み
-			File file = new File(System.getProperty("user.dir") + "\\Group\\" + uuid + ".txt");
+			File file = new File(System.getProperty("user.dir") + "\\Group\\" + gi.groupNumber + ".txt");
+			File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + gi.groupNumber + "_main.png");
+
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
-			pw = new PrintWriter(file);
 
-			while((line = br.readLine())!=null)
-				line = line.replaceAll(line, newinfo);
-		}catch(IOException e) {
-			System.err.print("グループ情報変更に関する処理でエラーが発生しました：" + e);
-			return;
-
-		}finally {
-			try {
-				fr.close();
-				br.close();
-				pw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			return;
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 4) break;
 			}
+
+			//いいね系列を保存
+			String line4 = line;
+			line = br.readLine();
+			String line5 = line;
+			line = br.readLine();
+			String line6 = line;
+			br.close();
+
+			file.delete();
+			file.createNewFile();
+
+			String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
+			nonhost.replace(" 0","");
+
+			//ユーザ情報ファイルを作成
+			FileWriter fw = new FileWriter(file);
+			fw.write(gi.name + "\n" +
+					 gi.relation + "\n" +
+					 line4 + "\n" +
+					 line5 + "\n" +
+					 line6 + "\n" +
+					 gi.hostUser + "\n" +
+					 nonhost + "\n" +
+					 gi.comment + "\n" +
+					 gi.numberOfMember + "\n"
+					 );
+			fw.close();
+			fw.close();
+
+			//画像を保存
+			ImageIO.write(gi.mainPhoto, "png", main_image);
+
+		}catch(IOException e) {
+			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
+			return;
 		}
-
 		return;
-
-
 	}
 
 	//グループ作成
@@ -1335,7 +1443,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//ユーザ削除
-	public static void deleteUser(String studentNum) {
+	public static boolean deleteUser(String studentNum) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		File image_user_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\" + studentNum);
@@ -1403,17 +1511,6 @@ public class Server extends JFrame implements ActionListener{
 					deleteGroup(InvitedGroups[i]);
 				}
 
-//使わないかも
-//				//配列のインデックスを取得
-//				int index = ArrayUtils.indexOf(users,activeUsers.get(studentNum));
-//
-//				//配列をずらす
-//				for(int i=index; i<=userFileNum - 1; i++) {
-//					users[i] = users[i+1];
-//				}
-//				users[userFileNum] = null;
-//				userFileNum--;
-
 				//削除
 				file.delete();
 				image_user_dir.delete();
@@ -1424,6 +1521,7 @@ public class Server extends JFrame implements ActionListener{
 
 			}catch(IOException e) {
 				System.err.print("ユーザ削除に関する処理でエラーが発生しました：" + e);
+				return false;
 			}finally {
 				try {
 					fr.close();
@@ -1432,6 +1530,8 @@ public class Server extends JFrame implements ActionListener{
 					e.printStackTrace();
 				}
 			}
+
+			return true;
 	}
 
 	//いいね
@@ -1576,7 +1676,7 @@ public class Server extends JFrame implements ActionListener{
  	}
 
  	//いいねを消す
- 	public static void deleteGood(String myId, String yourId) {
+ 	public static boolean deleteGood(String myId, String yourId) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
@@ -1617,6 +1717,7 @@ public class Server extends JFrame implements ActionListener{
 
   		}catch(IOException e) {
    			System.out.println(e);
+   			return false;
    		}finally {
    			try {
 				fw.close();
@@ -1626,10 +1727,12 @@ public class Server extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
    		}
+
+ 		return true;
  	}
 
  	//受け取ったいいねを消す
- 	public static void deleteReceivedGood(String myId, String yourId) {
+ 	public static boolean deleteReceivedGood(String myId, String yourId) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
@@ -1670,6 +1773,7 @@ public class Server extends JFrame implements ActionListener{
 
   		}catch(IOException e) {
    			System.out.println(e);
+   			return false;
    		}finally {
    			try {
 				fw.close();
@@ -1679,6 +1783,8 @@ public class Server extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
    		}
+
+ 		return true;
  	}
 
 	//グループいいね
@@ -1872,7 +1978,7 @@ public class Server extends JFrame implements ActionListener{
  	}
 
  	//受け取ったグループいいねを消す
- 	public static void deleteReceivedGroupGood(String myuuid, String youruuid) {
+ 	public static boolean deleteReceivedGroupGood(String myuuid, String youruuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
@@ -1913,6 +2019,7 @@ public class Server extends JFrame implements ActionListener{
 
   		}catch(IOException e) {
    			System.out.println(e);
+   			return false;
    		}finally {
    			try {
 				fw.close();
@@ -1922,6 +2029,7 @@ public class Server extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
    		}
+ 		return true;
  	}
 
  	//マッチング削除
