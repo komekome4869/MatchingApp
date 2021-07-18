@@ -45,11 +45,15 @@ public class Server extends JFrame implements ActionListener{
 	static HashMap<String, UserInfo> activeUsers =new HashMap<>();
 	static int userFileNum = 0;	//ユーザファイル数
 
+	static GroupInfo groups[] = new GroupInfo[1000];
+	static HashMap<UUID, GroupInfo> activeGroups =new HashMap<>();
+	static int groupFileNum = 0;	//ユーザファイル数
+
 	//検索用
-	static forSearchData usersForSearch[] = new forSearchData[1000];
-	static ArrayList<UserInfo> list;
+	static ArrayList<UserInfo> userlist;
 	static ArrayList<UserInfo> user_buf;
-	static HashMap<String, forSearchData> bufferedUsers =new HashMap<>();
+	static ArrayList<GroupInfo> grouplist;
+	static ArrayList<GroupInfo> group_buf;
 
 	int w = 400;
 	int h = 650;
@@ -125,7 +129,6 @@ public class Server extends JFrame implements ActionListener{
 	public static void readAllUserFiles() {
 		userFileNum = 0;
 		users = null;
-		usersForSearch = null;
 		activeUsers.clear();
 
 		File dir = new File(System.getProperty("user.dir") + "\\ID");
@@ -157,7 +160,6 @@ public class Server extends JFrame implements ActionListener{
 			fr = new FileReader(file);
 	        br = new BufferedReader(fr);
 	        String line;
-	        String studentNum = null;
 			int line_counter = 0;
 
 			while((line = br.readLine()) != null) {
@@ -166,7 +168,6 @@ public class Server extends JFrame implements ActionListener{
 
 					case 1 :
 						users[userFileNum].studentNumber = Integer.parseInt(line);
-						studentNum = line;
 
 						//画像の読み込み
 						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
@@ -272,8 +273,8 @@ public class Server extends JFrame implements ActionListener{
 
 				}
 
-				list.add(users[userFileNum]);
-				//activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
+				userlist.add(users[userFileNum]);
+				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
 				userFileNum++;
 
 			}
@@ -284,18 +285,131 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//グループファイルを全て読み込み
+	public static void readAllGroupFiles() {
+		groupFileNum = 0;
+		groups = null;
+		activeGroups.clear();
+
+		File dir = new File(System.getProperty("user.dir") + "\\Group");
+		File image_dir = new File(System.getProperty("user.dir") + "\\Group\\images");
+
+		if(!dir.exists()) dir.mkdir();
+		if(!image_dir.exists()) image_dir.mkdir();
+
+		File[] files = dir.listFiles();
+		if( files == null )
+			return;
+		for( File file : files ) {
+			if( !file.exists() )
+				continue;
+			else if( file.isDirectory() )
+				continue;
+			else if( file.isFile() ) {
+				readGroupFile(file);
+			}
+		}
+		groupFileNum--; //要素と一致させる
+	}
 
 	//グループファイル読み込み
+	public static void readGroupFile(File file) {
+	       FileReader fr;
+	        BufferedReader br;
+			try {
+				fr = new FileReader(file);
+		        br = new BufferedReader(fr);
+		        String line;
+				int line_counter = 0;
+
+				while((line = br.readLine()) != null) {
+					line_counter++;
+					switch(line_counter) {
+
+						case 1 :
+							groups[groupFileNum].groupNumber = UUID.fromString(line);
+
+							//画像の読み込み
+							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
+							BufferedImage main = ImageIO.read(main_image);
+
+							groups[groupFileNum].mainPhoto = main;
+									;
+							break;
+
+						case 2 :
+							groups[groupFileNum].name = line;
+							break;
+
+						case 3 :
+							groups[groupFileNum].relation = line;
+							break;
+
+						case 4 :
+							String sendGood[] = line.split(" ");
+							for(int i=0; i<sendGood.length; i++) {
+								groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
+							}
+							break;
+
+						case 5 :
+							String receiveGood[] = line.split(" ");
+							for(int i=0; i<receiveGood.length; i++) {
+								groups[groupFileNum].receiveGood[i] = UUID.fromString(receiveGood[i]);
+							}
+							break;
+
+						case 6 :
+							String matchedGood[] = line.split(" ");
+							for(int i=0; i<matchedGood.length; i++) {
+								groups[groupFileNum].matchedGroup[i] = UUID.fromString(matchedGood[i]);
+							}
+							break;
+
+						case 7 :
+							groups[groupFileNum].hostUser = Integer.parseInt(line);
+							break;
+
+						case 8 :
+							String nonhostUser[] = line.split(" ");
+							for(int i=0; i<nonhostUser.length; i++) {
+								groups[groupFileNum].nonhostUser[i] = Integer.parseInt(nonhostUser[i]);
+							}
+							break;
+
+						case 9 :
+							groups[groupFileNum].purpose = Integer.parseInt(line);
+							break;
+
+						case 10 :
+							groups[groupFileNum].comment = line;
+							break;
+
+						case 11 :
+							groups[groupFileNum].numberOfMember = Integer.parseInt(line);
+							break;
+
+						case 12 :
+							groups[groupFileNum].isGathered = Boolean.parseBoolean(line);
+							break;
+
+					}
+
+					grouplist.add(groups[groupFileNum]);
+					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
+					userFileNum++;
+
+				}
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+	}
 
 	//データ受信用スレッド(内部クラス)
 	class Receiver extends Thread {
-		//private InputStreamReader sisr; //受信データ用文字ストリーム
-		//private BufferedReader br; //文字ストリーム用のバッファ
 		private ObjectInputStream ois;
 		private ObjectOutputStream oos;
 		private PrintWriter out_buf; //送信先を記録
-		//private Receiver receiver_buf; //受信元を記録
-
 		// 内部クラスReceiverのコンストラクタ
 		Receiver (Socket socket){
 			try{
@@ -337,20 +451,90 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
+						case "us": //3人分送信
+							try {
+								oos.writeObject(sendUserInfo(Integer.parseInt(act[1])));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
+						case "uj": //ユーザ条件検索
+							try {
+								oos.writeObject(searchUsers(Integer.parseInt(act[1]), Integer.parseInt(act[2]), Integer.parseInt(act[3]), Integer.parseInt(act[4]), Integer.parseInt(act[5]), Integer.parseInt(act[6])));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
+						case "gi": //グループ情報の取得
+							try {
+								oos.writeObject(activeGroups.get(UUID.fromString(act[1])));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("グループ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
+						case "gs": //3グループ分送信
+							try {
+								oos.writeObject(sendGroupInfo(Integer.parseInt(act[1])));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("グループ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
+						case "gj": //グループ条件検索
+							try {
+								oos.writeObject(searchGroups(Integer.parseInt(act[1]), Integer.parseInt(act[2]), Integer.parseInt(act[3])));
+								oos.flush();
+							} catch (IOException e) {
+								System.err.print("グループ情報送信時にエラーが発生しました：" + e);
+							}
+							break;
+
 						case "ug": //ユーザにいいねを送る
+							if(goodUser(act[0],act[1])) {
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
 
 							break;
 
 						case "gg": //グループにいいねを送る
-
+							if(goodGroup(act[0],act[1])) {
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
 							break;
 
 						case "jg": //グループに参加
-							joinGroup(act[1], act[2]);
+							if(joinGroup(act[1], act[2])){
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
 							break;
 
 						case "rg": //グループ参加拒否
-							deleteGroup(act[2]);
+							if(deleteGroup(act[2])){
+								oos.writeObject("1");
+								oos.flush();
+							}else {
+								oos.writeObject("0");
+								oos.flush();
+							}
 							break;
 
 						}
@@ -399,8 +583,6 @@ public class Server extends JFrame implements ActionListener{
 					} catch (ClassNotFoundException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					}
-
-
 				}
 			}catch(IOException e) {
 				System.err.println("クライアントが切断しました");
@@ -424,14 +606,14 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//検索
-	public UserInfo[] searchUsers(int page, int gender, int grade, int faculty, int birth, int circle) {
+	public static UserInfo[] searchUsers(int page, int gender, int grade, int faculty, int birth, int circle) {
 
 		user_buf.clear();
 
 		UserInfo res[] = new UserInfo[3];
 
-		for(int i = 0; i < list.size(); i++){
-			UserInfo user = list.get(i);
+		for(int i = 0; i < userlist.size(); i++){
+			UserInfo user = userlist.get(i);
 
 			//完全一致
 		    if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
@@ -445,18 +627,102 @@ public class Server extends JFrame implements ActionListener{
 
 		//候補がいる場合
 		else {
-			if(user_buf.get(3*page - 2) != null) res[0] = user_buf.get(3*page - 2);
+			if(3*page - 2 <= user_buf.size()) res[0] = user_buf.get(3*page - 2);
 			else res[0] = null;
 
-			if(user_buf.get(3*page - 1) != null) res[1] = user_buf.get(3*page - 1);
+			if(3*page - 1 <= user_buf.size()) res[1] = user_buf.get(3*page - 1);
 			else res[1] = null;
 
-			if(user_buf.get(3*page) != null) res[2] = user_buf.get(3*page);
+			if(3*page <= user_buf.size()) res[2] = user_buf.get(3*page);
 			else res[2] = null;
 
 		}
 
-		//そのページに検索結果がなければnullを返す
+		return res;
+	}
+
+	//UserInfo送信
+	public static UserInfo[] sendUserInfo(int page) {
+		UserInfo res[] = new UserInfo[3];
+
+		//なしならnullを返す
+		if(users == null) return null;
+
+		//ユーザがいる場合
+		else {
+			if(users[3*page - 2] != null) res[0] = users[3*page - 2];
+			else res[0] = null;
+
+			if(users[3*page - 1] != null) res[1] = users[3*page - 1];
+			else res[1] = null;
+
+			if(users[3*page] != null) res[2] = users[3*page];
+			else res[2] = null;
+		}
+
+		//そのページにユーザがいなければnullを返す
+		if(res[0] == null && res[1] == null && res[2] == null) return null;
+
+		return res;
+	}
+
+	//グループ検索
+	public GroupInfo[] searchGroups(int page, int purpose, int num) {
+
+		group_buf.clear();
+
+		GroupInfo res[] = new GroupInfo[3];
+
+		for(int i = 0; i < grouplist.size(); i++){
+			GroupInfo group = grouplist.get(i);
+
+			//完全一致
+		    if(group.purpose == purpose || group.numberOfMember == num) {
+		    	group_buf.add(group);
+		    }
+
+		}
+
+		//候補なしならnullを返す
+		if(group_buf == null) return null;
+
+		//候補がいる場合
+		else {
+			if(3*page - 2 <= group_buf.size()) res[0] = group_buf.get(3*page - 2);
+			else res[0] = null;
+
+			if(3*page - 1 <= group_buf.size()) res[1] = group_buf.get(3*page - 1);
+			else res[1] = null;
+
+			if(3*page <= group_buf.size()) res[2] = group_buf.get(3*page);
+			else res[2] = null;
+
+		}
+
+		return res;
+
+	}
+
+	//GroupInfo送信
+	public GroupInfo[] sendGroupInfo(int page) {
+		GroupInfo res[] = new GroupInfo[3];
+
+		//なしならnullを返す
+		if(groups == null) return null;
+
+		//ユーザがいる場合
+		else {
+			if(groups[3*page - 2] != null) res[0] = groups[3*page - 2];
+			else res[0] = null;
+
+			if(groups[3*page - 1] != null) res[1] = groups[3*page - 1];
+			else res[1] = null;
+
+			if(groups[3*page] != null) res[2] = groups[3*page];
+			else res[2] = null;
+		}
+
+		//そのページにユーザがいなければnullを返す
 		if(res[0] == null && res[1] == null && res[2] == null) return null;
 
 		return res;
@@ -740,8 +1006,8 @@ public class Server extends JFrame implements ActionListener{
 			//該当行を検索
 			while((line = br.readLine()) != null) {
 				line_counter++;
-				strbuf.append(line + "\n");
 				if(line_counter == 13) break;
+				strbuf.append(line + "\n");
 			}
 
 			//参加しているグループ(13行目)に追加
@@ -764,6 +1030,9 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
+
+			//参加したグループが全員集まったか確認
+			judgeAllGathered(uuid);
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -789,6 +1058,63 @@ public class Server extends JFrame implements ActionListener{
 
 		return true;
 
+	}
+
+	//全員集まったか
+	public static void judgeAllGathered(String uuid) {
+        BufferedReader br = null;
+        FileReader fr = null;
+		FileWriter fw = null;
+        String line;
+        StringBuffer strbuf = new StringBuffer("");
+
+        try {
+        	File file = new File(System.getProperty("user.dir") + "\\Group\\" + uuid + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 8) break;
+				strbuf.append(line + "\n");
+			}
+
+			String students[] = line.split(" ");
+			int index = students.length + 1; //参加している人数
+
+			strbuf.append(line + "\n");
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 11) break;
+				strbuf.append(line + "\n");
+			}
+
+			boolean judge = false;
+			if(index == Integer.parseInt(line)) judge = true;
+			strbuf.append(line + "\n");
+
+			line = br.readLine(); //次の行
+			if(judge) {
+				strbuf.append("true\n");
+			}else {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+        }catch(IOException e) {
+
+        }
 	}
 
 	//グループ参加拒否・グループ削除
@@ -848,6 +1174,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//再度読み込み
 			readAllUserFiles();
+			readAllGroupFiles();
 
 		}catch(IOException e) {
 			System.err.print("グループ参加拒否に関する処理でエラーが発生しました：" + e);
@@ -885,8 +1212,8 @@ public class Server extends JFrame implements ActionListener{
 				//該当行を検索
 				while((line = br.readLine()) != null) {
 					line_counter++;
-					strbuf.append(line + "\n");
 					if(line_counter == 13) break;
+					strbuf.append(line + "\n");
 				}
 
 				//すでに参加している場合
@@ -920,6 +1247,7 @@ public class Server extends JFrame implements ActionListener{
 
 				//再度読み込み
 				readAllUserFiles();
+				readAllGroupFiles();
 
 			}catch(IOException e) {
 				System.err.print("グループ招待削除に関する処理でエラーが発生しました：" + e);
@@ -1012,6 +1340,7 @@ public class Server extends JFrame implements ActionListener{
 
 				//再度読み込み
 				readAllUserFiles();
+				readAllGroupFiles();
 
 			}catch(IOException e) {
 				System.err.print("ユーザ削除に関する処理でエラーが発生しました：" + e);
@@ -1087,96 +1416,85 @@ public class Server extends JFrame implements ActionListener{
    			}
 
    			readAllUserFiles();
+   			readAllGroupFiles();
 
   		}catch(IOException e) {
    			System.out.println(e);
+   			return false;
    		}
 
+ 		return true;
  	}
 
 	//グループいいね
  	public static boolean goodGroup(String my_num, String your_num) {
-		try {
-		  	File file = new File(my_num + ".txt");
-		  	FileReader filereader = new FileReader(file);
-		  	BufferedReader br = new BufferedReader(filereader);
+ 		try {
+ 			File file = new File(my_num + ".txt");
+ 			FileReader filereader = new FileReader(file);
+ 			BufferedReader br = new BufferedReader(filereader);
 
-		   	int count = 0;
-		  	int flag = 0;
-		   	String[] str = new String[100];
+ 			int count = 0;
+ 			int flag = 0;
+ 			String[] str = new String[100];
 
 
-		   	while(str[count] != null) {
-				str[count] = br.readLine();
-				count++;
-		   	}
+ 			while(str[count] != null) {
+ 				str[count] = br.readLine();
+ 				count++;
+ 			}
 
-		    int check = str[4].indexOf(your_num);
-		    if(check!=-1) {    //いいねされてた
-		    	str[4] = str[10].replace(your_num,"");
-		    	flag = 1;
-		    }
-		    else
-		    	str[3] += " your_num";
+ 			int check = str[4].indexOf(your_num);
+ 			if(check!=-1) {    //いいねされてた
+ 				str[4] = str[10].replace(your_num,"");
+ 				flag = 1;
+ 			}
+ 			else
+ 				str[3] += " your_num";
 
-		    if(flag == 1)   //マッチした
-		    	str[5] += " your_num";
+ 			if(flag == 1)   //マッチした
+ 				str[5] += " your_num";
 
-		   FileWriter filewriter = new FileWriter(file);  //書き換え
-		   BufferedWriter bw = new BufferedWriter(filewriter);
-		   for (int i=0;i<11;i++) {
-			   bw.write(str[i]);
-			   bw.newLine();
-		   }
+ 			FileWriter filewriter = new FileWriter(file);  //書き換え
+ 			BufferedWriter bw = new BufferedWriter(filewriter);
+ 			for (int i=0;i<11;i++) {
+ 				bw.write(str[i]);
+ 				bw.newLine();
+ 			}
 
-		   File file2 = new File(your_num + ".txt");
-		   FileReader filereader2 = new FileReader(file2);
-		   BufferedReader br2 = new BufferedReader(filereader2);
+ 			File file2 = new File(your_num + ".txt");
+ 			FileReader filereader2 = new FileReader(file2);
+ 			BufferedReader br2 = new BufferedReader(filereader2);
 
-		   int count2 = 1;
-		   String[] str2 = new String[100];
-		   str2[count-1] = br2.readLine();
-		   while(str2[count2-1] != null) {
-			   count2++;
-			   str2[count2-1] = br.readLine();
-		   }
-		   if(flag == 1) { //マッチしたら
-			   str[9] = str[9].replace(your_num,"");
-			   str[11] += " your_num";
-		   }
-		   else {
-			   str[10] += " your_num";
-		   }
+ 			int count2 = 1;
+ 			String[] str2 = new String[100];
+ 			str2[count-1] = br2.readLine();
+ 			while(str2[count2-1] != null) {
+ 				count2++;
+ 				str2[count2-1] = br.readLine();
+ 			}
+ 			if(flag == 1) { //マッチしたら
+ 				str[9] = str[9].replace(your_num,"");
+ 				str[11] += " your_num";
+ 			}
+ 			else {
+ 				str[10] += " your_num";
+ 			}
 
-		   FileWriter filewriter2 = new FileWriter(file2);  //書き換え
-		   BufferedWriter bw2 = new BufferedWriter(filewriter2);
-		   for (int i=0;i<11;i++) {
-			   bw2.write(str[i]);
-			   bw2.newLine();
-		   }
-		   readAllUserFiles();
+ 			FileWriter filewriter2 = new FileWriter(file2);  //書き換え
+ 			BufferedWriter bw2 = new BufferedWriter(filewriter2);
+ 			for (int i=0;i<11;i++) {
+ 				bw2.write(str[i]);
+ 				bw2.newLine();
+ 			}
+ 			readAllUserFiles();
+ 			readAllGroupFiles();
 
-		  }catch(IOException e) {
-		   System.out.println(e);
-		   }
-
-		 }
-
- 	//検索用内部クラス
- 	class forSearchData{
- 		String gender;
- 		String grade;
- 		String faculty;
- 		String birth;
- 		String circle;
-
- 		public forSearchData(String gender, String grade, String faculty, String birth, String circle) {
- 			this.gender = gender;
- 			this.grade = grade;
- 			this.faculty = faculty;
- 			this.birth = birth;
- 			this.circle = circle;
+ 		}catch(IOException e) {
+ 			System.out.println(e);
+ 			return false;
  		}
+
+		return true;
 
  	}
 
