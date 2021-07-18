@@ -25,10 +25,10 @@ public class UserInfo implements Serializable{
 	int[] matchedUser=new int[MAX];	//マッチングした相手の学籍番号
 	UUID[] joiningGroup=new UUID[MAX];		//参加しているグルの識別番号
 	UUID[] invitedGroup=new UUID[MAX];		//誘われているグルの識別番号
-	BufferedImage studentCard;		//学生証の写真
+	transient BufferedImage studentCard;		//学生証の写真
 	int isAuthentificated=0;		//0:認証されていない,1:認証された,2:認証されたが「認証されました画面」を見ていない
-	BufferedImage mainPhoto;	//メインの写真
-	BufferedImage[] subPhoto=new BufferedImage[4];		//サブの写真
+	transient BufferedImage mainPhoto;	//メインの写真
+	transient BufferedImage[] subPhoto=new BufferedImage[4];		//サブの写真
 	String lineId="未登録";	//ラインID
 	boolean isPublic=true;		//プロフの非公開を希望するユーザはfalseに。falseだと検索に引っかからなくなる。
 
