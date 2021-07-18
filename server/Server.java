@@ -1596,7 +1596,7 @@ public class Server extends JFrame implements ActionListener{
 
 			readAllUserFiles();
 			readAllGroupFiles();
-			
+
 			return true;
 
 		}catch(IOException e) {
@@ -1635,7 +1635,7 @@ public class Server extends JFrame implements ActionListener{
 
 				readAllUserFiles();
 				readAllGroupFiles();
-				
+
 				return true;
 
 			}catch(IOException e) {
