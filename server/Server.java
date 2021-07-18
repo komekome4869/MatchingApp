@@ -227,8 +227,11 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 10 :
-						if(line != "") {
+						if(line.length()>2) {
+							System.out.println(line+"a");
 							String sendStudents[] = line.split(" ");
+							//System.out.println(line+"a");
+							System.out.println(sendStudents[0]+"a");
 							for(int i=0; i<sendStudents.length; i++) {
 								users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
 							}
@@ -236,7 +239,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 11 :
-						if(line != "") {
+						if(line.length()>2) {
 							String receiveStudents[] = line.split(" ");
 							for(int i=0; i<receiveStudents.length; i++) {
 								users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
@@ -245,7 +248,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 12 :
-						if(line != "") {
+						if(line.length()>2) {
 							String matchingStudents[] = line.split(" ");
 							for(int i=0; i<matchingStudents.length; i++) {
 								users[userFileNum].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
@@ -254,7 +257,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 13 :
-						if(line != "") {
+						if(line.length()>2) {
 							String joiningGroups[] = line.split(" ");
 							for(int i=0; i<joiningGroups.length; i++) {
 								users[userFileNum].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
@@ -263,7 +266,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 14 :
-						if(line != "") {
+						if(line.length()>2) {
 							String invitedGroups[] = line.split(" ");
 							for(int i=0; i<invitedGroups.length; i++) {
 								users[userFileNum].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
@@ -357,7 +360,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 4 :
-							if(line != "") {
+							if(line.length()>2) {
 								String sendGood[] = line.split(" ");
 								for(int i=0; i<sendGood.length; i++) {
 									groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
@@ -366,7 +369,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 5 :
-							if(line != "") {
+							if(line.length()>2) {
 								String receiveGood[] = line.split(" ");
 								for(int i=0; i<receiveGood.length; i++) {
 									groups[groupFileNum].receiveGood[i] = UUID.fromString(receiveGood[i]);
@@ -375,7 +378,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 6 :
-							if(line != "") {
+							if(line.length()>2) {
 								String matchedGood[] = line.split(" ");
 								for(int i=0; i<matchedGood.length; i++) {
 									groups[groupFileNum].matchedGroup[i] = UUID.fromString(matchedGood[i]);
@@ -388,7 +391,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 8 :
-							if(line != "") {
+							if(line.length()>2) {
 								String nonhostUser[] = line.split(" ");
 								for(int i=0; i<nonhostUser.length; i++) {
 									groups[groupFileNum].nonhostUser[i] = Integer.parseInt(nonhostUser[i]);
