@@ -3871,10 +3871,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	//条件検索
-	public void Ssearch(int page, int cond) {
+	public void Ssearch(int page, String cond) {
 		try{
 			connectServer();
-			String outLine = "us,"+Integer.toString(page)+","+Integer.toString(cond);
+			String outLine = "us,"+Integer.toString(page)+","+cond;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
@@ -3978,10 +3978,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	//グルにいいねを送る
-	public void Sgroup_good(int uuid) {
+	public void Sgroup_good(UUID number) {
 		try{
 			connectServer();
-			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+Integer.toString(uuid);
+			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
