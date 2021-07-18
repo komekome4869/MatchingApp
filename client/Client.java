@@ -245,6 +245,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    goodInform();
 	    matchingInform();
 
+		ipAddress="localhost";
+
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
 	    layout.show(cardPanel,"login");
 	    pack();
@@ -2282,9 +2284,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
-			//TODO 自分のユーザ情報取得 SgetUserprof(myUswerInfo.getStudentNumber);
 			if(groupSearchCondition==""){
-				//TODO Sgroup_home(nowPage);
+				Sgroup_home(nowPage);
 			}
 			else {
 				//TODO グル検索(nowPage,groupSearchCondition);
@@ -2307,12 +2308,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//TODO 自分のグル情報の取得(myGroupInfo.getStudentNumber());
 				if(userSearchCondition==""){
-					//TODO Shome(nowPage);
+					Shome(nowPage);
 				}
 				else {
-					//TODO ユーザ検索(nowPage,userSearchCondition);
+					Ssearch(nowPage,userSearchCondition);
 				}
 
 				if(nowShowingUsers[i]==null) {
@@ -2339,25 +2339,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			lGroupPhotoViewGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
 			lGroupProfileViewGroup.setText("<html><body>"+Purpose[nowShowingGroup.getPurpose()]+"<br />"+nowShowingGroup.getComment()+"</body></html>");
 
-			//UserInfoの取得(nowShowingGroup.getHostUser())
-			//bMemberProfileViewGroup[0].setIcon(scaleImage(,w/3,h/12));
-			//bMemberProfileViewGroup[0].setText(ホストの名前)
+			SgetyourUserprof(nowShowingGroup.getHostUser());
+			bMemberProfileViewGroup[0].setIcon(scaleImage(yourUserInfo.getMainPhoto(),w/3,h/12));
+			bMemberProfileViewGroup[0].setText(yourUserInfo.getName());
 
-			/*for(int i=1;i<5;i++) {
-				//UserInfoの取得(nowShowingGroup.getNonHostUser()[i-1])
-				if(nonhostUserの情報!=null) {
-					bMemberProfileViewGroup[i].setIcon(scaleImage(,w/3,h/12));
-					bMemberProfileViewGroup[i].setText(ノンホストの名前);
+			for(int i=1;i<5;i++) {
+				SgetyourUserprof(nowShowingGroup.getNonhostUser()[i-1]);
+				if(yourUserInfo==null) {
+					bMemberProfileViewGroup[i].setIcon(scaleImage(yourUserInfo.getMainPhoto(),w/3,h/12));
+					bMemberProfileViewGroup[i].setText(yourUserInfo.getName());
 					bMemberProfileViewGroup[i].setVisible(true);
 				}
 				else{
 					bMemberProfileViewGroup[i].setVisible(false);
 				}
-			}*/
+			}
 
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("グループの写真取得に失敗");
 		}
 		boolean flag=false;
 		for(int i=0;i<myGroupInfo.getSendGood().length;i++) {
@@ -2415,7 +2415,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goInviteInform() {
 
 		for(int i=0;i<3;i++) {
-			//nowShowingGroups[i]=グル情報取得(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
+			SgetyourGroupprof(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
+			nowShowingGroups[i]=yourGroupInfo;
 			if(nowShowingGroups[i]==null) {
 				bIconInviteInform[i].setVisible(false);
 			}
@@ -2435,7 +2436,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goGoodInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
+				SgetyourGroupprof(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
+				nowShowingGroups[i]=yourGroupInfo;
 				if(nowShowingGroups[i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2452,7 +2454,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//nowShowingUsers[i]=ユーザ情報取得(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+				SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+				nowShowingUsers[i]=yourUserInfo;
 				if(nowShowingUsers[i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2473,7 +2476,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goMatchingInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				//nowShowingGroups[i]=グル情報取得(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
+				SgetyourGroupprof(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
+				nowShowingUsers[i]=yourUserInfo;
 				if(nowShowingGroups[i]==null) {
 					bIconMatchingInform[i].setVisible(false);
 				}
@@ -2489,7 +2493,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				//nowShowingUsers[i]=グル情報取得(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+				SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+				nowShowingUsers[i]=yourUserInfo;
 				if(nowShowingUsers[i]==null) {
 					bIconMatchingInform[i].setVisible(false);
 				}
@@ -2641,7 +2646,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			else {
 				myUserInfo.setName(tfNameJudge.getText());
 				myUserInfo.setLineId(tfNumberJudge.getText());
+				System.out.println("送信開始");
 				sendUserInfo(myUserInfo);
+				System.out.println("送信終了");
 				layout.show(cardPanel,"pleaseWait");
 			}
 			break;
@@ -2789,30 +2796,30 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case"いいねreply":
-			//TODO Sgood(nowShowingUser.getStudentNumber());
+			Sgood(nowShowingUser.getStudentNumber());
 			goGoodInform();
 			break;
 
 
 		case"断るreply":
-			//TODO SrejectGood(nowShowingUser.getStudentNumber());
+			SrejectGood(nowShowingUser.getStudentNumber());
 			goGoodInform();
 			break;
 
 
 		case"いいねreplyGroup":
-			//TODO Sgroup_good(nowShowingGroup.getStudentNumber());
+			 Sgroup_good(nowShowingGroup.getStudentNumber());
 			layout.show(cardPanel, "goodInform");
 			break;
 
 
 		case"断るreplyGroup":
-			//TODO SrejectGoodfromGroup(nowShowingGroup.getStudentNumber());
+			SrejectGoodfromGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
 		case "いいねgood":
-			//TODO Sgood(nowShowingUser.getStudentNumber());
+			Sgood(nowShowingUser.getStudentNumber());
 			bGoodGood.setVisible(false);
 			lGoodGood.setVisible(true);
 			break;
@@ -2919,7 +2926,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			userSearchCondition="";
 			groupSearchCondition="";
 
-			//TODO myUserInfo=SgetUserprof(myUserInfo.getStudentNumber())
+			SgetmyUserprof(myUserInfo.getStudentNumber());
 
 			try {
 				bPersonalChange.setIcon(scaleImage(myUserInfo.getMainPhoto(),w/4,h/10));
@@ -2930,7 +2937,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						bIconChange[i].setVisible(false);
 					}
 					else {
-						//TODO nowShowingGroups[i]=SgetGroupprof(myUserInfo.getJoiningGroup()[i+3*(nowPage-1))]
+						SgetyourGroupprof(myUserInfo.getJoiningGroup()[i+3*(nowPage-1)]);
+						nowShowingGroups[i]=yourGroupInfo;
 						bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 						bIconChange[i].setText(nowShowingGroups[i].getName());
 						bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
@@ -2975,7 +2983,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bMainPhotoMyProfile.setIcon(scaleImage(bi,w/2,h/6));
 				myUserInfo.setMainPhoto(bi);
-				//TODO myUserInfo=SchangeProf(myUserInfo);
+				SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
 				System.out.println("正しくファイルが選択されませんでした");
@@ -3003,7 +3011,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bSubPhotoMyProfile[temp] .setIcon(scaleImage(bi,w/6,h/10));
 				myUserInfo.setSubPhoto(bi,temp);
-				//TODO myUserInfo=SchangeProf(myUserInfo);
+				SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
 				System.out.println("正しくファイルが選択されませんでした");
@@ -3051,7 +3059,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			myUserInfo.setCircle(cbCircleMyProfile.getSelectedIndex());
 
 			if(flag) {
-				//TODO SchangeProf(myUserInfo.getStudentNumber());
+				SchangeProf(myUserInfo);
 				layout.show(cardPanel,"menu");
 			}
 			break;
@@ -3090,7 +3098,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "グループ2change":
 			for(int i=0;i<3;i++) {
 				if(cmd=="グループ"+String.valueOf(i)+"change") {
-					//TODO myGroupInfo=SgetGroupprof(nowShowingGroups[i]);
+					SgetmyGroupprof(nowShowingGroups[i].getStudentNumber());
 				}
 			}
 			isNowUsingGroupAccount=true;
@@ -3114,7 +3122,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							bIconChange[i].setVisible(false);
 						}
 						else {
-							//TODO nowShowingGroup[i]=SgetGroupprof(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
+							SgetyourGroupprof(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i]);
+							nowShowingGroups[i]=yourGroupInfo;
 							bIconChange[i].setVisible(true);
 							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 							bIconChange[i].setText(nowShowingGroups[i].getName());
@@ -3141,7 +3150,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 							bIconChange[i].setVisible(false);
 						}
 						else {
-							//TODO nowShowingGroups[i]=SgetGroupprof(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i])
+							SgetyourGroupprof(myUserInfo.getJoiningGroup()[3*(nowPage-1)+i]);
+							nowShowingGroups[i]=yourGroupInfo;
 							bIconChange[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/10));
 							bIconChange[i].setText(nowShowingGroups[i].getName());
 							bIconChange[i].setEnabled(nowShowingGroups[i].getIsGathered());
@@ -3256,7 +3266,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else if(flag) {
 				nowShowingGroup.setNumberOfMember(temp+2);
-				//TODO SmakeGroup(nowShowingGroup);
+				SmakeGroup(nowShowingGroup);
 				goHome();
 			}
 			break;
@@ -3269,12 +3279,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "参加invite":
-			//TODO SjoinGroup(nowShowingGroup.getStudentNumber());
+			SjoinGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
 		case "断るinvite":
-			//TODO SrejectJoinGroup(nowShowingGroup.getStudentNumber());
+			SrejectJoinGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
@@ -3284,12 +3294,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "メンバ3viewGroup":
 		case "メンバ4viewGroup":
 			if(cmd=="メンバ0viewGroup") {
-				//TODO nowShowingUser=SgetUserprof(nowShowingGroup.getHostUser());
+				SgetyourUserprof(nowShowingGroup.getHostUser());
+				nowShowingUser=yourUserInfo;
 			}
 			else {
 				for(int i=1;i<5;i++) {
 					if(cmd=="メンバ"+String.valueOf(i)+"viewGroup") {
-						//TODO nowShowingUser=SgetUserprof(nowShowingGroup.getNonhostUser()[i]);
+						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i]);
+						nowShowingUser=yourUserInfo;
 					}
 				}
 			}
@@ -3299,7 +3311,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "いいねviewGroup":
-			//TODO Sgroup_good(nowShowingGroup.getStudentNumber());
+			Sgroup_good(nowShowingGroup.getStudentNumber());
 			bGoodViewGroup.setVisible(false);
 			lGoodViewGroup.setVisible(true);
 			break;
@@ -3315,7 +3327,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bi=ImageIO.read(f);
 				bPhotoMyGroupProfile.setIcon(scaleImage(bi,w/2,h/6));
 				myUserInfo.setMainPhoto(bi);
-				//TODO SchangeProf(myUserInfo);
+				SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
 				System.out.println("ファイルが正しく選択されませんでした");
@@ -3361,7 +3373,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 
 			if(flag) {
-				//TODO SchangeGroupProf(myGroupInfo);
+				SchangeGroupProf(myGroupInfo);
 				layout.show(cardPanel,"menu");
 			}
 			break;
@@ -3372,7 +3384,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 
 			if (temp == 0){
-				//TODO SdeleteGroup=(myGroupProfile.getStudentNumber);
+				SdeleteGroup(myGroupInfo.getStudentNumber());
 				isNowUsingGroupAccount=false;
 				nowPage=1;
 				userSearchCondition="";
@@ -3386,7 +3398,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			temp = JOptionPane.showOptionDialog(this,"本当に削除しますか？","最終確認",JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 			if (temp == 0){
-				//TODO SdeleteUser(myGroupProfile.getStudentNumber);
+				SdeleteUser(myUserInfo.getStudentNumber());
 				myUserInfo=new UserInfo();
 				isNowUsingGroupAccount=false;
 
@@ -3518,8 +3530,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			catch (IOException e) {
 				System.out.println("アイコンの取得に失敗");
 			}
-			//TODO lHostInvite.setText("<html><body>"+//SgetGroupprof(nowShowingGroup.getHostUser).getName()
-			//+"<br/>に招待されました</html></body>");
+			SgetyourUserprof(nowShowingGroup.getHostUser());
+			lHostInvite.setText("<html><body>"+yourUserInfo.getName()
+					+"<br/>に招待されました</html></body>");
 			layout.show(cardPanel,"invite");
 			break;
 
@@ -3527,7 +3540,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール0goodInform":
 		case "プロフィール1goodInform":
 		case "プロフィール2goodInform":
-			UserInfo tempUser;
 
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
@@ -3540,17 +3552,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					lGroupPhotoReplyGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/5,h/10));
 					lGroupProfileReplyGroup.setText("<html><body>"+Purpose[nowShowingGroup.getPurpose()]+"<br />"+nowShowingGroup.getComment()+"</body></html>");
 
-					//TODO tempUser=SgetUserprof(nowShowingGroup.getHostUser());
-					//bMemberProfileReplyGroup[0].setIcon(scaleImage(tempUser.getMainPhoto,w/3,h/12));
-					//bMemberProfileReplyGroup[0].setText(tempUser.getName);
+					SgetyourUserprof(nowShowingGroup.getHostUser());
+					bMemberProfileReplyGroup[0].setIcon(scaleImage(yourUserInfo.getMainPhoto(),w/3,h/12));
+					bMemberProfileReplyGroup[0].setText(yourUserInfo.getName());
 
-					/*for(int i=1;i<5;i++) {
-						//TODO tempUser=SgetUserprof(nowShowingGroup.getNonHostUser()[i-1]);
-						if(tempUser!=null) {
-							bMemberProfileReplyGroup[i].setIcon(scaleImage(tempUser.getMainPhoto,w/3,h/12));
-							bMemberProfileReplyGroup[i].setText(tempUser.getName);
+					for(int i=1;i<5;i++) {
+						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i-1]);
+						if(yourUserInfo!=null) {
+							bMemberProfileReplyGroup[i].setIcon(scaleImage(yourUserInfo.getMainPhoto(),w/3,h/12));
+							bMemberProfileReplyGroup[i].setText(yourUserInfo.getName());
 						}
-					}*/
+					}
 
 				}
 				catch (IOException e) {
@@ -3601,7 +3613,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				try {
 					lIconMatching.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
 					lNameMatching.setText("<html><body>"+nowShowingGroup.getName()+"<br />とマッチングしました！</body></html>");
-					//TODO lIdMatching.setText("<html><body>LINE ID:<br />"+SgetGroupprof(nowShowingGroup.getHostUser()).getLineId()+"</body></html>");
+					SgetyourUserprof(nowShowingGroup.getHostUser());
+					lIdMatching.setText("<html><body>LINE ID:<br />"+yourUserInfo.getLineId()+"</body></html>");
 				}
 				catch (IOException e) {
 					System.out.println("アイコンの取得に失敗");
@@ -4034,7 +4047,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	//グループのプロフィール変更
-	public void SchangeGroupProf(UserInfo newprof) {
+	public void SchangeGroupProf(GroupInfo newprof) {
 		try{
 			connectServer();
 			String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
