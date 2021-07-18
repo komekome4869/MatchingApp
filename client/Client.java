@@ -261,11 +261,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    }
 	    myUserInfo=new UserInfo();
 
-		try {
-			BufferedImage defaultBi=ImageIO.read(new File("./img/初期アイコン.png"));
-		} catch (IOException e) {
-			System.out.println("初期アイコンの取得に失敗");
-		}
 	}
 
 
@@ -3916,6 +3911,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			connectServer();
 			UserInfo a = obj;
 			oos.writeObject(a);
+			System.out.println("登録情報を送信しました。");
 			oos.flush();
 			inputObj = null;
 			while(inputObj==null) {
