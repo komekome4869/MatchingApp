@@ -188,8 +188,7 @@ public class Server extends JFrame implements ActionListener{
 						users[userFileNum].subPhoto[0] = sub1;
 						users[userFileNum].subPhoto[1] = sub2;
 						users[userFileNum].subPhoto[2] = sub3;
-						users[userFileNum].subPhoto[3] = sub4
-								;
+						users[userFileNum].subPhoto[3] = sub4;
 						break;
 
 					case 2 :
