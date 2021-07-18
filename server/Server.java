@@ -434,12 +434,9 @@ public class Server extends JFrame implements ActionListener{
 			UserInfo user = list.get(i);
 
 			//完全一致
-		    if(gender != 9 && grade != 9 && faculty != 9 && birth != 9 && circle != 9){
-		    	if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
-		    		user_buf.add(user);
-		    	}
+		    if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
+		    	user_buf.add(user);
 		    }
-
 
 		}
 
@@ -1030,20 +1027,20 @@ public class Server extends JFrame implements ActionListener{
 
 	//いいね
  	public static boolean goodUser(String my_num, String your_num) {
-  		try {
-   			File file = new File(my_num + ".txt");
-   			FileReader filereader = new FileReader(file);
-   			BufferedReader br = new BufferedReader(filereader);
+ 		try {
+ 			File file = new File(my_num + ".txt");
+ 			FileReader filereader = new FileReader(file);
+ 			BufferedReader br = new BufferedReader(filereader);
 
-   			int count = 0;
-   			int flag = 0;
-   			String[] str = new String[100];
+ 			int count = 0;
+ 			int flag = 0;
+ 			String[] str = new String[100];
 
 
-  			while(str[count] != null) {
-	  			str[count] = br.readLine();
-	 		  	count++;
-   			}
+ 			while(str[count] != null) {
+ 				str[count] = br.readLine();
+ 				count++;
+ 			}
 
     			int check = str[10].indexOf(your_num);
     			if(check!=-1) {    //いいねされてた
