@@ -3387,7 +3387,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				//TODO SdeleteUser(myGroupProfile.getStudentNumber);
 				myUserInfo=new UserInfo();
 				isNowUsingGroupAccount=false;
-a
+
 				lMessageLogin.setVisible(false);
 				tfIdLogin.setText("");
 				tfPasswordLogin.setText("");
