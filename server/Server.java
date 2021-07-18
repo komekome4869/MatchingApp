@@ -1491,13 +1491,9 @@ public class Server extends JFrame implements ActionListener{
 
  		return true;
  	}
-<<<<<<< HEAD
 
 	//グループいいね
-=======
 
-	//グループいいね
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
  	public static boolean goodGroup(String my_num, String your_num) {
  		try {
  			File file = new File(my_num + ".txt");
