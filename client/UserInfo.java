@@ -206,10 +206,12 @@ public class UserInfo implements Serializable{
 
 
 	public void setStudentCard(BufferedImage sc) {
+		buf = getArrayByImage(sc, 50, 50);
 		studentCard=sc;
 	}
 
 	public BufferedImage getStudentCard() {
+		studentCard = getImageByArray(buf,50,50);
 		return studentCard;
 	}
 
