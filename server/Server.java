@@ -95,6 +95,7 @@ public class Server extends JFrame implements ActionListener{
 
 		//ファイルを読み込んでハッシュマップに追加
 		readAllUserFiles();
+		readAllGroupFiles();
 
 		try {
 			ss = new ServerSocket(50);
@@ -128,7 +129,7 @@ public class Server extends JFrame implements ActionListener{
 	//ユーザファイルを全て読み込み
 	public static void readAllUserFiles() {
 		userFileNum = 0;
-		users = null;
+		users = new UserInfo[1000];
 		activeUsers.clear();
 
 		File dir = new File(System.getProperty("user.dir") + "\\ID");
@@ -1425,146 +1426,496 @@ public class Server extends JFrame implements ActionListener{
 
 	//いいね
  	public static boolean goodUser(String my_num, String your_num) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
  		try {
- 			File file = new File(my_num + ".txt");
- 			FileReader filereader = new FileReader(file);
- 			BufferedReader br = new BufferedReader(filereader);
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + my_num + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
 
- 			int count = 0;
- 			int flag = 0;
- 			String[] str = new String[100];
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 10) break;
+				strbuf.append(line + "\n");
+			}
 
+			String students[] = null;
+			String line10 = line;	//10行目いいねした
 
- 			while(str[count] != null) {
- 				str[count] = br.readLine();
- 				count++;
- 			}
+			//次の行
+			line = br.readLine();
 
-    			int check = str[10].indexOf(your_num);
-    			if(check!=-1) {    //いいねされてた
-    				str[10] = str[10].replace(your_num,"");
-    				flag = 1;
-    			}
-    			else
-    				str[9] += " your_num";
+			String line11 = line;	//11行目いいねされた
 
-    			if(flag == 1)   //マッチした
-    				str[11] += " your_num";
+			if(line11 != null) {
+				students = line11.split(" ");
+			}
 
-   			FileWriter filewriter = new FileWriter(file);  //書き換え
-   			BufferedWriter bw = new BufferedWriter(filewriter);
-   			for (int i=0;i<17;i++) {
-	   			bw.write(str[i]);
-	   			bw.newLine();
-   			}
+			//一致してたらマッチ
+			for(int i=0; i<students.length;) {
+				if(students[i] == your_num) {
+					deleteGood(your_num, my_num); //相手のいいねした欄から自分を消す
+					deleteReceivedGood(my_num, your_num); //自分のいいねを受け取った欄から相手を消す
+					return matchUsers(my_num, your_num, false);
+				}
+			}
 
-   			File file2 = new File(your_num + ".txt");
-   			FileReader filereader2 = new FileReader(file2);
-   			BufferedReader br2 = new BufferedReader(filereader2);
+			//自分のファイルの、いいねを送った人に相手を追加
+			if(line10 == "") {
+				strbuf.append(your_num + "\n");
+			}else {
+				strbuf.append(line10 + " " + your_num + "\n");
+			}
 
-   			int count2 = 1;
-   			String[] str2 = new String[100];
-   			str2[count-1] = br2.readLine();
-   			while(str2[count2-1] != null) {
-	   			count2++;
-	   			str2[count2-1] = br.readLine();
-   			}
-   			if(flag == 1) { //マッチしたら
-	   			str[9] = str[9].replace(your_num,"");
-	   			str[11] += " your_num";
-   			}
-   			else {
-	   			str[10] += " your_num";
-   			}
+			strbuf.append(line11 + "\n");
 
-   			FileWriter filewriter2 = new FileWriter(file2);  //書き換え
-   			BufferedWriter bw2 = new BufferedWriter(filewriter2);
-   			for (int i=0;i<17;i++) {
-	   			bw2.write(str[i]);
-	   			bw2.newLine();
-   			}
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
 
-   			readAllUserFiles();
-   			readAllGroupFiles();
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
 
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
    		}
 
  		return true;
  	}
 
-	//グループいいね
- 	public static boolean goodGroup(String my_num, String your_num) {
+ 	//ユーザマッチング
+ 	public static boolean matchUsers(String myId, String yourId, boolean preventLoop) {	//preventLoopがtrueなら再帰を行わない
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
  		try {
- 			File file = new File(my_num + ".txt");
- 			FileReader filereader = new FileReader(file);
- 			BufferedReader br = new BufferedReader(filereader);
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myId + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
 
- 			int count = 0;
- 			int flag = 0;
- 			String[] str = new String[100];
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 12) break;
+				strbuf.append(line + "\n");
+			}
 
+			//自分のファイルの、いいねを送った人に相手を追加
+			if(line == "") {
+				strbuf.append(yourId + "\n");
+			}else {
+				strbuf.append(line + " " + yourId + "\n");
+			}
 
- 			while(str[count] != null) {
- 				str[count] = br.readLine();
- 				count++;
- 			}
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
 
- 			int check = str[4].indexOf(your_num);
- 			if(check!=-1) {    //いいねされてた
- 				str[4] = str[10].replace(your_num,"");
- 				flag = 1;
- 			}
- 			else
- 				str[3] += " your_num";
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
 
- 			if(flag == 1)   //マッチした
- 				str[5] += " your_num";
+			if(!preventLoop) {
+				matchUsers(yourId, myId, true);
+				readAllUserFiles();
+				readAllGroupFiles();
+			}
 
- 			FileWriter filewriter = new FileWriter(file);  //書き換え
- 			BufferedWriter bw = new BufferedWriter(filewriter);
- 			for (int i=0;i<11;i++) {
- 				bw.write(str[i]);
- 				bw.newLine();
- 			}
+  		}catch(IOException e) {
+   			System.out.println(e);
+   			return false;
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
 
- 			File file2 = new File(your_num + ".txt");
- 			FileReader filereader2 = new FileReader(file2);
- 			BufferedReader br2 = new BufferedReader(filereader2);
+ 		return true;
+ 	}
 
- 			int count2 = 1;
- 			String[] str2 = new String[100];
- 			str2[count-1] = br2.readLine();
- 			while(str2[count2-1] != null) {
- 				count2++;
- 				str2[count2-1] = br.readLine();
- 			}
- 			if(flag == 1) { //マッチしたら
- 				str[9] = str[9].replace(your_num,"");
- 				str[11] += " your_num";
- 			}
- 			else {
- 				str[10] += " your_num";
- 			}
+ 	//いいねを消す
+ 	public static void deleteGood(String myId, String yourId) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
 
- 			FileWriter filewriter2 = new FileWriter(file2);  //書き換え
- 			BufferedWriter bw2 = new BufferedWriter(filewriter2);
- 			for (int i=0;i<11;i++) {
- 				bw2.write(str[i]);
- 				bw2.newLine();
- 			}
- 			readAllUserFiles();
- 			readAllGroupFiles();
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myId + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
 
- 			return true;
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 10) break;
+				strbuf.append(line + "\n");
+			}
 
- 		}catch(IOException e) {
- 			System.out.println(e);
- 			return false;
- 		}
+			line = line.replace(yourId, ""); //numを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+ 	}
+
+ 	//受け取ったいいねを消す
+ 	public static void deleteReceivedGood(String myId, String yourId) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myId + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 11) break;
+				strbuf.append(line + "\n");
+			}
+
+			line = line.replace(yourId, ""); //numを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+ 	}
+
+	//グループいいね
+ 	public static boolean goodGroup(String myuuid, String youruuid) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\Group\\" + myuuid + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 4) break;
+				strbuf.append(line + "\n");
+			}
+
+			String groups[] = null;
+			String line4 = line;	//4行目
+
+			//次の行
+			line = br.readLine();
+
+			String line5 = line;	//5行目
+
+			if(line5 != null) {
+				groups = line5.split(" ");
+
+				//一致してたらマッチ
+				for(int i=0; i<groups.length;) {
+					if(groups[i] == youruuid) {
+						return matchGroups(myuuid, youruuid, false);
+					}
+				}
+			}
+
+			//自分のファイルの、いいねを送った人に相手を追加
+			if(line4 == "") {
+				strbuf.append(youruuid + "\n");
+			}else {
+				strbuf.append(line4 + " " + youruuid + "\n");
+			}
+
+			strbuf.append(line5 + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   			return false;
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+
+ 		return true;
 	}
+
+ 	//グループマッチング
+ 	public static boolean matchGroups(String myuuid, String youruuid, boolean preventLoop) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myuuid + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 6) break;
+				strbuf.append(line + "\n");
+			}
+
+			//自分のファイルの、いいねを送った人に相手を追加
+			if(line == "") {
+				strbuf.append(youruuid + "\n");
+			}else {
+				strbuf.append(line + " " + youruuid + "\n");
+			}
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			if(!preventLoop) {
+				matchUsers(youruuid, myuuid, true);
+				readAllUserFiles();
+				readAllGroupFiles();
+			}
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   			return false;
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+
+ 		return true;
+ 	}
+
+ 	//グループいいねを消す
+ 	public static void deleteGroupGood(String myuuid, String youruuid) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\Group\\" + myuuid + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 4) break;
+				strbuf.append(line + "\n");
+			}
+
+			line = line.replace(youruuid, ""); //uuidを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+ 	}
+
+ 	//受け取ったグループいいねを消す
+ 	public static void deleteReceivedGroupGood(String myuuid, String youruuid) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		StringBuffer strbuf = new StringBuffer("");
+
+ 		try {
+ 			File file = new File(System.getProperty("user.dir") + "\\Group\\" + myuuid + ".txt");
+ 			fr = new FileReader(file);
+ 			br = new BufferedReader(fr);
+ 			String line;
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 5) break;
+				strbuf.append(line + "\n");
+			}
+
+			line = line.replace(youruuid, ""); //uuidを削除
+			line = line.replace("  "," "); //並んだ空白を削除
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			strbuf.append(line + "\n");
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+  		}catch(IOException e) {
+   			System.out.println(e);
+   		}finally {
+   			try {
+				fw.close();
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+   		}
+ 	}
+
+ 	//マッチング削除
+ 	public static void deleteMatching() {
+
+ 	}
 
 	//ユーザいいね拒否
 	public static boolean badUser(String my_num, String your_num) {
