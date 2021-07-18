@@ -556,6 +556,7 @@ public class Server extends JFrame implements ActionListener{
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
 
+							ui.studentCard = ui.getImageByArray(ui.buf,100,100);
 							if(ui.state == 0) {
 								//signUp(ui);
 								oos.writeObject("1");
