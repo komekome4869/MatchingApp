@@ -1492,7 +1492,6 @@ public class Server extends JFrame implements ActionListener{
  		return true;
  	}
 
-	//グループいいね
  	public static boolean goodGroup(String my_num, String your_num) {
  		try {
  			File file = new File(my_num + ".txt");
