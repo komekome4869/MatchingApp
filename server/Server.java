@@ -961,6 +961,14 @@ public class Server extends JFrame implements ActionListener{
 			}
 		}
 
+		joinGroup(String.valueOf(gi.hostUser), gi.groupNumber.toString());
+		for(int i=0; i<gi.numberOfMember-1; i++) {
+			inviteUsers(String.valueOf(gi.hostUser), gi.groupNumber.toString());
+		}
+
+		String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
+		nonhost.replace(" 0","");
+
 		try {
 			//グループ情報ファイルを作成
 			FileWriter fw = new FileWriter(GroupFile);
@@ -970,7 +978,7 @@ public class Server extends JFrame implements ActionListener{
 					 /*UUID*/ "\n" +
 					 /*UUID*/ "\n" +
 					 gi.hostUser + "\n" +
-					 gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3] + "\n" +
+					 nonhost + "\n" +
 					 gi.comment + "\n" +
 					 gi.numberOfMember + "\n"
 					 );
@@ -985,6 +993,64 @@ public class Server extends JFrame implements ActionListener{
 		} catch (IOException e) {
 			System.err.print("新規登録の際にエラーが発生しました：" + e);
 			return;
+		}
+	}
+
+	//グループ作成時に招待
+	public static void inviteUsers(String studentNum, String uuid) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		FileWriter fw = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 14) break;
+				strbuf.append(line + "\n");
+			}
+
+			//誘われているグループ(13行目)に追加
+			if(line == "") { 	//今まで誘われていなかった場合
+				strbuf.append(uuid + "\n");
+			}else {				//すでに誘われていた場合
+				strbuf.append(line + " " + uuid + "\n");
+			}
+
+			//最後まで読み込み
+			while((line = br.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//参加したグループが全員集まったか確認
+			judgeAllGathered(uuid);
+
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
+			//再度読み込み
+			readAllUserFiles();
+			readAllGroupFiles();
+
+		}catch(IOException e) {
+			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
+		}finally {
+			try {
+				fr.close();
+				br.close();
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -1496,6 +1562,78 @@ public class Server extends JFrame implements ActionListener{
  			return false;
  		}
 	}
+
+	//ユーザいいね拒否
+	public static void badUser(String my_num, String your_num) {
+		try {
+			File file = new File(my_num + ".txt");
+			FileReader filereader = new FileReader(file);
+			BufferedReader br = new BufferedReader(filereader);
+
+			int count = 0;
+			int flag = 0;
+			String[] str = new String[100];
+
+
+			while(str[count] != null) {
+				str[count] = br.readLine();
+				count++;
+			}
+
+ 				str[10] = str[10].replace(your_num,""); //縺輔ｌ縺溯｡後°繧画ｶ医☆
+ 				str[10] = str[10].replace("  "," "); //荳ｦ繧薙□遨ｺ逋ｽ繧貞炎髯､
+				if(str[10].charAt(0) == ' ')  str[10] = str[10].substring(1, str[10].length()); //蜈磯�ｭ縺ｮ遨ｺ逋ｽ繧貞炎髯､
+				if(str[10].charAt(str[10].length()) == ' ')  str[10] = str[10].substring(1, str[10].length()-1); //譛�蠕後�ｮ遨ｺ逋ｽ繧貞炎髯､
+
+			FileWriter filewriter = new FileWriter(file);  //譖ｸ縺肴鋤縺�
+			BufferedWriter bw = new BufferedWriter(filewriter);
+			for (int i=0;i<17;i++) {
+	   			bw.write(str[i]);
+	   			bw.newLine();
+			}
+
+			readAllUserFiles();
+
+		}catch(IOException e) {
+			System.out.println(e);
+		}
+
+	}
+
+	//グループいいね拒否
+	public static void badGroup(String my_num, String your_num) {
+			try {
+				File file = new File(my_num + ".txt");
+				FileReader filereader = new FileReader(file);
+				BufferedReader br = new BufferedReader(filereader);
+
+				int count = 0;
+				String[] str = new String[100];
+
+				while(str[count] != null) {
+					str[count] = br.readLine();
+					count++;
+				}
+
+	 				str[4] = str[4].replace(your_num,""); //縺輔ｌ縺溯｡後°繧画ｶ医☆
+	 				str[4] = str[4].replace("  "," "); //荳ｦ繧薙□遨ｺ逋ｽ繧貞炎髯､
+					if(str[4].charAt(0) == ' ')  str[4] = str[4].substring(1, str[4].length()); //蜈磯�ｭ縺ｮ遨ｺ逋ｽ繧貞炎髯､
+					if(str[4].charAt(str[4].length()) == ' ')  str[4] = str[4].substring(1, str[4].length()-1); //譛�蠕後�ｮ遨ｺ逋ｽ繧貞炎髯､
+
+				FileWriter filewriter = new FileWriter(file);  //譖ｸ縺肴鋤縺�
+				BufferedWriter bw = new BufferedWriter(filewriter);
+				for (int i=0;i<11;i++) {
+		   			bw.write(str[i]);
+		   			bw.newLine();
+				}
+
+				readAllUserFiles();
+
+			}catch(IOException e) {
+				System.out.println(e);
+			}
+
+		}
 
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
