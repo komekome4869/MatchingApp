@@ -199,7 +199,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
-	String ipAddress = "localhost";	//ipアドレス設定
+	String ipAddress = "182.170.133.46";	//ipアドレス設定
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
