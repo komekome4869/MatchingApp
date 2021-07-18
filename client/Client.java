@@ -246,7 +246,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"finishAuthen");
+	    layout.show(cardPanel,"new_regis");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -2580,7 +2580,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				lMessageNew_r.setText("パスワードが一致していません");
 				lMessageNew_r.setVisible(true);
 			}
-			else if(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText())){
+			else if(!(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText()))){
 				lMessageNew_r.setText("パスワードが一致していません");
 				lMessageNew_r.setVisible(true);
 			}
@@ -4087,7 +4087,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//自分のユーザ情報の取得
 	public void SgetmyUserprof(int number) {
 		try{
-			String outLine = "mui,"+Integer.toString(number);
+			String outLine = "ui,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
@@ -4108,11 +4108,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.exit(-1);
 		}
 	}
-	
+
 	//相手のユーザ情報の取得
 		public void SgetyourUserprof(int number) {
 			try{
-				String outLine = "yui,"+Integer.toString(number);
+				String outLine = "ui,"+Integer.toString(number);
 				oos.writeObject(outLine);
 				System.out.println(outLine+"を送信しました。");  //確認用
 				oos.flush();
@@ -4138,7 +4138,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void SgetmyGroupprof(UUID number) {
 		try{
 			connectServer();
-			String outLine = "mgi,"+number.toString();
+			String outLine = "gi,"+number.toString();
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
@@ -4160,12 +4160,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.exit(-1);
 		}
 	}
-	
+
 	//相手のグループ情報の取得
 		public void SgetyourGroupprof(UUID number) {
 			try{
 				connectServer();
-				String outLine = "mgi,"+number.toString();
+				String outLine = "gi,"+number.toString();
 				oos.writeObject(outLine);
 				System.out.println(outLine+"を送信しました。");  //確認用
 				oos.flush();
