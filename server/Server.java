@@ -989,6 +989,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//再度読み込み
 			readAllUserFiles();
+			readAllGroupFiles();
 
 		} catch (IOException e) {
 			System.err.print("新規登録の際にエラーが発生しました：" + e);
@@ -1106,6 +1107,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//再度読み込み
 			readAllUserFiles();
+			readAllGroupFiles();
 
 		}catch(IOException e) {
 			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
@@ -1491,9 +1493,14 @@ public class Server extends JFrame implements ActionListener{
 
  		return true;
  	}
+<<<<<<< HEAD
 
 	//グループいいね
 
+=======
+
+	//グループいいね
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
  	public static boolean goodGroup(String my_num, String your_num) {
  		try {
  			File file = new File(my_num + ".txt");
@@ -1565,7 +1572,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//ユーザいいね拒否
-	public static void badUser(String my_num, String your_num) {
+	public static boolean badUser(String my_num, String your_num) {
 		try {
 			File file = new File(my_num + ".txt");
 			FileReader filereader = new FileReader(file);
@@ -1581,12 +1588,12 @@ public class Server extends JFrame implements ActionListener{
 				count++;
 			}
 
- 				str[10] = str[10].replace(your_num,""); //縺輔ｌ縺溯｡後°繧画ｶ医☆
- 				str[10] = str[10].replace("  "," "); //荳ｦ繧薙□遨ｺ逋ｽ繧貞炎髯､
-				if(str[10].charAt(0) == ' ')  str[10] = str[10].substring(1, str[10].length()); //蜈磯�ｭ縺ｮ遨ｺ逋ｽ繧貞炎髯､
-				if(str[10].charAt(str[10].length()) == ' ')  str[10] = str[10].substring(1, str[10].length()-1); //譛�蠕後�ｮ遨ｺ逋ｽ繧貞炎髯､
+ 				str[10] = str[10].replace(your_num,"");
+ 				str[10] = str[10].replace("  "," ");
+				if(str[10].charAt(0) == ' ')  str[10] = str[10].substring(1, str[10].length());
+				if(str[10].charAt(str[10].length()) == ' ')  str[10] = str[10].substring(1, str[10].length()-1);
 
-			FileWriter filewriter = new FileWriter(file);  //譖ｸ縺肴鋤縺�
+			FileWriter filewriter = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(filewriter);
 			for (int i=0;i<17;i++) {
 	   			bw.write(str[i]);
@@ -1594,15 +1601,19 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			readAllUserFiles();
+			readAllGroupFiles();
+
+			return true;
 
 		}catch(IOException e) {
 			System.out.println(e);
+			return false;
 		}
 
 	}
 
 	//グループいいね拒否
-	public static void badGroup(String my_num, String your_num) {
+	public static boolean badGroup(String my_num, String your_num) {
 			try {
 				File file = new File(my_num + ".txt");
 				FileReader filereader = new FileReader(file);
@@ -1616,12 +1627,12 @@ public class Server extends JFrame implements ActionListener{
 					count++;
 				}
 
-	 				str[4] = str[4].replace(your_num,""); //縺輔ｌ縺溯｡後°繧画ｶ医☆
-	 				str[4] = str[4].replace("  "," "); //荳ｦ繧薙□遨ｺ逋ｽ繧貞炎髯､
-					if(str[4].charAt(0) == ' ')  str[4] = str[4].substring(1, str[4].length()); //蜈磯�ｭ縺ｮ遨ｺ逋ｽ繧貞炎髯､
-					if(str[4].charAt(str[4].length()) == ' ')  str[4] = str[4].substring(1, str[4].length()-1); //譛�蠕後�ｮ遨ｺ逋ｽ繧貞炎髯､
+	 				str[4] = str[4].replace(your_num,"");
+	 				str[4] = str[4].replace("  "," ");
+					if(str[4].charAt(0) == ' ')  str[4] = str[4].substring(1, str[4].length());
+					if(str[4].charAt(str[4].length()) == ' ')  str[4] = str[4].substring(1, str[4].length()-1);
 
-				FileWriter filewriter = new FileWriter(file);  //譖ｸ縺肴鋤縺�
+				FileWriter filewriter = new FileWriter(file);
 				BufferedWriter bw = new BufferedWriter(filewriter);
 				for (int i=0;i<11;i++) {
 		   			bw.write(str[i]);
@@ -1629,9 +1640,13 @@ public class Server extends JFrame implements ActionListener{
 				}
 
 				readAllUserFiles();
+				readAllGroupFiles();
+
+				return true;
 
 			}catch(IOException e) {
 				System.out.println(e);
+				return false;
 			}
 
 		}

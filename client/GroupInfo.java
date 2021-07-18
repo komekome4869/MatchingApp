@@ -16,7 +16,7 @@ public class GroupInfo implements Serializable{
 	UUID[] sendGood=new UUID[MAX];		//このグルがイイネを送った相手のグルの識別番号
 	UUID[] receiveGood=new UUID[MAX];		//このグルにイイネを送った相手のグルの識別番号
 	UUID[] matchedGroup=new UUID[MAX];		//このグルとマッチングした相手のグルの識別番号
-	BufferedImage mainPhoto;		//グルの写真
+	transient BufferedImage mainPhoto;		//グルの写真
 	int hostUser=0;		//グルのホストユーザ(=グルを作った人)
 	int[] nonhostUser=new int[4];		//グルのホストでないユーザ。グルに招待されている時点で追加する
 	int purpose=0;			//グルの目的。Client.javaの配列Purposeで文字列に変える

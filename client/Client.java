@@ -199,7 +199,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
+<<<<<<< HEAD
 	String ipAddress = "";	//ipアドレス設定
+=======
+	String ipAddress = "182.170.133.46";	//ipアドレス設定
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
@@ -246,7 +250,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"new_regis");
+	    layout.show(cardPanel,"login");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -2530,9 +2534,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					loginId=Integer.valueOf(tfIdLogin.getText());
 					loginPassword=tfPasswordLogin.getText();
 
-					//TODO Scheck(loginId,loginPassword);
+					Scheck(loginId,loginPassword);
 					if((boolean)inputObj) {
-						//TODO myUserInfo=SgetUserprof(loginId);
+						SgetmyUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
 						if(temp==0) {
 							layout.show(cardPanel,"pleaseWait");
@@ -2641,7 +2645,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			else {
 				myUserInfo.setName(tfNameJudge.getText());
 				myUserInfo.setLineId(tfNumberJudge.getText());
-				//TODO sendUserInfo(myUserInfo);
+				sendUserInfo(myUserInfo);
 				layout.show(cardPanel,"pleaseWait");
 			}
 			break;
@@ -2649,7 +2653,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "すすむfinishAuthen":
 			myUserInfo.setIsAuthentificated(1);
-			//TODO SchangeProf(myUserInfo);
+			SchangeProf(myUserInfo);
 			goHome();
 			break;
 
@@ -3647,7 +3651,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	//client.connectServer();
+    	client.connectServer();
     	//client.new Notification();
     }
 
