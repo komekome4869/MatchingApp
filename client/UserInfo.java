@@ -20,7 +20,9 @@ public class UserInfo implements Serializable{
 	int faculty=0;	//学部
 	int birth=0;	//出身
 	int circle=0;	//サークル
-	int []buf;		//学生証バフ
+	int[] bufStudentCard;		//学生証バフ
+	int[] bufMainPhoto;
+	int[][] bufSubPhoto=new int[4][];
 	String hobby="";	//趣味
 	int[] sendGood=new int[MAX];	//自分がイイネを送った相手の学籍番号
 	int[] receiveGood=new int[MAX];	//自分にイイネを送った相手の学籍番号
@@ -34,6 +36,14 @@ public class UserInfo implements Serializable{
 	String lineId="未登録";	//ラインID
 	boolean isPublic=true;		//プロフの非公開を希望するユーザはfalseに。falseだと検索に引っかからなくなる。
 
+
+	int widthOfStudentCard;
+	int heightOfStudentCard;
+	int widthOfMainPhoto;
+	int heightOfMainPhoto;
+	int[] widthOfSubPhoto=new int[4];
+	int[] heightOfSubPhoto=new int[4];
+	;
 	static final long serialVersionUID=1000;
 
 	UserInfo(){
@@ -206,12 +216,14 @@ public class UserInfo implements Serializable{
 
 
 	public void setStudentCard(BufferedImage sc) {
-		buf = getArrayByImage(sc, 50, 50);
+		widthOfStudentCard=sc.getWidth();
+		heightOfStudentCard=sc.getHeight();
+		bufStudentCard = getArrayByImage(sc, widthOfStudentCard,heightOfStudentCard);
 		studentCard=sc;
 	}
 
 	public BufferedImage getStudentCard() {
-		studentCard = getImageByArray(buf,50,50);
+		studentCard = getImageByArray(bufStudentCard,widthOfStudentCard,heightOfStudentCard);
 		return studentCard;
 	}
 
@@ -224,22 +236,43 @@ public class UserInfo implements Serializable{
 	}
 
 	public void setMainPhoto(BufferedImage mp) {
+		widthOfMainPhoto=mp.getWidth();
+		heightOfMainPhoto=mp.getHeight();
+		bufMainPhoto = getArrayByImage(mp, widthOfMainPhoto,heightOfMainPhoto);
 		mainPhoto=mp;
 	}
 
 	public BufferedImage getMainPhoto() {
+		mainPhoto=getImageByArray(bufMainPhoto, widthOfMainPhoto,heightOfMainPhoto);
 		return mainPhoto;
 	}
 
 	public void setSubPhoto(BufferedImage[] sp) {
-		subPhoto=sp;
+		for(int i=0;i<4;i++) {
+			if(sp[i]!=null) {
+				widthOfSubPhoto[i]=sp[i].getWidth();
+				heightOfSubPhoto[i]=sp[i].getHeight();
+				bufSubPhoto[i] = getArrayByImage(sp[i], widthOfSubPhoto[i],heightOfSubPhoto[i]);
+				subPhoto[i]=sp[i];
+			}
+			else {
+				bufSubPhoto[i]=null;
+				sp[i]=null;
+			}
+		}
 	}
 
-	public void setSubPhoto(BufferedImage sp,int n) {
-		subPhoto[n]=sp;
+	public void setSubPhoto(BufferedImage sp,int i) {
+		widthOfSubPhoto[i]=sp.getWidth();
+		heightOfSubPhoto[i]=sp.getHeight();
+		bufSubPhoto[i] = getArrayByImage(sp, widthOfSubPhoto[i],heightOfSubPhoto[i]);
+		subPhoto[i]=sp;
 	}
 
 	public BufferedImage[] getSubPhoto() {
+		for(int i=0;i<4;i++) {
+			subPhoto[i]=getImageByArray(bufSubPhoto[i], widthOfSubPhoto[i],heightOfSubPhoto[i]);
+		}
 		return subPhoto;
 	}
 

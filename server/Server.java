@@ -557,7 +557,7 @@ public class Server extends JFrame implements ActionListener{
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							ui.studentCard = ui.getImageByArray(ui.buf,100,100);
+							ui.studentCard = ui.getStudentCard();//TODO
 
 							if(ui.state == 0) {
 								//新規登録
