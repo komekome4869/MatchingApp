@@ -550,13 +550,12 @@ public class Server extends JFrame implements ActionListener{
 				while(true) {
 					try {
 						Object inputObj = ois.readObject();
+						System.out.println("データを受信しました");
 						//UserInfo型なら
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							ui.studentCard = ui.getImageByArray(ui.buf, 100, 100);
-							ImageIO.write(ui.studentCard, "png", new File("T.png"));//検証でファイル保存
-							//新規登録
+
 							if(ui.state == 0) {
 								//signUp(ui);
 								oos.writeObject("1");
@@ -567,7 +566,7 @@ public class Server extends JFrame implements ActionListener{
 						//GroupInfo型なら
 						else if(inputObj instanceof GroupInfo) {
 							GroupInfo gi = new GroupInfo();
-							gi = (GroupInfo)ois.readObject();
+							gi = (GroupInfo)inputObj;
 							//グループ作成
 							if(gi.state == 0) {
 								makeGroup(gi);
@@ -1496,7 +1495,6 @@ public class Server extends JFrame implements ActionListener{
 
  		return true;
  	}
-	//グループいいね
 
  	public static boolean goodGroup(String my_num, String your_num) {
  		try {

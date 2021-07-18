@@ -3904,6 +3904,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			connectServer();
 			UserInfo a = obj;
 			a.buf = UserInfo.getArrayByImage(a.studentCard, 100, 100);
+			System.out.println(a.buf);
 			oos.writeObject(a);
 			oos.flush();
 			inputObj = null;

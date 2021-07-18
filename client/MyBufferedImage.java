@@ -5,9 +5,9 @@ import java.io.Serializable;
 
 public class MyBufferedImage implements Serializable{
 
-	transient int [] buf; // ‚±‚Ì•Ï”‚ÍAƒ[ƒJƒ‹•Ï”‚É‚µ‚½•û‚ª‚æ‚¢B‰ü—Ç‚·‚×‚«“_‚Å‚·B
+	transient int [] buf; // ã“ã®å¤‰æ•°ã¯ã€ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã«ã—ãŸæ–¹ãŒã‚ˆã„ã€‚æ”¹è‰¯ã™ã¹ãç‚¹ã§ã™ã€‚
 
-	transient BufferedImage img; // ’¼—ñ‰»•s‰ÂƒtƒB[ƒ‹ƒh‚Ìw’è
+	transient BufferedImage img; // ç›´åˆ—åŒ–ä¸å¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æŒ‡å®š
 
 	static int [] getArrayByImage(BufferedImage img){
 		int w = img.getWidth();
@@ -26,24 +26,24 @@ public class MyBufferedImage implements Serializable{
 
 	/*private void writeObject(ObjectOutputStream stream) throws IOException {
 		//stream.putFields();
-		//stream.writeFields();//eƒNƒ‰ƒX‚Ìî•ño—Í
-		//ã‹L‚±‚Ì2s‚Ì‘ã‚í‚è‚ÉA
-		stream.defaultWriteObject();//‚ğg‚Á‚½B
+		//stream.writeFields();//è¦ªã‚¯ãƒ©ã‚¹ã®æƒ…å ±å‡ºåŠ›
+		//ä¸Šè¨˜ã“ã®2è¡Œã®ä»£ã‚ã‚Šã«ã€
+		stream.defaultWriteObject();//ã‚’ä½¿ã£ãŸã€‚
 
 		int width = this.img.getWidth();
 		stream.writeInt(width);
 
 		this.buf = getArrayByImage(this.img);
 		stream.writeInt(this.buf.length);
-		for(int i=0; i < this.buf.g‚Á‚½length;  i++){
+		for(int i=0; i < this.buf.ä½¿ã£ãŸlength;  i++){
 			stream.writeInt(this.buf[i]);
 		}
 	}*/
 
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		//stream.readFields();
-		//@ã‹L‘ã‚í‚è‚ÉA
-		stream.defaultReadObject();//‚ğg‚Á‚½B
+		//ã€€ä¸Šè¨˜ä»£ã‚ã‚Šã«ã€
+		stream.defaultReadObject();//ã‚’ä½¿ã£ãŸã€‚
 
 		int width = stream.readInt();
 		this.buf = new int[stream.readInt()];
