@@ -245,8 +245,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    goodInform();
 	    matchingInform();
 
-		ipAddress="localhost";
-
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
 	    layout.show(cardPanel,"login");
 	    pack();
