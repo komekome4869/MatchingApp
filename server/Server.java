@@ -188,8 +188,7 @@ public class Server extends JFrame implements ActionListener{
 						users[userFileNum].subPhoto[0] = sub1;
 						users[userFileNum].subPhoto[1] = sub2;
 						users[userFileNum].subPhoto[2] = sub3;
-						users[userFileNum].subPhoto[3] = sub4
-								;
+						users[userFileNum].subPhoto[3] = sub4;
 						break;
 
 					case 2 :
@@ -594,7 +593,7 @@ public class Server extends JFrame implements ActionListener{
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							ui.studentCard = ui.getImageByArray(ui.buf,100,100);
+							ui.studentCard = ui.getStudentCard();//TODO
 
 							//新規登録
 							if(ui.state == 0) {
@@ -893,12 +892,12 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(ui.studentCard, "png", studentCard);
-			ImageIO.write(ui.mainPhoto, "png", main_image);
-			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
-			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
-			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
-			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
+			ImageIO.write(ui.getStudentCard(), "png", studentCard);
+			ImageIO.write(ui.getMainPhoto(), "png", main_image);
+			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
+			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
+			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
+			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 			//配列に追加
 			readUserFile(LoginFile);
@@ -1097,7 +1096,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(gi.mainPhoto, "png", main_image);
+			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
 			//再度読み込み
 			readAllUserFiles();

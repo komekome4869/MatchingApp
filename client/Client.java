@@ -199,7 +199,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
-	String ipAddress = "localhost";	//ipアドレス設定
+	//String ipAddress = "182.170.133.46";	//ipアドレス設定
+	String ipAddress = "localhost";
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
@@ -3914,8 +3915,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		try{
 			connectServer();
 			UserInfo a = obj;
-			a.buf = UserInfo.getArrayByImage(a.studentCard, 100, 100);
-			System.out.println(a.buf);
 			oos.writeObject(a);
 			oos.flush();
 			inputObj = null;
