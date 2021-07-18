@@ -1027,19 +1027,12 @@ public class Server extends JFrame implements ActionListener{
 
 
 	//いいね
-<<<<<<< HEAD
- 	public static boolean goodUser(String my_num, String your_num) {
-  		try {
-   			File file = new File(my_num + ".txt");
-   			FileReader filereader = new FileReader(file);
-   			BufferedReader br = new BufferedReader(filereader);
-=======
+
  	public static boolean goodUser(String my_num, String your_num) {
  		try {
  			File file = new File(my_num + ".txt");
  			FileReader filereader = new FileReader(file);
  			BufferedReader br = new BufferedReader(filereader);
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 
  			int count = 0;
  			int flag = 0;
@@ -1168,12 +1161,10 @@ public class Server extends JFrame implements ActionListener{
 		 }catch(IOException e) {
 		   System.out.println(e);
 		 }
-<<<<<<< HEAD
 
 	}
  	
  	
-=======
 
  	//検索用内部クラス
  	class forSearchData{
@@ -1193,7 +1184,6 @@ public class Server extends JFrame implements ActionListener{
 
  	}
 
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
 		JPanel cardPanel;
