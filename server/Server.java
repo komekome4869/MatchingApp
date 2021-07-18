@@ -1489,14 +1489,13 @@ public class Server extends JFrame implements ActionListener{
  			readAllUserFiles();
  			readAllGroupFiles();
 
+ 			return true;
+
  		}catch(IOException e) {
  			System.out.println(e);
  			return false;
  		}
-
-		return true;
-
- 	}
+	}
 
 	//認証内部クラス
 	class Authentificate extends JFrame implements ActionListener{
