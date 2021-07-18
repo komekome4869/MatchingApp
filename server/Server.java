@@ -227,37 +227,47 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 10 :
-						String sendStudents[] = line.split(" ");
-						for(int i=0; i<sendStudents.length; i++) {
-							users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
+						if(line != "") {
+							String sendStudents[] = line.split(" ");
+							for(int i=0; i<sendStudents.length; i++) {
+								users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
+							}
 						}
 						break;
 
 					case 11 :
-						String receiveStudents[] = line.split(" ");
-						for(int i=0; i<receiveStudents.length; i++) {
-							users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
+						if(line != "") {
+							String receiveStudents[] = line.split(" ");
+							for(int i=0; i<receiveStudents.length; i++) {
+								users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
+							}
 						}
 						break;
 
 					case 12 :
-						String matchingStudents[] = line.split(" ");
-						for(int i=0; i<matchingStudents.length; i++) {
-							users[userFileNum].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
+						if(line != "") {
+							String matchingStudents[] = line.split(" ");
+							for(int i=0; i<matchingStudents.length; i++) {
+								users[userFileNum].matchedUser[i] = Integer.parseInt(matchingStudents[i]);
+							}
 						}
 						break;
 
 					case 13 :
-						String joiningGroups[] = line.split(" ");
-						for(int i=0; i<joiningGroups.length; i++) {
-							users[userFileNum].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
+						if(line != "") {
+							String joiningGroups[] = line.split(" ");
+							for(int i=0; i<joiningGroups.length; i++) {
+								users[userFileNum].joiningGroup[i] = UUID.fromString(joiningGroups[i]);
+							}
 						}
 						break;
 
 					case 14 :
-						String invitedGroups[] = line.split(" ");
-						for(int i=0; i<invitedGroups.length; i++) {
-							users[userFileNum].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
+						if(line != "") {
+							String invitedGroups[] = line.split(" ");
+							for(int i=0; i<invitedGroups.length; i++) {
+								users[userFileNum].invitedGroup[i] = UUID.fromString(invitedGroups[i]);
+							}
 						}
 						break;
 
@@ -347,23 +357,29 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 4 :
-							String sendGood[] = line.split(" ");
-							for(int i=0; i<sendGood.length; i++) {
-								groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
+							if(line != "") {
+								String sendGood[] = line.split(" ");
+								for(int i=0; i<sendGood.length; i++) {
+									groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
+								}
 							}
 							break;
 
 						case 5 :
-							String receiveGood[] = line.split(" ");
-							for(int i=0; i<receiveGood.length; i++) {
-								groups[groupFileNum].receiveGood[i] = UUID.fromString(receiveGood[i]);
+							if(line != "") {
+								String receiveGood[] = line.split(" ");
+								for(int i=0; i<receiveGood.length; i++) {
+									groups[groupFileNum].receiveGood[i] = UUID.fromString(receiveGood[i]);
+								}
 							}
 							break;
 
 						case 6 :
-							String matchedGood[] = line.split(" ");
-							for(int i=0; i<matchedGood.length; i++) {
-								groups[groupFileNum].matchedGroup[i] = UUID.fromString(matchedGood[i]);
+							if(line != "") {
+								String matchedGood[] = line.split(" ");
+								for(int i=0; i<matchedGood.length; i++) {
+									groups[groupFileNum].matchedGroup[i] = UUID.fromString(matchedGood[i]);
+								}
 							}
 							break;
 
@@ -372,9 +388,11 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case 8 :
-							String nonhostUser[] = line.split(" ");
-							for(int i=0; i<nonhostUser.length; i++) {
-								groups[groupFileNum].nonhostUser[i] = Integer.parseInt(nonhostUser[i]);
+							if(line != "") {
+								String nonhostUser[] = line.split(" ");
+								for(int i=0; i<nonhostUser.length; i++) {
+									groups[groupFileNum].nonhostUser[i] = Integer.parseInt(nonhostUser[i]);
+								}
 							}
 							break;
 
