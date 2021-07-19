@@ -287,7 +287,12 @@ public class Server extends JFrame implements ActionListener{
 						}
 						break;
 
+<<<<<<< HEAD
 					case 15 :
+=======
+					case 15 :
+						if(line.length()>0)
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 						users[userFileNum].isAuthentificated = Integer.parseInt(line);
 						break;
 
@@ -1861,7 +1866,7 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
-			
+
 			if(!preventLoop) {
 				matchUsers(yourId, myId, true);
 				readAllUserFiles();
@@ -2565,6 +2570,68 @@ public class Server extends JFrame implements ActionListener{
 			String cmd=ae.getActionCommand();
 
 			if(cmd.equals("認証")) {
+			 	BufferedReader br = null;
+		        FileReader fr = null;
+		        FileWriter fw = null;
+		        String line;
+		        StringBuffer strbuf = new StringBuffer("");
+		        if(pageAuthen != -1) {
+			        try {
+						//ファイルを読み込み
+						File file = notAuthentificatededUsers[pageAuthen];
+						fr = new FileReader(file);
+						br = new BufferedReader(fr);
+						int line_counter = 0;
+
+						//該当行を検索
+						while((line = br.readLine()) != null) {
+							line_counter++;
+							if(line_counter == 15) {
+								strbuf.append("2\n");
+							}
+							else {
+								strbuf.append(line + "\n");
+							}
+						}
+
+						//最後まで読み込み
+						while((line = br.readLine()) != null) {
+							strbuf.append(line + "\n");
+						}
+
+						//書き込み
+						fw = new FileWriter(file);
+						fw.write(strbuf.toString());
+						fw.close();
+						fr.close();
+						br.close();
+
+						readAllUserFiles();
+
+						pageAuthen--;
+
+					}
+					catch(IOException e) {
+						System.err.print("認証に関する処理でエラーが発生しました：" + e);
+					}
+				}
+				if(pageAuthen <= -1) {
+					this.setVisible(false);
+					this.dispose();
+					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
+				}
+				else {
+					nextPage();
+				}
+			}
+			else if(cmd.equals("却下")) {
+				if(pageAuthen <= -1) {
+					this.setVisible(false);
+					this.dispose();
+					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
+				}
+				else {
+					File file = notAuthentificatededUsers[pageAuthen];
 				 	BufferedReader br = null;
 			        FileReader fr = null;
 			        FileWriter fw = null;
@@ -2573,7 +2640,7 @@ public class Server extends JFrame implements ActionListener{
 			        if(pageAuthen != -1) {
 				        try {
 							//ファイルを読み込み
-							File file = notAuthentificatededUsers[pageAuthen];
+							file = notAuthentificatededUsers[pageAuthen];
 							fr = new FileReader(file);
 							br = new BufferedReader(fr);
 							int line_counter = 0;
@@ -2610,12 +2677,14 @@ public class Server extends JFrame implements ActionListener{
 					}
 					if(pageAuthen == -1) {
 						this.setVisible(false);
+						readAllUserFiles();//TODO
 						this.dispose();
 						//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 					}
 					else {
 						nextPage();
 					}
+				}
 			}
 			else if(cmd.equals("却下")) {
 				if(pageAuthen == -1) {

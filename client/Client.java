@@ -2549,6 +2549,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						System.out.println("ログイン成功");
 						SgetmyUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
+						System.out.println(temp);
 						if(temp==0) {
 							layout.show(cardPanel,"pleaseWait");
 						}
