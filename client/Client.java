@@ -180,7 +180,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JTextField tfCommentMyGroupProfile = new JTextField(20);
     JButton bQuitMyGroupProfile = new JButton("解散");
 
-    JRadioButton rbProfileSetup = new JRadioButton("公開", true);
+    JButton bProfileSetup = new JButton("公開");
 
     JButton[] bIconInviteInform=new JButton[3];
 
@@ -1914,11 +1914,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lProfileSetup);
 
-        rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
-        rbProfileSetup.addChangeListener(this);
-        rbProfileSetup.setContentAreaFilled(false);
-        rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(rbProfileSetup);
+        bProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
+        bProfileSetup.addActionListener(this);
+        bProfileSetup.setBackground(Color.blue);
+        bProfileSetup.setForeground(Color.white);
+        bProfileSetup.setActionCommand("公開・非公開");
+        bProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(bProfileSetup);
 
         JLabel lDeleteAccountSetup = new JLabel("アカウント削除");
         lDeleteAccountSetup.setBounds(w/10,3*h/10,w/2,h/10);
@@ -2285,9 +2287,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				Sgroup_home(nowPage);
 			}
 			else {
-				//TODO グル検索(nowPage,groupSearchCondition);
+				Sgroupsearch(nowPage,groupSearchCondition);
 			}
-
 			for(int i=0;i<3;i++) {
 				if(nowShowingGroups[i]==null) {
 					bIconHome[i].setVisible(false);
@@ -2304,20 +2305,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 		}
 		else {
+			if(userSearchCondition==""){
+				Shome(nowPage);
+			}
+			else {
+				Susersearch(nowPage,userSearchCondition);
+			}
 			for(int i=0;i<3;i++) {
-				if(userSearchCondition==""){
-					Shome(nowPage);
-				}
-				else {
-					Susersearch(nowPage,userSearchCondition);
-				}
-
 				if(nowShowingUsers[i]==null) {
+					System.out.println(i+"nullです");
 					bIconHome[i].setVisible(false);
 				}
 				else {
+					System.out.println(i+""+""+nowShowingUsers[i].getName());
 				    try {
-						bIconHome[i].setIcon(scaleImage(myUserInfo.getMainPhoto(),w/6,h/15));
+						bIconHome[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/6,h/15));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -2413,12 +2415,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goInviteInform() {
 
 		for(int i=0;i<3;i++) {
-			SgetyourGroupprof(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
-			nowShowingGroups[i]=yourGroupInfo;
-			if(nowShowingGroups[i]==null) {
+			if(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]==null) {
 				bIconInviteInform[i].setVisible(false);
 			}
 			else {
+				SgetyourGroupprof(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
+				nowShowingGroups[i]=yourGroupInfo;
 			    try {
 			    	bIconInviteInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 				} catch (IOException e) {
@@ -2434,12 +2436,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goGoodInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				SgetyourGroupprof(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
-				nowShowingGroups[i]=yourGroupInfo;
-				if(nowShowingGroups[i]==null) {
+				if(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
 				else {
+					SgetyourGroupprof(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
+					nowShowingGroups[i]=yourGroupInfo;
 				    try {
 				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 					} catch (IOException e) {
@@ -2452,12 +2454,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
-				nowShowingUsers[i]=yourUserInfo;
-				if(nowShowingUsers[i]==null) {
+				if(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]==0) {
 					bIconGoodInform[i].setVisible(false);
 				}
 				else {
+					SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
 					} catch (IOException e) {
@@ -2474,12 +2476,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goMatchingInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				SgetyourGroupprof(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
-				nowShowingUsers[i]=yourUserInfo;
-				if(nowShowingGroups[i]==null) {
+				if(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]==null) {
 					bIconMatchingInform[i].setVisible(false);
 				}
 				else {
+					SgetyourGroupprof(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
+					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 					} catch (IOException e) {
@@ -2491,12 +2493,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
-				nowShowingUsers[i]=yourUserInfo;
-				if(nowShowingUsers[i]==null) {
+				if(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]==0) {
 					bIconMatchingInform[i].setVisible(false);
 				}
 				else {
+					SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
 					} catch (IOException e) {
@@ -2956,12 +2958,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "設定menu":
 			if(myUserInfo.getIsPublic()) {
-				rbProfileSetup.setSelected(true);
-				rbProfileSetup.setText("公開");
+				bProfileSetup.setText("公開");
 			}
 			else {
-				rbProfileSetup.setSelected(false);
-				rbProfileSetup.setText("非公開");
+				bProfileSetup.setText("非公開");
 			}
 
 			layout.show(cardPanel,"setup");
@@ -3638,6 +3638,19 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			layout.show(cardPanel,"matching");
 			break;
+
+
+		case "公開・非公開":
+			if(myUserInfo.getIsPublic()) {
+				bProfileSetup.setText("非公開");
+				myUserInfo.setIsPublic(false);
+				SchangeProf(myUserInfo);
+			}
+			else {
+				bProfileSetup.setText("公開");
+				myUserInfo.setIsPublic(true);
+				SchangeProf(myUserInfo);
+			}
 		}
 
 	}
@@ -3649,11 +3662,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			if (cb.isSelected()) {
 				cb.setText("公開");
 				myUserInfo.setIsPublic(true);
-				//新プロフ(myUserInfo.getStudentNumber())
+				SchangeProf(myUserInfo);
 			} else {
 				cb.setText("非公開");
 				myUserInfo.setIsPublic(false);
-				//新プロフ(myUserInfo.getStudentNumber())
+				SchangeProf(myUserInfo);
 			}
 		}
 	}
