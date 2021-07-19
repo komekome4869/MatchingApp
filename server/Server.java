@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -56,9 +57,9 @@ public class Server extends JFrame implements ActionListener{
 	static int groupFileNum = 0;	//ユーザファイル数
 
 	//検索用
-	static ArrayList<UserInfo> userlist = new ArrayList<UserInfo>();
+	static ArrayList<UserInfo> userlist;
 	static ArrayList<UserInfo> user_buf = new ArrayList<UserInfo>();
-	static ArrayList<GroupInfo> grouplist = new ArrayList<GroupInfo>();
+	static ArrayList<GroupInfo> grouplist;
 	static ArrayList<GroupInfo> group_buf = new ArrayList<GroupInfo>();
 
 	int w = 400;
@@ -157,6 +158,9 @@ public class Server extends JFrame implements ActionListener{
 					userFileNum++;
 				}
 			}
+			//ユーザ情報のリストを作成
+			userlist = new ArrayList<UserInfo>(Arrays.asList(users));
+			System.out.println(userlist);
 			userFileNum--;
 		}
 	}
@@ -295,7 +299,8 @@ public class Server extends JFrame implements ActionListener{
 
 				}
 
-				userlist.add(users[userFileNum]);
+				//userlist.add(users[userFileNum]);
+				//System.out.println("a:"+users[userFileNum]+userFileNum);
 				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
 
 			}
@@ -329,6 +334,11 @@ public class Server extends JFrame implements ActionListener{
 				readGroupFile(file);
 				groupFileNum++;
 			}
+		}
+		//グループのリストを作成
+		if(groups!=null) {
+			grouplist = new ArrayList<GroupInfo>(Arrays.asList(groups));
+			System.out.println("grouplist"+grouplist);
 		}
 		groupFileNum--; //要素と一致させる
 	}
@@ -424,7 +434,7 @@ public class Server extends JFrame implements ActionListener{
 
 					}
 
-					grouplist.add(groups[groupFileNum]);
+					//grouplist.add(groups[groupFileNum]);
 					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
 
 				}
@@ -693,7 +703,7 @@ public class Server extends JFrame implements ActionListener{
 					}
 				}
 			}catch(IOException e) {
-				System.err.println("クライアントが切断しました");
+				System.out.println("クライアントが切断しました");
 			}
 		}
 	}
@@ -719,31 +729,39 @@ public class Server extends JFrame implements ActionListener{
 		user_buf.clear();
 
 		UserInfo res[] = new UserInfo[3];
+		
+		System.out.println("userList："+userlist);
 
 		for(int i = 0; i < userlist.size(); i++){
 			UserInfo user = userlist.get(i);
 
 			//完全一致
-		    if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
-		    	user_buf.add(user);
-		    }
+			if(user!=null) {
+				if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
+					user_buf.add(user);
+				}
+			}
 
 		}
+		
+		
+			System.out.println("配列："+user_buf);
+		
 
 		//候補なしならnullを返す
-		if(user_buf == null) return null;
+		if(user_buf.get(0) == null) return null;
 
 		//候補がいる場合
 		else {
-			if(3*page - 2 <= user_buf.size()) res[0] = user_buf.get(3*page - 2);
+			if(3*page - 2 <= user_buf.size()) res[0] = user_buf.get(3*page - 3);
 			else res[0] = null;
-
-			if(3*page - 1 <= user_buf.size()) res[1] = user_buf.get(3*page - 1);
+			System.out.println(res[0]);
+			if(3*page - 1 <= user_buf.size()) res[1] = user_buf.get(3*page - 2);
 			else res[1] = null;
-
-			if(3*page <= user_buf.size()) res[2] = user_buf.get(3*page);
+			System.out.println(res[1]);
+			if(3*page <= user_buf.size()) res[2] = user_buf.get(3*page-1);
 			else res[2] = null;
-
+			System.out.println(res[2]);
 		}
 
 		return res;
@@ -785,9 +803,11 @@ public class Server extends JFrame implements ActionListener{
 			GroupInfo group = grouplist.get(i);
 
 			//完全一致
-		    if(group.purpose == purpose || group.numberOfMember == num) {
-		    	group_buf.add(group);
-		    }
+			if(group!=null) {
+				if(group.purpose == purpose || group.numberOfMember == num) {
+					group_buf.add(group);
+				}
+			}
 
 		}
 
@@ -796,13 +816,13 @@ public class Server extends JFrame implements ActionListener{
 
 		//候補がいる場合
 		else {
-			if(3*page - 2 <= group_buf.size()) res[0] = group_buf.get(3*page - 2);
+			if(3*page - 2 <= group_buf.size()) res[0] = group_buf.get(3*page - 3);
 			else res[0] = null;
 
-			if(3*page - 1 <= group_buf.size()) res[1] = group_buf.get(3*page - 1);
+			if(3*page - 1 <= group_buf.size()) res[1] = group_buf.get(3*page - 2);
 			else res[1] = null;
 
-			if(3*page <= group_buf.size()) res[2] = group_buf.get(3*page);
+			if(3*page <= group_buf.size()) res[2] = group_buf.get(3*page - 1);
 			else res[2] = null;
 
 		}
