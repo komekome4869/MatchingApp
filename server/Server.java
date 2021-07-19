@@ -1415,15 +1415,21 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループにuuidがあるときtrue
-			if(line.length() > 2) {
-				if(line.contains(uuid)) {
-					return true;
+			if(line==null) {
+				return false;
+			}
+			else {
+				if(line.length() > 2) {
+					if(line.contains(uuid)) {
+						return true;
+					}else {
+						return false;
+					}
 				}else {
 					return false;
 				}
-			}else {
-				return false;
 			}
+			
 
 		}catch(IOException e) {
 			System.err.print("judgeJoinedGroupでエラーが発生しました：" + e);
@@ -2342,7 +2348,6 @@ public class Server extends JFrame implements ActionListener{
 	    JLabel lStudentCardAuthen = new JLabel("");
 	    JLabel lUserNumberAuthen = new JLabel("");
 	    JLabel lUserLineIdAuthen = new JLabel("");
-
 
 		public Authentificate(){
 
