@@ -2070,6 +2070,13 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
+   		}finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
    		}
 
  		return true;

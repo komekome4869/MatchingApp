@@ -3340,8 +3340,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "いいねviewGroup":
 			Sgroup_good(nowShowingGroup.getStudentNumber());
-			bGoodViewGroup.setVisible(false);
-			lGoodViewGroup.setVisible(true);
+			SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
