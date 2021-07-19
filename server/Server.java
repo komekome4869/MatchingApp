@@ -1195,9 +1195,6 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			//参加したグループが全員集まったか確認
-			judgeAllGathered(uuid);
-
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
