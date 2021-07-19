@@ -2309,7 +2309,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					Shome(nowPage);
 				}
 				else {
-					Ssearch(nowPage,userSearchCondition);
+					Susersearch(nowPage,userSearchCondition);
 				}
 
 				if(nowShowingUsers[i]==null) {
@@ -3660,7 +3660,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	client.connectServer();
+    	//client.connectServer();
     	//client.new Notification();
     }
 
@@ -3866,16 +3866,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			// データ受信
 			inputObj = null;
-			while(inputObj==null) {
+			//while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					System.out.println(inputObj);
-					nowShowingUsers = (UserInfo[])inputObj;
+					if(inputObj!=null)  nowShowingUsers = (UserInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
+					//break;
 				}
-			}
+			//}
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3883,25 +3883,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	//条件検索
-	public void Ssearch(int page, String cond) {
+	public void Susersearch(int page, String cond) {
 		try{
 			connectServer();
-			String outLine = "us,"+Integer.toString(page)+","+cond;
+			String outLine = "uj,"+Integer.toString(page)+","+cond;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
 			inputObj = null;
-			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
-					nowShowingUsers[1] = (UserInfo)ois.readObject();
-					nowShowingUsers[2] = (UserInfo)ois.readObject();
+					if(inputObj!=null)	nowShowingUsers = (UserInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
 				}
-			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
@@ -3909,6 +3905,31 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.exit(-1);
 		}
 	}
+
+	//条件検索
+		public void Sgroupsearch(int page, String cond) {
+			try{
+				connectServer();
+				String outLine = "gj,"+Integer.toString(page)+","+cond;
+				oos.writeObject(outLine);
+				System.out.println(outLine+"を送信しました。");  //確認用
+				oos.flush();
+				inputObj = null;
+					try {
+						inputObj = ois.readObject();
+						if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
+						else System.out.println("取得できるユーザ情報がありません。");
+					}catch(ClassNotFoundException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					}
+
+				System.out.println(inputObj);
+				closeSocket();
+			}catch(IOException e) {
+				System.err.println("サーバ接続時にエラーが発生しました: " + e);
+				System.exit(-1);
+			}
+		}
 
 	// 新規登録
 	public void sendUserInfo(UserInfo obj) {
@@ -3946,17 +3967,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			// データ受信
 			inputObj = null;
-			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingGroups[0] = (GroupInfo)inputObj;
-					nowShowingGroups[1] = (GroupInfo)ois.readObject();
-					nowShowingGroups[2] = (GroupInfo)ois.readObject();
+					if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
 				}
-			}
+
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
@@ -4132,14 +4150,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				System.out.println(outLine+"を送信しました。");  //確認用
 				oos.flush();
 				inputObj = null;
-				while(inputObj==null) {
 					try {
 						inputObj = ois.readObject();	//自分のユーザ情報を取得
 					}catch(ClassNotFoundException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-						break;
 					}
-				}
+
 				System.out.println(inputObj);
 				yourUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
 				closeSocket();
