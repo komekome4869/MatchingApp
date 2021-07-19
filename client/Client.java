@@ -3421,8 +3421,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "招待inform":
-			nowPage=1;
-			/*if(IsNowUsingGroupAccount)
+			nowPage=1;/*
+			if(IsNowUsingGroupAccount) {
+
+			}
 			SgetmyUserprof(myUserInfo.getStudentNumber());
 			Sget*/
 			goInviteInform();
