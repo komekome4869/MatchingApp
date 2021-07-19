@@ -1862,7 +1862,7 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
-			
+
 			if(!preventLoop) {
 				matchUsers(yourId, myId, true);
 				readAllUserFiles();
@@ -2599,6 +2599,8 @@ public class Server extends JFrame implements ActionListener{
 						fw = new FileWriter(file);
 						fw.write(strbuf.toString());
 						fw.close();
+						fr.close();
+						br.close();
 
 						readAllUserFiles();
 
