@@ -313,7 +313,7 @@ public class Server extends JFrame implements ActionListener{
 	//グループファイルを全て読み込み
 	public static void readAllGroupFiles() {
 		groupFileNum = 0;
-		groups = null;
+		groups = new GroupInfo[1000];
 		activeGroups.clear();
 
 		File dir = new File(System.getProperty("user.dir") + "\\Group");
@@ -345,9 +345,9 @@ public class Server extends JFrame implements ActionListener{
 
 	//グループファイル読み込み
 	public static void readGroupFile(File file) {
-	       FileReader fr;
-	        BufferedReader br;
-			try {
+		FileReader fr;
+		BufferedReader br;
+		try {
 				fr = new FileReader(file);
 		        br = new BufferedReader(fr);
 		        String line;
