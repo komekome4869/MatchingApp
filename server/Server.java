@@ -1302,6 +1302,9 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fr.close();
+			br.close();
+			fw.close();
 
 			//参加したグループが全員集まったか確認
 			if(!preventJudge)
@@ -1312,14 +1315,7 @@ public class Server extends JFrame implements ActionListener{
 			return false;
 
 		}finally {
-			try {//久保田が書き換え
-				fr.close();
-				br.close();
-				fw.close();//nullpointer
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
+
 		}
 
 		return true;
@@ -1354,9 +1350,13 @@ public class Server extends JFrame implements ActionListener{
 			//非ホストユーザがグループに入っているか確認
 			int count_true = 0;
 			for(int i=0; i<students.length; i++) {
-				if(students[i].length() > 0)
-					if(judgeJoinedGroup(students[i], uuid))
+				if(students[i].length() > 0) {
+					System.out.println("count_trueの判定はじめ");
+					if(judgeJoinedGroup(students[i], uuid)) {
 						count_true++;
+						System.out.println("count_true++"+count_true);
+					}
+				}
 			}
 
 			//該当行を検索
@@ -1422,11 +1422,32 @@ public class Server extends JFrame implements ActionListener{
 			System.out.println(line);
 
 			//参加しているグループにuuidがあるときtrue
+<<<<<<< HEAD
 			if(line != null) {
 				return true;
+=======
+			if(line==null) {
+				System.out.println("行は空");
+				return false;
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 			}
 			else {
+<<<<<<< HEAD
 				return false;
+=======
+				if(line.length() > 2) {
+					if(line.contains(uuid)) {
+						System.out.println("contains");
+						return true;
+					}else {
+						System.out.println("no contains");
+						return false;
+					}
+				}else {
+					System.out.println("長さが2もない");
+					return false;
+				}
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 			}
 
 

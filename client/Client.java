@@ -1848,7 +1848,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMyGroupProfile);
 
-        tfCommentMyGroupProfile.setBounds(w/3,33*h/60,w/2,h/5);
+        tfCommentMyGroupProfile.setBounds(w/3,33*h/60,w/2,h/20);
         tfCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(tfCommentMyGroupProfile);
 
@@ -2809,31 +2809,40 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case"いいねreply":
 			Sgood(nowShowingUser.getStudentNumber());
 			SgetmyUserprof(myUserInfo.getStudentNumber());
-			goGoodInform();//TODO
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case"断るreply":
 			SrejectGood(nowShowingUser.getStudentNumber());
-			goGoodInform();
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case"いいねreplyGroup":
 			 Sgroup_good(nowShowingGroup.getStudentNumber());
-			layout.show(cardPanel, "goodInform");
+			 SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			 nowPage=1;
+			 goHome();
 			break;
 
 
 		case"断るreplyGroup":
 			SrejectGoodfromGroup(nowShowingGroup.getStudentNumber());
+			SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case "いいねgood":
 			Sgood(nowShowingUser.getStudentNumber());
-			bGoodGood.setVisible(false);
-			lGoodGood.setVisible(true);
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
@@ -3290,11 +3299,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "参加invite":
 			SjoinGroup(nowShowingGroup.getStudentNumber());
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case "断るinvite":
 			SrejectJoinGroup(nowShowingGroup.getStudentNumber());
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
@@ -3421,18 +3436,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "招待inform":
-			nowPage=1;/*
-			if(IsNowUsingGroupAccount) {
-
+			nowPage=1;
+			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
 			}
-			SgetmyUserprof(myUserInfo.getStudentNumber());
-			Sget*/
+			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
+			}
 			goInviteInform();
 			break;
 
 
 		case "いいねinform":
 			nowPage=1;
+			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			}
+			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
+			}
 			goGoodInform();
 			break;
 
@@ -3440,6 +3462,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "マッチングinform":
 			nowPage=1;
+			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			}
+			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
+			}
 			goMatchingInform();
 			break;
 
