@@ -2383,7 +2383,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	public void goGood() {
-		System.out.println(nowShowingUser.getStudentNumber());
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
 		lGradeGood2.setText(String.valueOf(Grade[nowShowingUser.getGrade()]));
@@ -2464,7 +2463,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 		}
 		else {
-			for(int i=0;i<3;i++) {
+			for(int i=0;i<3;i++) {//TODO
 				if(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]==0) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2810,7 +2809,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case"いいねreply":
 			Sgood(nowShowingUser.getStudentNumber());
-			goGoodInform();
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			goGoodInform();//TODO
 			break;
 
 
@@ -3302,7 +3302,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "メンバ0viewGroup":
 		case "メンバ1viewGroup":
 		case "メンバ2viewGroup":
-		case "メンバ3viewGroup":
+		case "メンバ3viewGroup"://TODO
 		case "メンバ4viewGroup":
 			if(cmd.equals("メンバ0viewGroup")) {
 				SgetyourUserprof(nowShowingGroup.getHostUser());
@@ -3311,7 +3311,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			else {
 				for(int i=1;i<5;i++) {
 					if(cmd.equals("メンバ"+String.valueOf(i)+"viewGroup")) {
-						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i]);
+						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i-1]);
 						nowShowingUser=yourUserInfo;
 					}
 				}
