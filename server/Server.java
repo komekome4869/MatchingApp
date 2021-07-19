@@ -161,7 +161,6 @@ public class Server extends JFrame implements ActionListener{
 			}
 			//ユーザ情報のリストを作成
 			userlist = new ArrayList<UserInfo>(Arrays.asList(users));
-			System.out.println(userlist);
 			userFileNum--;
 		}
 	}
@@ -341,7 +340,6 @@ public class Server extends JFrame implements ActionListener{
 		//グループのリストを作成
 		if(groups!=null) {
 			grouplist = new ArrayList<GroupInfo>(Arrays.asList(groups));
-			System.out.println("grouplist"+grouplist);
 		}
 		groupFileNum--; //要素と一致させる
 	}
@@ -1416,15 +1414,21 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループにuuidがあるときtrue
-			if(line.length() > 2) {
-				if(line.contains(uuid)) {
-					return true;
+			if(line==null) {
+				return false;
+			}
+			else {
+				if(line.length() > 2) {
+					if(line.contains(uuid)) {
+						return true;
+					}else {
+						return false;
+					}
 				}else {
 					return false;
 				}
-			}else {
-				return false;
 			}
+
 
 		}catch(IOException e) {
 			System.err.print("judgeJoinedGroupでエラーが発生しました：" + e);
@@ -2431,6 +2435,7 @@ public class Server extends JFrame implements ActionListener{
 
 			if(pageAuthen == -1) return;
 
+
 			try {
 				//ファイルを読み込み
 				file = notAuthentificatededUsers[pageAuthen];
@@ -2449,7 +2454,7 @@ public class Server extends JFrame implements ActionListener{
 				while((line = br.readLine()) != null) {
 					line_counter++;
 					if(line_counter == 16) {
-						lUserNameAuthen.setText(line);
+						lUserLineIdAuthen.setText(line);
 						break;
 					}
 				}
@@ -2458,6 +2463,14 @@ public class Server extends JFrame implements ActionListener{
             catch(IOException e) {
 				System.err.print("認証に関する処理でエラーが発生しました：" + e);
 
+			}
+
+
+			try {
+				File imgFile=new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + lUserNumberAuthen.getText() + "\\" + lUserNumberAuthen.getText() + "_card.png");
+				lStudentCardAuthen.setIcon(scaleImage(ImageIO.read(imgFile),9*w/10,h/5));
+			} catch (IOException e) {
+				System.out.println("学生証の読み込みに失敗"+e);
 			}
 			/*finally {
             	try {
@@ -2482,7 +2495,7 @@ public class Server extends JFrame implements ActionListener{
 	        card.add(lTitleAuthen);
 
 
-	        lStudentCardAuthen.setBounds(w/10,h/3,9*w/10,h/5);
+	        lStudentCardAuthen.setBounds(w/10,h/5,9*w/10,h/5);
 	        lStudentCardAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lStudentCardAuthen);
 
@@ -2498,36 +2511,36 @@ public class Server extends JFrame implements ActionListener{
 	        card.add(lUserNameAuthen);
 
 	        JLabel lNumberAuthen = new JLabel("学籍番号");
-	        lNumberAuthen.setBounds(w/10,8*h/15,w/5,h/15);
+	        lNumberAuthen.setBounds(w/10,9*h/15,w/5,h/15);
 	        lNumberAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lNumberAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lNumberAuthen);
 
-	        lUserNumberAuthen.setBounds(2*w/5,8*h/15,3*w/5,h/15);
+	        lUserNumberAuthen.setBounds(2*w/5,9*h/15,3*w/5,h/15);
 	        lUserNumberAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lUserNumberAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lUserNumberAuthen);
 
 	        JLabel lLineIdAuthen = new JLabel("LINEのID");
-	        lLineIdAuthen.setBounds(w/10,9*h/15,w/5,h/15);
+	        lLineIdAuthen.setBounds(w/10,11*h/15,w/5,h/15);
 	        lLineIdAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lLineIdAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lLineIdAuthen);
 
-	        lUserLineIdAuthen.setBounds(2*w/5,9*h/15,3*w/5,h/15);
+	        lUserLineIdAuthen.setBounds(2*w/5,11*h/15,3*w/5,h/15);
 	        lUserLineIdAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        lUserLineIdAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lUserLineIdAuthen);
 
 	        JButton bAcceptAuthen=new JButton("認証");
-	        bAcceptAuthen.setBounds(w/5,5*h/6,w/4,h/15);
+	        bAcceptAuthen.setBounds(w/5,13*h/15,w/4,h/15);
 	        bAcceptAuthen.addActionListener(this);
 	        bAcceptAuthen.setActionCommand("認証");
 	        bAcceptAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
 	        card.add(bAcceptAuthen);
 
 	        JButton bRejectAuthen=new JButton("却下");
-	        bRejectAuthen.setBounds(11*w/20,5*h/6,w/4,h/15);
+	        bRejectAuthen.setBounds(11*w/20,13*h/15,w/4,h/15);
 	        bRejectAuthen.addActionListener(this);
 	        bRejectAuthen.setActionCommand("却下");
 	        bRejectAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
