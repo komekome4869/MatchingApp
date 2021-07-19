@@ -1239,6 +1239,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループ(13行目)に追加
+
 			if(line.length() < 3) { 	//今まで参加してなかった場合
 				strbuf.append(uuid + "\n");
 			}else {				//すでに参加したことがある場合
@@ -1311,6 +1312,7 @@ public class Server extends JFrame implements ActionListener{
 				if(line_counter == 8) break;
 				strbuf.append(line + "\n");
 			}
+
 
 			if(line.length() < 3) {
 				students = line.split(" ");//TODO
