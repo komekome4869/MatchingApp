@@ -360,6 +360,7 @@ public class Server extends JFrame implements ActionListener{
 						case 1 :
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
 
+
 							//画像の読み込み
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
 							BufferedImage main = ImageIO.read(main_image);
@@ -729,7 +730,7 @@ public class Server extends JFrame implements ActionListener{
 		user_buf.clear();
 
 		UserInfo res[] = new UserInfo[3];
-		
+
 		System.out.println("userList："+userlist);
 
 		for(int i = 0; i < userlist.size(); i++){
@@ -743,13 +744,13 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 		}
-		
-		
+
+
 			System.out.println("配列："+user_buf);
-		
+
 
 		//候補なしならnullを返す
-		if(user_buf.get(0) == null) return null;
+		if(user_buf == null) return null;
 
 		//候補がいる場合
 		else {
@@ -1271,9 +1272,9 @@ public class Server extends JFrame implements ActionListener{
 			line = line.replace(uuid, ""); //UUIDを削除
 			line = line.replace("  "," "); //並んだ空白を削除
 			//久保田が書き換え
-			if(line.length()!=0) {
-				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-				if(line.charAt(line.length()-1) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length() != 0) {
+				if(Character.isWhitespace(line.charAt(0)))  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(Character.isWhitespace(line.charAt(line.length() - 1)))  line = line.substring(1, line.length()-1); //最後の空白を削除
 			}
 
 			strbuf.append(line + "\n");
@@ -1283,11 +1284,12 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
+			//書き込み
+			fw = new FileWriter(file);
+			fw.write(strbuf.toString());
+
 			//参加したグループが全員集まったか確認
-			//久保田：書き込みが終わる前に判定しようとしてる
 			judgeAllGathered(uuid);
-
-
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1317,7 +1319,9 @@ public class Server extends JFrame implements ActionListener{
         BufferedReader br = null;
         FileReader fr = null;
 		FileWriter fw = null;
-        String line;
+
+        String line = "";
+        String students[] = null;
         StringBuffer strbuf = new StringBuffer("");
 
         try {
@@ -1333,14 +1337,17 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			int index =1;
-			if(line!=null) {
-				if(line.length()!=0) {
-					String students[] = line.split(" ");//TODO
-					index = students.length + 1; //参加している人数
-				}
+			if(line.length() != 0) {
+				students = line.split(" ");//TODO
 			}
 			strbuf.append(line + "\n");
+
+			//非ホストユーザがグループに入っているか確認
+			int i = 0;
+			int count_true = 0;
+			while(students[i] != null) {
+				if(judgeJoinedGroup(students[i], uuid)) count_true++;
+			}
 
 			//該当行を検索
 			while((line = br.readLine()) != null) {
@@ -1349,10 +1356,13 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
+			//人数の行
 			boolean judge = false;
-			if(index == Integer.parseInt(line)) judge = true;
+			if(count_true + 1 == Integer.parseInt(line))
+				judge = true;
 			strbuf.append(line + "\n");
 
+			//全員集まったかの行
 			line = br.readLine(); //次の行
 			if(judge) {
 				strbuf.append("true\n");
@@ -1371,6 +1381,49 @@ public class Server extends JFrame implements ActionListener{
         }catch(IOException e) {
 
         }
+	}
+
+	//グループの参加の有無をチェック
+	public static boolean judgeJoinedGroup(String studentNum, String uuid) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		String line;
+		StringBuffer strbuf = new StringBuffer("");
+
+		try {
+			//ファイルを読み込み
+			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			int line_counter = 0;
+
+			//該当行を検索
+			while((line = br.readLine()) != null) {
+				line_counter++;
+				if(line_counter == 13) break;
+				strbuf.append(line + "\n");
+			}
+
+			//参加しているグループにuuidがあるときtrue
+			if(line.contains(uuid)) {
+				return true;
+			}else {
+				return false;
+			}
+
+		}catch(IOException e) {
+			System.err.print("judgeJoinedGroupでエラーが発生しました：" + e);
+			return false;
+
+		}finally {
+			try {
+				fr.close();
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
 	}
 
 	//グループ参加拒否・グループ削除
@@ -2475,8 +2528,9 @@ public class Server extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
-	 public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
+
+	//画像のリサイズ
+	public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
 	        int width = bi.getWidth();    // オリジナル画像の幅
 	        int height = bi.getHeight();  // オリジナル画像の高さ
 
@@ -2640,7 +2694,7 @@ public class Server extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent ae) {
 			String cmd=ae.getActionCommand();
 			System.out.println(cmd);
-			
+
 			if(cmd=="検索") {
 				System.out.println("検索実行");
 				String studentNum=tfStudentNumberSearch.getText();
@@ -2652,9 +2706,9 @@ public class Server extends JFrame implements ActionListener{
 					//ファイルを読み込み
 					File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 					File image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_main.png");
-					
+
 					lMainPhotoUserInfo.setIcon(scaleImage(ImageIO.read(image_dir),w/2,h/6));
-					
+
 					for(int i=0;i<4;i++) {
 						switch(i) {
 						case 1:
@@ -2672,7 +2726,7 @@ public class Server extends JFrame implements ActionListener{
 						}
 						lSubPhotoUserInfo[i].setIcon(scaleImage(ImageIO.read(image_dir),w/6,h/10));
 					}
-					
+
 					fr = new FileReader(file);
 					br = new BufferedReader(fr);
 
