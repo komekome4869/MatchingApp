@@ -858,13 +858,13 @@ public class Server extends JFrame implements ActionListener{
 
 		//ユーザがいる場合
 		else {
-			if(groups[3*page - 2] != null) res[0] = groups[3*page - 2];
+			if(groups[3*page - 3] != null) res[0] = groups[3*page - 2];
 			else res[0] = null;
 
-			if(groups[3*page - 1] != null) res[1] = groups[3*page - 1];
+			if(groups[3*page - 2] != null) res[1] = groups[3*page - 1];
 			else res[1] = null;
 
-			if(groups[3*page] != null) res[2] = groups[3*page];
+			if(groups[3*page-1] != null) res[2] = groups[3*page];
 			else res[2] = null;
 		}
 
@@ -1303,23 +1303,20 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fr.close();
+			br.close();
+			fw.close();
 
 			//参加したグループが全員集まったか確認
-			if(!preventJudge) judgeAllGathered(uuid);
+			if(!preventJudge)
+				judgeAllGathered(uuid);
 
 		}catch(IOException e) {
 			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
 			return false;
 
 		}finally {
-			try {//久保田が書き換え
-				fr.close();
-				br.close();
-				fw.close();//nullpointer
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
+
 		}
 
 		return true;
@@ -1333,7 +1330,6 @@ public class Server extends JFrame implements ActionListener{
 		FileWriter fw = null;
 
         String line = "";
-        String students[] = null;
         StringBuffer strbuf = new StringBuffer("");
 
         try {
@@ -1349,15 +1345,19 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			if(line.length() > 3) {
-				students = line.split(" ");//TODO
-			}
+			String students[] = line.split(" ");//TODO
 			strbuf.append(line + "\n");
 
 			//非ホストユーザがグループに入っているか確認
 			int count_true = 0;
 			for(int i=0; i<students.length; i++) {
-				if(judgeJoinedGroup(students[i], uuid)) count_true++;
+				if(students[i].length() > 0) {
+					System.out.println("count_trueの判定はじめ");
+					if(judgeJoinedGroup(students[i], uuid)) {
+						count_true++;
+						System.out.println("count_true++"+count_true);
+					}
+				}
 			}
 
 			//該当行を検索
@@ -1369,6 +1369,8 @@ public class Server extends JFrame implements ActionListener{
 
 			//人数の行
 			boolean judge = false;
+			System.out.println("count : " + count_true);
+			System.out.println("ninzuu : " + Integer.parseInt(line));
 			if(count_true + 1 == Integer.parseInt(line))
 				judge = true;
 			strbuf.append(line + "\n");
@@ -1384,13 +1386,14 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
 			readAllGroupFiles();
 
         }catch(IOException e) {
-
+			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
         }
 	}
 
@@ -1398,7 +1401,7 @@ public class Server extends JFrame implements ActionListener{
 	public static boolean judgeJoinedGroup(String studentNum, String uuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
-		String line;
+		String line = "";
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
@@ -1407,26 +1410,34 @@ public class Server extends JFrame implements ActionListener{
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			int line_counter = 0;
+			int i= 0;
 
 			//該当行を検索
 			while((line = br.readLine()) != null) {
 				line_counter++;
+				System.out.println(i++);
 				if(line_counter == 13) break;
 				strbuf.append(line + "\n");
 			}
 
+			System.out.println(line);
+
 			//参加しているグループにuuidがあるときtrue
 			if(line==null) {
+				System.out.println("行は空");
 				return false;
 			}
 			else {
 				if(line.length() > 2) {
 					if(line.contains(uuid)) {
+						System.out.println("contains");
 						return true;
 					}else {
+						System.out.println("no contains");
 						return false;
 					}
 				}else {
+					System.out.println("長さが2もない");
 					return false;
 				}
 			}
@@ -1604,9 +1615,10 @@ public class Server extends JFrame implements ActionListener{
 		String Groups[] = new String[100]; //参加してるグループ、とりあえず100個まで
 		String InvitedGroups[] = new String[100]; //誘われてるグループ、とりあえず100個まで
 
+		//ファイルを読み込み
+		File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+
 			try {
-				//ファイルを読み込み
-				File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 				fr = new FileReader(file);
 				br = new BufferedReader(fr);
 				int line_counter = 0;
@@ -1621,7 +1633,8 @@ public class Server extends JFrame implements ActionListener{
 				SentGoodStudents = line.split(" ");
 				//ここでいいね削除
 				for(int i=0; i<SentGoodStudents.length; i++) {
-					deleteReceivedGood(SentGoodStudents[i], studentNum);
+					if(SentGoodStudents[i].length() > 0)
+						deleteReceivedGood(SentGoodStudents[i], studentNum);
 				}
 
 				//次の行
@@ -1631,7 +1644,8 @@ public class Server extends JFrame implements ActionListener{
 				BeingSentGoodStudents = line.split(" ");
 				//ここでいいね削除
 				for(int i=0; i<BeingSentGoodStudents.length; i++) {
-					deleteGood(BeingSentGoodStudents[i], studentNum);
+					if(BeingSentGoodStudents[i].length() > 0)
+						deleteGood(BeingSentGoodStudents[i], studentNum);
 				}
 
 				//次の行
@@ -1640,7 +1654,8 @@ public class Server extends JFrame implements ActionListener{
 				//空白で分割して保存、マッチングした人
 				MatchingStudents = line.split(" ");
 				for(int i=0; i<MatchingStudents.length; i++) {
-					deleteMatching(MatchingStudents[i], studentNum, false);
+					if(MatchingStudents[i].length() > 0)
+						deleteMatching(MatchingStudents[i], studentNum, false);
 				}
 
 				//次の行
@@ -1649,7 +1664,8 @@ public class Server extends JFrame implements ActionListener{
 				//空白で分割して保存、参加してるグループ
 				Groups = line.split(" ");
 				for(int i=0; i<Groups.length; i++) {
-					deleteGroup(Groups[i]);
+					if(Groups[i].length() > 0)
+						deleteGroup(Groups[i]);
 				}
 
 				//次の行
@@ -1658,16 +1674,9 @@ public class Server extends JFrame implements ActionListener{
 				//空白で分割して保存、誘われてるグループ
 				InvitedGroups = line.split(" ");
 				for(int i=0; i<InvitedGroups.length; i++) {
-					deleteGroup(InvitedGroups[i]);
+					if(InvitedGroups[i].length() > 0)
+						deleteGroup(InvitedGroups[i]);
 				}
-
-				//削除
-				file.delete();
-				image_user_dir.delete();
-
-				//再度読み込み
-				readAllUserFiles();
-				readAllGroupFiles();
 
 			}catch(IOException e) {
 				System.err.print("ユーザ削除に関する処理でエラーが発生しました：" + e);
@@ -1676,6 +1685,17 @@ public class Server extends JFrame implements ActionListener{
 				try {
 					fr.close();
 					br.close();
+
+					//削除
+					if(file.delete()) System.out.println("削除成功");
+					else System.out.println("削除失敗");
+					image_user_dir.delete();
+
+					System.out.println(studentNum + "を削除しました");
+
+					//再度読み込み
+					readAllUserFiles();
+					readAllGroupFiles();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -1971,7 +1991,7 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-   				//fw.close();
+   				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2387,7 +2407,6 @@ public class Server extends JFrame implements ActionListener{
 		            try {
 						//ファイルを読み込み
 						file = fileList[i];
-						System.out.println(file);
 						if(file.isDirectory()) continue;
 						fr = new FileReader(file);
 						br = new BufferedReader(fr);
@@ -2400,26 +2419,19 @@ public class Server extends JFrame implements ActionListener{
 								if(line.contains("0")) {
 									notAuthentificatededUsers[j] = new File(file.toString());
 									pageAuthen = j;
-							    	System.out.println("ok");
 									j++;
 								}
 								break;
 							}
 						}
+
+						fr.close();
+						br.close();
 					}
 		            catch(IOException e) {
 						System.err.print("認証に関する処理でエラーが発生しました：" + e);
 
 					}
-		            finally {
-		            	try {
-							fr.close();
-							br.close();
-						}
-						catch (IOException e) {
-							e.printStackTrace();
-						}
-		            }
 		        }
 			}
 		}
@@ -2455,6 +2467,9 @@ public class Server extends JFrame implements ActionListener{
 						break;
 					}
 				}
+
+				fr.close();
+				br.close();
 
 			}
             catch(IOException e) {
@@ -2609,6 +2624,12 @@ public class Server extends JFrame implements ActionListener{
 					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 				}
 				else {
+					pageAuthen--;
+					if(pageAuthen == -1) {
+						this.setVisible(false);
+						this.dispose();
+						//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
+					}
 					nextPage();
 				}
 			}
