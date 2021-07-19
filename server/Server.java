@@ -186,12 +186,12 @@ public class Server extends JFrame implements ActionListener{
 						BufferedImage sub3 = ImageIO.read(sub3_image);
 						BufferedImage sub4 = ImageIO.read(sub4_image);
 
-						users[userFileNum].studentCard = card;
-						users[userFileNum].mainPhoto = main;
-						users[userFileNum].subPhoto[0] = sub1;
-						users[userFileNum].subPhoto[1] = sub2;
-						users[userFileNum].subPhoto[2] = sub3;
-						users[userFileNum].subPhoto[3] = sub4;
+						users[userFileNum].setStudentCard(card);
+						users[userFileNum].setMainPhoto(main);
+						users[userFileNum].setSubPhoto(sub1,0);
+						users[userFileNum].setSubPhoto(sub2,1);
+						users[userFileNum].setSubPhoto(sub3,2);
+						users[userFileNum].setSubPhoto(sub4,3);
 						break;
 
 					case 2 :
@@ -347,7 +347,7 @@ public class Server extends JFrame implements ActionListener{
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
 							BufferedImage main = ImageIO.read(main_image);
 
-							groups[groupFileNum].mainPhoto = main;
+							groups[groupFileNum].setMainPhoto(main);
 									;
 							break;
 
@@ -616,7 +616,7 @@ public class Server extends JFrame implements ActionListener{
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							ui.studentCard = ui.getStudentCard();//TODO
+							ui.setStudentCard(ui.getStudentCard());//TODO
 
 							//新規登録
 							if(ui.state == 0) {
@@ -844,12 +844,14 @@ public class Server extends JFrame implements ActionListener{
 			try {
 				fr = new FileReader(LoginFile);
 				br = new BufferedReader(fr);
-				String str = br.readLine();				//1行目読み込み
+				br.readLine();	//TODO
+				String str = br.readLine();				//2行目読み込み
 				br.close();
+				System.out.println("str="+str);
 				String res[] = str.split(" ");			//空白で分割
 
 				//もしパスワードが一致していればtrue
-				if(res[1] == pass) return true;
+				if(res[0].equals(pass)) return true;//TODO
 				//そうでなければfalse
 				else return false;
 
@@ -995,11 +997,11 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(ui.mainPhoto, "png", main_image);
-			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
-			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
-			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
-			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
+			ImageIO.write(ui.getMainPhoto(), "png", main_image);
+			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
+			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
+			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
+			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -1060,7 +1062,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(gi.mainPhoto, "png", main_image);
+			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -2282,7 +2284,7 @@ public class Server extends JFrame implements ActionListener{
 				System.err.print("認証に関する処理でエラーが発生しました：" + e);
 
 			}
-			finally {
+			/*finally {
             	try {
 					fr.close();
 					br.close();
@@ -2290,7 +2292,7 @@ public class Server extends JFrame implements ActionListener{
 				catch (IOException e) {
 					e.printStackTrace();
 				}
-            }
+            }*/
 
 		}
 

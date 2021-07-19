@@ -60,7 +60,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	UserInfo nowShowingUser=new UserInfo();//イイネ画面とかで使う
 	GroupInfo nowShowingGroup=new GroupInfo();
 	int nowPage=1;
-	boolean isNowUsingGroupAccount=true;
+	boolean isNowUsingGroupAccount=false;
 	String prePageForGood="home";
 	String prePageForViewGroup="home";
 	String groupSearchCondition="";
@@ -1965,7 +1965,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		card.setLayout(null);
 
 		//使い方
-		String explain = "aaaaaaaaaaaa\naaaaaaaaa\naaaaaaa\naaa\na\na\n\na\naa\naa\naa\naa\naa\nb\na\nq\nww\nrr\nf";
+		String explain = "FAQ\n\n\n・自分のプロフィールを変えたい\n\nホーム画面→メニュ→Myプロフィール\nと移動して設定しよう\n\n\n"
+				+ "・グループアカウントを使いたい\n\nホーム画面→メニュ→アカウント切り替え\nと移動してグループを作成しよう\n\n\n"
+				+ "・マッチングした相手のLINEが知りたい\n\n通知→マッチングした人\nと移動し目当ての相手のLINEIDを手に入れよう\n\n\n"
+				+ "・自分のアカウントを削除したい\n\nホーム画面→メニュ→設定\nと移動しアカウントを削除できます\n";
 
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
@@ -1982,7 +1985,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JTextArea taexpHtu = new JTextArea(explain);
         taexpHtu.setEditable(false);
         //taexpHtu.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
-        taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         // スクロールバー
         JScrollPane sp = new JScrollPane(taexpHtu);
 		sp.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
@@ -2530,7 +2533,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					loginPassword=tfPasswordLogin.getText();
 
 					Scheck(loginId,loginPassword);
-					if((boolean)inputObj) {
+					if(inputObj.equals("1")){
+						System.out.println("ログイン成功");
 						SgetmyUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
 						if(temp==0) {
@@ -3654,7 +3658,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	//client.connectServer();
+    	client.connectServer();
     	//client.new Notification();
     }
 
@@ -4096,6 +4100,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//自分のユーザ情報の取得
 	public void SgetmyUserprof(int number) {
 		try{
+			connectServer();
 			String outLine = "ui,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用

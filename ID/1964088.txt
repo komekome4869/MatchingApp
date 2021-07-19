@@ -12,6 +12,6 @@ namae
 
 
 
-0
+1
 id
 true
