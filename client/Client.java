@@ -1672,7 +1672,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bokinvite.addActionListener(this);
         bokinvite.setBackground(Color.blue);
         bokinvite.setForeground(Color.white);
-        bprofileinvite.setActionCommand("参加invite");
+        bokinvite.setActionCommand("参加invite");
         card.add(bokinvite);
 
         //参加しないボタン
