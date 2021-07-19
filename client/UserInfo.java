@@ -323,14 +323,14 @@ public class UserInfo implements Serializable{
 				break;
 			}
 			if(temp!=null) {
-				System.out.println(i+"の幅"+ widthOfSubPhoto[i]);
-				System.out.println(i+"の高さ"+heightOfSubPhoto[i]);
+				//System.out.println(i+"の幅"+ widthOfSubPhoto[i]);
+				//System.out.println(i+"の高さ"+heightOfSubPhoto[i]);
 				subPhoto[i]=getImageByArray(temp, widthOfSubPhoto[i],heightOfSubPhoto[i]);
-				System.out.println("sabu"+i+"はnullじゃない");
+				//System.out.println("sabu"+i+"はnullじゃない");
 			}
 			else {
 				subPhoto[i]=null;
-				System.out.println("sabu"+i+"はnull");
+				//System.out.println("sabu"+i+"はnull");
 			}
 		}
 		return subPhoto;

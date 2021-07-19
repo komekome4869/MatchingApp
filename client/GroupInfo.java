@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,14 +26,34 @@ public class GroupInfo implements Serializable{
 	boolean isGathered=false;	//グルが全員集まったならtrueに変換し、検索に引っかかるようになる。
 	//グルから抜ける機能がない以上、誰かが招待を断った時点でグルは削除
 
+	int[] bufMainPhoto;
+	int widthOfMainPhoto;
+	int heightOfMainPhoto;
+
 	static final long serialVersionUID=1L;
 
 	GroupInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
+			setMainPhoto(ImageIO.read(new File("./img/初期アイコン.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int [] getArrayByImage(BufferedImage img,int w, int h){
+		BufferedImage subImg = img.getSubimage(0, 0, w, h);
+		WritableRaster raster = subImg.getRaster();
+		int size = raster.getNumBands() * w * h;
+		int [] buf = new int[ size ];
+		raster.getPixels(0, 0, w, h, buf);
+		return buf;
+	}
+
+	public  BufferedImage getImageByArray(int [] buf,int w, int h){
+		BufferedImage img = new BufferedImage(w,h,BufferedImage.TYPE_4BYTE_ABGR);
+		WritableRaster raster = img.getRaster();
+		raster.setPixels(0, 0, w, h, buf);
+		return img;
 	}
 
 	public int getState() {
@@ -105,10 +126,14 @@ public class GroupInfo implements Serializable{
 	}
 
 	public void setMainPhoto(BufferedImage mp) {
+		widthOfMainPhoto=mp.getWidth();
+		heightOfMainPhoto=mp.getHeight();
+		bufMainPhoto = getArrayByImage(mp, widthOfMainPhoto,heightOfMainPhoto);
 		mainPhoto=mp;
 	}
 
 	public BufferedImage getMainPhoto() {
+		mainPhoto=getImageByArray(bufMainPhoto, widthOfMainPhoto,heightOfMainPhoto);
 		return mainPhoto;
 	}
 

@@ -60,7 +60,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	UserInfo nowShowingUser=new UserInfo();//イイネ画面とかで使う
 	GroupInfo nowShowingGroup=new GroupInfo();
 	int nowPage=1;
-	boolean isNowUsingGroupAccount=true;
+	boolean isNowUsingGroupAccount=false;
 	String prePageForGood="home";
 	String prePageForViewGroup="home";
 	String groupSearchCondition="";
@@ -180,7 +180,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JTextField tfCommentMyGroupProfile = new JTextField(20);
     JButton bQuitMyGroupProfile = new JButton("解散");
 
-    JRadioButton rbProfileSetup = new JRadioButton("公開", true);
+    JButton bProfileSetup = new JButton("公開");
 
     JButton[] bIconInviteInform=new JButton[3];
 
@@ -200,12 +200,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static BufferedWriter bw;
 	static Object inputObj;
 	//String ipAddress = "182.170.133.46";	//ipアドレス設定
-	String ipAddress = "localhost";
+	String ipAddress = "localhost";//TODO
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
 	public Client(){
-		super("TITLE");
+		super("ave");
 		cardPanel = new JPanel();
 	    layout = new CardLayout();
 	    cardPanel.setLayout(layout);
@@ -278,9 +278,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		 */
 
 
-		JLabel lTitleLogin = new JLabel("TITLE");
-		lTitleLogin.setBounds(w/4,h/10,w/2,h/10);
-		lTitleLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
+		JLabel lTitleLogin = new JLabel("ave");
+		lTitleLogin.setBounds(w/4,h/10,w/2,h/9);
+		lTitleLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/5));
 		lTitleLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleLogin);
 
@@ -1914,11 +1914,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lProfileSetup);
 
-        rbProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
-        rbProfileSetup.addChangeListener(this);
-        rbProfileSetup.setContentAreaFilled(false);
-        rbProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
-        card.add(rbProfileSetup);
+        bProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
+        bProfileSetup.addActionListener(this);
+        bProfileSetup.setBackground(Color.blue);
+        bProfileSetup.setForeground(Color.white);
+        bProfileSetup.setActionCommand("公開・非公開");
+        bProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
+        card.add(bProfileSetup);
 
         JLabel lDeleteAccountSetup = new JLabel("アカウント削除");
         lDeleteAccountSetup.setBounds(w/10,3*h/10,w/2,h/10);
@@ -1965,7 +1967,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		card.setLayout(null);
 
 		//使い方
-		String explain = "aaaaaaaaaaaa\naaaaaaaaa\naaaaaaa\naaa\na\na\n\na\naa\naa\naa\naa\naa\nb\na\nq\nww\nrr\nf";
+		String explain = "FAQ\n\n\n・自分のプロフィールを変えたい\n\nホーム画面→メニュ→Myプロフィール\nと移動して設定しよう\n\n\n"
+				+ "・グループアカウントを使いたい\n\nホーム画面→メニュ→アカウント切り替え\nと移動してグループを作成しよう\n\n\n"
+				+ "・マッチングした相手のLINEが知りたい\n\n通知→マッチングした人\nと移動し目当ての相手のLINEIDを手に入れよう\n\n\n"
+				+ "・自分のアカウントを削除したい\n\nホーム画面→メニュ→設定\nと移動しアカウントを削除できます\n";
 
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
@@ -1982,7 +1987,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JTextArea taexpHtu = new JTextArea(explain);
         taexpHtu.setEditable(false);
         //taexpHtu.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
-        taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+        taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         // スクロールバー
         JScrollPane sp = new JScrollPane(taexpHtu);
 		sp.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
@@ -2282,9 +2287,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				Sgroup_home(nowPage);
 			}
 			else {
-				//TODO グル検索(nowPage,groupSearchCondition);
+				Sgroupsearch(nowPage,groupSearchCondition);
 			}
-
 			for(int i=0;i<3;i++) {
 				if(nowShowingGroups[i]==null) {
 					bIconHome[i].setVisible(false);
@@ -2301,20 +2305,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 		}
 		else {
+			if(userSearchCondition==""){
+				Shome(nowPage);
+			}
+			else {
+				Susersearch(nowPage,userSearchCondition);
+			}
 			for(int i=0;i<3;i++) {
-				if(userSearchCondition==""){
-					Shome(nowPage);
-				}
-				else {
-					Ssearch(nowPage,userSearchCondition);
-				}
-
 				if(nowShowingUsers[i]==null) {
+					System.out.println(i+"nullです");
 					bIconHome[i].setVisible(false);
 				}
 				else {
+					System.out.println(i+""+""+nowShowingUsers[i].getName());
 				    try {
-						bIconHome[i].setIcon(scaleImage(myUserInfo.getMainPhoto(),w/6,h/15));
+						bIconHome[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/6,h/15));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -2359,6 +2364,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				flag=true;
 			}
 		}
+		for(int i=0;i<myGroupInfo.getMatchedGroup().length;i++) {
+			if(myGroupInfo.getMatchedGroup()[i]==nowShowingGroup.getStudentNumber()) {
+				flag=true;
+			}
+		}
+
 		if(flag) {
 			lGoodViewGroup.setVisible(true);
 			bGoodViewGroup.setVisible(false);
@@ -2371,7 +2382,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel, "viewGroup");
 	}
 
-	public void goGood() {
+	public void goGood() {//TODO
+		System.out.println(nowShowingUser.getStudentNumber());
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
 		lGradeGood2.setText(String.valueOf(Grade[nowShowingUser.getGrade()]));
@@ -2395,6 +2407,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				flag=true;
 			}
 		}
+		for(int i=0;i<myUserInfo.getMatchedUser().length;i++) {
+			if(myUserInfo.getMatchedUser()[i]==nowShowingUser.getStudentNumber()) {
+				flag=true;
+			}
+		}
 		if(flag) {
 			lGoodGood.setVisible(true);
 			bGoodGood.setVisible(false);
@@ -2409,12 +2426,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goInviteInform() {
 
 		for(int i=0;i<3;i++) {
-			SgetyourGroupprof(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
-			nowShowingGroups[i]=yourGroupInfo;
-			if(nowShowingGroups[i]==null) {
+			if(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]==null) {
 				bIconInviteInform[i].setVisible(false);
 			}
 			else {
+				SgetyourGroupprof(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]);
+				nowShowingGroups[i]=yourGroupInfo;
 			    try {
 			    	bIconInviteInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 				} catch (IOException e) {
@@ -2430,12 +2447,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goGoodInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				SgetyourGroupprof(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
-				nowShowingGroups[i]=yourGroupInfo;
-				if(nowShowingGroups[i]==null) {
+				if(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]==null) {
 					bIconGoodInform[i].setVisible(false);
 				}
 				else {
+					SgetyourGroupprof(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]);
+					nowShowingGroups[i]=yourGroupInfo;
 				    try {
 				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 					} catch (IOException e) {
@@ -2448,12 +2465,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
-				nowShowingUsers[i]=yourUserInfo;
-				if(nowShowingUsers[i]==null) {
+				if(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]==0) {
 					bIconGoodInform[i].setVisible(false);
 				}
 				else {
+					SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconGoodInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
 					} catch (IOException e) {
@@ -2470,12 +2487,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void goMatchingInform() {
 		if(isNowUsingGroupAccount) {
 			for(int i=0;i<3;i++) {
-				SgetyourGroupprof(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
-				nowShowingUsers[i]=yourUserInfo;
-				if(nowShowingGroups[i]==null) {
+				if(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]==null) {
 					bIconMatchingInform[i].setVisible(false);
 				}
 				else {
+					SgetyourGroupprof(myGroupInfo.getMatchedGroup()[3*(nowPage-1)+i]);
+					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingGroups[i].getMainPhoto(),w/4,h/15));
 					} catch (IOException e) {
@@ -2487,12 +2504,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
-				nowShowingUsers[i]=yourUserInfo;
-				if(nowShowingUsers[i]==null) {
+				if(myUserInfo.getMatchedUser()[3*(nowPage-1)+i]==0) {
 					bIconMatchingInform[i].setVisible(false);
 				}
 				else {
+					SgetyourUserprof(myUserInfo.getMatchedUser()[3*(nowPage-1)+i]);
+					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
 					} catch (IOException e) {
@@ -2530,7 +2547,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					loginPassword=tfPasswordLogin.getText();
 
 					Scheck(loginId,loginPassword);
-					if((boolean)inputObj) {
+					if(inputObj.equals("1")){
+						System.out.println("ログイン成功");
 						SgetmyUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
 						if(temp==0) {
@@ -2733,7 +2751,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール2home":
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"home") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"home") ){
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -2742,7 +2760,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"home") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"home") ){
+						System.out.println("プロフィール\"+String.valueOf(i)+\"home");//TODO
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -2950,12 +2969,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "設定menu":
 			if(myUserInfo.getIsPublic()) {
-				rbProfileSetup.setSelected(true);
-				rbProfileSetup.setText("公開");
+				bProfileSetup.setText("公開");
 			}
 			else {
-				rbProfileSetup.setSelected(false);
-				rbProfileSetup.setText("非公開");
+				bProfileSetup.setText("非公開");
 			}
 
 			layout.show(cardPanel,"setup");
@@ -3091,7 +3108,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "グループ1change":
 		case "グループ2change":
 			for(int i=0;i<3;i++) {
-				if(cmd=="グループ"+String.valueOf(i)+"change") {
+				if(cmd.equals("グループ"+String.valueOf(i)+"change")) {
 					SgetmyGroupprof(nowShowingGroups[i].getStudentNumber());
 				}
 			}
@@ -3287,13 +3304,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "メンバ2viewGroup":
 		case "メンバ3viewGroup":
 		case "メンバ4viewGroup":
-			if(cmd=="メンバ0viewGroup") {
+			if(cmd.equals("メンバ0viewGroup")) {
 				SgetyourUserprof(nowShowingGroup.getHostUser());
 				nowShowingUser=yourUserInfo;
 			}
 			else {
 				for(int i=1;i<5;i++) {
-					if(cmd=="メンバ"+String.valueOf(i)+"viewGroup") {
+					if(cmd.equals("メンバ"+String.valueOf(i)+"viewGroup")) {
 						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i]);
 						nowShowingUser=yourUserInfo;
 					}
@@ -3513,7 +3530,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール1inviteInform":
 		case "プロフィール2inviteInform":
 			for(int i=0;i<3;i++) {
-				if(cmd=="プロフィール"+String.valueOf(i)+"inviteInform") {
+				if(cmd.equals("プロフィール"+String.valueOf(i)+"inviteInform")) {
 					nowShowingGroup=nowShowingGroups[i];
 				}
 			}
@@ -3537,7 +3554,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"goodInform") ){
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -3567,7 +3584,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"goodInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -3599,7 +3616,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール2matchingInform":
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"matchingInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"matchingInform")) {
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -3617,7 +3634,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"matchingInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -3632,6 +3649,19 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			layout.show(cardPanel,"matching");
 			break;
+
+
+		case "公開・非公開":
+			if(myUserInfo.getIsPublic()) {
+				bProfileSetup.setText("非公開");
+				myUserInfo.setIsPublic(false);
+				SchangeProf(myUserInfo);
+			}
+			else {
+				bProfileSetup.setText("公開");
+				myUserInfo.setIsPublic(true);
+				SchangeProf(myUserInfo);
+			}
 		}
 
 	}
@@ -3639,15 +3669,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void stateChanged(ChangeEvent e) {
 		JRadioButton cb = (JRadioButton)e.getSource();
 		String message = cb.getText();
-		if(message=="公開" || message=="非公開") {
+		if(message.equals("公開") || message.equals("非公開")) {
 			if (cb.isSelected()) {
 				cb.setText("公開");
 				myUserInfo.setIsPublic(true);
-				//新プロフ(myUserInfo.getStudentNumber())
+				SchangeProf(myUserInfo);
 			} else {
 				cb.setText("非公開");
 				myUserInfo.setIsPublic(false);
-				//新プロフ(myUserInfo.getStudentNumber())
+				SchangeProf(myUserInfo);
 			}
 		}
 	}
@@ -3860,17 +3890,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			// データ受信
 			inputObj = null;
-			while(inputObj==null) {
+			//while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
-					nowShowingUsers[1] = (UserInfo)ois.readObject();
-					nowShowingUsers[2] = (UserInfo)ois.readObject();
+					if(inputObj!=null)  nowShowingUsers = (UserInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
+					//break;
 				}
-			}
+			//}
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3878,25 +3907,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	//条件検索
-	public void Ssearch(int page, String cond) {
+	public void Susersearch(int page, String cond) {
 		try{
 			connectServer();
-			String outLine = "us,"+Integer.toString(page)+","+cond;
+			String outLine = "uj,"+Integer.toString(page)+","+cond;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
 			inputObj = null;
-			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
-					nowShowingUsers[1] = (UserInfo)ois.readObject();
-					nowShowingUsers[2] = (UserInfo)ois.readObject();
+					if(inputObj!=null)	nowShowingUsers = (UserInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
 				}
-			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
@@ -3904,6 +3929,31 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.exit(-1);
 		}
 	}
+
+	//条件検索
+		public void Sgroupsearch(int page, String cond) {
+			try{
+				connectServer();
+				String outLine = "gj,"+Integer.toString(page)+","+cond;
+				oos.writeObject(outLine);
+				System.out.println(outLine+"を送信しました。");  //確認用
+				oos.flush();
+				inputObj = null;
+					try {
+						inputObj = ois.readObject();
+						if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
+						else System.out.println("取得できるユーザ情報がありません。");
+					}catch(ClassNotFoundException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+					}
+
+				System.out.println(inputObj);
+				closeSocket();
+			}catch(IOException e) {
+				System.err.println("サーバ接続時にエラーが発生しました: " + e);
+				System.exit(-1);
+			}
+		}
 
 	// 新規登録
 	public void sendUserInfo(UserInfo obj) {
@@ -3941,17 +3991,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			// データ受信
 			inputObj = null;
-			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingGroups[0] = (GroupInfo)inputObj;
-					nowShowingGroups[1] = (GroupInfo)ois.readObject();
-					nowShowingGroups[2] = (GroupInfo)ois.readObject();
+					if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
 				}
-			}
+
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
@@ -4096,6 +4143,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//自分のユーザ情報の取得
 	public void SgetmyUserprof(int number) {
 		try{
+			connectServer();
 			String outLine = "ui,"+Integer.toString(number);
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
@@ -4126,14 +4174,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				System.out.println(outLine+"を送信しました。");  //確認用
 				oos.flush();
 				inputObj = null;
-				while(inputObj==null) {
 					try {
 						inputObj = ois.readObject();	//自分のユーザ情報を取得
 					}catch(ClassNotFoundException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-						break;
 					}
-				}
+
 				System.out.println(inputObj);
 				yourUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
 				closeSocket();

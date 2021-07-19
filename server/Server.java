@@ -3,9 +3,16 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,6 +24,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -49,9 +57,9 @@ public class Server extends JFrame implements ActionListener{
 	static int groupFileNum = 0;	//ユーザファイル数
 
 	//検索用
-	static ArrayList<UserInfo> userlist = new ArrayList<UserInfo>();
+	static ArrayList<UserInfo> userlist;
 	static ArrayList<UserInfo> user_buf = new ArrayList<UserInfo>();
-	static ArrayList<GroupInfo> grouplist = new ArrayList<GroupInfo>();
+	static ArrayList<GroupInfo> grouplist;
 	static ArrayList<GroupInfo> group_buf = new ArrayList<GroupInfo>();
 
 	int w = 400;
@@ -150,6 +158,9 @@ public class Server extends JFrame implements ActionListener{
 					userFileNum++;
 				}
 			}
+			//ユーザ情報のリストを作成
+			userlist = new ArrayList<UserInfo>(Arrays.asList(users));
+			System.out.println(userlist);
 			userFileNum--;
 		}
 	}
@@ -186,12 +197,12 @@ public class Server extends JFrame implements ActionListener{
 						BufferedImage sub3 = ImageIO.read(sub3_image);
 						BufferedImage sub4 = ImageIO.read(sub4_image);
 
-						users[userFileNum].studentCard = card;
-						users[userFileNum].mainPhoto = main;
-						users[userFileNum].subPhoto[0] = sub1;
-						users[userFileNum].subPhoto[1] = sub2;
-						users[userFileNum].subPhoto[2] = sub3;
-						users[userFileNum].subPhoto[3] = sub4;
+						users[userFileNum].setStudentCard(card);
+						users[userFileNum].setMainPhoto(main);
+						users[userFileNum].setSubPhoto(sub1,0);
+						users[userFileNum].setSubPhoto(sub2,1);
+						users[userFileNum].setSubPhoto(sub3,2);
+						users[userFileNum].setSubPhoto(sub4,3);
 						break;
 
 					case 2 :
@@ -288,7 +299,8 @@ public class Server extends JFrame implements ActionListener{
 
 				}
 
-				userlist.add(users[userFileNum]);
+				//userlist.add(users[userFileNum]);
+				//System.out.println("a:"+users[userFileNum]+userFileNum);
 				activeUsers.put(String.valueOf(users[userFileNum].studentNumber),users[userFileNum]);
 
 			}
@@ -323,6 +335,11 @@ public class Server extends JFrame implements ActionListener{
 				groupFileNum++;
 			}
 		}
+		//グループのリストを作成
+		if(groups!=null) {
+			grouplist = new ArrayList<GroupInfo>(Arrays.asList(groups));
+			System.out.println("grouplist"+grouplist);
+		}
 		groupFileNum--; //要素と一致させる
 	}
 
@@ -342,12 +359,13 @@ public class Server extends JFrame implements ActionListener{
 
 						case 1 :
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
+							
 
 							//画像の読み込み
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
 							BufferedImage main = ImageIO.read(main_image);
 
-							groups[groupFileNum].mainPhoto = main;
+							groups[groupFileNum].setMainPhoto(main);
 									;
 							break;
 
@@ -417,7 +435,7 @@ public class Server extends JFrame implements ActionListener{
 
 					}
 
-					grouplist.add(groups[groupFileNum]);
+					//grouplist.add(groups[groupFileNum]);
 					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
 
 				}
@@ -476,7 +494,7 @@ public class Server extends JFrame implements ActionListener{
 								oos.writeObject(sendUserInfo(Integer.parseInt(act[1])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);//TODO
 							}
 							break;
 
@@ -517,7 +535,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "ug": //ユーザにいいねを送る
-							if(goodUser(act[0],act[1])) {
+							if(goodUser(act[1],act[2])) {
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -538,7 +556,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "jg": //グループに参加
-							if(joinGroup(act[1], act[2])){
+							if(joinGroup(act[1], act[2])){//久保田が書き換え
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -616,7 +634,7 @@ public class Server extends JFrame implements ActionListener{
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							ui.studentCard = ui.getStudentCard();//TODO
+							ui.setStudentCard(ui.getStudentCard());//TODO
 
 							//新規登録
 							if(ui.state == 0) {
@@ -686,7 +704,7 @@ public class Server extends JFrame implements ActionListener{
 					}
 				}
 			}catch(IOException e) {
-				System.err.println("クライアントが切断しました");
+				System.out.println("クライアントが切断しました");
 			}
 		}
 	}
@@ -713,37 +731,45 @@ public class Server extends JFrame implements ActionListener{
 
 		UserInfo res[] = new UserInfo[3];
 
+		System.out.println("userList："+userlist);
+
 		for(int i = 0; i < userlist.size(); i++){
 			UserInfo user = userlist.get(i);
 
 			//完全一致
-		    if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
-		    	user_buf.add(user);
-		    }
+			if(user!=null) {
+				if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
+					user_buf.add(user);
+				}
+			}
 
 		}
+
+
+			System.out.println("配列："+user_buf);
+
 
 		//候補なしならnullを返す
 		if(user_buf == null) return null;
 
 		//候補がいる場合
 		else {
-			if(3*page - 2 <= user_buf.size()) res[0] = user_buf.get(3*page - 2);
+			if(3*page - 2 <= user_buf.size()) res[0] = user_buf.get(3*page - 3);
 			else res[0] = null;
-
-			if(3*page - 1 <= user_buf.size()) res[1] = user_buf.get(3*page - 1);
+			System.out.println(res[0]);
+			if(3*page - 1 <= user_buf.size()) res[1] = user_buf.get(3*page - 2);
 			else res[1] = null;
-
-			if(3*page <= user_buf.size()) res[2] = user_buf.get(3*page);
+			System.out.println(res[1]);
+			if(3*page <= user_buf.size()) res[2] = user_buf.get(3*page-1);
 			else res[2] = null;
-
+			System.out.println(res[2]);
 		}
 
 		return res;
 	}
 
 	//UserInfo送信
-	public static UserInfo[] sendUserInfo(int page) {
+	public static UserInfo[] sendUserInfo(int page) {//久保田が書き換え
 		UserInfo res[] = new UserInfo[3];
 
 		//なしならnullを返す
@@ -751,13 +777,13 @@ public class Server extends JFrame implements ActionListener{
 
 		//ユーザがいる場合
 		else {
-			if(users[3*page - 2] != null) res[0] = users[3*page - 2];
+			if(users[3*page - 3] != null) res[0] = users[3*page - 3];
 			else res[0] = null;
 
-			if(users[3*page - 1] != null) res[1] = users[3*page - 1];
+			if(users[3*page - 2] != null) res[1] = users[3*page - 2];
 			else res[1] = null;
 
-			if(users[3*page] != null) res[2] = users[3*page];
+			if(users[3*page-1] != null) res[2] = users[3*page-1];
 			else res[2] = null;
 		}
 
@@ -778,9 +804,11 @@ public class Server extends JFrame implements ActionListener{
 			GroupInfo group = grouplist.get(i);
 
 			//完全一致
-		    if(group.purpose == purpose || group.numberOfMember == num) {
-		    	group_buf.add(group);
-		    }
+			if(group!=null) {
+				if(group.purpose == purpose || group.numberOfMember == num) {
+					group_buf.add(group);
+				}
+			}
 
 		}
 
@@ -789,13 +817,13 @@ public class Server extends JFrame implements ActionListener{
 
 		//候補がいる場合
 		else {
-			if(3*page - 2 <= group_buf.size()) res[0] = group_buf.get(3*page - 2);
+			if(3*page - 2 <= group_buf.size()) res[0] = group_buf.get(3*page - 3);
 			else res[0] = null;
 
-			if(3*page - 1 <= group_buf.size()) res[1] = group_buf.get(3*page - 1);
+			if(3*page - 1 <= group_buf.size()) res[1] = group_buf.get(3*page - 2);
 			else res[1] = null;
 
-			if(3*page <= group_buf.size()) res[2] = group_buf.get(3*page);
+			if(3*page <= group_buf.size()) res[2] = group_buf.get(3*page - 1);
 			else res[2] = null;
 
 		}
@@ -844,12 +872,14 @@ public class Server extends JFrame implements ActionListener{
 			try {
 				fr = new FileReader(LoginFile);
 				br = new BufferedReader(fr);
-				String str = br.readLine();				//1行目読み込み
+				br.readLine();	//TODO
+				String str = br.readLine();				//2行目読み込み
 				br.close();
+				System.out.println("str="+str);
 				String res[] = str.split(" ");			//空白で分割
 
 				//もしパスワードが一致していればtrue
-				if(res[1] == pass) return true;
+				if(res[0].equals(pass)) return true;//TODO
 				//そうでなければfalse
 				else return false;
 
@@ -995,11 +1025,11 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(ui.mainPhoto, "png", main_image);
-			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
-			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
-			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
-			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
+			ImageIO.write(ui.getMainPhoto(), "png", main_image);
+			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
+			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
+			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
+			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -1060,7 +1090,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(gi.mainPhoto, "png", main_image);
+			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -1182,7 +1212,7 @@ public class Server extends JFrame implements ActionListener{
 			try {
 				fr.close();
 				br.close();
-				fw.close();
+				fw.close();//nullpointer
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -1223,8 +1253,12 @@ public class Server extends JFrame implements ActionListener{
 			//誘われているグループ(14行目)から削除
 			line = line.replace(uuid, ""); //UUIDを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			//久保田が書き換え
+			if(line.length()!=0) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(line.charAt(line.length()-1) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
+
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み
@@ -1233,11 +1267,10 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加したグループが全員集まったか確認
+			//久保田：書き込みが終わる前に判定しようとしてる
 			judgeAllGathered(uuid);
 
-			//書き込み
-			fw = new FileWriter(file);
-			fw.write(strbuf.toString());
+
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1248,10 +1281,10 @@ public class Server extends JFrame implements ActionListener{
 			return false;
 
 		}finally {
-			try {
+			try {//久保田が書き換え
 				fr.close();
 				br.close();
-				fw.close();
+				fw.close();//nullpointer
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -1283,9 +1316,13 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			String students[] = line.split(" ");
-			int index = students.length + 1; //参加している人数
-
+			int index =1;
+			if(line!=null) {
+				if(line.length()!=0) {
+					String students[] = line.split(" ");//TODO
+					index = students.length + 1; //参加している人数
+				}
+			}
 			strbuf.append(line + "\n");
 
 			//該当行を検索
@@ -2282,7 +2319,7 @@ public class Server extends JFrame implements ActionListener{
 				System.err.print("認証に関する処理でエラーが発生しました：" + e);
 
 			}
-			finally {
+			/*finally {
             	try {
 					fr.close();
 					br.close();
@@ -2290,7 +2327,7 @@ public class Server extends JFrame implements ActionListener{
 				catch (IOException e) {
 					e.printStackTrace();
 				}
-            }
+            }*/
 
 		}
 
@@ -2362,7 +2399,7 @@ public class Server extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent ae) {
 			String cmd=ae.getActionCommand();
 
-			if(cmd=="認証") {
+			if(cmd.equals("認証")) {
 				 BufferedReader br = null;
 			        FileReader fr = null;
 			        FileWriter fw = null;
@@ -2410,7 +2447,7 @@ public class Server extends JFrame implements ActionListener{
 						nextPage();
 					}
 			}
-			else if(cmd=="却下") {
+			else if(cmd.equals("却下")) {
 				if(pageAuthen==notAuthentificatededUsers.length-1) {
 					this.dispose();
 					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
@@ -2421,6 +2458,28 @@ public class Server extends JFrame implements ActionListener{
 			}
 		}
 	}
+
+	//画像のリサイズ
+	public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
+	        int width = bi.getWidth();    // オリジナル画像の幅
+	        int height = bi.getHeight();  // オリジナル画像の高さ
+
+	        // 縦横の比率から、scaleを決める
+	        double widthScale = (double) destWidth / (double) width;
+	        double heightScale = (double) destHeight / (double) height;
+	        double scale = widthScale < heightScale ? widthScale : heightScale;
+
+	        ImageFilter filter = new AreaAveragingScaleFilter(
+	            (int) (bi.getWidth() * scale), (int) (bi.getHeight() * scale));
+	        ImageProducer p = new FilteredImageSource(bi.getSource(), filter);
+	        Image dstImage = Toolkit.getDefaultToolkit().createImage(p);
+	        BufferedImage dst = new BufferedImage(
+	            dstImage.getWidth(null), dstImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
+	        Graphics2D g = dst.createGraphics();
+	        g.drawImage(dstImage, 0, 0, null);
+	        g.dispose();
+	        return new ImageIcon(dst);
+	    }
 
 	//会員検索内部クラス
 	class searchUsers extends JFrame implements ActionListener,ChangeListener{
@@ -2509,6 +2568,7 @@ public class Server extends JFrame implements ActionListener{
 
 	        lMainPhotoUserInfo.setBounds(w/4,6*h/60,w/2,h/6);
 	        lMainPhotoUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
+	        lMainPhotoUserInfo.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lMainPhotoUserInfo);
 
 	        for(int i=0;i<4;i++) {
@@ -2563,8 +2623,10 @@ public class Server extends JFrame implements ActionListener{
 
 		public void actionPerformed(ActionEvent ae) {
 			String cmd=ae.getActionCommand();
+			System.out.println(cmd);
 
 			if(cmd=="検索") {
+				System.out.println("検索実行");
 				String studentNum=tfStudentNumberSearch.getText();
 				BufferedReader br = null;
 		        FileReader fr = null;
@@ -2573,6 +2635,28 @@ public class Server extends JFrame implements ActionListener{
 				try {
 					//ファイルを読み込み
 					File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
+					File image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_main.png");
+
+					lMainPhotoUserInfo.setIcon(scaleImage(ImageIO.read(image_dir),w/2,h/6));
+
+					for(int i=0;i<4;i++) {
+						switch(i) {
+						case 1:
+							image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_sub2.png");
+							break;
+						case 2:
+							image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_sub3.png");
+							break;
+						case 3:
+							image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_sub4.png");
+							break;
+						case 0:
+							image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_sub1.png");
+							break;
+						}
+						lSubPhotoUserInfo[i].setIcon(scaleImage(ImageIO.read(image_dir),w/6,h/10));
+					}
+
 					fr = new FileReader(file);
 					br = new BufferedReader(fr);
 
@@ -2592,17 +2676,17 @@ public class Server extends JFrame implements ActionListener{
 							break;
 						}
 					}
+					cardLayout.show(cardPanel,"UserInfo");
 				}
 				catch(IOException e) {
 					System.err.print("ユーザ検索に関する処理でエラーが発生しました：" + e);
-
 				}
 			}
-			else if(cmd=="BAN") {
+			else if(cmd.equals("BAN")) {
 				deleteUser(tfStudentNumberSearch.getText());
 				cardLayout.show(cardPanel,"search");
 			}
-			else if(cmd=="戻る") {
+			else if(cmd.equals("戻る")) {
 				cardLayout.show(cardPanel,"search");
 			}
 
