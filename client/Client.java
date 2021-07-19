@@ -247,7 +247,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"home");
+	    layout.show(cardPanel,"login");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
