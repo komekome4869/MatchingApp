@@ -775,7 +775,7 @@ public class Server extends JFrame implements ActionListener{
 		int k=0;
 		//再読み込み
 		readAllUserFiles();
-		
+
 		for(int i=0;i<users.length;i++) {
 			if(users[i] != null) {
 				if(users[i].isPublic) {
@@ -789,7 +789,7 @@ public class Server extends JFrame implements ActionListener{
 
 		//ユーザがいる場合
 		else {
-			
+
 			if(public_users[3*page - 3] != null) res[0] = public_users[3*page - 3];
 			else res[0] = null;
 
@@ -1043,7 +1043,7 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
 			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
 			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
-			
+
 			//再度読み込み
 			readAllUserFiles();
 			System.out.println("AllUserFile:"+userlist);
@@ -1108,7 +1108,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//画像を保存
 			ImageIO.write(gi.getMainPhoto(), "png", main_image);
-			
+
 			//再度読み込み
 			readAllGroupFiles();
 
@@ -1207,7 +1207,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//誘われているグループ(13行目)に追加
-			if(line == "") { 	//今まで誘われていなかった場合
+			if(line.length() < 2) { 	//今まで誘われていなかった場合
 				strbuf.append(uuid + "\n");
 			}else {				//すでに誘われていた場合
 				strbuf.append(line + " " + uuid + "\n");
