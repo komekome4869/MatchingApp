@@ -1196,7 +1196,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加したグループが全員集まったか確認
-			judgeAllGathered(uuid);
+			//judgeAllGathered(uuid);
 
 			//書き込み
 			fw = new FileWriter(file);
