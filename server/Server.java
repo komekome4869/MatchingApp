@@ -359,6 +359,7 @@ public class Server extends JFrame implements ActionListener{
 
 						case 1 :
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
+							
 
 							//画像の読み込み
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
@@ -729,7 +730,7 @@ public class Server extends JFrame implements ActionListener{
 		user_buf.clear();
 
 		UserInfo res[] = new UserInfo[3];
-		
+
 		System.out.println("userList："+userlist);
 
 		for(int i = 0; i < userlist.size(); i++){
@@ -743,10 +744,10 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 		}
-		
-		
+
+
 			System.out.println("配列："+user_buf);
-		
+
 
 		//候補なしならnullを返す
 		if(user_buf == null) return null;
@@ -2457,7 +2458,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	 public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
 	        int width = bi.getWidth();    // オリジナル画像の幅
 	        int height = bi.getHeight();  // オリジナル画像の高さ
@@ -2622,7 +2623,7 @@ public class Server extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent ae) {
 			String cmd=ae.getActionCommand();
 			System.out.println(cmd);
-			
+
 			if(cmd=="検索") {
 				System.out.println("検索実行");
 				String studentNum=tfStudentNumberSearch.getText();
@@ -2634,9 +2635,9 @@ public class Server extends JFrame implements ActionListener{
 					//ファイルを読み込み
 					File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 					File image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_main.png");
-					
+
 					lMainPhotoUserInfo.setIcon(scaleImage(ImageIO.read(image_dir),w/2,h/6));
-					
+
 					for(int i=0;i<4;i++) {
 						switch(i) {
 						case 1:
@@ -2654,7 +2655,7 @@ public class Server extends JFrame implements ActionListener{
 						}
 						lSubPhotoUserInfo[i].setIcon(scaleImage(ImageIO.read(image_dir),w/6,h/10));
 					}
-					
+
 					fr = new FileReader(file);
 					br = new BufferedReader(fr);
 

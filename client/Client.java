@@ -200,12 +200,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static BufferedWriter bw;
 	static Object inputObj;
 	//String ipAddress = "182.170.133.46";	//ipアドレス設定
-	String ipAddress = "localhost";
+	String ipAddress = "localhost";//TODO
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
 	public Client(){
-		super("TITLE");
+		super("ave");
 		cardPanel = new JPanel();
 	    layout = new CardLayout();
 	    cardPanel.setLayout(layout);
@@ -278,9 +278,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		 */
 
 
-		JLabel lTitleLogin = new JLabel("TITLE");
-		lTitleLogin.setBounds(w/4,h/10,w/2,h/10);
-		lTitleLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, 3*w/20));
+		JLabel lTitleLogin = new JLabel("ave");
+		lTitleLogin.setBounds(w/4,h/10,w/2,h/9);
+		lTitleLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/5));
 		lTitleLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleLogin);
 
@@ -2364,6 +2364,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				flag=true;
 			}
 		}
+		for(int i=0;i<myGroupInfo.getMatchedGroup().length;i++) {
+			if(myGroupInfo.getMatchedGroup()[i]==nowShowingGroup.getStudentNumber()) {
+				flag=true;
+			}
+		}
+
 		if(flag) {
 			lGoodViewGroup.setVisible(true);
 			bGoodViewGroup.setVisible(false);
@@ -2398,6 +2404,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		boolean flag=false;
 		for(int i=0;i<myUserInfo.getSendGood().length;i++) {
 			if(myUserInfo.getSendGood()[i]==nowShowingUser.getStudentNumber()) {
+				flag=true;
+			}
+		}
+		for(int i=0;i<myUserInfo.getMatchedUser().length;i++) {
+			if(myUserInfo.getMatchedUser()[i]==nowShowingUser.getStudentNumber()) {
 				flag=true;
 			}
 		}
@@ -2493,11 +2504,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 		else {
 			for(int i=0;i<3;i++) {
-				if(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]==0) {
+				if(myUserInfo.getMatchedUser()[3*(nowPage-1)+i]==0) {
 					bIconMatchingInform[i].setVisible(false);
 				}
 				else {
-					SgetyourUserprof(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]);
+					SgetyourUserprof(myUserInfo.getMatchedUser()[3*(nowPage-1)+i]);
 					nowShowingUsers[i]=yourUserInfo;
 				    try {
 				    	bIconMatchingInform[i].setIcon(scaleImage(nowShowingUsers[i].getMainPhoto(),w/4,h/20));
@@ -3623,7 +3634,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("プロフィール"+String.valueOf(i)+"goodInform") ){
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"matchingInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
