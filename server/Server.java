@@ -352,6 +352,7 @@ public class Server extends JFrame implements ActionListener{
 		        br = new BufferedReader(fr);
 		        String line;
 				int line_counter = 0;
+				groups[groupFileNum] = new GroupInfo();
 
 				while((line = br.readLine()) != null) {
 					line_counter++;
@@ -359,7 +360,6 @@ public class Server extends JFrame implements ActionListener{
 
 						case 1 :
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
-
 
 							//画像の読み込み
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
