@@ -749,7 +749,7 @@ public class Server extends JFrame implements ActionListener{
 		
 
 		//候補なしならnullを返す
-		if(user_buf.get(0) == null) return null;
+		if(user_buf == null) return null;
 
 		//候補がいる場合
 		else {
