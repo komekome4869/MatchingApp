@@ -1945,6 +1945,8 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
+			
+			br.close();
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1960,7 +1962,6 @@ public class Server extends JFrame implements ActionListener{
    		}finally {
    			try {
 				fw.close();
-				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
