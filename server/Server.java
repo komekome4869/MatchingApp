@@ -161,7 +161,6 @@ public class Server extends JFrame implements ActionListener{
 			}
 			//ユーザ情報のリストを作成
 			userlist = new ArrayList<UserInfo>(Arrays.asList(users));
-			System.out.println(userlist);
 			userFileNum--;
 		}
 	}
@@ -341,7 +340,6 @@ public class Server extends JFrame implements ActionListener{
 		//グループのリストを作成
 		if(groups!=null) {
 			grouplist = new ArrayList<GroupInfo>(Arrays.asList(groups));
-			System.out.println("grouplist"+grouplist);
 		}
 		groupFileNum--; //要素と一致させる
 	}
