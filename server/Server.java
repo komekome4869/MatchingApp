@@ -1197,12 +1197,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-<<<<<<< HEAD
-			//参加したグループが全員集まったか確認
-			//judgeAllGathered(uuid);
 
-=======
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
