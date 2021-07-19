@@ -1854,6 +1854,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bQuitMyGroupProfile.setBounds(3*w/11,44*h/60,5*w/22,h/20);
         bQuitMyGroupProfile.addActionListener(this);
+        bQuitMyGroupProfile.setBackground(Color.black);
+        bQuitMyGroupProfile.setForeground(Color.white);
         bQuitMyGroupProfile.setActionCommand("削除myGroupProfile");
         bQuitMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         card.add(bQuitMyGroupProfile);

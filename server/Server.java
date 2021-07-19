@@ -548,7 +548,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "gg": //グループにいいねを送る
-							if(goodGroup(act[0],act[1])) {
+							if(goodGroup(act[1],act[2])) {//久保田が書き換え
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -2060,6 +2060,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			br.close();
 			fw.close();
 
 			//再度読み込み
@@ -2069,13 +2070,6 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
-   		}finally {
-   			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
 
  		return true;
