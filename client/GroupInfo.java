@@ -34,7 +34,7 @@ public class GroupInfo implements Serializable{
 
 	GroupInfo(){
 		try {
-			mainPhoto=ImageIO.read(new File("./img/初期アイコン.png"));
+			setMainPhoto(ImageIO.read(new File("./img/初期アイコン.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

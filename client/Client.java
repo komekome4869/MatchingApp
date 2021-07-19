@@ -2374,7 +2374,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel, "viewGroup");
 	}
 
-	public void goGood() {
+	public void goGood() {//TODO
+		System.out.println(nowShowingUser.getStudentNumber());
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);
 		lGradeGood2.setText(String.valueOf(Grade[nowShowingUser.getGrade()]));
@@ -2737,7 +2738,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール2home":
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"home") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"home") ){
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -2746,7 +2747,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"home") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"home") ){
+						System.out.println("プロフィール\"+String.valueOf(i)+\"home");//TODO
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -3095,7 +3097,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "グループ1change":
 		case "グループ2change":
 			for(int i=0;i<3;i++) {
-				if(cmd=="グループ"+String.valueOf(i)+"change") {
+				if(cmd.equals("グループ"+String.valueOf(i)+"change")) {
 					SgetmyGroupprof(nowShowingGroups[i].getStudentNumber());
 				}
 			}
@@ -3291,13 +3293,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "メンバ2viewGroup":
 		case "メンバ3viewGroup":
 		case "メンバ4viewGroup":
-			if(cmd=="メンバ0viewGroup") {
+			if(cmd.equals("メンバ0viewGroup")) {
 				SgetyourUserprof(nowShowingGroup.getHostUser());
 				nowShowingUser=yourUserInfo;
 			}
 			else {
 				for(int i=1;i<5;i++) {
-					if(cmd=="メンバ"+String.valueOf(i)+"viewGroup") {
+					if(cmd.equals("メンバ"+String.valueOf(i)+"viewGroup")) {
 						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i]);
 						nowShowingUser=yourUserInfo;
 					}
@@ -3517,7 +3519,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール1inviteInform":
 		case "プロフィール2inviteInform":
 			for(int i=0;i<3;i++) {
-				if(cmd=="プロフィール"+String.valueOf(i)+"inviteInform") {
+				if(cmd.equals("プロフィール"+String.valueOf(i)+"inviteInform")) {
 					nowShowingGroup=nowShowingGroups[i];
 				}
 			}
@@ -3541,7 +3543,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"goodInform") ){
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -3571,7 +3573,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"goodInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -3603,7 +3605,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "プロフィール2matchingInform":
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"matchingInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"matchingInform")) {
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -3621,7 +3623,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd=="プロフィール"+String.valueOf(i)+"goodInform") {
+					if(cmd.equals("プロフィール"+String.valueOf(i)+"goodInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -3643,7 +3645,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void stateChanged(ChangeEvent e) {
 		JRadioButton cb = (JRadioButton)e.getSource();
 		String message = cb.getText();
-		if(message=="公開" || message=="非公開") {
+		if(message.equals("公開") || message.equals("非公開")) {
 			if (cb.isSelected()) {
 				cb.setText("公開");
 				myUserInfo.setIsPublic(true);
@@ -3867,9 +3869,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
-					nowShowingUsers[1] = (UserInfo)ois.readObject();
-					nowShowingUsers[2] = (UserInfo)ois.readObject();
+					System.out.println(inputObj);
+					nowShowingUsers = (UserInfo[])inputObj;
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;

@@ -476,7 +476,7 @@ public class Server extends JFrame implements ActionListener{
 								oos.writeObject(sendUserInfo(Integer.parseInt(act[1])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);//TODO 
 							}
 							break;
 
@@ -743,7 +743,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//UserInfo送信
-	public static UserInfo[] sendUserInfo(int page) {
+	public static UserInfo[] sendUserInfo(int page) {//久保田が書き換え
 		UserInfo res[] = new UserInfo[3];
 
 		//なしならnullを返す
@@ -751,13 +751,13 @@ public class Server extends JFrame implements ActionListener{
 
 		//ユーザがいる場合
 		else {
-			if(users[3*page - 2] != null) res[0] = users[3*page - 2];
+			if(users[3*page - 3] != null) res[0] = users[3*page - 3];
 			else res[0] = null;
 
-			if(users[3*page - 1] != null) res[1] = users[3*page - 1];
+			if(users[3*page - 2] != null) res[1] = users[3*page - 2];
 			else res[1] = null;
 
-			if(users[3*page] != null) res[2] = users[3*page];
+			if(users[3*page-1] != null) res[2] = users[3*page-1];
 			else res[2] = null;
 		}
 
@@ -1225,8 +1225,14 @@ public class Server extends JFrame implements ActionListener{
 			//誘われているグループ(14行目)から削除
 			line = line.replace(uuid, ""); //UUIDを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			//久保田が書き換え
+			if(line.length()!=0) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+			}
+			if(line.length()!=0) {
+				if(line.charAt(line.length()-1) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
+			
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み
@@ -1235,11 +1241,10 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加したグループが全員集まったか確認
-			judgeAllGathered(uuid);
+			//久保田：書き込みが終わる前に判定しようとしてる
+			//judgeAllGathered(uuid);
 
-			//書き込み
-			fw = new FileWriter(file);
-			fw.write(strbuf.toString());
+			
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1250,10 +1255,10 @@ public class Server extends JFrame implements ActionListener{
 			return false;
 
 		}finally {
-			try {
+			try {//久保田が書き換え
 				fr.close();
 				br.close();
-				fw.close();
+				//fw.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -1284,10 +1289,14 @@ public class Server extends JFrame implements ActionListener{
 				if(line_counter == 8) break;
 				strbuf.append(line + "\n");
 			}
-
-			String students[] = line.split(" ");
-			int index = students.length + 1; //参加している人数
-
+			
+			int index =1;
+			if(line!=null) {
+				if(line.length()!=0) {
+					String students[] = line.split(" ");//TODO
+					index = students.length + 1; //参加している人数
+				}
+			}
 			strbuf.append(line + "\n");
 
 			//該当行を検索
