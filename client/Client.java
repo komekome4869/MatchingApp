@@ -211,8 +211,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    cardPanel.setLayout(layout);
 
 	    try {
-			backNoButton=scaleImage(ImageIO.read(new File("./img/ボタンなし背景.png")),w+30,h+30);
-			backWithButton=scaleImage(ImageIO.read(new File("./img/ボタンあり背景.png")),w+10,h);
+			backNoButton=scaleImage(ImageIO.read(new File("./img/背景.jpg")),w+30,h+30);
+			backWithButton=scaleImage(ImageIO.read(new File("./img/背景.jpg")),w+10,h);
 		}
 	    catch (IOException e) {
 			e.printStackTrace();
@@ -247,7 +247,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    matchingInform();
 
 	    //"login"のところを違う画面の名前に変えれば、それが一番最初の画面になる。
-	    layout.show(cardPanel,"login");
+	    layout.show(cardPanel,"home");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -307,7 +307,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLoginLogin=new JButton("ログイン");
         bLoginLogin.setBounds(w/4,19*h/30,w/2,h/15);
         bLoginLogin.addActionListener(this);
-        bLoginLogin.setBackground(Color.blue);
+        bLoginLogin.setBackground(Color.black);
         bLoginLogin.setForeground(Color.white);
         bLoginLogin.setActionCommand("ログインlogin");//ボタンにラベル付け、ここのルールも決めたほうがいい
         bLoginLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -316,7 +316,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bNewAccountLogin=new JButton("新規作成");
         bNewAccountLogin.setBounds(w/4,22*h/30,w/2,h/15);
         bNewAccountLogin.addActionListener(this);
-        bNewAccountLogin.setBackground(Color.blue);
+        bNewAccountLogin.setBackground(Color.black);
         bNewAccountLogin.setForeground(Color.white);
         bNewAccountLogin.setActionCommand("アカウント作成login");
         bNewAccountLogin.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -378,7 +378,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bNewAccountNew_r=new JButton("登録");
         bNewAccountNew_r.setBounds(w/4,23*h/30,w/2,h/15);
         bNewAccountNew_r.addActionListener(this);
-        bNewAccountNew_r.setBackground(Color.blue);
+        bNewAccountNew_r.setBackground(Color.black);
         bNewAccountNew_r.setForeground(Color.white);
         bNewAccountNew_r.setActionCommand("登録new_regis");
         bNewAccountNew_r.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -439,7 +439,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bChoiceJudge=new JButton("選択");
 		bChoiceJudge.setBounds(9*w/40,9*h/15,3*w/20,h/15);
 		bChoiceJudge.addActionListener(this);
-		bChoiceJudge.setBackground(Color.blue);
+		bChoiceJudge.setBackground(Color.black);
         bChoiceJudge.setForeground(Color.white);
 		bChoiceJudge.setActionCommand("選択judge");
 		bChoiceJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/50));
@@ -453,7 +453,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bSendJudge=new JButton("送信");
 		bSendJudge.setBounds(w/4,23*h/30,w/2,h/15);
 		bSendJudge.addActionListener(this);
-		bSendJudge.setBackground(Color.blue);
+		bSendJudge.setBackground(Color.black);
         bSendJudge.setForeground(Color.white);
 		bSendJudge.setActionCommand("送信judge");
 		bSendJudge.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -514,7 +514,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bnextFinishAuthen=new JButton("すすむ");
         bnextFinishAuthen.setBounds(w/4,3*h/4,w/2,h/10);
         bnextFinishAuthen.addActionListener(this);
-		bnextFinishAuthen.setBackground(Color.blue);
+		bnextFinishAuthen.setBackground(Color.black);
         bnextFinishAuthen.setForeground(Color.white);
         bnextFinishAuthen.setActionCommand("すすむfinishAuthen");
         bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -540,7 +540,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bSearchHome = new JButton("Search");
         bSearchHome.setBounds(w/12,h/30,w/5,h/15);
         bSearchHome.addActionListener(this);
-		bSearchHome.setBackground(new Color(128,0,128));
+		bSearchHome.setBackground(Color.black);
         bSearchHome.setForeground(Color.white);
         bSearchHome.setActionCommand("検索home");
         card.add(bSearchHome);
@@ -548,7 +548,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bMenuHome = new JButton("MENU");
         bMenuHome.setBounds(5*w/7,h/30,w/5,h/15);
         bMenuHome.addActionListener(this);
-		bMenuHome.setBackground(new Color(128,0,128));
+		bMenuHome.setBackground(Color.black);
         bMenuHome.setForeground(Color.white);
         bMenuHome.setActionCommand("メニューhome");
         card.add(bMenuHome);
@@ -588,7 +588,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
         bHome.setActionCommand("HOME");
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bHome);
@@ -596,7 +596,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -707,7 +707,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bGoodReply = new JButton("いいね");
         bGoodReply.setBounds(w/4,46*h/60,w/4,h/20);
         bGoodReply.addActionListener(this);
-        bGoodReply.setBackground(Color.blue);
+        bGoodReply.setBackground(Color.black);
         bGoodReply.setForeground(Color.white);
         bGoodReply.setActionCommand("いいねreply");
         bGoodReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -716,7 +716,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bBadReply = new JButton("断る");
         bBadReply.setBounds(w/2,46*h/60,w/4,h/20);
         bBadReply.addActionListener(this);
-        bBadReply.setBackground(Color.blue);
+        bBadReply.setBackground(Color.black);
         bBadReply.setForeground(Color.white);
         bBadReply.setActionCommand("断るreply");
         bBadReply.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -725,7 +725,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -734,7 +734,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -784,7 +784,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bGoodReplyGroup=new JButton("いいね");
         bGoodReplyGroup.setBounds(w/4,45*h/60,w/4,h/15);
         bGoodReplyGroup.addActionListener(this);
-        bGoodReplyGroup.setBackground(Color.blue);
+        bGoodReplyGroup.setBackground(Color.black);
         bGoodReplyGroup.setForeground(Color.white);
         bGoodReplyGroup.setActionCommand("いいねreplyGroup");
         bGoodReplyGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
@@ -794,7 +794,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bBadReplyGroup=new JButton("断る");
         bBadReplyGroup.setBounds(w/2,45*h/60,w/4,h/15);
         bBadReplyGroup.addActionListener(this);
-        bBadReplyGroup.setBackground(Color.blue);
+        bBadReplyGroup.setBackground(Color.black);
         bBadReplyGroup.setForeground(Color.white);
         bBadReplyGroup.setActionCommand("断るreplyGroup");
         bBadReplyGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
@@ -804,7 +804,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -813,7 +813,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -922,7 +922,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bGoodGood.setBounds(w/4,46*h/60,w/2,h/20);
         bGoodGood.addActionListener(this);
-        bGoodGood.setBackground(Color.blue);
+        bGoodGood.setBackground(Color.black);
         bGoodGood.setForeground(Color.white);
         bGoodGood.setActionCommand("いいねgood");
         bGoodGood.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -937,7 +937,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -946,7 +946,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -992,7 +992,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bProfMatching=new JButton("プロフィールを確認する");
         bProfMatching.setBounds(w/4,8*h/20,w/2,h/15);
         bProfMatching.addActionListener(this);
-        bProfMatching.setBackground(Color.blue);
+        bProfMatching.setBackground(Color.black);
         bProfMatching.setForeground(Color.white);
         bProfMatching.setActionCommand("確認matching");
         bProfMatching.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
@@ -1001,7 +1001,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1010,7 +1010,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1092,7 +1092,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bSearchSeachUser = new JButton("検索");
         bSearchSeachUser.setBounds(3*w/10,20*h/25,2*w/5,h/10);
         bSearchSeachUser.addActionListener(this);
-        bSearchSeachUser.setBackground(Color.blue);
+        bSearchSeachUser.setBackground(Color.black);
         bSearchSeachUser.setForeground(Color.white);
         bSearchSeachUser.setActionCommand("検索searchUser");
         bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1144,7 +1144,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bSearchSeachGroup = new JButton("検索");
         bSearchSeachGroup.setBounds(3*w/10,15*h/20,2*w/5,h/8);
         bSearchSeachGroup.addActionListener(this);
-        bSearchSeachGroup.setBackground(Color.blue);
+        bSearchSeachGroup.setBackground(Color.black);
         bSearchSeachGroup.setForeground(Color.white);
         bSearchSeachGroup.setActionCommand("検索searchGroup");
         bSearchSeachGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -1170,7 +1170,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bProfileMenu=new JButton("Myプロフィール");
         bProfileMenu.setBounds(w/4,8*h/30,w/2,3*h/30);
         bProfileMenu.addActionListener(this);
-        bProfileMenu.setBackground(Color.blue);
+        bProfileMenu.setBackground(Color.black);
         bProfileMenu.setForeground(Color.white);
         bProfileMenu.setActionCommand("Myプロフィールmenu");
         bProfileMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -1179,7 +1179,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bChangeAccountMenu=new JButton("アカウント切り替え");
         bChangeAccountMenu.setBounds(w/4,12*h/30,w/2,3*h/30);
         bChangeAccountMenu.addActionListener(this);
-        bChangeAccountMenu.setBackground(Color.blue);
+        bChangeAccountMenu.setBackground(Color.black);
         bChangeAccountMenu.setForeground(Color.white);
         bChangeAccountMenu.setActionCommand("アカウント切り替えmenu");
         bChangeAccountMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1188,7 +1188,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bConfigMenu=new JButton("設定");
         bConfigMenu.setBounds(w/4,16*h/30,w/2,3*h/30);
         bConfigMenu.addActionListener(this);
-        bConfigMenu.setBackground(Color.blue);
+        bConfigMenu.setBackground(Color.black);
         bConfigMenu.setForeground(Color.white);
         bConfigMenu.setActionCommand("設定menu");
         bConfigMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -1197,7 +1197,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHelpMenu=new JButton("ヘルプ");
         bHelpMenu.setBounds(w/4,20*h/30,w/2,3*h/30);
         bHelpMenu.addActionListener(this);
-        bHelpMenu.setBackground(Color.blue);
+        bHelpMenu.setBackground(Color.black);
         bHelpMenu.setForeground(Color.white);
         bHelpMenu.setActionCommand("ヘルプmenu");
         bHelpMenu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -1206,7 +1206,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1215,7 +1215,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1344,7 +1344,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bChangeMyProfile = new JButton("変更確定");
         bChangeMyProfile.setBounds(w/4,92*h/120,w/2,h/20);
         bChangeMyProfile.addActionListener(this);
-        bChangeMyProfile.setBackground(Color.blue);
+        bChangeMyProfile.setBackground(Color.black);
         bChangeMyProfile.setForeground(Color.white);
         bChangeMyProfile.setActionCommand("確定myProfile");
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -1353,7 +1353,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1362,7 +1362,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1439,7 +1439,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1448,7 +1448,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1529,7 +1529,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bGatherMakeGroup = new JButton("メンバーを選択");
         bGatherMakeGroup.setBounds(w/3,44*h/60,w/3,h/15);
         bGatherMakeGroup.addActionListener(this);
-        bGatherMakeGroup.setBackground(Color.blue);
+        bGatherMakeGroup.setBackground(Color.black);
         bGatherMakeGroup.setForeground(Color.white);
         bGatherMakeGroup.setActionCommand("選択makeGroup");
         bGatherMakeGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
@@ -1538,7 +1538,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1547,7 +1547,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1604,7 +1604,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bConfGather = new JButton("確定");
         bConfGather.setBounds(15*w/40,42*h/65,w/5,h/15);
         bConfGather.addActionListener(this);
-        bConfGather.setBackground(Color.blue);
+        bConfGather.setBackground(Color.black);
         bConfGather.setForeground(Color.white);
         bConfGather.setActionCommand("確定gathering");
         bConfGather.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -1613,7 +1613,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1622,7 +1622,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1661,7 +1661,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bprofileinvite = new JButton("プロフィールを確認する");
         bprofileinvite.setBounds(w/4,7*h/20,w/2,h/20);
         bprofileinvite.addActionListener(this);
-        bprofileinvite.setBackground(Color.blue);
+        bprofileinvite.setBackground(Color.black);
         bprofileinvite.setForeground(Color.white);
         bprofileinvite.setActionCommand("確認invite");
         card.add(bprofileinvite);
@@ -1670,7 +1670,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bokinvite = new JButton("参加する！");
         bokinvite.setBounds(w/4,9*h/20,w/2,h/20);
         bokinvite.addActionListener(this);
-        bokinvite.setBackground(Color.blue);
+        bokinvite.setBackground(Color.black);
         bokinvite.setForeground(Color.white);
         bokinvite.setActionCommand("参加invite");
         card.add(bokinvite);
@@ -1679,7 +1679,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bnoinvite = new JButton("参加しない");
         bnoinvite.setBounds(w/4,11*h/20,w/2,h/20);
         bnoinvite.addActionListener(this);
-        bnoinvite.setBackground(Color.blue);
+        bnoinvite.setBackground(Color.black);
         bnoinvite.setForeground(Color.white);
         bnoinvite.setActionCommand("断るinvite");
         card.add(bnoinvite);
@@ -1692,7 +1692,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1701,7 +1701,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1751,7 +1751,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bGoodViewGroup.setBounds(2*w/5,45*h/60,w/5,h/15);
         bGoodViewGroup.addActionListener(this);
-        bGoodViewGroup.setBackground(Color.blue);
+        bGoodViewGroup.setBackground(Color.black);
         bGoodViewGroup.setForeground(Color.white);
         bGoodViewGroup.setActionCommand("いいねviewGroup");
         bGoodViewGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
@@ -1766,7 +1766,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1775,7 +1775,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1861,7 +1861,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bChangeMyProfile = new JButton("変更確定");
         bChangeMyProfile.setBounds(w/2,44*h/60,5*w/22,h/20);
         bChangeMyProfile.addActionListener(this);
-        bChangeMyProfile.setBackground(Color.blue);
+        bChangeMyProfile.setBackground(Color.black);
         bChangeMyProfile.setForeground(Color.white);
         bChangeMyProfile.setActionCommand("確定myGroupProfile");
         bChangeMyProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
@@ -1870,7 +1870,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1879,7 +1879,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1916,7 +1916,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         bProfileSetup.setBounds(7*w/10,13*h/65,w/5,h/10);
         bProfileSetup.addActionListener(this);
-        bProfileSetup.setBackground(Color.blue);
+        bProfileSetup.setBackground(Color.black);
         bProfileSetup.setForeground(Color.white);
         bProfileSetup.setActionCommand("公開・非公開");
         bProfileSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
@@ -1931,7 +1931,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bDeleteAccountSetup = new JButton("削除");
         bDeleteAccountSetup.setBounds(7*w/10,21*h/65,w/7,h/20);
         bDeleteAccountSetup.addActionListener(this);
-        bDeleteAccountSetup.setBackground(Color.blue);
+        bDeleteAccountSetup.setBackground(Color.black);
         bDeleteAccountSetup.setForeground(Color.white);
         bDeleteAccountSetup.setActionCommand("削除setup");
         bDeleteAccountSetup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
@@ -1940,7 +1940,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -1949,7 +1949,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2001,7 +2001,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2010,7 +2010,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2036,7 +2036,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInviteInform=new JButton("グループへの招待");
         bInviteInform.setBounds(w/4,8*h/30,w/2,4*h/30);
         bInviteInform.addActionListener(this);
-        bInviteInform.setBackground(Color.blue);
+        bInviteInform.setBackground(Color.black);
         bInviteInform.setForeground(Color.white);
         bInviteInform.setActionCommand("招待inform");
         bInviteInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -2045,7 +2045,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bGoodInform=new JButton("いいねをした人");
         bGoodInform.setBounds(w/4,13*h/30,w/2,4*h/30);
         bGoodInform.addActionListener(this);
-        bGoodInform.setBackground(Color.blue);
+        bGoodInform.setBackground(Color.black);
         bGoodInform.setForeground(Color.white);
         bGoodInform.setActionCommand("いいねinform");
         bGoodInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -2054,7 +2054,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bMatchedInform=new JButton("マッチングした人");
         bMatchedInform.setBounds(w/4,18*h/30,w/2,4*h/30);
         bMatchedInform.addActionListener(this);
-        bMatchedInform.setBackground(Color.blue);
+        bMatchedInform.setBackground(Color.black);
         bMatchedInform.setForeground(Color.white);
         bMatchedInform.setActionCommand("マッチングinform");
         bMatchedInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
@@ -2063,7 +2063,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2072,7 +2072,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2128,7 +2128,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2137,7 +2137,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2193,7 +2193,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2202,7 +2202,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2258,7 +2258,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
         bHome.addActionListener(this);
-        bHome.setBackground(Color.blue);
+        bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
         bHome.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
@@ -2267,7 +2267,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bInform=new JButton("通知");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
-        bInform.setBackground(Color.blue);
+        bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
         bInform.setActionCommand("通知");
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
