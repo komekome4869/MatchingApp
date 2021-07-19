@@ -12,10 +12,7 @@ bbb
 
 938aca03-a4da-42e2-8f6f-12473296b74b 33e9b046-b122-4d98-bddc-4e52636d4e73
 
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 1
 aaa
 true
