@@ -55,9 +55,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	UserInfo yourUserInfo=new UserInfo();
 	GroupInfo myGroupInfo= new GroupInfo();
 	GroupInfo yourGroupInfo=new GroupInfo();
-	UserInfo[] nowShowingUsers=new UserInfo[3];//ãƒ›ãƒ¼ãƒ ç”»é¢ã‚„é€šçŸ¥ç”»é¢ã§ä½¿ã†
+	UserInfo[] nowShowingUsers=new UserInfo[3];//ƒz[ƒ€‰æ–Ê‚â’Ê’m‰æ–Ê‚Åg‚¤
 	GroupInfo[] nowShowingGroups=new GroupInfo[3];
-	UserInfo nowShowingUser=new UserInfo();//ã‚¤ã‚¤ãƒç”»é¢ã¨ã‹ã§ä½¿ã†
+	UserInfo nowShowingUser=new UserInfo();//ƒCƒCƒl‰æ–Ê‚Æ‚©‚Åg‚¤
 	GroupInfo nowShowingGroup=new GroupInfo();
 	int nowPage=1;
 	boolean isNowUsingGroupAccount=false;
@@ -66,67 +66,67 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String groupSearchCondition="";
 	String userSearchCondition="";
 
-	//ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã®æ¤œç´¢ã§é¸ã¶ã‚„ã¤
-	String[] Sex = {"ç”·æ€§", "å¥³æ€§", "ãã®ä»–"};
+	//ƒvƒƒtƒB[ƒ‹‚ÌŒŸõ‚Å‘I‚Ô‚â‚Â
+	String[] Sex = {"’j«", "—«", "‚»‚Ì‘¼"};
 	String[] Grade = {"1", "2", "3", "4"};
-	String[] Faculty = {"çµŒå–¶", "çµŒæ¸ˆ", "æ•™è‚²", "ç†å·¥", "éƒ½å¸‚ç§‘å­¦"};
-	String[] Birthplace = {"åŒ—æµ·é“ãƒ»æ±åŒ—", "é–¢æ±", "ä¸­éƒ¨", "è¿‘ç•¿", "ä¸­å›½", "å››å›½", "ä¹å·", "æµ·å¤–"};
-	String[] Circle = {"ãƒ†ãƒ‹ã‚¹", "é‹å‹•", "æ–‡åŒ–","æ‰€å±ã—ã¦ã„ãªã„"};
-	String[] Purpose = {"ç”·å­ã¨ä»²è‰¯ããªã‚ŠãŸã„","å¥³å­ã¨ä»²è‰¯ããªã‚ŠãŸã„"};
+	String[] Faculty = {"Œo‰c", "ŒoÏ", "‹³ˆç", "—H", "“ss‰ÈŠw"};
+	String[] Birthplace = {"–kŠC“¹E“Œ–k", "ŠÖ“Œ", "’†•”", "‹ß‹E", "’†‘", "l‘", "‹ãB", "ŠCŠO"};
+	String[] Circle = {"ƒeƒjƒX", "‰^“®", "•¶‰»","Š‘®‚µ‚Ä‚¢‚È‚¢"};
+	String[] Purpose = {"’jq‚Æ’‡—Ç‚­‚È‚è‚½‚¢","—q‚Æ’‡—Ç‚­‚È‚è‚½‚¢"};
 	String[] HowMany = {"2","3","4","5"};
-	String[] yesNo= {"ã¯ã„","ã„ã„ãˆ"};
+	String[] yesNo= {"‚Í‚¢","‚¢‚¢‚¦"};
 
-	//ç”»åƒ
+	//‰æ‘œ
 	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
-	ImageIcon backNoButton=new ImageIcon("./img/ãƒœã‚¿ãƒ³ãªã—èƒŒæ™¯.png");
-	ImageIcon backWithButton=new ImageIcon("./img/ãƒœã‚¿ãƒ³ã‚ã‚ŠèƒŒæ™¯.png");
+	ImageIcon backNoButton=new ImageIcon("./img/ƒ{ƒ^ƒ“‚È‚µ”wŒi.png");
+	ImageIcon backWithButton=new ImageIcon("./img/ƒ{ƒ^ƒ“‚ ‚è”wŒi.png");
 	BufferedImage defaultBi;
 
-	//ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒŠãƒ¼ã§ã„ã˜ã‚‹ãŸã‚ã«ä¸€éƒ¨ã®å¤‰æ•°ã‚’å¤–éƒ¨å¤‰æ•°ã«
+	//ƒAƒNƒVƒ‡ƒ“ƒŠƒXƒi[‚Å‚¢‚¶‚é‚½‚ß‚Éˆê•”‚Ì•Ï”‚ğŠO•”•Ï”‚É
 	JTextField tfIdLogin = new JTextField(20);
 	JTextField tfPasswordLogin = new JTextField(20);
-	JLabel lMessageLogin = new JLabel("å­¦ç±ç•ªå·ã‚‚ã—ãã¯ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“");
+	JLabel lMessageLogin = new JLabel("ŠwĞ”Ô†‚à‚µ‚­‚ÍƒpƒXƒ[ƒh‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 
 	JTextField tfIdNew_r = new JTextField(20);
 	JTextField tfPasswordNew_r = new JTextField(20);
 	JTextField tfPasswordConfNew_r = new JTextField(20);
-	JLabel lMessageNew_r = new JLabel("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸€è‡´ã—ã¦ã„ã¾ã›ã‚“");
+	JLabel lMessageNew_r = new JLabel("ƒpƒXƒ[ƒh‚ªˆê’v‚µ‚Ä‚¢‚Ü‚¹‚ñ");
 
 	JTextField tfNameJudge = new JTextField(20);
 	JTextField tfNumberJudge= new JTextField(20);
-	JLabel lPicOutputJudge= new JLabel("<html><body>æœ¬äººç¢ºèªã«<br />å­¦ç”Ÿè¨¼ã‚’ä½¿ç”¨ã—ã¾ã™<br />é¸æŠãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦<br />å­¦ç”Ÿè¨¼ã®å†™çœŸã‚’<br />é€ä¿¡ã—ã¦ãã ã•ã„</body></html>");
-	JLabel lErrorJudge = new JLabel("æœªå…¥åŠ›ã®ç®‡æ‰€ãŒã‚ã‚Šã¾ã™");
+	JLabel lPicOutputJudge= new JLabel("<html><body>–{lŠm”F‚É<br />Šw¶Ø‚ğg—p‚µ‚Ü‚·<br />‘I‘ğƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä<br />Šw¶Ø‚ÌÊ^‚ğ<br />‘—M‚µ‚Ä‚­‚¾‚³‚¢</body></html>");
+	JLabel lErrorJudge = new JLabel("–¢“ü—Í‚Ì‰ÓŠ‚ª‚ ‚è‚Ü‚·");
 
 	JButton bIconHome[]=new JButton[3];
 
-	JLabel lNameReply = new JLabel("â—‹â—‹");
+	JLabel lNameReply = new JLabel("››");
     JLabel lMainPhotoReply = new JLabel("");
     JLabel[] lSubPhotoReply = new JLabel[4];
-    JLabel lGenderReply2 = new JLabel("â—‹â—‹");
-    JLabel lGradeReply2 = new JLabel("â—‹â—‹");
-    JLabel lFacultyReply2 = new JLabel("â—‹â—‹");
-    JLabel lBirthReply2 = new JLabel("â—‹â—‹");
-    JLabel lCircleReply2 = new JLabel("â—‹â—‹");
-    JLabel lHobbyReply2 = new JLabel("â—‹â—‹");
+    JLabel lGenderReply2 = new JLabel("››");
+    JLabel lGradeReply2 = new JLabel("››");
+    JLabel lFacultyReply2 = new JLabel("››");
+    JLabel lBirthReply2 = new JLabel("››");
+    JLabel lCircleReply2 = new JLabel("››");
+    JLabel lHobbyReply2 = new JLabel("››");
 
     JLabel lGroupNameReplyGroup = new JLabel();
     JLabel lGroupPhotoReplyGroup = new JLabel();
     JLabel lGroupProfileReplyGroup=new JLabel();
     JButton[] bMemberProfileReplyGroup = new JButton[5];
 
-    JLabel lNameGood = new JLabel("â—‹â—‹");
+    JLabel lNameGood = new JLabel("››");
     JLabel lMainPhotoGood = new JLabel();
     JLabel[] lSubPhotoGood = new JLabel[4];
-    JLabel lGenderGood2 = new JLabel("â—‹â—‹");
-    JLabel lGradeGood2 = new JLabel("â—‹â—‹");
-    JLabel lFacultyGood2 = new JLabel("â—‹â—‹");
-    JLabel lBirthGood2 = new JLabel("â—‹â—‹");
-    JLabel lCircleGood2 = new JLabel("â—‹â—‹");
-    JLabel lHobbyGood2 = new JLabel("â—‹â—‹");
-    JButton bGoodGood = new JButton("ã„ã„ã­");
-    JLabel lGoodGood = new JLabel("æ—¢ã«ã„ã„ã­ã—ã¾ã—ãŸ");
+    JLabel lGenderGood2 = new JLabel("››");
+    JLabel lGradeGood2 = new JLabel("››");
+    JLabel lFacultyGood2 = new JLabel("››");
+    JLabel lBirthGood2 = new JLabel("››");
+    JLabel lCircleGood2 = new JLabel("››");
+    JLabel lHobbyGood2 = new JLabel("››");
+    JButton bGoodGood = new JButton("‚¢‚¢‚Ë");
+    JLabel lGoodGood = new JLabel("Šù‚É‚¢‚¢‚Ë‚µ‚Ü‚µ‚½");
 
     JLabel lIconMatching = new JLabel();
     JLabel lNameMatching = new JLabel();
@@ -152,7 +152,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JTextField tfHobbyMyProfile = new JTextField("");
     JTextField tfLineIdMyProfile = new JTextField("");
 
-    JButton bPersonalChange = new JButton("å€‹äººã‚¢ã‚«ã‚¦ãƒ³ãƒˆ",iAdd);
+    JButton bPersonalChange = new JButton("ŒÂlƒAƒJƒEƒ“ƒg",iAdd);
     JButton[] bIconChange=new JButton[3];
 
     JButton bPhotoMakeGroup = new JButton("");
@@ -164,23 +164,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     JTextField tfNumberGather[]=new JTextField[5];
 
     JLabel lIconInvite = new JLabel();
-    JLabel lHostInvite = new JLabel("ã€‡ã€‡ã•ã‚“ã«æ‹›å¾…ã•ã‚Œã¾ã—ãŸï¼");
+    JLabel lHostInvite = new JLabel("ZZ‚³‚ñ‚Éµ‘Ò‚³‚ê‚Ü‚µ‚½I");
 
     JLabel lGroupNameViewGroup = new JLabel();
     JLabel lGroupPhotoViewGroup = new JLabel();
     JLabel lGroupProfileViewGroup=new JLabel();
     JButton[] bMemberProfileViewGroup = new JButton[5];
-    JButton bGoodViewGroup=new JButton("ã„ã„ã­");
-    JLabel lGoodViewGroup=new JLabel("ã™ã§ã« ã„ã„ã­ ã—ã¦ã„ã¾ã™");
+    JButton bGoodViewGroup=new JButton("‚¢‚¢‚Ë");
+    JLabel lGoodViewGroup=new JLabel("‚·‚Å‚É ‚¢‚¢‚Ë ‚µ‚Ä‚¢‚Ü‚·");
 
     JButton bPhotoMyGroupProfile = new JButton();
     JTextField tfNameMyGroupProfile = new JTextField("");
     JTextField tfRelationMyGroupProfile = new JTextField("");
     JComboBox<String> cbPurposeMyGroupProfile = new JComboBox<String>(Purpose);
     JTextField tfCommentMyGroupProfile = new JTextField(20);
-    JButton bQuitMyGroupProfile = new JButton("è§£æ•£");
+    JButton bQuitMyGroupProfile = new JButton("‰ğU");
 
-    JButton bProfileSetup = new JButton("å…¬é–‹");
+    JButton bProfileSetup = new JButton("ŒöŠJ");
 
     JButton[] bIconInviteInform=new JButton[3];
 
@@ -192,16 +192,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	JPanel cardPanel;
 	CardLayout layout;
 
-	//ã‚µãƒ¼ãƒã¨ã®é€šä¿¡ã«å¿…è¦ãªå¤‰æ•°
+	//ƒT[ƒo‚Æ‚Ì’ÊM‚É•K—v‚È•Ï”
 	static Socket socket;
 	static ObjectOutputStream oos;
 	static OutputStreamWriter out;
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
-	//String ipAddress = "182.170.133.46";	//ipã‚¢ãƒ‰ãƒ¬ã‚¹è¨­å®š
+	//String ipAddress = "182.170.133.46";	//ipƒAƒhƒŒƒXİ’è
 	String ipAddress = "localhost";//TODO
-	int port = 50;  //portç•ªå·è¨­å®š
+	int port = 50;  //port”Ô†İ’è
 	String inputLine = "0";
 
 	public Client(){
@@ -211,14 +211,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    cardPanel.setLayout(layout);
 
 	    try {
-			backNoButton=scaleImage(ImageIO.read(new File("./img/èƒŒæ™¯.jpg")),w+30,h+30);
-			backWithButton=scaleImage(ImageIO.read(new File("./img/èƒŒæ™¯.jpg")),w+10,h);
+			backNoButton=scaleImage(ImageIO.read(new File("./img/”wŒi.jpg")),w+30,h+30);
+			backWithButton=scaleImage(ImageIO.read(new File("./img/”wŒi.jpg")),w+10,h);
 		}
 	    catch (IOException e) {
 			e.printStackTrace();
 		}
 
-	    //è‡ªåˆ†ãŒä½œã‚‹ç”»é¢ã®ãƒ¡ã‚½ãƒƒãƒ‰åã‚’ã“ã“ã«æ›¸ã
+	    //©•ª‚ªì‚é‰æ–Ê‚Ìƒƒ\ƒbƒh–¼‚ğ‚±‚±‚É‘‚­
 	    login();
 	    new_regis();
 	    judging();
@@ -246,7 +246,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    goodInform();
 	    matchingInform();
 
-	    //"login"ã®ã¨ã“ã‚ã‚’é•ã†ç”»é¢ã®åå‰ã«å¤‰ãˆã‚Œã°ã€ãã‚ŒãŒä¸€ç•ªæœ€åˆã®ç”»é¢ã«ãªã‚‹ã€‚
+	    //"login"‚Ì‚Æ‚±‚ë‚ğˆá‚¤‰æ–Ê‚Ì–¼‘O‚É•Ï‚¦‚ê‚ÎA‚»‚ê‚ªˆê”ÔÅ‰‚Ì‰æ–Ê‚É‚È‚éB
 	    layout.show(cardPanel,"login");
 	    pack();
 	    getContentPane().add(cardPanel, BorderLayout.CENTER);
@@ -265,65 +265,65 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 	public void login() {
-		//â†“2è¡Œã¯ã‚³ãƒ”ãƒšã§OK
+		//«2s‚ÍƒRƒsƒy‚ÅOK
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		/*å¤‰æ•°åã¯ã€Œå¤‰æ•°ã®ç¨®é¡+å†…å®¹+ã©ã®ç”»é¢ã§ä½¿ã†ã‹ã€ã€‚
-		 * ã€Œãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ã§ä½¿ã† ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ JLabelã€ãªã‚‰ã€ŒlTitleLoginã€ã€‚
-		 * å˜èªã®é ­ã ã‘å¤§æ–‡å­—ã€‚ãŸã ã—ã€æœ€åˆã®æ–‡å­—ã¯å°æ–‡å­—ã€‚
-		 * lowerCammelCaseã§ã‚°ã‚°ã‚Œã°å‡ºã¦ãã‚‹ã€‚
+		/*•Ï”–¼‚Íu•Ï”‚Ìí—Ş+“à—e+‚Ç‚Ì‰æ–Ê‚Åg‚¤‚©vB
+		 * uƒƒOƒCƒ“‰æ–Ê‚Åg‚¤ ƒ^ƒCƒgƒ‹‚ğ•\¦‚·‚é JLabelv‚È‚çulTitleLoginvB
+		 * ’PŒê‚Ì“ª‚¾‚¯‘å•¶šB‚½‚¾‚µAÅ‰‚Ì•¶š‚Í¬•¶šB
+		 * lowerCammelCase‚ÅƒOƒO‚ê‚Îo‚Ä‚­‚éB
 		 *
-		 * æ–‡å­—ã®ãƒ•ã‚©ãƒ³ãƒˆã¯ã€ã¨ã‚Šã‚ãˆãšMSæ˜æœã«ã—ã¦ã‚‹ã‘ã©ã€ã‚¢ãƒ—ãƒªã®é›°å›²æ°—ã«åˆã‚ã›ã¦å¾Œã§å¤‰ãˆã‚ˆã†
+		 * •¶š‚ÌƒtƒHƒ“ƒg‚ÍA‚Æ‚è‚ ‚¦‚¸MS–¾’©‚É‚µ‚Ä‚é‚¯‚ÇAƒAƒvƒŠ‚Ì•µˆÍ‹C‚É‡‚í‚¹‚ÄŒã‚Å•Ï‚¦‚æ‚¤
 		 */
 
 
 		JLabel lTitleLogin = new JLabel("ave");
 		lTitleLogin.setBounds(w/4,h/10,w/2,h/9);
-		lTitleLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/5));
+		lTitleLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/5));
 		lTitleLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleLogin);
 
-        JLabel lIdLogin = new JLabel("å­¦ç±ç•ªå·");
+        JLabel lIdLogin = new JLabel("ŠwĞ”Ô†");
         lIdLogin.setBounds(w/6,h/3,w/5,h/15);
-        lIdLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lIdLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lIdLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIdLogin);
 
         tfIdLogin.setBounds(2*w/5,h/3,2*w/5,h/15);
-        tfIdLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfIdLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfIdLogin);
 
-        JLabel lPasswordLogin = new JLabel("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰");
+        JLabel lPasswordLogin = new JLabel("ƒpƒXƒ[ƒh");
         lPasswordLogin.setBounds(w/6,7*h/15,w/5,h/15);
-        lPasswordLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lPasswordLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lPasswordLogin.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPasswordLogin);
 
         tfPasswordLogin.setBounds(2*w/5,7*h/15,2*w/5,h/15);
-        tfPasswordLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfPasswordLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfPasswordLogin);
 
-        JButton bLoginLogin=new JButton("ãƒ­ã‚°ã‚¤ãƒ³");
+        JButton bLoginLogin=new JButton("ƒƒOƒCƒ“");
         bLoginLogin.setBounds(w/4,19*h/30,w/2,h/15);
         bLoginLogin.addActionListener(this);
         bLoginLogin.setBackground(Color.black);
         bLoginLogin.setForeground(Color.white);
-        bLoginLogin.setActionCommand("ãƒ­ã‚°ã‚¤ãƒ³login");//ãƒœã‚¿ãƒ³ã«ãƒ©ãƒ™ãƒ«ä»˜ã‘ã€ã“ã“ã®ãƒ«ãƒ¼ãƒ«ã‚‚æ±ºã‚ãŸã»ã†ãŒã„ã„
-        bLoginLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bLoginLogin.setActionCommand("ƒƒOƒCƒ“login");//ƒ{ƒ^ƒ“‚Éƒ‰ƒxƒ‹•t‚¯A‚±‚±‚Ìƒ‹[ƒ‹‚àŒˆ‚ß‚½‚Ù‚¤‚ª‚¢‚¢
+        bLoginLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bLoginLogin);
 
-        JButton bNewAccountLogin=new JButton("æ–°è¦ä½œæˆ");
+        JButton bNewAccountLogin=new JButton("V‹Kì¬");
         bNewAccountLogin.setBounds(w/4,22*h/30,w/2,h/15);
         bNewAccountLogin.addActionListener(this);
         bNewAccountLogin.setBackground(Color.black);
         bNewAccountLogin.setForeground(Color.white);
-        bNewAccountLogin.setActionCommand("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆlogin");
-        bNewAccountLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bNewAccountLogin.setActionCommand("ƒAƒJƒEƒ“ƒgì¬login");
+        bNewAccountLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bNewAccountLogin);
 
         lMessageLogin.setBounds(w/10,26*h/30,4*w/5,h/30);
-        lMessageLogin.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lMessageLogin.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lMessageLogin.setHorizontalAlignment(JLabel.CENTER);
         lMessageLogin.setForeground(Color.RED);
         lMessageLogin.setVisible(false);
@@ -334,7 +334,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
-        //è‡ªåˆ†ãŒä½œã‚‹ç”»é¢ã«åå‰ä»˜ã‘ã€‚ãƒ¡ã‚½ãƒƒãƒ‰åã¨åŒã˜ã˜ã‚ƒãªãã¦ã‚‚å¤§ä¸ˆå¤«ã ã‘ã©ã€åŒã˜ã®ã»ã†ãŒåˆ†ã‹ã‚Šã‚„ã™ã„ã‹ã‚‚ã€‚
+        //©•ª‚ªì‚é‰æ–Ê‚É–¼‘O•t‚¯Bƒƒ\ƒbƒh–¼‚Æ“¯‚¶‚¶‚á‚È‚­‚Ä‚à‘åä•v‚¾‚¯‚ÇA“¯‚¶‚Ì‚Ù‚¤‚ª•ª‚©‚è‚â‚·‚¢‚©‚àB
 		cardPanel.add(card,"login");
 	}
 
@@ -342,50 +342,50 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleNew_r = new JLabel("æ–°è¦ç™»éŒ²");
+		JLabel lTitleNew_r = new JLabel("V‹K“o˜^");
 		lTitleNew_r.setBounds(w/4,h/10,w/2,h/10);
-		lTitleNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 2*w/20));
+		lTitleNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 2*w/20));
 		lTitleNew_r.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleNew_r);
 
-        JLabel lIdNew_r = new JLabel("å­¦ç±ç•ªå·");
+        JLabel lIdNew_r = new JLabel("ŠwĞ”Ô†");
         lIdNew_r.setBounds(w/5,h/3,w/5,h/15);
-        lIdNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lIdNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(lIdNew_r);
 
         tfIdNew_r.setBounds(2*w/5,h/3,2*w/5,h/15);
-        tfIdNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfIdNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfIdNew_r);
 
-        JLabel lPasswordNew_r = new JLabel("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰");
+        JLabel lPasswordNew_r = new JLabel("ƒpƒXƒ[ƒh");
         lPasswordNew_r.setBounds(w/5,7*h/15,w/5,h/15);
-        lPasswordNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lPasswordNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(lPasswordNew_r);
 
         tfPasswordNew_r.setBounds(2*w/5,7*h/15,2*w/5,h/15);
-        tfPasswordNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfPasswordNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfPasswordNew_r);
 
-        JLabel lPasswordconfNew_r = new JLabel("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(ç¢ºèªç”¨)");
+        JLabel lPasswordconfNew_r = new JLabel("ƒpƒXƒ[ƒh(Šm”F—p)");
         lPasswordconfNew_r.setBounds(w/10,9*h/15,w/2,h/15);
-        lPasswordconfNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lPasswordconfNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(lPasswordconfNew_r);
 
         tfPasswordConfNew_r.setBounds(2*w/5,9*h/15,2*w/5,h/15);
-        tfPasswordConfNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfPasswordConfNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfPasswordConfNew_r);
 
-        JButton bNewAccountNew_r=new JButton("ç™»éŒ²");
+        JButton bNewAccountNew_r=new JButton("“o˜^");
         bNewAccountNew_r.setBounds(w/4,23*h/30,w/2,h/15);
         bNewAccountNew_r.addActionListener(this);
         bNewAccountNew_r.setBackground(Color.black);
         bNewAccountNew_r.setForeground(Color.white);
-        bNewAccountNew_r.setActionCommand("ç™»éŒ²new_regis");
-        bNewAccountNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bNewAccountNew_r.setActionCommand("“o˜^new_regis");
+        bNewAccountNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bNewAccountNew_r);
 
         lMessageNew_r.setBounds(w/10,26*h/30,4*w/5,h/30);
-        lMessageNew_r.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lMessageNew_r.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lMessageNew_r.setHorizontalAlignment(JLabel.CENTER);
         lMessageNew_r.setForeground(Color.RED);
         lMessageNew_r.setVisible(false);
@@ -404,63 +404,63 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		card.setLayout(null);
 
-		JLabel lTitleJudge = new JLabel("æœ¬äººç¢ºèª");
+		JLabel lTitleJudge = new JLabel("–{lŠm”F");
 		lTitleJudge.setBounds(w/4,h/20,w/2,h/10);
-		lTitleJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/10));
+		lTitleJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/10));
 		lTitleJudge.setHorizontalAlignment(JLabel.CENTER);
 		card.add(lTitleJudge);
 
-		JLabel lIdJudge = new JLabel("åå‰");
+		JLabel lIdJudge = new JLabel("–¼‘O");
 		lIdJudge.setBounds(w/5,h/5,w/5,h/15);
-		lIdJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lIdJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lIdJudge.setHorizontalAlignment(JLabel.CENTER);
 		card.add(lIdJudge);
 
 		tfNameJudge.setBounds(2*w/5,h/5,2*w/5,h/15);
-		tfNameJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		tfNameJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		card.add(tfNameJudge);
 
-		JLabel lNumberJudge = new JLabel("LINEã®ID");
+		JLabel lNumberJudge = new JLabel("LINE‚ÌID");
 		lNumberJudge.setBounds(w/5,h/3,w/5,h/15);
-		lNumberJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lNumberJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lNumberJudge.setHorizontalAlignment(JLabel.CENTER);
 		card.add(lNumberJudge);
 
 		tfNumberJudge.setBounds(2*w/5,h/3,2*w/5,h/15);
-		tfNumberJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		tfNumberJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		card.add(tfNumberJudge);
 
-		JLabel lPicJudge = new JLabel("å­¦ç”Ÿè¨¼");
+		JLabel lPicJudge = new JLabel("Šw¶Ø");
 		lPicJudge.setBounds(w/5,h/2,w/5,h/15);
-		lPicJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lPicJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lPicJudge.setHorizontalAlignment(JLabel.CENTER);
 		card.add(lPicJudge);
 
-		JButton bChoiceJudge=new JButton("é¸æŠ");
+		JButton bChoiceJudge=new JButton("‘I‘ğ");
 		bChoiceJudge.setBounds(9*w/40,9*h/15,3*w/20,h/15);
 		bChoiceJudge.addActionListener(this);
 		bChoiceJudge.setBackground(Color.black);
         bChoiceJudge.setForeground(Color.white);
-		bChoiceJudge.setActionCommand("é¸æŠjudge");
-		bChoiceJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/50));
+		bChoiceJudge.setActionCommand("‘I‘ğjudge");
+		bChoiceJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/50));
 		card.add(bChoiceJudge);
 
 		lPicOutputJudge.setBounds(2*w/5,h/2,2*w/5,h/6);
-		lPicOutputJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/23));
+		lPicOutputJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/23));
 		lPicOutputJudge.setHorizontalAlignment(JLabel.CENTER);
 		card.add(lPicOutputJudge);
 
-		JButton bSendJudge=new JButton("é€ä¿¡");
+		JButton bSendJudge=new JButton("‘—M");
 		bSendJudge.setBounds(w/4,23*h/30,w/2,h/15);
 		bSendJudge.addActionListener(this);
 		bSendJudge.setBackground(Color.black);
         bSendJudge.setForeground(Color.white);
-		bSendJudge.setActionCommand("é€ä¿¡judge");
-		bSendJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		bSendJudge.setActionCommand("‘—Mjudge");
+		bSendJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		card.add(bSendJudge);
 
 		lErrorJudge.setBounds(0,26*h/30,w,h/15);
-		lErrorJudge.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lErrorJudge.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lErrorJudge.setForeground(Color.RED);
 		lErrorJudge.setHorizontalAlignment(JLabel.CENTER);
 		lErrorJudge.setVisible(false);
@@ -477,20 +477,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel waitpl = new JLabel("<html><body>æœ¬äººç¢ºèªãŒå®Œäº†ã™ã‚‹ã¾ã§ãŠå¾…ã¡ãã ã•ã„<br />"
-				+ "ã“ã®ã¾ã¾ã‚¢ãƒ—ãƒªã‚’é–‰ã˜ã¦ã‚‚å¤§ä¸ˆå¤«ã§ã™</body></html>");
+		JLabel waitpl = new JLabel("<html><body>–{lŠm”F‚ªŠ®—¹‚·‚é‚Ü‚Å‚¨‘Ò‚¿‚­‚¾‚³‚¢<br />"
+				+ "‚±‚Ì‚Ü‚ÜƒAƒvƒŠ‚ğ•Â‚¶‚Ä‚à‘åä•v‚Å‚·</body></html>");
 		waitpl.setBounds(0,h/10,w,h/5);
-		waitpl.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		waitpl.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		waitpl.setHorizontalAlignment(JLabel.CENTER);
 		card.add(waitpl);
 
 		JLabel manual = new JLabel("<html><body>"
-				+ "Step1 è‡ªåˆ†ã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã‚’<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ä½œã‚Šã¾ã—ã‚‡ã†<br /><br />"
-				+ "step2 æ°—ã«ãªã‚‹ãŠç›¸æ‰‹ã‚’æ¢ã—ã¦<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ã€Œã„ã„ã­ã€ã‚’æŠ¼ã—ã¾ã—ã‚‡ã†<br /><br />"
-				+ "Step3 ä¸¡æƒ³ã„ã§ãƒãƒƒãƒãƒ³ã‚°æˆç«‹ï¼<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINEã‚’ã—ã¾ã—ã‚‡ã†<br /><br />"
-				+ "Step4 å€‹äººã ã‘ã§ãªãã‚°ãƒ«ãƒ¼ãƒ—ã§ã‚‚<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ãƒãƒƒãƒãƒ³ã‚°ã§ãã¾ã™</body></html>");
+				+ "Step1 ©•ª‚ÌƒvƒƒtƒB[ƒ‹‚ğ<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ì‚è‚Ü‚µ‚å‚¤<br /><br />"
+				+ "step2 ‹C‚É‚È‚é‚¨‘Šè‚ğ’T‚µ‚Ä<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u‚¢‚¢‚Ëv‚ğ‰Ÿ‚µ‚Ü‚µ‚å‚¤<br /><br />"
+				+ "Step3 —¼‘z‚¢‚Åƒ}ƒbƒ`ƒ“ƒO¬—§I<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINE‚ğ‚µ‚Ü‚µ‚å‚¤<br /><br />"
+				+ "Step4 ŒÂl‚¾‚¯‚Å‚È‚­ƒOƒ‹[ƒv‚Å‚à<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ƒ}ƒbƒ`ƒ“ƒO‚Å‚«‚Ü‚·</body></html>");
 		manual.setBounds(w/8,h/5,3*w/4,5*h/10);
-		manual.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		manual.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		manual.setHorizontalAlignment(JLabel.CENTER);
 		card.add(manual);
 
@@ -505,19 +505,19 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lMessageFinishAuthen = new JLabel("æœ¬äººç¢ºèªãŒå®Œäº†ã—ã¾ã—ãŸ");
+		JLabel lMessageFinishAuthen = new JLabel("–{lŠm”F‚ªŠ®—¹‚µ‚Ü‚µ‚½");
 		lMessageFinishAuthen.setBounds(0,h/3,w,h/5);
-		lMessageFinishAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/15));
+		lMessageFinishAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/15));
 		lMessageFinishAuthen.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMessageFinishAuthen);
 
-        JButton bnextFinishAuthen=new JButton("ã™ã™ã‚€");
+        JButton bnextFinishAuthen=new JButton("‚·‚·‚Ş");
         bnextFinishAuthen.setBounds(w/4,3*h/4,w/2,h/10);
         bnextFinishAuthen.addActionListener(this);
 		bnextFinishAuthen.setBackground(Color.black);
         bnextFinishAuthen.setForeground(Color.white);
-        bnextFinishAuthen.setActionCommand("ã™ã™ã‚€finishAuthen");
-        bnextFinishAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bnextFinishAuthen.setActionCommand("‚·‚·‚ŞfinishAuthen");
+        bnextFinishAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bnextFinishAuthen);
 
         JLabel background=new JLabel(backNoButton);
@@ -533,7 +533,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		JLabel lTitleHome = new JLabel("HOME");
 		lTitleHome.setBounds(w/4,h/50,w/2,h/10);
-		lTitleHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/50));
+		lTitleHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/50));
 		lTitleHome.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleHome);
 
@@ -542,7 +542,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchHome.addActionListener(this);
 		bSearchHome.setBackground(Color.black);
         bSearchHome.setForeground(Color.white);
-        bSearchHome.setActionCommand("æ¤œç´¢home");
+        bSearchHome.setActionCommand("ŒŸõhome");
         card.add(bSearchHome);
 
         JButton bMenuHome = new JButton("MENU");
@@ -550,17 +550,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bMenuHome.addActionListener(this);
 		bMenuHome.setBackground(Color.black);
         bMenuHome.setForeground(Color.white);
-        bMenuHome.setActionCommand("ãƒ¡ãƒ‹ãƒ¥ãƒ¼home");
+        bMenuHome.setActionCommand("ƒƒjƒ…[home");
         card.add(bMenuHome);
 
 
         for(int i=0;i<3;i++) {
-        	bIconHome[i]=new JButton("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«",iRight);
+        	bIconHome[i]=new JButton("ƒvƒƒtƒB[ƒ‹",iRight);
         	bIconHome[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconHome[i].addActionListener(this);
         	bIconHome[i].setContentAreaFilled(false);
-        	bIconHome[i].setActionCommand("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"home");
-        	bIconHome[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/35));
+        	bIconHome[i].setActionCommand("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"home");
+        	bIconHome[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/35));
         	card.add(bIconHome[i]);
         }
 
@@ -571,13 +571,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLeftHome = new JButton(iLeft);
         bLeftHome.setBounds(w/4,15*h/20,w/11,h/20);
         bLeftHome.addActionListener(this);
-    	bLeftHome.setActionCommand("å‰ã®ãƒšãƒ¼ã‚¸home");
+    	bLeftHome.setActionCommand("‘O‚Ìƒy[ƒWhome");
         card.add(bLeftHome);
 
         JButton bRightHome = new JButton(iRight);
         bRightHome.setBounds(2*w/3,15*h/20,w/11,h/20);
         bRightHome.addActionListener(this);
-    	bRightHome.setActionCommand("æ¬¡ã®ãƒšãƒ¼ã‚¸home");
+    	bRightHome.setActionCommand("Ÿ‚Ìƒy[ƒWhome");
         card.add(bRightHome);
 
         JLabel lnexthome = new JLabel("next");
@@ -590,16 +590,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setActionCommand("HOME");
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -617,109 +617,109 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ã„ã„ã­é€šçŸ¥ã¸");
+        bPrePage.setActionCommand("‚¢‚¢‚Ë’Ê’m‚Ö");
         card.add(bPrePage);
 
 		lNameReply.setBounds(w/4,h/60,w/2,h/15);
-		lNameReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lNameReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lNameReply.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameReply);
 
         lMainPhotoReply.setBounds(w/4,6*h/60,w/2,h/6);
-        lMainPhotoReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        lMainPhotoReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lMainPhotoReply.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMainPhotoReply);
 
         for(int i=0;i<4;i++) {
         	lSubPhotoReply[i] = new JLabel();
         	lSubPhotoReply[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-            lSubPhotoReply[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+            lSubPhotoReply[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
             lSubPhotoReply[i].setHorizontalAlignment(JLabel.CENTER);
             card.add(lSubPhotoReply[i]);
         }
 
-        JLabel lGenderReply = new JLabel("æ€§åˆ¥");
+        JLabel lGenderReply = new JLabel("«•Ê");
 		lGenderReply.setBounds(0,25*h/60,w/3,h/30);
-		lGenderReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGenderReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGenderReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lGenderReply);
 
         lGenderReply2.setBounds(w/2,25*h/60,w/3,h/30);
-		lGenderReply2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGenderReply2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGenderReply2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lGenderReply2);
 
-        JLabel lGradeReply = new JLabel("å­¦å¹´");
+        JLabel lGradeReply = new JLabel("Šw”N");
 		lGradeReply.setBounds(0,28*h/60,w/3,h/30);
-		lGradeReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGradeReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGradeReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lGradeReply);
 
         lGradeReply2.setBounds(w/2,28*h/60,w/3,h/30);
-		lGradeReply2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGradeReply2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGradeReply2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lGradeReply2);
 
-        JLabel lFacultyReply = new JLabel("å­¦éƒ¨");
+        JLabel lFacultyReply = new JLabel("Šw•”");
 		lFacultyReply.setBounds(0,31*h/60,w/3,h/30);
-		lFacultyReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lFacultyReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lFacultyReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lFacultyReply);
 
         lFacultyReply2.setBounds(w/2,31*h/60,w/3,h/30);
-        lFacultyReply2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lFacultyReply2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lFacultyReply2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lFacultyReply2);
 
-        JLabel lBirthReply = new JLabel("å‡ºèº«");
+        JLabel lBirthReply = new JLabel("og");
 		lBirthReply.setBounds(0,34*h/60,w/3,h/30);
-		lBirthReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lBirthReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lBirthReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lBirthReply);
 
         lBirthReply2.setBounds(w/2,34*h/60,w/3,h/30);
-        lBirthReply2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lBirthReply2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lBirthReply2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lBirthReply2);
 
-        JLabel lCircleReply = new JLabel("ã‚µãƒ¼ã‚¯ãƒ«");
+        JLabel lCircleReply = new JLabel("ƒT[ƒNƒ‹");
 		lCircleReply.setBounds(0,37*h/60,w/3,h/30);
-		lCircleReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lCircleReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lCircleReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lCircleReply);
 
         lCircleReply2.setBounds(w/2,37*h/60,w/3,h/30);
-        lCircleReply2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lCircleReply2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lCircleReply2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lCircleReply2);
 
-        JLabel lHobbyReply = new JLabel("è¶£å‘³");
+        JLabel lHobbyReply = new JLabel("ï–¡");
 		lHobbyReply.setBounds(0,40*h/60,w/3,h/30);
-		lHobbyReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/35));
+		lHobbyReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/35));
 		lHobbyReply.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lHobbyReply);
 
         lHobbyReply2.setBounds(w/2,40*h/60,w/3,h/30);
-        lHobbyReply2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lHobbyReply2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lHobbyReply2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lHobbyReply2);
 
-        JButton bGoodReply = new JButton("ã„ã„ã­");
+        JButton bGoodReply = new JButton("‚¢‚¢‚Ë");
         bGoodReply.setBounds(w/4,46*h/60,w/4,h/20);
         bGoodReply.addActionListener(this);
         bGoodReply.setBackground(Color.black);
         bGoodReply.setForeground(Color.white);
-        bGoodReply.setActionCommand("ã„ã„ã­reply");
-        bGoodReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bGoodReply.setActionCommand("‚¢‚¢‚Ëreply");
+        bGoodReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bGoodReply);
 
-        JButton bBadReply = new JButton("æ–­ã‚‹");
+        JButton bBadReply = new JButton("’f‚é");
         bBadReply.setBounds(w/2,46*h/60,w/4,h/20);
         bBadReply.addActionListener(this);
         bBadReply.setBackground(Color.black);
         bBadReply.setForeground(Color.white);
-        bBadReply.setActionCommand("æ–­ã‚‹reply");
-        bBadReply.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bBadReply.setActionCommand("’f‚éreply");
+        bBadReply.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bBadReply);
 
         JButton bHome=new JButton("HOME");
@@ -728,16 +728,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -754,50 +754,50 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ã„ã„ã­é€šçŸ¥ã¸");
+        bPrePage.setActionCommand("‚¢‚¢‚Ë’Ê’m‚Ö");
         card.add(bPrePage);
 
 		lGroupNameReplyGroup.setBounds(w/4,h/60,w/2,h/20);
-		lGroupNameReplyGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/50));
+		lGroupNameReplyGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/50));
 		lGroupNameReplyGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupNameReplyGroup);
 
         lGroupPhotoReplyGroup.setBounds(w/5,5*h/60,w/5,h/10);
-        lGroupPhotoReplyGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        lGroupPhotoReplyGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         lGroupPhotoReplyGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupPhotoReplyGroup);
 
         lGroupProfileReplyGroup.setBounds(2*w/5,7*h/60,w/2,h/15);
-        lGroupProfileReplyGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lGroupProfileReplyGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lGroupPhotoReplyGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupProfileReplyGroup);
 
         for(int i=0;i<5;i++) {
-            bMemberProfileReplyGroup[i]=new JButton("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«");
+            bMemberProfileReplyGroup[i]=new JButton("ƒvƒƒtƒB[ƒ‹");
             bMemberProfileReplyGroup[i].setBounds(w/6,(11+7*i)*h/60,2*w/3,h/12);
             bMemberProfileReplyGroup[i].addActionListener(this);
-            bMemberProfileReplyGroup[i].setActionCommand("ãƒ¡ãƒ³ãƒ"+String.valueOf(i)+"replyGroup");
-            bMemberProfileReplyGroup[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+            bMemberProfileReplyGroup[i].setActionCommand("ƒƒ“ƒo"+String.valueOf(i)+"replyGroup");
+            bMemberProfileReplyGroup[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
             card.add(bMemberProfileReplyGroup[i]);
         }
 
-        JButton bGoodReplyGroup=new JButton("ã„ã„ã­");
+        JButton bGoodReplyGroup=new JButton("‚¢‚¢‚Ë");
         bGoodReplyGroup.setBounds(w/4,45*h/60,w/4,h/15);
         bGoodReplyGroup.addActionListener(this);
         bGoodReplyGroup.setBackground(Color.black);
         bGoodReplyGroup.setForeground(Color.white);
-        bGoodReplyGroup.setActionCommand("ã„ã„ã­replyGroup");
-        bGoodReplyGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/27));
+        bGoodReplyGroup.setActionCommand("‚¢‚¢‚ËreplyGroup");
+        bGoodReplyGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/27));
         bGoodReplyGroup.setVisible(false);
         card.add(bGoodReplyGroup);
 
-        JButton bBadReplyGroup=new JButton("æ–­ã‚‹");
+        JButton bBadReplyGroup=new JButton("’f‚é");
         bBadReplyGroup.setBounds(w/2,45*h/60,w/4,h/15);
         bBadReplyGroup.addActionListener(this);
         bBadReplyGroup.setBackground(Color.black);
         bBadReplyGroup.setForeground(Color.white);
-        bBadReplyGroup.setActionCommand("æ–­ã‚‹replyGroup");
-        bBadReplyGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/27));
+        bBadReplyGroup.setActionCommand("’f‚éreplyGroup");
+        bBadReplyGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/27));
         bBadReplyGroup.setVisible(false);
         card.add(bBadReplyGroup);
 
@@ -807,16 +807,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -833,90 +833,90 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("æˆ»ã‚‹good");
+        bPrePage.setActionCommand("–ß‚égood");
         card.add(bPrePage);
 
 		lNameGood.setBounds(w/4,h/60,w/2,h/15);
-		lNameGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lNameGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lNameGood.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameGood);
 
         lMainPhotoGood.setBounds(w/4,6*h/60,w/2,h/6);
-        lMainPhotoGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        lMainPhotoGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         lMainPhotoGood.setHorizontalAlignment(JLabel.CENTER);
         card.add(lMainPhotoGood);
 
         for(int i=0;i<4;i++) {
         	lSubPhotoGood[i] = new JLabel();
         	lSubPhotoGood[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-            lSubPhotoGood[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+            lSubPhotoGood[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
             lSubPhotoGood[i].setHorizontalAlignment(JLabel.CENTER);
             card.add(lSubPhotoGood[i]);
         }
 
-        JLabel lGenderGood = new JLabel("æ€§åˆ¥");
+        JLabel lGenderGood = new JLabel("«•Ê");
 		lGenderGood.setBounds(0,25*h/60,w/3,h/30);
-		lGenderGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGenderGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGenderGood.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lGenderGood);
 
         lGenderGood2.setBounds(w/2,25*h/60,w/3,h/30);
-		lGenderGood2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGenderGood2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGenderGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lGenderGood2);
 
-        JLabel lGradeGood = new JLabel("å­¦å¹´");
+        JLabel lGradeGood = new JLabel("Šw”N");
 		lGradeGood.setBounds(0,28*h/60,w/3,h/30);
-		lGradeGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGradeGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGradeGood.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lGradeGood);
 
         lGradeGood2.setBounds(w/2,28*h/60,w/3,h/30);
-		lGradeGood2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGradeGood2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGradeGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lGradeGood2);
 
-        JLabel lFacultyGood = new JLabel("å­¦éƒ¨");
+        JLabel lFacultyGood = new JLabel("Šw•”");
 		lFacultyGood.setBounds(0,31*h/60,w/3,h/30);
-		lFacultyGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lFacultyGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lFacultyGood.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lFacultyGood);
 
         lFacultyGood2.setBounds(w/2,31*h/60,w/3,h/30);
-        lFacultyGood2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lFacultyGood2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lFacultyGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lFacultyGood2);
 
-        JLabel lBirthGood = new JLabel("å‡ºèº«");
+        JLabel lBirthGood = new JLabel("og");
 		lBirthGood.setBounds(0,34*h/60,w/3,h/30);
-		lBirthGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lBirthGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lBirthGood.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lBirthGood);
 
         lBirthGood2.setBounds(w/2,34*h/60,w/3,h/30);
-        lBirthGood2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lBirthGood2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lBirthGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lBirthGood2);
 
-        JLabel lCircleGood = new JLabel("ã‚µãƒ¼ã‚¯ãƒ«");
+        JLabel lCircleGood = new JLabel("ƒT[ƒNƒ‹");
 		lCircleGood.setBounds(0,37*h/60,w/3,h/30);
-		lCircleGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lCircleGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lCircleGood.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lCircleGood);
 
         lCircleGood2.setBounds(w/2,37*h/60,w/3,h/30);
-        lCircleGood2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lCircleGood2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lCircleGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lCircleGood2);
 
-        JLabel lHobbyGood = new JLabel("è¶£å‘³");
+        JLabel lHobbyGood = new JLabel("ï–¡");
 		lHobbyGood.setBounds(0,40*h/60,w/3,h/30);
-		lHobbyGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lHobbyGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lHobbyGood.setHorizontalAlignment(JLabel.RIGHT);
         card.add(lHobbyGood);
 
         lHobbyGood2.setBounds(w/2,40*h/60,w/3,h/30);
-        lHobbyGood2.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/35));
+        lHobbyGood2.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/35));
         lHobbyGood2.setHorizontalAlignment(JLabel.LEFT);
         card.add(lHobbyGood2);
 
@@ -924,12 +924,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bGoodGood.addActionListener(this);
         bGoodGood.setBackground(Color.black);
         bGoodGood.setForeground(Color.white);
-        bGoodGood.setActionCommand("ã„ã„ã­good");
-        bGoodGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bGoodGood.setActionCommand("‚¢‚¢‚Ëgood");
+        bGoodGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bGoodGood);
 
         lGoodGood.setBounds(0,46*h/60,w,h/20);
-        lGoodGood.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lGoodGood.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lGoodGood.setHorizontalAlignment(JLabel.CENTER);
         lGoodGood.setVisible(false);
         card.add(lGoodGood);
@@ -940,16 +940,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -963,16 +963,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleMatching = new JLabel("ãƒãƒƒãƒãƒ³ã‚°");
+		JLabel lTitleMatching = new JLabel("ƒ}ƒbƒ`ƒ“ƒO");
 		lTitleMatching.setBounds(w/4,h/50,w/2,h/10);
-		lTitleMatching.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/50));
+		lTitleMatching.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/50));
 		lTitleMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatching);
 
         JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒãƒƒãƒãƒ³ã‚°é€šçŸ¥ã¸");
+        bPrePage.setActionCommand("ƒ}ƒbƒ`ƒ“ƒO’Ê’m‚Ö");
         card.add(bPrePage);
 
         lIconMatching.setBounds(w/5,h/7,3*w/5,h/5);
@@ -980,22 +980,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lIconMatching);
 
         lNameMatching.setBounds(0,11*h/20,w,h/15);
-        lNameMatching.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        lNameMatching.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         lNameMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMatching);
 
         lIdMatching.setBounds(0,13*h/20,w,h/7);
-        lIdMatching.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        lIdMatching.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         lIdMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIdMatching);
 
-        JButton bProfMatching=new JButton("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã‚’ç¢ºèªã™ã‚‹");
+        JButton bProfMatching=new JButton("ƒvƒƒtƒB[ƒ‹‚ğŠm”F‚·‚é");
         bProfMatching.setBounds(w/4,8*h/20,w/2,h/15);
         bProfMatching.addActionListener(this);
         bProfMatching.setBackground(Color.black);
         bProfMatching.setForeground(Color.white);
-        bProfMatching.setActionCommand("ç¢ºèªmatching");
-        bProfMatching.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bProfMatching.setActionCommand("Šm”Fmatching");
+        bProfMatching.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(bProfMatching);
 
         JButton bHome=new JButton("HOME");
@@ -1004,16 +1004,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1030,72 +1030,72 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ›ãƒ¼ãƒ ã¸");
+        bPrePage.setActionCommand("ƒz[ƒ€‚Ö");
         card.add(bPrePage);
 
-		JLabel lTitleSearchUser = new JLabel("æ¤œç´¢");
+		JLabel lTitleSearchUser = new JLabel("ŒŸõ");
 		lTitleSearchUser.setBounds(w/4,h/60,w/2,2*h/15);
-		lTitleSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/10));
+		lTitleSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/10));
 		lTitleSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleSearchUser);
 
-        JLabel lGenderSearchUser = new JLabel("æ€§åˆ¥");
+        JLabel lGenderSearchUser = new JLabel("«•Ê");
 		lGenderSearchUser.setBounds(w/8,5*h/25,w/6,2*h/25);
-		lGenderSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		lGenderSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lGenderSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGenderSearchUser);
 
         cbGenderSearchUser.setBounds(w/3,5*h/25,w/2,2*h/25);
-		cbGenderSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		cbGenderSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(cbGenderSearchUser);
 
-        JLabel lGradeSearchUser = new JLabel("å­¦å¹´");
+        JLabel lGradeSearchUser = new JLabel("Šw”N");
 		lGradeSearchUser.setBounds(w/8,8*h/25,w/6,2*h/25);
-		lGradeSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		lGradeSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lGradeSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGradeSearchUser);
 
         cbGradeSearchUser.setBounds(w/3,8*h/25,w/2,2*h/25);
-		cbGradeSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		cbGradeSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(cbGradeSearchUser);
 
-        JLabel lFacultySearchUser = new JLabel("å­¦éƒ¨");
+        JLabel lFacultySearchUser = new JLabel("Šw•”");
 		lFacultySearchUser.setBounds(w/8,11*h/25,w/6,2*h/25);
-		lFacultySearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		lFacultySearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lFacultySearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lFacultySearchUser);
 
         cbFacultySearchUser.setBounds(w/3,11*h/25,w/2,2*h/25);
-		cbFacultySearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		cbFacultySearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(cbFacultySearchUser);
 
-        JLabel lBirthSearchUser = new JLabel("å‡ºèº«");
+        JLabel lBirthSearchUser = new JLabel("og");
 		lBirthSearchUser.setBounds(w/8,14*h/25,w/6,2*h/25);
-		lBirthSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		lBirthSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lBirthSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lBirthSearchUser);
 
         cbBirthSearchUser.setBounds(w/3,14*h/25,w/2,2*h/25);
-        cbBirthSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        cbBirthSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(cbBirthSearchUser);
 
-        JLabel lCircleSearchUser = new JLabel("ã‚µãƒ¼ã‚¯ãƒ«");
+        JLabel lCircleSearchUser = new JLabel("ƒT[ƒNƒ‹");
 		lCircleSearchUser.setBounds(w/8,17*h/25,w/6,2*h/25);
-		lCircleSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lCircleSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lCircleSearchUser.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCircleSearchUser);
 
         cbCircleSearchUser.setBounds(w/3,17*h/25,w/2,2*h/25);
-        cbCircleSearchUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        cbCircleSearchUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(cbCircleSearchUser);
 
-        JButton bSearchSeachUser = new JButton("æ¤œç´¢");
+        JButton bSearchSeachUser = new JButton("ŒŸõ");
         bSearchSeachUser.setBounds(3*w/10,20*h/25,2*w/5,h/10);
         bSearchSeachUser.addActionListener(this);
         bSearchSeachUser.setBackground(Color.black);
         bSearchSeachUser.setForeground(Color.white);
-        bSearchSeachUser.setActionCommand("æ¤œç´¢searchUser");
-        bSearchSeachUser.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bSearchSeachUser.setActionCommand("ŒŸõsearchUser");
+        bSearchSeachUser.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bSearchSeachUser);
 
         JLabel background=new JLabel(backNoButton);
@@ -1112,42 +1112,42 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ›ãƒ¼ãƒ ã¸");
+        bPrePage.setActionCommand("ƒz[ƒ€‚Ö");
         card.add(bPrePage);
 
-		JLabel lTitleSearchGroup = new JLabel("æ¤œç´¢");
+		JLabel lTitleSearchGroup = new JLabel("ŒŸõ");
 		lTitleSearchGroup.setBounds(w/4,h/60,w/2,2*h/15);
-		lTitleSearchGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/10));
+		lTitleSearchGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/10));
 		lTitleSearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleSearchGroup);
 
-        JLabel lPurposeSearchGroup = new JLabel("ç›®çš„");
+        JLabel lPurposeSearchGroup = new JLabel("–Ú“I");
 		lPurposeSearchGroup.setBounds(w/8,5*h/20,w/6,2*h/20);
-		lPurposeSearchGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		lPurposeSearchGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lPurposeSearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeSearchGroup);
 
         cbPurposeSearchGroup.setBounds(w/3,5*h/20,w/2,2*h/20);
-		cbPurposeSearchGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		cbPurposeSearchGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbPurposeSearchGroup);
 
-        JLabel lHowManySearchGroup = new JLabel("äººæ•°");
+        JLabel lHowManySearchGroup = new JLabel("l”");
 		lHowManySearchGroup.setBounds(w/8,10*h/20,w/6,2*h/20);
-		lHowManySearchGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+		lHowManySearchGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 		lHowManySearchGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lHowManySearchGroup);
 
         cbHowManySearchGroup.setBounds(w/3,10*h/20,w/2,2*h/20);
-        cbHowManySearchGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        cbHowManySearchGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(cbHowManySearchGroup);
 
-        JButton bSearchSeachGroup = new JButton("æ¤œç´¢");
+        JButton bSearchSeachGroup = new JButton("ŒŸõ");
         bSearchSeachGroup.setBounds(3*w/10,15*h/20,2*w/5,h/8);
         bSearchSeachGroup.addActionListener(this);
         bSearchSeachGroup.setBackground(Color.black);
         bSearchSeachGroup.setForeground(Color.white);
-        bSearchSeachGroup.setActionCommand("æ¤œç´¢searchGroup");
-        bSearchSeachGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bSearchSeachGroup.setActionCommand("ŒŸõsearchGroup");
+        bSearchSeachGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bSearchSeachGroup);
 
         JLabel background=new JLabel(backNoButton);
@@ -1163,44 +1163,44 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		JLabel lTitleMenu = new JLabel("Menu");
 		lTitleMenu.setBounds(w/4,2*h/30,w/2,3*h/30);
-		lTitleMenu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 2*w/20));
+		lTitleMenu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 2*w/20));
 		lTitleMenu.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMenu);
 
-        JButton bProfileMenu=new JButton("Myãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«");
+        JButton bProfileMenu=new JButton("MyƒvƒƒtƒB[ƒ‹");
         bProfileMenu.setBounds(w/4,8*h/30,w/2,3*h/30);
         bProfileMenu.addActionListener(this);
         bProfileMenu.setBackground(Color.black);
         bProfileMenu.setForeground(Color.white);
-        bProfileMenu.setActionCommand("Myãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«menu");
-        bProfileMenu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bProfileMenu.setActionCommand("MyƒvƒƒtƒB[ƒ‹menu");
+        bProfileMenu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bProfileMenu);
 
-        JButton bChangeAccountMenu=new JButton("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåˆ‡ã‚Šæ›¿ãˆ");
+        JButton bChangeAccountMenu=new JButton("ƒAƒJƒEƒ“ƒgØ‚è‘Ö‚¦");
         bChangeAccountMenu.setBounds(w/4,12*h/30,w/2,3*h/30);
         bChangeAccountMenu.addActionListener(this);
         bChangeAccountMenu.setBackground(Color.black);
         bChangeAccountMenu.setForeground(Color.white);
-        bChangeAccountMenu.setActionCommand("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåˆ‡ã‚Šæ›¿ãˆmenu");
-        bChangeAccountMenu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bChangeAccountMenu.setActionCommand("ƒAƒJƒEƒ“ƒgØ‚è‘Ö‚¦menu");
+        bChangeAccountMenu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bChangeAccountMenu);
 
-        JButton bConfigMenu=new JButton("è¨­å®š");
+        JButton bConfigMenu=new JButton("İ’è");
         bConfigMenu.setBounds(w/4,16*h/30,w/2,3*h/30);
         bConfigMenu.addActionListener(this);
         bConfigMenu.setBackground(Color.black);
         bConfigMenu.setForeground(Color.white);
-        bConfigMenu.setActionCommand("è¨­å®šmenu");
-        bConfigMenu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bConfigMenu.setActionCommand("İ’èmenu");
+        bConfigMenu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bConfigMenu);
 
-        JButton bHelpMenu=new JButton("ãƒ˜ãƒ«ãƒ—");
+        JButton bHelpMenu=new JButton("ƒwƒ‹ƒv");
         bHelpMenu.setBounds(w/4,20*h/30,w/2,3*h/30);
         bHelpMenu.addActionListener(this);
         bHelpMenu.setBackground(Color.black);
         bHelpMenu.setForeground(Color.white);
-        bHelpMenu.setActionCommand("ãƒ˜ãƒ«ãƒ—menu");
-        bHelpMenu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bHelpMenu.setActionCommand("ƒwƒ‹ƒvmenu");
+        bHelpMenu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bHelpMenu);
 
         JButton bHome=new JButton("HOME");
@@ -1209,16 +1209,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1235,20 +1235,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸");
+        bPrePage.setActionCommand("ƒƒjƒ…[‚Ö");
         card.add(bPrePage);
 
-        JLabel lTitleMyProfile = new JLabel("Myãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«");
+        JLabel lTitleMyProfile = new JLabel("MyƒvƒƒtƒB[ƒ‹");
 		lTitleMyProfile.setBounds(w/4,h/60,w/2,h/15);
-		lTitleMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lTitleMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lTitleMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMyProfile);
 
         bMainPhotoMyProfile.setBounds(w/4,6*h/60,w/2,h/6);
         bMainPhotoMyProfile.addActionListener(this);
         bMainPhotoMyProfile.setContentAreaFilled(false);
-        bMainPhotoMyProfile.setActionCommand("ãƒ¡ã‚¤ãƒ³myProfile");
-        bMainPhotoMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bMainPhotoMyProfile.setActionCommand("ƒƒCƒ“myProfile");
+        bMainPhotoMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bMainPhotoMyProfile);
 
         for(int i=0;i<4;i++) {
@@ -1256,98 +1256,98 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bSubPhotoMyProfile[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
             bSubPhotoMyProfile[i].addActionListener(this);
             bSubPhotoMyProfile[i].setContentAreaFilled(false);
-            bSubPhotoMyProfile[i].setActionCommand("ã‚µãƒ–"+String.valueOf(i)+"myProfile");
-            bSubPhotoMyProfile[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+            bSubPhotoMyProfile[i].setActionCommand("ƒTƒu"+String.valueOf(i)+"myProfile");
+            bSubPhotoMyProfile[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
             card.add(bSubPhotoMyProfile[i]);
         }
 
-        JLabel lNameMyProfile = new JLabel("åå‰");
+        JLabel lNameMyProfile = new JLabel("–¼‘O");
 		lNameMyProfile.setBounds(w/8,25*h/60,w/6,h/30);
-		lNameMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lNameMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lNameMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMyProfile);
 
         tfNameMyProfile.setBounds(w/3,25*h/60,w/2,h/30);
-        tfNameMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfNameMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfNameMyProfile);
 
-        JLabel lGenderMyProfile = new JLabel("æ€§åˆ¥");
+        JLabel lGenderMyProfile = new JLabel("«•Ê");
 		lGenderMyProfile.setBounds(w/8,55*h/120,w/6,h/30);
-		lGenderMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGenderMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGenderMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGenderMyProfile);
 
         cbGenderMyProfile.setBounds(w/3,55*h/120,w/2,h/30);
-		cbGenderMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		cbGenderMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbGenderMyProfile);
 
-        JLabel lGradeMyProfile = new JLabel("å­¦å¹´");
+        JLabel lGradeMyProfile = new JLabel("Šw”N");
 		lGradeMyProfile.setBounds(w/8,60*h/120,w/6,h/30);
-		lGradeMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lGradeMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lGradeMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGradeMyProfile);
 
         cbGradeMyProfile.setBounds(w/3,60*h/120,w/2,h/30);
-		cbGradeMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		cbGradeMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbGradeMyProfile);
 
-        JLabel lFacultyMyProfile = new JLabel("å­¦éƒ¨");
+        JLabel lFacultyMyProfile = new JLabel("Šw•”");
 		lFacultyMyProfile.setBounds(w/8,65*h/120,w/6,h/30);
-		lFacultyMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lFacultyMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lFacultyMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lFacultyMyProfile);
 
         cbFacultyMyProfile.setBounds(w/3,65*h/120,w/2,h/30);
-		cbFacultyMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		cbFacultyMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbFacultyMyProfile);
 
-        JLabel lBirthMyProfile = new JLabel("å‡ºèº«");
+        JLabel lBirthMyProfile = new JLabel("og");
 		lBirthMyProfile.setBounds(w/8,70*h/120,w/6,h/30);
-		lBirthMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lBirthMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lBirthMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lBirthMyProfile);
 
         cbBirthMyProfile.setBounds(w/3,70*h/120,w/2,h/30);
-        cbBirthMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        cbBirthMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbBirthMyProfile);
 
-        JLabel lCircleMyProfile = new JLabel("ã‚µãƒ¼ã‚¯ãƒ«");
+        JLabel lCircleMyProfile = new JLabel("ƒT[ƒNƒ‹");
 		lCircleMyProfile.setBounds(w/8,75*h/120,w/6,h/30);
-		lCircleMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lCircleMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lCircleMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCircleMyProfile);
 
         cbCircleMyProfile.setBounds(w/3,75*h/120,w/2,h/30);
-        cbCircleMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        cbCircleMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbCircleMyProfile);
 
-        JLabel lHobbyMyProfile = new JLabel("è¶£å‘³");
+        JLabel lHobbyMyProfile = new JLabel("ï–¡");
 		lHobbyMyProfile.setBounds(w/8,80*h/120,w/6,h/30);
-		lHobbyMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lHobbyMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lHobbyMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lHobbyMyProfile);
 
         tfHobbyMyProfile.setBounds(w/3,80*h/120,w/2,h/30);
-        tfHobbyMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfHobbyMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfHobbyMyProfile);
 
-        JLabel lLineIdMyProfile = new JLabel("LINEã®ID");
+        JLabel lLineIdMyProfile = new JLabel("LINE‚ÌID");
 		lLineIdMyProfile.setBounds(w/8,85*h/120,w/6,h/30);
-		lLineIdMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lLineIdMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lLineIdMyProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lLineIdMyProfile);
 
         tfLineIdMyProfile.setBounds(w/3,85*h/120,w/2,h/30);
-        tfLineIdMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfLineIdMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfLineIdMyProfile);
 
-        JButton bChangeMyProfile = new JButton("å¤‰æ›´ç¢ºå®š");
+        JButton bChangeMyProfile = new JButton("•ÏXŠm’è");
         bChangeMyProfile.setBounds(w/4,92*h/120,w/2,h/20);
         bChangeMyProfile.addActionListener(this);
         bChangeMyProfile.setBackground(Color.black);
         bChangeMyProfile.setForeground(Color.white);
-        bChangeMyProfile.setActionCommand("ç¢ºå®šmyProfile");
-        bChangeMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bChangeMyProfile.setActionCommand("Šm’èmyProfile");
+        bChangeMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bChangeMyProfile);
 
         JButton bHome=new JButton("HOME");
@@ -1356,16 +1356,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1379,31 +1379,31 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel ltitlechange = new JLabel("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåˆ‡ã‚Šæ›¿ãˆ");
+		JLabel ltitlechange = new JLabel("ƒAƒJƒEƒ“ƒgØ‚è‘Ö‚¦");
 		ltitlechange.setBounds(w/5,h/50,3*w/5,h/10);
-		ltitlechange.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/50));
+		ltitlechange.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/50));
 		ltitlechange.setHorizontalAlignment(JLabel.CENTER);
         card.add(ltitlechange);
 
         JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸");
+        bPrePage.setActionCommand("ƒƒjƒ…[‚Ö");
         card.add(bPrePage);
 
-        JButton bMakeGroupChange = new JButton("ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆ",iAdd);
+        JButton bMakeGroupChange = new JButton("ƒOƒ‹[ƒvì¬",iAdd);
         bMakeGroupChange.setBounds(w/4,9*h/60,w/2,h/10);
         bMakeGroupChange.addActionListener(this);
         bMakeGroupChange.setContentAreaFilled(false);
-        bMakeGroupChange.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
-        bMakeGroupChange.setActionCommand("ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆchange");
+        bMakeGroupChange.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
+        bMakeGroupChange.setActionCommand("ƒOƒ‹[ƒvì¬change");
         card.add(bMakeGroupChange);
 
         bPersonalChange.setBounds(w/4,16*h/60,w/2,h/10);
         bPersonalChange.addActionListener(this);
         bPersonalChange.setContentAreaFilled(false);
-        bPersonalChange.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/40));
-        bPersonalChange.setActionCommand("å€‹äººã‚¢ã‚«ã‚¦ãƒ³ãƒˆchange");
+        bPersonalChange.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/40));
+        bPersonalChange.setActionCommand("ŒÂlƒAƒJƒEƒ“ƒgchange");
         card.add(bPersonalChange);
 
         for(int i=0;i<3;i++) {
@@ -1411,8 +1411,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bIconChange[i].setBounds(w/4,(24+7*i)*h/60,w/2,h/10);
         	bIconChange[i].addActionListener(this);
         	bIconChange[i].setContentAreaFilled(false);
-        	bIconChange[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/40));
-        	bIconChange[i].setActionCommand("ã‚°ãƒ«ãƒ¼ãƒ—"+String.valueOf(i)+"change");
+        	bIconChange[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/40));
+        	bIconChange[i].setActionCommand("ƒOƒ‹[ƒv"+String.valueOf(i)+"change");
         	card.add(bIconChange[i]);
         }
 
@@ -1423,13 +1423,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bleftchange = new JButton(iLeft);
         bleftchange.setBounds(w/4,46*h/60,w/11,h/20);
         bleftchange.addActionListener(this);
-    	bleftchange.setActionCommand("å‰ã®ãƒšãƒ¼ã‚¸change");
+    	bleftchange.setActionCommand("‘O‚Ìƒy[ƒWchange");
         card.add(bleftchange);
 
         JButton brightchange = new JButton(iRight);
         brightchange.setBounds(2*w/3,46*h/60,w/11,h/20);
         brightchange.addActionListener(this);
-    	brightchange.setActionCommand("æ¬¡ã®ãƒšãƒ¼ã‚¸change");
+    	brightchange.setActionCommand("Ÿ‚Ìƒy[ƒWchange");
         card.add(brightchange);
 
         JLabel lnextchange = new JLabel("next");
@@ -1442,16 +1442,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1468,71 +1468,71 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("åˆ‡ã‚Šæ›¿ãˆã¸");
+        bPrePage.setActionCommand("Ø‚è‘Ö‚¦‚Ö");
         card.add(bPrePage);
 
-        JLabel lTitleMakeGroup = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«");
+        JLabel lTitleMakeGroup = new JLabel("ƒOƒ‹[ƒvƒvƒƒtƒB[ƒ‹");
 		lTitleMakeGroup.setBounds(w/5,h/60,3*w/5,h/15);
-		lTitleMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lTitleMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lTitleMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMakeGroup);
 
         bPhotoMakeGroup.setBounds(w/4,6*h/60,w/2,h/6);
         bPhotoMakeGroup.addActionListener(this);
-        bPhotoMakeGroup.setActionCommand("ãƒ¡ã‚¤ãƒ³makeGroup");
+        bPhotoMakeGroup.setActionCommand("ƒƒCƒ“makeGroup");
         bPhotoMakeGroup.setContentAreaFilled(false);
-        bPhotoMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bPhotoMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         bPhotoMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(bPhotoMakeGroup);
 
-        JLabel lNameMakeGroup = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—å");
+        JLabel lNameMakeGroup = new JLabel("ƒOƒ‹[ƒv–¼");
 		lNameMakeGroup.setBounds(w/9,18*h/60,w/5,h/20);
-		lNameMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lNameMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lNameMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMakeGroup);
 
         tfNameMakeGroup.setBounds(w/3,18*h/60,w/2,h/20);
-        tfNameMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfNameMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfNameMakeGroup);
 
-        JLabel lRelationMakeGroup = new JLabel("é–¢ä¿‚æ€§");
+        JLabel lRelationMakeGroup = new JLabel("ŠÖŒW«");
 		lRelationMakeGroup.setBounds(w/8,23*h/60,w/6,h/20);
-		lRelationMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lRelationMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lRelationMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lRelationMakeGroup);
 
         tfRelationMakeGroup.setBounds(w/3,23*h/60,w/2,h/20);
-        tfRelationMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfRelationMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfRelationMakeGroup);
 
-        JLabel lPurposeMakeGroup = new JLabel("ç›®çš„");
+        JLabel lPurposeMakeGroup = new JLabel("–Ú“I");
 		lPurposeMakeGroup.setBounds(w/8,28*h/60,w/6,h/20);
-		lPurposeMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lPurposeMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lPurposeMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeMakeGroup);
 
         cbPurposeMakeGroup.setBounds(w/3,28*h/60,w/2,h/20);
-        cbPurposeMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        cbPurposeMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbPurposeMakeGroup);
 
 
-        JLabel lCommentMakeGroup = new JLabel("ã²ã¨ã“ã¨");
+        JLabel lCommentMakeGroup = new JLabel("‚Ğ‚Æ‚±‚Æ");
 		lCommentMakeGroup.setBounds(w/8,33*h/60,w/6,h/20);
-		lCommentMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lCommentMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lCommentMakeGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMakeGroup);
 
         tfCommentMakeGroup.setBounds(w/3,33*h/60,w/2,h/20);
-        tfCommentMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfCommentMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfCommentMakeGroup);
 
-        JButton bGatherMakeGroup = new JButton("ãƒ¡ãƒ³ãƒãƒ¼ã‚’é¸æŠ");
+        JButton bGatherMakeGroup = new JButton("ƒƒ“ƒo[‚ğ‘I‘ğ");
         bGatherMakeGroup.setBounds(w/3,44*h/60,w/3,h/15);
         bGatherMakeGroup.addActionListener(this);
         bGatherMakeGroup.setBackground(Color.black);
         bGatherMakeGroup.setForeground(Color.white);
-        bGatherMakeGroup.setActionCommand("é¸æŠmakeGroup");
-        bGatherMakeGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bGatherMakeGroup.setActionCommand("‘I‘ğmakeGroup");
+        bGatherMakeGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(bGatherMakeGroup);
 
         JButton bHome=new JButton("HOME");
@@ -1541,16 +1541,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1568,46 +1568,46 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ã‚°ãƒ«ä½œæˆã¸");
+        bPrePage.setActionCommand("ƒOƒ‹ì¬‚Ö");
         card.add(bPrePage);
 
-		// ã‚¿ã‚¤ãƒˆãƒ«
-		JLabel lTitleMatching = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆ");
+		// ƒ^ƒCƒgƒ‹
+		JLabel lTitleMatching = new JLabel("ƒOƒ‹[ƒvì¬");
 		lTitleMatching.setBounds(10*w/40,h/120,20*w/40,h/10);
-		lTitleMatching.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/15));
+		lTitleMatching.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/15));
 		lTitleMatching.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatching);
 
-        //å­¦ç±ç•ªå·è¡¨ç¤º
-        JLabel lNumberGather = new JLabel("å­¦ç±ç•ªå·");
+        //ŠwĞ”Ô†•\¦
+        JLabel lNumberGather = new JLabel("ŠwĞ”Ô†");
         lNumberGather.setBounds(3*w/40,14*h/65,w/5,5*h/65);
-        lNumberGather.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        lNumberGather.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(lNumberGather);
 
         for(int i=0;i<4;i++) {
         	tfNumberGather[i] = new JTextField("");
         	tfNumberGather[i].setBounds(15*w/40,(15+4*i)*h/65,20*w/40,4*h/65);
-            tfNumberGather[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+            tfNumberGather[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
             card.add(tfNumberGather[i]);
         }
 
-        /* //ç¢ºå®šãƒœã‚¿ãƒ³
-        JButton bAddGather = new JButton("å…¥åŠ›æ¬„ã‚’è¿½åŠ ã™ã‚‹");
+        /* //Šm’èƒ{ƒ^ƒ“
+        JButton bAddGather = new JButton("“ü—Í—“‚ğ’Ç‰Á‚·‚é");
         bAddGather.setBounds(15*w/40,add_height*h/65,20*w/40,3*h/65);
         bAddGather.addActionListener(this);
-        bAddGather.setActionCommand("è¿½åŠ ");
-        bAddGather.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bAddGather.setActionCommand("’Ç‰Á");
+        bAddGather.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(bAddGather);
         */
 
-        //ç¢ºå®šãƒœã‚¿ãƒ³
-        JButton bConfGather = new JButton("ç¢ºå®š");
+        //Šm’èƒ{ƒ^ƒ“
+        JButton bConfGather = new JButton("Šm’è");
         bConfGather.setBounds(15*w/40,42*h/65,w/5,h/15);
         bConfGather.addActionListener(this);
         bConfGather.setBackground(Color.black);
         bConfGather.setForeground(Color.white);
-        bConfGather.setActionCommand("ç¢ºå®šgathering");
-        bConfGather.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bConfGather.setActionCommand("Šm’ègathering");
+        bConfGather.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bConfGather);
 
         JButton bHome=new JButton("HOME");
@@ -1616,16 +1616,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1642,46 +1642,46 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("æ‹›å¾…é€šçŸ¥ã¸");
+        bPrePage.setActionCommand("µ‘Ò’Ê’m‚Ö");
         card.add(bPrePage);
 
-		//ã‚¿ã‚¤ãƒˆãƒ«
-		JLabel ltitleinvite = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—æ‹›å¾…");
+		//ƒ^ƒCƒgƒ‹
+		JLabel ltitleinvite = new JLabel("ƒOƒ‹[ƒvµ‘Ò");
 		ltitleinvite.setBounds(w/4,h/50,w/2,h/10);
-		ltitleinvite.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/50));
+		ltitleinvite.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/50));
 		ltitleinvite.setHorizontalAlignment(JLabel.CENTER);
         card.add(ltitleinvite);
 
-        //ç”»åƒè²¼ã‚Šä»˜ã‘
+        //‰æ‘œ“\‚è•t‚¯
         lIconInvite.setBounds(w/4,3*h/20,w/2,h/5);
         lIconInvite.setHorizontalAlignment(JLabel.CENTER);
         card.add(lIconInvite);
 
-        //ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ç¢ºèªãƒœã‚¿ãƒ³
-        JButton bprofileinvite = new JButton("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã‚’ç¢ºèªã™ã‚‹");
+        //ƒvƒƒtƒB[ƒ‹Šm”Fƒ{ƒ^ƒ“
+        JButton bprofileinvite = new JButton("ƒvƒƒtƒB[ƒ‹‚ğŠm”F‚·‚é");
         bprofileinvite.setBounds(w/4,7*h/20,w/2,h/20);
         bprofileinvite.addActionListener(this);
         bprofileinvite.setBackground(Color.black);
         bprofileinvite.setForeground(Color.white);
-        bprofileinvite.setActionCommand("ç¢ºèªinvite");
+        bprofileinvite.setActionCommand("Šm”Finvite");
         card.add(bprofileinvite);
 
-        //å‚åŠ ã™ã‚‹ãƒœã‚¿ãƒ³
-        JButton bokinvite = new JButton("å‚åŠ ã™ã‚‹ï¼");
+        //Q‰Á‚·‚éƒ{ƒ^ƒ“
+        JButton bokinvite = new JButton("Q‰Á‚·‚éI");
         bokinvite.setBounds(w/4,9*h/20,w/2,h/20);
         bokinvite.addActionListener(this);
         bokinvite.setBackground(Color.black);
         bokinvite.setForeground(Color.white);
-        bokinvite.setActionCommand("å‚åŠ invite");
+        bokinvite.setActionCommand("Q‰Áinvite");
         card.add(bokinvite);
 
-        //å‚åŠ ã—ãªã„ãƒœã‚¿ãƒ³
-        JButton bnoinvite = new JButton("å‚åŠ ã—ãªã„");
+        //Q‰Á‚µ‚È‚¢ƒ{ƒ^ƒ“
+        JButton bnoinvite = new JButton("Q‰Á‚µ‚È‚¢");
         bnoinvite.setBounds(w/4,11*h/20,w/2,h/20);
         bnoinvite.addActionListener(this);
         bnoinvite.setBackground(Color.black);
         bnoinvite.setForeground(Color.white);
-        bnoinvite.setActionCommand("æ–­ã‚‹invite");
+        bnoinvite.setActionCommand("’f‚éinvite");
         card.add(bnoinvite);
 
         lHostInvite.setBounds(0,13*h/20,w,h/20);
@@ -1695,16 +1695,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1721,21 +1721,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("æˆ»ã‚‹viewGroup");
+        bPrePage.setActionCommand("–ß‚éviewGroup");
         card.add(bPrePage);
 
 		lGroupNameViewGroup.setBounds(w/4,h/60,w/2,h/20);
-		lGroupNameViewGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/50));
+		lGroupNameViewGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/50));
 		lGroupNameViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupNameViewGroup);
 
         lGroupPhotoViewGroup.setBounds(w/5,5*h/60,w/5,h/10);
-        lGroupPhotoViewGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        lGroupPhotoViewGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         lGroupPhotoViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupPhotoViewGroup);
 
         lGroupProfileViewGroup.setBounds(2*w/5,7*h/60,w/2,h/15);
-        lGroupProfileViewGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lGroupProfileViewGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lGroupPhotoViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGroupProfileViewGroup);
 
@@ -1744,8 +1744,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
             bMemberProfileViewGroup[i].setBounds(w/6,(11+7*i)*h/60,2*w/3,h/12);
             bMemberProfileViewGroup[i].addActionListener(this);
             bMemberProfileViewGroup[i].setContentAreaFilled(false);
-            bMemberProfileViewGroup[i].setActionCommand("ãƒ¡ãƒ³ãƒ"+String.valueOf(i)+"viewGroup");
-            bMemberProfileViewGroup[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/40));
+            bMemberProfileViewGroup[i].setActionCommand("ƒƒ“ƒo"+String.valueOf(i)+"viewGroup");
+            bMemberProfileViewGroup[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/40));
             card.add(bMemberProfileViewGroup[i]);
         }
 
@@ -1753,13 +1753,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bGoodViewGroup.addActionListener(this);
         bGoodViewGroup.setBackground(Color.black);
         bGoodViewGroup.setForeground(Color.white);
-        bGoodViewGroup.setActionCommand("ã„ã„ã­viewGroup");
-        bGoodViewGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/27));
+        bGoodViewGroup.setActionCommand("‚¢‚¢‚ËviewGroup");
+        bGoodViewGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/27));
         bGoodViewGroup.setVisible(false);
         card.add(bGoodViewGroup);
 
         lGoodViewGroup.setBounds(w/5,45*h/60,3*w/5,h/15);
-        lGoodViewGroup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lGoodViewGroup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lGoodViewGroup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lGoodViewGroup);
 
@@ -1769,16 +1769,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1795,76 +1795,76 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸");
+        bPrePage.setActionCommand("ƒƒjƒ…[‚Ö");
         card.add(bPrePage);
 
-        JLabel lTitleMyGroupProfile = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«");
+        JLabel lTitleMyGroupProfile = new JLabel("ƒOƒ‹[ƒvƒvƒƒtƒB[ƒ‹");
 		lTitleMyGroupProfile.setBounds(w/5,h/60,3*w/5,h/15);
-		lTitleMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lTitleMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lTitleMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMyGroupProfile);
 
         bPhotoMyGroupProfile.setBounds(w/4,6*h/60,w/2,h/6);
         bPhotoMyGroupProfile.addActionListener(this);
         bPhotoMyGroupProfile.setContentAreaFilled(false);
-        bPhotoMyGroupProfile.setActionCommand("ãƒ¡ã‚¤ãƒ³myGroupProfile");
-        bPhotoMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bPhotoMyGroupProfile.setActionCommand("ƒƒCƒ“myGroupProfile");
+        bPhotoMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bPhotoMyGroupProfile);
 
-        JLabel lNameMyGroupProfile = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—å");
+        JLabel lNameMyGroupProfile = new JLabel("ƒOƒ‹[ƒv–¼");
 		lNameMyGroupProfile.setBounds(w/9,18*h/60,w/5,h/20);
-		lNameMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+		lNameMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 		lNameMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lNameMyGroupProfile);
 
         tfNameMyGroupProfile.setBounds(w/3,18*h/60,w/2,h/20);
-        tfNameMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfNameMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfNameMyGroupProfile);
 
-        JLabel lRelationMyGroupProfile = new JLabel("é–¢ä¿‚æ€§");
+        JLabel lRelationMyGroupProfile = new JLabel("ŠÖŒW«");
 		lRelationMyGroupProfile.setBounds(w/8,23*h/60,w/6,h/20);
-		lRelationMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lRelationMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lRelationMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lRelationMyGroupProfile);
 
         tfRelationMyGroupProfile.setBounds(w/3,23*h/60,w/2,h/20);
-        tfRelationMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        tfRelationMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(tfRelationMyGroupProfile);
 
-        JLabel lPurposeMyGroupProfile = new JLabel("ç›®çš„");
+        JLabel lPurposeMyGroupProfile = new JLabel("–Ú“I");
 		lPurposeMyGroupProfile.setBounds(w/8,28*h/60,w/6,h/20);
-		lPurposeMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lPurposeMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lPurposeMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lPurposeMyGroupProfile);
 
         cbPurposeMyGroupProfile.setBounds(w/3,28*h/60,w/2,h/20);
-        cbPurposeMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        cbPurposeMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(cbPurposeMyGroupProfile);
 
 
-        JLabel lCommentMyGroupProfile = new JLabel("ã²ã¨ã“ã¨");
+        JLabel lCommentMyGroupProfile = new JLabel("‚Ğ‚Æ‚±‚Æ");
 		lCommentMyGroupProfile.setBounds(w/8,33*h/60,w/6,h/20);
-		lCommentMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+		lCommentMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMyGroupProfile);
 
         tfCommentMyGroupProfile.setBounds(w/3,33*h/60,w/2,h/5);
-        tfCommentMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        tfCommentMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(tfCommentMyGroupProfile);
 
         bQuitMyGroupProfile.setBounds(3*w/11,44*h/60,5*w/22,h/20);
         bQuitMyGroupProfile.addActionListener(this);
-        bQuitMyGroupProfile.setActionCommand("å‰Šé™¤myGroupProfile");
-        bQuitMyGroupProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bQuitMyGroupProfile.setActionCommand("íœmyGroupProfile");
+        bQuitMyGroupProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(bQuitMyGroupProfile);
 
-        JButton bChangeMyProfile = new JButton("å¤‰æ›´ç¢ºå®š");
+        JButton bChangeMyProfile = new JButton("•ÏXŠm’è");
         bChangeMyProfile.setBounds(w/2,44*h/60,5*w/22,h/20);
         bChangeMyProfile.addActionListener(this);
         bChangeMyProfile.setBackground(Color.black);
         bChangeMyProfile.setForeground(Color.white);
-        bChangeMyProfile.setActionCommand("ç¢ºå®šmyGroupProfile");
-        bChangeMyProfile.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bChangeMyProfile.setActionCommand("Šm’èmyGroupProfile");
+        bChangeMyProfile.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(bChangeMyProfile);
 
         JButton bHome=new JButton("HOME");
@@ -1873,16 +1873,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1899,18 +1899,18 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸");
+        bPrePage.setActionCommand("ƒƒjƒ…[‚Ö");
         card.add(bPrePage);
 
-		JLabel lTitleSetup = new JLabel("è¨­å®š");
+		JLabel lTitleSetup = new JLabel("İ’è");
 		lTitleSetup.setBounds(w/4,h/15,w/2,h/10);
-		lTitleSetup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/20));
+		lTitleSetup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/20));
 		lTitleSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleSetup);
 
-        JLabel lProfileSetup = new JLabel("å€‹äººãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã®å…¬é–‹ãƒ»éå…¬é–‹");
+        JLabel lProfileSetup = new JLabel("ŒÂlƒvƒƒtƒB[ƒ‹‚ÌŒöŠJE”ñŒöŠJ");
         lProfileSetup.setBounds(w/10,2*h/10,w/2,h/10);
-        lProfileSetup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lProfileSetup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lProfileSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lProfileSetup);
 
@@ -1918,23 +1918,23 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bProfileSetup.addActionListener(this);
         bProfileSetup.setBackground(Color.black);
         bProfileSetup.setForeground(Color.white);
-        bProfileSetup.setActionCommand("å…¬é–‹ãƒ»éå…¬é–‹");
-        bProfileSetup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        bProfileSetup.setActionCommand("ŒöŠJE”ñŒöŠJ");
+        bProfileSetup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         card.add(bProfileSetup);
 
-        JLabel lDeleteAccountSetup = new JLabel("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå‰Šé™¤");
+        JLabel lDeleteAccountSetup = new JLabel("ƒAƒJƒEƒ“ƒgíœ");
         lDeleteAccountSetup.setBounds(w/10,3*h/10,w/2,h/10);
-        lDeleteAccountSetup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+        lDeleteAccountSetup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
         lDeleteAccountSetup.setHorizontalAlignment(JLabel.CENTER);
         card.add(lDeleteAccountSetup);
 
-        JButton bDeleteAccountSetup = new JButton("å‰Šé™¤");
+        JButton bDeleteAccountSetup = new JButton("íœ");
         bDeleteAccountSetup.setBounds(7*w/10,21*h/65,w/7,h/20);
         bDeleteAccountSetup.addActionListener(this);
         bDeleteAccountSetup.setBackground(Color.black);
         bDeleteAccountSetup.setForeground(Color.white);
-        bDeleteAccountSetup.setActionCommand("å‰Šé™¤setup");
-        bDeleteAccountSetup.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/35));
+        bDeleteAccountSetup.setActionCommand("íœsetup");
+        bDeleteAccountSetup.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/35));
         card.add(bDeleteAccountSetup);
 
         JButton bHome=new JButton("HOME");
@@ -1943,16 +1943,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -1966,29 +1966,29 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		//ä½¿ã„æ–¹
-		String explain = "FAQ\n\n\nãƒ»è‡ªåˆ†ã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã‚’å¤‰ãˆãŸã„\n\nãƒ›ãƒ¼ãƒ ç”»é¢â†’ãƒ¡ãƒ‹ãƒ¥â†’Myãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«\nã¨ç§»å‹•ã—ã¦è¨­å®šã—ã‚ˆã†\n\n\n"
-				+ "ãƒ»ã‚°ãƒ«ãƒ¼ãƒ—ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ä½¿ã„ãŸã„\n\nãƒ›ãƒ¼ãƒ ç”»é¢â†’ãƒ¡ãƒ‹ãƒ¥â†’ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåˆ‡ã‚Šæ›¿ãˆ\nã¨ç§»å‹•ã—ã¦ã‚°ãƒ«ãƒ¼ãƒ—ã‚’ä½œæˆã—ã‚ˆã†\n\n\n"
-				+ "ãƒ»ãƒãƒƒãƒãƒ³ã‚°ã—ãŸç›¸æ‰‹ã®LINEãŒçŸ¥ã‚ŠãŸã„\n\né€šçŸ¥â†’ãƒãƒƒãƒãƒ³ã‚°ã—ãŸäºº\nã¨ç§»å‹•ã—ç›®å½“ã¦ã®ç›¸æ‰‹ã®LINEIDã‚’æ‰‹ã«å…¥ã‚Œã‚ˆã†\n\n\n"
-				+ "ãƒ»è‡ªåˆ†ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤ã—ãŸã„\n\nãƒ›ãƒ¼ãƒ ç”»é¢â†’ãƒ¡ãƒ‹ãƒ¥â†’è¨­å®š\nã¨ç§»å‹•ã—ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤ã§ãã¾ã™\n";
+		//g‚¢•û
+		String explain = "FAQ\n\n\nE©•ª‚ÌƒvƒƒtƒB[ƒ‹‚ğ•Ï‚¦‚½‚¢\n\nƒz[ƒ€‰æ–Ê¨ƒƒjƒ…¨MyƒvƒƒtƒB[ƒ‹\n‚ÆˆÚ“®‚µ‚Äİ’è‚µ‚æ‚¤\n\n\n"
+				+ "EƒOƒ‹[ƒvƒAƒJƒEƒ“ƒg‚ğg‚¢‚½‚¢\n\nƒz[ƒ€‰æ–Ê¨ƒƒjƒ…¨ƒAƒJƒEƒ“ƒgØ‚è‘Ö‚¦\n‚ÆˆÚ“®‚µ‚ÄƒOƒ‹[ƒv‚ğì¬‚µ‚æ‚¤\n\n\n"
+				+ "Eƒ}ƒbƒ`ƒ“ƒO‚µ‚½‘Šè‚ÌLINE‚ª’m‚è‚½‚¢\n\n’Ê’m¨ƒ}ƒbƒ`ƒ“ƒO‚µ‚½l\n‚ÆˆÚ“®‚µ–Ú“–‚Ä‚Ì‘Šè‚ÌLINEID‚ğè‚É“ü‚ê‚æ‚¤\n\n\n"
+				+ "E©•ª‚ÌƒAƒJƒEƒ“ƒg‚ğíœ‚µ‚½‚¢\n\nƒz[ƒ€‰æ–Ê¨ƒƒjƒ…¨İ’è\n‚ÆˆÚ“®‚µƒAƒJƒEƒ“ƒg‚ğíœ‚Å‚«‚Ü‚·\n";
 
 		JButton bPrePage = new JButton(iLeft);
         bPrePage.setBounds(w/14,h/30,w/11,h/20);
         bPrePage.addActionListener(this);
-        bPrePage.setActionCommand("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸");
+        bPrePage.setActionCommand("ƒƒjƒ…[‚Ö");
         card.add(bPrePage);
 
-		JLabel lTitleHtu = new JLabel("ä½¿ã„æ–¹");
+		JLabel lTitleHtu = new JLabel("g‚¢•û");
 		lTitleHtu.setBounds(w/4,h/15,w/2,h/10);
-		lTitleHtu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 3*w/20));
+		lTitleHtu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 3*w/20));
 		lTitleHtu.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleHtu);
 
         JTextArea taexpHtu = new JTextArea(explain);
         taexpHtu.setEditable(false);
         //taexpHtu.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
-        taexpHtu.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
-        // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+        taexpHtu.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
+        // ƒXƒNƒ[ƒ‹ƒo[
         JScrollPane sp = new JScrollPane(taexpHtu);
 		sp.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
 		card.add(sp);
@@ -2004,16 +2004,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -2027,37 +2027,37 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleInform = new JLabel("é€šçŸ¥");
+		JLabel lTitleInform = new JLabel("’Ê’m");
 		lTitleInform.setBounds(w/4,2*h/30,w/2,3*h/30);
-		lTitleInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 2*w/20));
+		lTitleInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 2*w/20));
 		lTitleInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleInform);
 
-        JButton bInviteInform=new JButton("ã‚°ãƒ«ãƒ¼ãƒ—ã¸ã®æ‹›å¾…");
+        JButton bInviteInform=new JButton("ƒOƒ‹[ƒv‚Ö‚Ìµ‘Ò");
         bInviteInform.setBounds(w/4,8*h/30,w/2,4*h/30);
         bInviteInform.addActionListener(this);
         bInviteInform.setBackground(Color.black);
         bInviteInform.setForeground(Color.white);
-        bInviteInform.setActionCommand("æ‹›å¾…inform");
-        bInviteInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bInviteInform.setActionCommand("µ‘Òinform");
+        bInviteInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bInviteInform);
 
-        JButton bGoodInform=new JButton("ã„ã„ã­ã‚’ã—ãŸäºº");
+        JButton bGoodInform=new JButton("‚¢‚¢‚Ë‚ğ‚µ‚½l");
         bGoodInform.setBounds(w/4,13*h/30,w/2,4*h/30);
         bGoodInform.addActionListener(this);
         bGoodInform.setBackground(Color.black);
         bGoodInform.setForeground(Color.white);
-        bGoodInform.setActionCommand("ã„ã„ã­inform");
-        bGoodInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bGoodInform.setActionCommand("‚¢‚¢‚Ëinform");
+        bGoodInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bGoodInform);
 
-        JButton bMatchedInform=new JButton("ãƒãƒƒãƒãƒ³ã‚°ã—ãŸäºº");
+        JButton bMatchedInform=new JButton("ƒ}ƒbƒ`ƒ“ƒO‚µ‚½l");
         bMatchedInform.setBounds(w/4,18*h/30,w/2,4*h/30);
         bMatchedInform.addActionListener(this);
         bMatchedInform.setBackground(Color.black);
         bMatchedInform.setForeground(Color.white);
-        bMatchedInform.setActionCommand("ãƒãƒƒãƒãƒ³ã‚°inform");
-        bMatchedInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+        bMatchedInform.setActionCommand("ƒ}ƒbƒ`ƒ“ƒOinform");
+        bMatchedInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
         card.add(bMatchedInform);
 
         JButton bHome=new JButton("HOME");
@@ -2066,16 +2066,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -2089,9 +2089,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleInviteInform = new JLabel("ã‚°ãƒ«ãƒ¼ãƒ—ã«æ‹›å¾…ã•ã‚Œã¾ã—ãŸ");
+		JLabel lTitleInviteInform = new JLabel("ƒOƒ‹[ƒv‚Éµ‘Ò‚³‚ê‚Ü‚µ‚½");
 		lTitleInviteInform.setBounds(w/4,h/50,w/2,h/10);
-		lTitleInviteInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 2*w/50));
+		lTitleInviteInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 2*w/50));
 		lTitleInviteInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleInviteInform);
 
@@ -2100,8 +2100,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bIconInviteInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconInviteInform[i].addActionListener(this);
         	bIconInviteInform[i].setContentAreaFilled(false);
-        	bIconInviteInform[i].setActionCommand("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"inviteInform");
-        	bIconInviteInform[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/40));
+        	bIconInviteInform[i].setActionCommand("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"inviteInform");
+        	bIconInviteInform[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/40));
         	card.add(bIconInviteInform[i]);
         }
 
@@ -2112,13 +2112,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLeftInviteInform = new JButton(iLeft);
         bLeftInviteInform.setBounds(w/4,15*h/20,w/11,h/20);
         bLeftInviteInform.addActionListener(this);
-    	bLeftInviteInform.setActionCommand("å‰ã®ãƒšãƒ¼ã‚¸inviteInform");
+    	bLeftInviteInform.setActionCommand("‘O‚Ìƒy[ƒWinviteInform");
         card.add(bLeftInviteInform);
 
         JButton bRightInviteInform = new JButton(iRight);
         bRightInviteInform.setBounds(2*w/3,15*h/20,w/11,h/20);
         bRightInviteInform.addActionListener(this);
-    	bRightInviteInform.setActionCommand("æ¬¡ã®ãƒšãƒ¼ã‚¸inviteInform");
+    	bRightInviteInform.setActionCommand("Ÿ‚Ìƒy[ƒWinviteInform");
         card.add(bRightInviteInform);
 
         JLabel lnextInviteInform = new JLabel("next");
@@ -2131,16 +2131,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -2154,9 +2154,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleGoodInform = new JLabel("ã„ã„ã­ãŒé€ã‚‰ã‚Œã¾ã—ãŸ");
+		JLabel lTitleGoodInform = new JLabel("‚¢‚¢‚Ë‚ª‘—‚ç‚ê‚Ü‚µ‚½");
 		lTitleGoodInform.setBounds(w/4,h/50,w/2,h/10);
-		lTitleGoodInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 2*w/50));
+		lTitleGoodInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 2*w/50));
 		lTitleGoodInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleGoodInform);
 
@@ -2165,8 +2165,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bIconGoodInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconGoodInform[i].addActionListener(this);
         	bIconGoodInform[i].setContentAreaFilled(false);
-        	bIconGoodInform[i].setActionCommand("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"goodInform");
-        	bIconGoodInform[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/40));
+        	bIconGoodInform[i].setActionCommand("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"goodInform");
+        	bIconGoodInform[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/40));
         	card.add(bIconGoodInform[i]);
         }
 
@@ -2177,13 +2177,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLeftGoodInform = new JButton(iLeft);
         bLeftGoodInform.setBounds(w/4,15*h/20,w/11,h/20);
         bLeftGoodInform.addActionListener(this);
-    	bLeftGoodInform.setActionCommand("å‰ã®ãƒšãƒ¼ã‚¸goodInform");
+    	bLeftGoodInform.setActionCommand("‘O‚Ìƒy[ƒWgoodInform");
         card.add(bLeftGoodInform);
 
         JButton bRightGoodInform = new JButton(iRight);
         bRightGoodInform.setBounds(2*w/3,15*h/20,w/11,h/20);
         bRightGoodInform.addActionListener(this);
-    	bRightGoodInform.setActionCommand("æ¬¡ã®ãƒšãƒ¼ã‚¸GoodInform");
+    	bRightGoodInform.setActionCommand("Ÿ‚Ìƒy[ƒWGoodInform");
         card.add(bRightGoodInform);
 
         JLabel lnextGoodInform = new JLabel("next");
@@ -2196,16 +2196,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -2219,9 +2219,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
-		JLabel lTitleMatchingInform = new JLabel("ãƒãƒƒãƒãƒ³ã‚°ã—ã¾ã—ãŸ");
+		JLabel lTitleMatchingInform = new JLabel("ƒ}ƒbƒ`ƒ“ƒO‚µ‚Ü‚µ‚½");
 		lTitleMatchingInform.setBounds(w/4,h/50,w/2,h/10);
-		lTitleMatchingInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, 2*w/50));
+		lTitleMatchingInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, 2*w/50));
 		lTitleMatchingInform.setHorizontalAlignment(JLabel.CENTER);
         card.add(lTitleMatchingInform);
 
@@ -2230,8 +2230,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         	bIconMatchingInform[i].setBounds(w/4,(3+4*i)*h/20,w/2,h/10);
         	bIconMatchingInform[i].addActionListener(this);
         	bIconMatchingInform[i].setContentAreaFilled(false);
-        	bIconMatchingInform[i].setActionCommand("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"matchingInform");
-        	bIconMatchingInform[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/40));
+        	bIconMatchingInform[i].setActionCommand("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"matchingInform");
+        	bIconMatchingInform[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/40));
         	card.add(bIconMatchingInform[i]);
         }
 
@@ -2242,13 +2242,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         JButton bLeftMatchingInform = new JButton(iLeft);
         bLeftMatchingInform.setBounds(w/4,15*h/20,w/11,h/20);
         bLeftMatchingInform.addActionListener(this);
-    	bLeftMatchingInform.setActionCommand("å‰ã®ãƒšãƒ¼ã‚¸matchingInform");
+    	bLeftMatchingInform.setActionCommand("‘O‚Ìƒy[ƒWmatchingInform");
         card.add(bLeftMatchingInform);
 
         JButton bRightMatchingInform = new JButton(iRight);
         bRightMatchingInform.setBounds(2*w/3,15*h/20,w/11,h/20);
         bRightMatchingInform.addActionListener(this);
-    	bRightMatchingInform.setActionCommand("æ¬¡ã®ãƒšãƒ¼ã‚¸matchingInform");
+    	bRightMatchingInform.setActionCommand("Ÿ‚Ìƒy[ƒWmatchingInform");
         card.add(bRightMatchingInform);
 
         JLabel lnextMatchingInform = new JLabel("next");
@@ -2261,16 +2261,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bHome.setBackground(Color.black);
         bHome.setForeground(Color.white);
         bHome.setActionCommand("HOME");
-        bHome.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bHome.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bHome);
 
-        JButton bInform=new JButton("é€šçŸ¥");
+        JButton bInform=new JButton("’Ê’m");
         bInform.setBounds(3*w/5,51*h/60,w/5,h/15);
         bInform.addActionListener(this);
         bInform.setBackground(Color.black);
         bInform.setForeground(Color.white);
-        bInform.setActionCommand("é€šçŸ¥");
-        bInform.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+        bInform.setActionCommand("’Ê’m");
+        bInform.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
         card.add(bInform);
 
         JLabel background=new JLabel(backWithButton);
@@ -2312,7 +2312,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			for(int i=0;i<3;i++) {
 				if(nowShowingUsers[i]==null) {
-					System.out.println(i+"nullã§ã™");
+					System.out.println(i+"null‚Å‚·");
 					bIconHome[i].setVisible(false);
 				}
 				else {
@@ -2355,7 +2355,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		}
 		catch (IOException e) {
-			System.out.println("ã‚°ãƒ«ãƒ¼ãƒ—ã®å†™çœŸå–å¾—ã«å¤±æ•—");
+			System.out.println("ƒOƒ‹[ƒv‚ÌÊ^æ“¾‚É¸”s");
 		}
 		boolean flag=false;
 		for(int i=0;i<myGroupInfo.getSendGood().length;i++) {
@@ -2523,7 +2523,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	public void actionPerformed(ActionEvent ae) {
 		String cmd = ae.getActionCommand();
-		System.out.println(cmd);//TODO debugç”¨
+		System.out.println(cmd);//TODO debug—p
 		int temp=0;
 		boolean flag=false;
 		FileDialog fd ;
@@ -2534,7 +2534,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		switch(cmd) {
 
-		case "ãƒ­ã‚°ã‚¤ãƒ³login":
+		case "ƒƒOƒCƒ“login":
 			if(tfIdLogin.getText().length()==0 || tfIdLogin.getText().length()>10) {
 			}
 			else if(tfPasswordLogin.getText().length()==0 || tfPasswordLogin.getText().length()>15) {
@@ -2546,7 +2546,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 					Scheck(loginId,loginPassword);
 					if(inputObj.equals("1")){
-						System.out.println("ãƒ­ã‚°ã‚¤ãƒ³æˆåŠŸ");
+						System.out.println("ƒƒOƒCƒ“¬Œ÷");
 						SgetmyUserprof(loginId);
 						temp=myUserInfo.getIsAuthentificated();
 						if(temp==0) {
@@ -2573,7 +2573,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆlogin":
+		case "ƒAƒJƒEƒ“ƒgì¬login":
 			lMessageNew_r.setVisible(false);
 			tfIdNew_r.setText("");
 			tfPasswordNew_r.setText("");
@@ -2582,21 +2582,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ç™»éŒ²new_regis":
+		case "“o˜^new_regis":
 			if(tfIdNew_r.getText().length()==0 || tfIdNew_r.getText().length()>10) {
-				lMessageNew_r.setText("å­¦ç±ç•ªå·ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“");
+				lMessageNew_r.setText("ŠwĞ”Ô†‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 				lMessageNew_r.setVisible(true);
 			}
 			else if(tfPasswordNew_r.getText().length()==0 || tfPasswordNew_r.getText().length()>15) {
-				lMessageNew_r.setText("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯15æ–‡å­—ä»¥ä¸‹ã§ã™");
+				lMessageNew_r.setText("ƒpƒXƒ[ƒh‚Í15•¶šˆÈ‰º‚Å‚·");
 				lMessageNew_r.setVisible(true);
 			}
 			else if(tfPasswordConfNew_r.getText().length()==0 || tfPasswordConfNew_r.getText().length()>15) {
-				lMessageNew_r.setText("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸€è‡´ã—ã¦ã„ã¾ã›ã‚“");
+				lMessageNew_r.setText("ƒpƒXƒ[ƒh‚ªˆê’v‚µ‚Ä‚¢‚Ü‚¹‚ñ");
 				lMessageNew_r.setVisible(true);
 			}
 			else if(!(tfPasswordNew_r.getText().equals(tfPasswordConfNew_r.getText()))){
-				lMessageNew_r.setText("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸€è‡´ã—ã¦ã„ã¾ã›ã‚“");
+				lMessageNew_r.setText("ƒpƒXƒ[ƒh‚ªˆê’v‚µ‚Ä‚¢‚Ü‚¹‚ñ");
 				lMessageNew_r.setVisible(true);
 			}
 			else {
@@ -2605,20 +2605,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					myUserInfo.setPassword(tfPasswordNew_r.getText());
 
 					lPicOutputJudge.setIcon(null);
-					lPicOutputJudge.setText("<html><body>æœ¬äººç¢ºèªã«<br />å­¦ç”Ÿè¨¼ã‚’ä½¿ç”¨ã—ã¾ã™<br />é¸æŠãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦<br />å­¦ç”Ÿè¨¼ã®å†™çœŸã‚’<br />é€ä¿¡ã—ã¦ãã ã•ã„</body></html>");
+					lPicOutputJudge.setText("<html><body>–{lŠm”F‚É<br />Šw¶Ø‚ğg—p‚µ‚Ü‚·<br />‘I‘ğƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä<br />Šw¶Ø‚ÌÊ^‚ğ<br />‘—M‚µ‚Ä‚­‚¾‚³‚¢</body></html>");
 					tfNumberJudge.setText("");
 					tfNameJudge.setText("");
 					layout.show(cardPanel, "judge");
 				}
 				catch(NumberFormatException e) {
-					lMessageNew_r.setText("å­¦ç±ç•ªå·ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“");
+					lMessageNew_r.setText("ŠwĞ”Ô†‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 					lMessageNew_r.setVisible(true);
 				}
 			}
 			break;
 
 
-		case "é¸æŠjudge":
+		case "‘I‘ğjudge":
 			fd = new FileDialog(this,"Open File",FileDialog.LOAD);
 			fd.setVisible(true);
 			bi = null;
@@ -2632,22 +2632,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			catch (IOException e) {
 				lPicOutputJudge.setIcon(null);
-				lPicOutputJudge.setText("<html><body>æœ¬äººç¢ºèªã«<br />å­¦ç”Ÿè¨¼ã‚’ä½¿ç”¨ã—ã¾ã™<br />é¸æŠãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦<br />å­¦ç”Ÿè¨¼ã®å†™çœŸã‚’<br />é€ä¿¡ã—ã¦ãã ã•ã„</body></html>");
+				lPicOutputJudge.setText("<html><body>–{lŠm”F‚É<br />Šw¶Ø‚ğg—p‚µ‚Ü‚·<br />‘I‘ğƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä<br />Šw¶Ø‚ÌÊ^‚ğ<br />‘—M‚µ‚Ä‚­‚¾‚³‚¢</body></html>");
 			}
 			break;
 
 
-		case "é€ä¿¡judge":
+		case "‘—Mjudge":
 			tfNameJudge.setForeground(Color.BLACK);
 			tfNumberJudge.setForeground(Color.BLACK);
 			lPicOutputJudge.setForeground(Color.BLACK);
 
 			if(tfNameJudge.getText().length()==0 || tfNameJudge.getText().length()>10) {
-				tfNameJudge.setText("å…¥åŠ›ã¯ä¸Šé™10æ–‡å­—ã§ã™");
+				tfNameJudge.setText("“ü—Í‚ÍãŒÀ10•¶š‚Å‚·");
 				tfNameJudge.setForeground(Color.RED);
 			}
 			else if(tfNumberJudge.getText().length()==0 || tfNumberJudge.getText().length()>20) {
-				tfNumberJudge.setText("å…¥åŠ›ã¯ä¸Šé™20æ–‡å­—ã§ã™");
+				tfNumberJudge.setText("“ü—Í‚ÍãŒÀ20•¶š‚Å‚·");
 				tfNumberJudge.setForeground(Color.RED);
 			}
 			else if(lPicOutputJudge.getIcon()==null) {
@@ -2656,15 +2656,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			else {
 				myUserInfo.setName(tfNameJudge.getText());
 				myUserInfo.setLineId(tfNumberJudge.getText());
-				System.out.println("é€ä¿¡é–‹å§‹");
+				System.out.println("‘—MŠJn");
 				sendUserInfo(myUserInfo);
-				System.out.println("é€ä¿¡çµ‚äº†");
+				System.out.println("‘—MI—¹");
 				layout.show(cardPanel,"pleaseWait");
 			}
 			break;
 
 
-		case "ã™ã™ã‚€finishAuthen":
+		case "‚·‚·‚ŞfinishAuthen":
 			myUserInfo.setIsAuthentificated(1);
 			SchangeProf(myUserInfo);
 			goHome();
@@ -2679,57 +2679,57 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "é€šçŸ¥":
+		case "’Ê’m":
 			layout.show(cardPanel,"inform");
 			break;
 
 
-		case "ã„ã„ã­é€šçŸ¥ã¸":
+		case "‚¢‚¢‚Ë’Ê’m‚Ö":
 			layout.show(cardPanel,"goodInform");
 			break;
 
 
-		case "ãƒãƒƒãƒãƒ³ã‚°é€šçŸ¥ã¸":
+		case "ƒ}ƒbƒ`ƒ“ƒO’Ê’m‚Ö":
 			layout.show(cardPanel,"matchingInform");
 			break;
 
 
-		case "ãƒ›ãƒ¼ãƒ ã¸":
+		case "ƒz[ƒ€‚Ö":
 			layout.show(cardPanel,"home");
 			break;
 
 
-		case "ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸":
+		case "ƒƒjƒ…[‚Ö":
 			layout.show(cardPanel,"menu");
 			break;
 
 
-		case "åˆ‡ã‚Šæ›¿ãˆã¸":
+		case "Ø‚è‘Ö‚¦‚Ö":
 			layout.show(cardPanel,"change");
 			break;
 
 
-		case "ã‚°ãƒ«ä½œæˆã¸":
+		case "ƒOƒ‹ì¬‚Ö":
 			layout.show(cardPanel,"makeGroup");
 			break;
 
 
-		case "æ‹›å¾…é€šçŸ¥ã¸":
+		case "µ‘Ò’Ê’m‚Ö":
 			layout.show(cardPanel,"inviteInform");
 			break;
 
 
-		case "æˆ»ã‚‹good":
+		case "–ß‚égood":
 			layout.show(cardPanel,prePageForGood);
 			break;
 
 
-		case "æˆ»ã‚‹viewGroup":
+		case "–ß‚éviewGroup":
 			layout.show(cardPanel,prePageForViewGroup);
 			break;
 
 
-		case "æ¤œç´¢home":
+		case "ŒŸõhome":
 			if(isNowUsingGroupAccount) {
 				layout.show(cardPanel, "searchGroup");
 			}
@@ -2739,17 +2739,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ãƒ¡ãƒ‹ãƒ¥ãƒ¼home":
+		case "ƒƒjƒ…[home":
 			layout.show(cardPanel,"menu");
 			break;
 
 
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«0home":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«1home":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«2home":
+		case "ƒvƒƒtƒB[ƒ‹0home":
+		case "ƒvƒƒtƒB[ƒ‹1home":
+		case "ƒvƒƒtƒB[ƒ‹2home":
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"home") ){
+					if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"home") ){
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -2758,8 +2758,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"home") ){
-						System.out.println("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«\"+String.valueOf(i)+\"home");//TODO
+					if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"home") ){
+						System.out.println("ƒvƒƒtƒB[ƒ‹\"+String.valueOf(i)+\"home");//TODO
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -2769,7 +2769,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case"å‰ã®ãƒšãƒ¼ã‚¸home":
+		case"‘O‚Ìƒy[ƒWhome":
 			nowPage--;
 			if(nowPage<1) {
 				nowPage++;
@@ -2785,7 +2785,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case"æ¬¡ã®ãƒšãƒ¼ã‚¸home":
+		case"Ÿ‚Ìƒy[ƒWhome":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
 				if(nowShowingGroups!=null) {
@@ -2806,38 +2806,38 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case"ã„ã„ã­reply":
+		case"‚¢‚¢‚Ëreply":
 			Sgood(nowShowingUser.getStudentNumber());
 			SgetmyUserprof(myUserInfo.getStudentNumber());
 			goGoodInform();//TODO
 			break;
 
 
-		case"æ–­ã‚‹reply":
+		case"’f‚éreply":
 			SrejectGood(nowShowingUser.getStudentNumber());
 			goGoodInform();
 			break;
 
 
-		case"ã„ã„ã­replyGroup":
+		case"‚¢‚¢‚ËreplyGroup":
 			 Sgroup_good(nowShowingGroup.getStudentNumber());
 			layout.show(cardPanel, "goodInform");
 			break;
 
 
-		case"æ–­ã‚‹replyGroup":
+		case"’f‚éreplyGroup":
 			SrejectGoodfromGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
-		case "ã„ã„ã­good":
+		case "‚¢‚¢‚Ëgood":
 			Sgood(nowShowingUser.getStudentNumber());
 			bGoodGood.setVisible(false);
 			lGoodGood.setVisible(true);
 			break;
 
 
-		case"ç¢ºèªmatching":
+		case"Šm”Fmatching":
 			if(isNowUsingGroupAccount) {
 				prePageForViewGroup="matching";
 				goViewGroup();
@@ -2849,7 +2849,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "æ¤œç´¢searchUser":
+		case "ŒŸõsearchUser":
 			userSearchCondition="";
 
 			userSearchCondition=String.valueOf(cbGenderSearchUser.getSelectedIndex())+",";
@@ -2863,7 +2863,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "æ¤œç´¢searchGroup":
+		case "ŒŸõsearchGroup":
 			groupSearchCondition="";
 
 			groupSearchCondition=String.valueOf(cbPurposeSearchGroup.getSelectedIndex())+",";
@@ -2874,7 +2874,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "Myãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«menu":
+		case "MyƒvƒƒtƒB[ƒ‹menu":
 			if(isNowUsingGroupAccount) {
 				tfNameMyGroupProfile.setForeground(Color.BLACK);
 				tfRelationMyGroupProfile.setForeground(Color.BLACK);
@@ -2888,7 +2888,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					bPhotoMyGroupProfile.setIcon(scaleImage(myGroupInfo.getMainPhoto(),w/2,h/6));
 				}
 				catch (IOException e) {
-					System.out.println("ã‚°ãƒ«ãƒ¼ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒOƒ‹[ƒvƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 
 				if(myGroupInfo.getHostUser()==myUserInfo.getStudentNumber()) {
@@ -2921,10 +2921,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					}
 				}
 				catch (IOException e) {
-					System.out.println("ãƒ¦ãƒ¼ã‚¶ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒ†[ƒUƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 				catch(IllegalArgumentException e) {
-					System.out.println("ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®å€¤ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì’l‚Ìæ“¾‚É¸”s");
 				}
 
 				layout.show(cardPanel,"myProfile");
@@ -2933,7 +2933,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåˆ‡ã‚Šæ›¿ãˆmenu":
+		case "ƒAƒJƒEƒ“ƒgØ‚è‘Ö‚¦menu":
 			nowPage=1;
 			userSearchCondition="";
 			groupSearchCondition="";
@@ -2960,30 +2960,30 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 			}
 			catch (IOException e) {
-				System.out.println("åˆ‡ã‚Šæ›¿ãˆã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+				System.out.println("Ø‚è‘Ö‚¦ƒAƒJƒEƒ“ƒg‚ÌƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 			}
 			layout.show(cardPanel,"change");
 			break;
 
 
-		case "è¨­å®šmenu":
+		case "İ’èmenu":
 			if(myUserInfo.getIsPublic()) {
-				bProfileSetup.setText("å…¬é–‹");
+				bProfileSetup.setText("ŒöŠJ");
 			}
 			else {
-				bProfileSetup.setText("éå…¬é–‹");
+				bProfileSetup.setText("”ñŒöŠJ");
 			}
 
 			layout.show(cardPanel,"setup");
 			break;
 
 
-		case"ãƒ˜ãƒ«ãƒ—menu":
+		case"ƒwƒ‹ƒvmenu":
 			layout.show(cardPanel,"howToUse");
 			break;
 
 
-		case"ãƒ¡ã‚¤ãƒ³myProfile":
+		case"ƒƒCƒ“myProfile":
 			fd = new FileDialog(this,"Open File",FileDialog.LOAD);
 			fd.setVisible(true);
 			bi = null;
@@ -2996,18 +2996,18 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
-				System.out.println("æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
+				System.out.println("³‚µ‚­ƒtƒ@ƒCƒ‹‚ª‘I‘ğ‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
 			}
 			break;
 
 
-		case "ã‚µãƒ–0myProfile":
-		case "ã‚µãƒ–1myProfile":
-		case "ã‚µãƒ–2myProfile":
-		case "ã‚µãƒ–3myProfile":
-		case "ã‚µãƒ–4myProfile":
+		case "ƒTƒu0myProfile":
+		case "ƒTƒu1myProfile":
+		case "ƒTƒu2myProfile":
+		case "ƒTƒu3myProfile":
+		case "ƒTƒu4myProfile":
 			for(int i=0;i<5;i++) {
-				if(cmd.equals("ã‚µãƒ–"+String.valueOf(i)+"myProfile")) {
+				if(cmd.equals("ƒTƒu"+String.valueOf(i)+"myProfile")) {
 					temp=i;
 				}
 			}
@@ -3024,12 +3024,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
-				System.out.println("æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
+				System.out.println("³‚µ‚­ƒtƒ@ƒCƒ‹‚ª‘I‘ğ‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
 			}
 			break;
 
 
-		case "ç¢ºå®šmyProfile":
+		case "Šm’èmyProfile":
 			flag=true;
 			tfNameMyProfile.setForeground(Color.BLACK);
 			tfHobbyMyProfile.setForeground(Color.BLACK);
@@ -3039,7 +3039,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				myUserInfo.setName(tfNameMyProfile.getText());
 			}
 			else {
-				tfNameMyProfile.setText("å…¥åŠ›ã¯ä¸Šé™10æ–‡å­—ã§ã™");
+				tfNameMyProfile.setText("“ü—Í‚ÍãŒÀ10•¶š‚Å‚·");
 				tfNameMyProfile.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3048,7 +3048,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				myUserInfo.setHobby(tfHobbyMyProfile.getText());
 			}
 			else {
-				tfHobbyMyProfile.setText("å…¥åŠ›ã¯ä¸Šé™10æ–‡å­—ã§ã™");
+				tfHobbyMyProfile.setText("“ü—Í‚ÍãŒÀ10•¶š‚Å‚·");
 				tfHobbyMyProfile.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3057,7 +3057,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				myUserInfo.setLineId(tfLineIdMyProfile.getText());
 			}
 			else {
-				tfLineIdMyProfile.setText("å…¥åŠ›ã¯ä¸Šé™20æ–‡å­—ã§ã™");
+				tfLineIdMyProfile.setText("“ü—Í‚ÍãŒÀ20•¶š‚Å‚·");
 				tfLineIdMyProfile.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3075,7 +3075,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆchange":
+		case "ƒOƒ‹[ƒvì¬change":
 			nowShowingGroup=new GroupInfo();
 
 			tfNameMakeGroup.setText(nowShowingGroup.getName());
@@ -3086,7 +3086,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bPhotoMakeGroup.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/6));
 			}
 			catch (IOException e) {
-				System.out.println("åˆæœŸã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+				System.out.println("‰ŠúƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 			}
 
 			tfNameMakeGroup.setForeground(Color.BLACK);
@@ -3096,18 +3096,18 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "å€‹äººã‚¢ã‚«ã‚¦ãƒ³ãƒˆchange":
+		case "ŒÂlƒAƒJƒEƒ“ƒgchange":
 			isNowUsingGroupAccount=false;
 			nowPage=1;
 			goHome();
 			break;
 
 
-		case "ã‚°ãƒ«ãƒ¼ãƒ—0change":
-		case "ã‚°ãƒ«ãƒ¼ãƒ—1change":
-		case "ã‚°ãƒ«ãƒ¼ãƒ—2change":
+		case "ƒOƒ‹[ƒv0change":
+		case "ƒOƒ‹[ƒv1change":
+		case "ƒOƒ‹[ƒv2change":
 			for(int i=0;i<3;i++) {
-				if(cmd.equals("ã‚°ãƒ«ãƒ¼ãƒ—"+String.valueOf(i)+"change")) {
+				if(cmd.equals("ƒOƒ‹[ƒv"+String.valueOf(i)+"change")) {
 					SgetmyGroupprof(nowShowingGroups[i].getStudentNumber());
 				}
 			}
@@ -3117,7 +3117,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case"å‰ã®ãƒšãƒ¼ã‚¸change":
+		case"‘O‚Ìƒy[ƒWchange":
 			nowPage--;
 			if(nowPage<1) {
 				nowPage++;
@@ -3142,13 +3142,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					}
 				}
 				catch (IOException e) {
-					System.out.println("åˆ‡ã‚Šæ›¿ãˆã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("Ø‚è‘Ö‚¦ƒAƒJƒEƒ“ƒg‚ÌƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 			}
 			break;
 
 
-		case "æ¬¡ã®ãƒšãƒ¼ã‚¸change":
+		case "Ÿ‚Ìƒy[ƒWchange":
 			nowPage++;
 			if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]!=null){
 				try {
@@ -3171,7 +3171,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 				}
 				catch (IOException e) {
-					System.out.println("åˆ‡ã‚Šæ›¿ãˆã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("Ø‚è‘Ö‚¦ƒAƒJƒEƒ“ƒg‚ÌƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 			}
 			else{
@@ -3180,7 +3180,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ãƒ¡ã‚¤ãƒ³makeGroup":
+		case "ƒƒCƒ“makeGroup":
 			fd = new FileDialog(this,"Open File",FileDialog.LOAD);
 			fd.setVisible(true);
 			bi = null;
@@ -3193,12 +3193,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				bPhotoMakeGroup.setText("");
 			}
 			catch (IOException e) {
-				System.out.println("æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
+				System.out.println("³‚µ‚­ƒtƒ@ƒCƒ‹‚ª‘I‘ğ‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
 			}
 			break;
 
 
-		case "é¸æŠmakeGroup":
+		case "‘I‘ğmakeGroup":
 			flag=true;
 			tfNameMakeGroup.setForeground(Color.BLACK);
 			tfRelationMakeGroup.setForeground(Color.BLACK);
@@ -3208,7 +3208,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				nowShowingGroup.setName(tfNameMakeGroup.getText());
 			}
 			else {
-				tfNameMakeGroup.setText("å…¥åŠ›ã®ä¸Šé™ã¯10æ–‡å­—ã§ã™");
+				tfNameMakeGroup.setText("“ü—Í‚ÌãŒÀ‚Í10•¶š‚Å‚·");
 				tfNameMakeGroup.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3217,7 +3217,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				nowShowingGroup.setRelation(tfRelationMakeGroup.getText());
 			}
 			else {
-				tfRelationMakeGroup.setText("å…¥åŠ›ã®ä¸Šé™ã¯10æ–‡å­—ã§ã™");
+				tfRelationMakeGroup.setText("“ü—Í‚ÌãŒÀ‚Í10•¶š‚Å‚·");
 				tfRelationMakeGroup.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3226,7 +3226,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				nowShowingGroup.setComment(tfCommentMakeGroup.getText());
 			}
 			else {
-				tfCommentMakeGroup.setText("å…¥åŠ›ã®ä¸Šé™ã¯15æ–‡å­—ã§ã™");
+				tfCommentMakeGroup.setText("“ü—Í‚ÌãŒÀ‚Í15•¶š‚Å‚·");
 				tfCommentMakeGroup.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3244,7 +3244,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ç¢ºå®šgathering":
+		case "Šm’ègathering":
 			nowShowingGroup.setHostUser(myUserInfo.getStudentNumber());
 			temp=0;
 			flag=true;
@@ -3257,13 +3257,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 								temp++;
 							}
 							else {
-								tfNumberGather[i].setText("å­¦ç±ç•ªå·ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“");
+								tfNumberGather[i].setText("ŠwĞ”Ô†‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 								tfNumberGather[i].setForeground(Color.RED);
 								flag=false;
 							}
 						}
 						catch(NumberFormatException e) {
-							tfNumberGather[i].setText("å­¦ç±ç•ªå·ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„");
+							tfNumberGather[i].setText("ŠwĞ”Ô†‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 							tfNumberGather[i].setForeground(Color.RED);
 							flag=false;
 						}
@@ -3271,7 +3271,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 
 			if(temp==0) {
-				tfNumberGather[0].setText("å­¦ç±ç•ªå·ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„");
+				tfNumberGather[0].setText("ŠwĞ”Ô†‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 				tfNumberGather[0].setForeground(Color.RED);
 			}
 			else if(flag) {
@@ -3282,34 +3282,34 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ç¢ºèªinvite":
+		case "Šm”Finvite":
 			prePageForViewGroup="invite";
 			goViewGroup();
 			break;
 
 
-		case "å‚åŠ invite":
+		case "Q‰Áinvite":
 			SjoinGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
-		case "æ–­ã‚‹invite":
+		case "’f‚éinvite":
 			SrejectJoinGroup(nowShowingGroup.getStudentNumber());
 			break;
 
 
-		case "ãƒ¡ãƒ³ãƒ0viewGroup":
-		case "ãƒ¡ãƒ³ãƒ1viewGroup":
-		case "ãƒ¡ãƒ³ãƒ2viewGroup":
-		case "ãƒ¡ãƒ³ãƒ3viewGroup"://TODO
-		case "ãƒ¡ãƒ³ãƒ4viewGroup":
-			if(cmd.equals("ãƒ¡ãƒ³ãƒ0viewGroup")) {
+		case "ƒƒ“ƒo0viewGroup":
+		case "ƒƒ“ƒo1viewGroup":
+		case "ƒƒ“ƒo2viewGroup":
+		case "ƒƒ“ƒo3viewGroup"://TODO
+		case "ƒƒ“ƒo4viewGroup":
+			if(cmd.equals("ƒƒ“ƒo0viewGroup")) {
 				SgetyourUserprof(nowShowingGroup.getHostUser());
 				nowShowingUser=yourUserInfo;
 			}
 			else {
 				for(int i=1;i<5;i++) {
-					if(cmd.equals("ãƒ¡ãƒ³ãƒ"+String.valueOf(i)+"viewGroup")) {
+					if(cmd.equals("ƒƒ“ƒo"+String.valueOf(i)+"viewGroup")) {
 						SgetyourUserprof(nowShowingGroup.getNonhostUser()[i-1]);
 						nowShowingUser=yourUserInfo;
 					}
@@ -3320,14 +3320,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ã„ã„ã­viewGroup":
+		case "‚¢‚¢‚ËviewGroup":
 			Sgroup_good(nowShowingGroup.getStudentNumber());
 			bGoodViewGroup.setVisible(false);
 			lGoodViewGroup.setVisible(true);
 			break;
 
 
-		case"ãƒ¡ã‚¤ãƒ³myGroupProfile":
+		case"ƒƒCƒ“myGroupProfile":
 			fd = new FileDialog(this,"Open File",FileDialog.LOAD);
 			fd.setVisible(true);
 			bi = null;
@@ -3340,12 +3340,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				SchangeProf(myUserInfo);
 			}
 			catch (IOException e) {
-				System.out.println("ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ­£ã—ãé¸æŠã•ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
+				System.out.println("ƒtƒ@ƒCƒ‹‚ª³‚µ‚­‘I‘ğ‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
 			}
 			break;
 
 
-		case "ç¢ºå®šmyGroupProfile":
+		case "Šm’èmyGroupProfile":
 			flag=true;
 			tfNameMyGroupProfile.setForeground(Color.BLACK);
 			tfRelationMyGroupProfile.setForeground(Color.BLACK);
@@ -3359,7 +3359,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				myGroupInfo.setName(tfNameMyGroupProfile.getText());
 			}
 			else {
-				tfNameMyGroupProfile.setText("å…¥åŠ›ã¯ä¸Šé™10æ–‡å­—ã§ã™");
+				tfNameMyGroupProfile.setText("“ü—Í‚ÍãŒÀ10•¶š‚Å‚·");
 				tfNameMyGroupProfile.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3368,7 +3368,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				myGroupInfo.setRelation(tfRelationMyGroupProfile.getText());
 			}
 			else {
-				tfRelationMyGroupProfile.setText("å…¥åŠ›ã¯ä¸Šé™10æ–‡å­—ã§ã™");
+				tfRelationMyGroupProfile.setText("“ü—Í‚ÍãŒÀ10•¶š‚Å‚·");
 				tfRelationMyGroupProfile.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3377,7 +3377,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				myGroupInfo.setComment(tfCommentMyGroupProfile.getText());
 			}
 			else {
-				tfCommentMyGroupProfile.setText("å…¥åŠ›ã¯ä¸Šé™15æ–‡å­—ã§ã™");
+				tfCommentMyGroupProfile.setText("“ü—Í‚ÍãŒÀ15•¶š‚Å‚·");
 				tfCommentMyGroupProfile.setForeground(Color.RED);
 				flag=false;
 			}
@@ -3389,8 +3389,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "å‰Šé™¤myGroupProfile":
-			temp = JOptionPane.showOptionDialog(this,"æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ","æœ€çµ‚ç¢ºèª",JOptionPane.YES_NO_OPTION,
+		case "íœmyGroupProfile":
+			temp = JOptionPane.showOptionDialog(this,"–{“–‚Éíœ‚µ‚Ü‚·‚©H","ÅIŠm”F",JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 
 			if (temp == 0){
@@ -3404,8 +3404,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "å‰Šé™¤setup":
-			temp = JOptionPane.showOptionDialog(this,"æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ","æœ€çµ‚ç¢ºèª",JOptionPane.YES_NO_OPTION,
+		case "íœsetup":
+			temp = JOptionPane.showOptionDialog(this,"–{“–‚Éíœ‚µ‚Ü‚·‚©H","ÅIŠm”F",JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE,null, yesNo, yesNo[1]);
 			if (temp == 0){
 				SdeleteUser(myUserInfo.getStudentNumber());
@@ -3420,26 +3420,26 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "æ‹›å¾…inform":
+		case "µ‘Òinform":
 			nowPage=1;
 			goInviteInform();
 			break;
 
 
-		case "ã„ã„ã­inform":
+		case "‚¢‚¢‚Ëinform":
 			nowPage=1;
 			goGoodInform();
 			break;
 
 
 
-		case "ãƒãƒƒãƒãƒ³ã‚°inform":
+		case "ƒ}ƒbƒ`ƒ“ƒOinform":
 			nowPage=1;
 			goMatchingInform();
 			break;
 
 
-		case"å‰ã®ãƒšãƒ¼ã‚¸inviteInform":
+		case"‘O‚Ìƒy[ƒWinviteInform":
 			nowPage--;
 			if(nowPage<1) {
 				nowPage++;
@@ -3450,7 +3450,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "æ¬¡ã®ãƒšãƒ¼ã‚¸inviteInform":
+		case "Ÿ‚Ìƒy[ƒWinviteInform":
 			nowPage++;
 			if(myUserInfo.getJoiningGroup()[3*(nowPage-1)]!=null){
 				goInviteInform();
@@ -3461,7 +3461,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case"å‰ã®ãƒšãƒ¼ã‚¸goodInform":
+		case"‘O‚Ìƒy[ƒWgoodInform":
 			nowPage--;
 			if(nowPage<1) {
 				nowPage++;
@@ -3472,7 +3472,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "æ¬¡ã®ãƒšãƒ¼ã‚¸goodInform":
+		case "Ÿ‚Ìƒy[ƒWgoodInform":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
 				if(myGroupInfo.getReceiveGood()[3*(nowPage-1)]!=null){
@@ -3493,7 +3493,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case"å‰ã®ãƒšãƒ¼ã‚¸matchingInform":
+		case"‘O‚Ìƒy[ƒWmatchingInform":
 			nowPage--;
 			if(nowPage<1) {
 				nowPage++;
@@ -3504,7 +3504,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "æ¬¡ã®ãƒšãƒ¼ã‚¸matchingInform":
+		case "Ÿ‚Ìƒy[ƒWmatchingInform":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
 				if(myGroupInfo.getMatchedGroup()[3*(nowPage-1)]!=null){
@@ -3525,11 +3525,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«0inviteInform":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«1inviteInform":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«2inviteInform":
+		case "ƒvƒƒtƒB[ƒ‹0inviteInform":
+		case "ƒvƒƒtƒB[ƒ‹1inviteInform":
+		case "ƒvƒƒtƒB[ƒ‹2inviteInform":
 			for(int i=0;i<3;i++) {
-				if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"inviteInform")) {
+				if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"inviteInform")) {
 					nowShowingGroup=nowShowingGroups[i];
 				}
 			}
@@ -3538,22 +3538,22 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				lIconInvite.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
 			}
 			catch (IOException e) {
-				System.out.println("ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+				System.out.println("ƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 			}
 			SgetyourUserprof(nowShowingGroup.getHostUser());
 			lHostInvite.setText("<html><body>"+yourUserInfo.getName()
-					+"<br/>ã«æ‹›å¾…ã•ã‚Œã¾ã—ãŸ</html></body>");
+					+"<br/>‚Éµ‘Ò‚³‚ê‚Ü‚µ‚½</html></body>");
 			layout.show(cardPanel,"invite");
 			break;
 
 
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«0goodInform":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«1goodInform":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«2goodInform":
+		case "ƒvƒƒtƒB[ƒ‹0goodInform":
+		case "ƒvƒƒtƒB[ƒ‹1goodInform":
+		case "ƒvƒƒtƒB[ƒ‹2goodInform":
 
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"goodInform") ){
+					if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"goodInform") ){
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
@@ -3576,14 +3576,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 				}
 				catch (IOException e) {
-					System.out.println("ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 				layout.show(cardPanel,"replyGroup");
 
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"goodInform") ){
+					if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"goodInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -3602,7 +3602,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					}
 				}
 				catch (IOException e) {
-					System.out.println("ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 
 				layout.show(cardPanel,"reply");
@@ -3610,54 +3610,54 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			break;
 
 
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«0matchingInform":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«1matchingInform":
-		case "ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«2matchingInform":
+		case "ƒvƒƒtƒB[ƒ‹0matchingInform":
+		case "ƒvƒƒtƒB[ƒ‹1matchingInform":
+		case "ƒvƒƒtƒB[ƒ‹2matchingInform":
 			if(isNowUsingGroupAccount) {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"matchingInform")) {
+					if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"matchingInform")) {
 						nowShowingGroup=nowShowingGroups[i];
 					}
 				}
 
 				try {
 					lIconMatching.setIcon(scaleImage(nowShowingGroup.getMainPhoto(),w/2,h/5));
-					lNameMatching.setText("<html><body>"+nowShowingGroup.getName()+"<br />ã¨ãƒãƒƒãƒãƒ³ã‚°ã—ã¾ã—ãŸï¼</body></html>");
+					lNameMatching.setText("<html><body>"+nowShowingGroup.getName()+"<br />‚Æƒ}ƒbƒ`ƒ“ƒO‚µ‚Ü‚µ‚½I</body></html>");
 					SgetyourUserprof(nowShowingGroup.getHostUser());
 					lIdMatching.setText("<html><body>LINE ID:<br />"+yourUserInfo.getLineId()+"</body></html>");
 				}
 				catch (IOException e) {
-					System.out.println("ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 
 			}
 			else {
 				for(int i=0;i<3;i++) {
-					if(cmd.equals("ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«"+String.valueOf(i)+"matchingInform") ){
+					if(cmd.equals("ƒvƒƒtƒB[ƒ‹"+String.valueOf(i)+"matchingInform") ){
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
 				try {
 					lIconMatching.setIcon(scaleImage(nowShowingUser.getMainPhoto(),w/2,h/5));
-					lNameMatching.setText("<html><body>"+nowShowingUser.getName()+"<br+nowSh />ã¨ãƒãƒƒãƒãƒ³ã‚°ã—ã¾ã—ãŸï¼</body></html>");
+					lNameMatching.setText("<html><body>"+nowShowingUser.getName()+"<br+nowSh />‚Æƒ}ƒbƒ`ƒ“ƒO‚µ‚Ü‚µ‚½I</body></html>");
 					lIdMatching.setText("<html><body>LINE ID:<br />"+nowShowingUser.getLineId()+"</body></html>");
 				}
 				catch (IOException e) {
-					System.out.println("ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—ã«å¤±æ•—");
+					System.out.println("ƒAƒCƒRƒ“‚Ìæ“¾‚É¸”s");
 				}
 			}
 			layout.show(cardPanel,"matching");
 			break;
 
 
-		case "å…¬é–‹ãƒ»éå…¬é–‹":
+		case "ŒöŠJE”ñŒöŠJ":
 			if(myUserInfo.getIsPublic()) {
-				bProfileSetup.setText("éå…¬é–‹");
+				bProfileSetup.setText("”ñŒöŠJ");
 				myUserInfo.setIsPublic(false);
 				SchangeProf(myUserInfo);
 			}
 			else {
-				bProfileSetup.setText("å…¬é–‹");
+				bProfileSetup.setText("ŒöŠJ");
 				myUserInfo.setIsPublic(true);
 				SchangeProf(myUserInfo);
 			}
@@ -3668,13 +3668,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void stateChanged(ChangeEvent e) {
 		JRadioButton cb = (JRadioButton)e.getSource();
 		String message = cb.getText();
-		if(message.equals("å…¬é–‹") || message.equals("éå…¬é–‹")) {
+		if(message.equals("ŒöŠJ") || message.equals("”ñŒöŠJ")) {
 			if (cb.isSelected()) {
-				cb.setText("å…¬é–‹");
+				cb.setText("ŒöŠJ");
 				myUserInfo.setIsPublic(true);
 				SchangeProf(myUserInfo);
 			} else {
-				cb.setText("éå…¬é–‹");
+				cb.setText("”ñŒöŠJ");
 				myUserInfo.setIsPublic(false);
 				SchangeProf(myUserInfo);
 			}
@@ -3688,10 +3688,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     }
 
     public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
-        int width = bi.getWidth();    // ã‚ªãƒªã‚¸ãƒŠãƒ«ç”»åƒã®å¹…
-        int height = bi.getHeight();  // ã‚ªãƒªã‚¸ãƒŠãƒ«ç”»åƒã®é«˜ã•
+        int width = bi.getWidth();    // ƒIƒŠƒWƒiƒ‹‰æ‘œ‚Ì•
+        int height = bi.getHeight();  // ƒIƒŠƒWƒiƒ‹‰æ‘œ‚Ì‚‚³
 
-        // ç¸¦æ¨ªã®æ¯”ç‡ã‹ã‚‰ã€scaleã‚’æ±ºã‚ã‚‹
+        // c‰¡‚Ì”ä—¦‚©‚çAscale‚ğŒˆ‚ß‚é
         double widthScale = (double) destWidth / (double) width;
         double heightScale = (double) destHeight / (double) height;
         double scale = widthScale < heightScale ? widthScale : heightScale;
@@ -3709,17 +3709,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     }
 
 
-    //TODO å¤šåˆ†ã‚‚ã†ã„ã‚‰ãªã„
-	//é€šçŸ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å†…éƒ¨ã‚¯ãƒ©ã‚¹ã§ã™ã‚ˆ
+    //TODO ‘½•ª‚à‚¤‚¢‚ç‚È‚¢
+	//’Ê’mƒEƒBƒ“ƒhƒE“à•”ƒNƒ‰ƒX‚Å‚·‚æ
     public class Notification extends JFrame implements ActionListener{
 
     	public Notification() {
-    		//é–‰ã˜ã‚‹ãƒœã‚¿ãƒ³ãƒ»ãƒªã‚µã‚¤ã‚º
-			JButton end = new JButton("é–‰ã˜ã‚‹");
+    		//•Â‚¶‚éƒ{ƒ^ƒ“EƒŠƒTƒCƒY
+			JButton end = new JButton("•Â‚¶‚é");
 			end.setPreferredSize(new Dimension(100, 50));
 			end.addActionListener(this);
 
-			//backãƒœã‚¿ãƒ³ nextãƒœã‚¿ãƒ³
+			//backƒ{ƒ^ƒ“ nextƒ{ƒ^ƒ“
 			JButton next = new JButton("next");
 			JButton back = new JButton("back");
 			next.setPreferredSize(new Dimension(100, 50));
@@ -3727,7 +3727,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			back.setPreferredSize(new Dimension(100, 50));
 			back.addActionListener(this);
 
-			//ãƒ‘ãƒãƒ«
+			//ƒpƒlƒ‹
 		    JPanel p1 = new JPanel();
 		    JPanel p2 = new JPanel();
 		    FlowLayout layout = new FlowLayout();
@@ -3741,15 +3741,15 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		    getContentPane().add(p1, BorderLayout.PAGE_END);
 		    getContentPane().add(p2, null);
 
-		    //ã‚¿ã‚¤ãƒˆãƒ«ãªã©
-    		setTitle("é€šçŸ¥");
+		    //ƒ^ƒCƒgƒ‹‚È‚Ç
+    		setTitle("’Ê’m");
     		setSize(w, h);
     		setVisible(true);
     		setResizable(false);
     	}
 
 		public void actionPerformed(ActionEvent e) {
-			//é–‰ã˜ã‚‹ãƒœã‚¿ãƒ³ã§ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚‹
+			//•Â‚¶‚éƒ{ƒ^ƒ“‚ÅƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é
 			Component c = (Component)e.getSource();
 			Window w = SwingUtilities.getWindowAncestor(c);
 			w.dispose();
@@ -3757,20 +3757,20 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     }
     /*
-    //æ¤œç´¢ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å†…éƒ¨ã‚¯ãƒ©ã‚¹
+    //ŒŸõƒEƒBƒ“ƒhƒE“à•”ƒNƒ‰ƒX
     public class search extends JFrame implements ActionListener{
     	public search() {
-    		JLabel menu = new JLabel("æ¤œç´¢");
+    		JLabel menu = new JLabel("ŒŸõ");
     		JComboBox<String> sex = new JComboBox<String>(Sex);
-    		JLabel sexL = new JLabel("æ€§åˆ¥");
+    		JLabel sexL = new JLabel("«•Ê");
     		JComboBox<String> grade = new JComboBox<String>(Grade);
-    		JLabel gradeL = new JLabel("å­¦å¹´");
+    		JLabel gradeL = new JLabel("Šw”N");
     		JComboBox<String> faculty = new JComboBox<String>(Faculty);
-    		JLabel facultyL = new JLabel("å­¦éƒ¨");
+    		JLabel facultyL = new JLabel("Šw•”");
     		JComboBox<String> birthplace = new JComboBox<String>(Birthplace);
-    		JLabel birthplaceL = new JLabel("å‡ºèº«");
+    		JLabel birthplaceL = new JLabel("og");
     		JComboBox<String> circle = new JComboBox<String>(Circle);
-    		JLabel circleL = new JLabel("ã‚µãƒ¼ã‚¯ãƒ«");
+    		JLabel circleL = new JLabel("ƒT[ƒNƒ‹");
 
     		JPanel p = new JPanel();
     		p.add(menu);
@@ -3794,54 +3794,54 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
     	}
 
 		public void actionPerformed(ActionEvent e) {
-			//é–‰ã˜ã‚‹ãƒœã‚¿ãƒ³ã§ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚‹
+			//•Â‚¶‚éƒ{ƒ^ƒ“‚ÅƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é
 			Component c = (Component)e.getSource();
 			Window w = SwingUtilities.getWindowAncestor(c);
 			w.dispose();
 		}
     }
-    //æ¤œç´¢ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å†…éƒ¨ã‚¯ãƒ©ã‚¹ã“ã“ã¾ã§
+    //ŒŸõƒEƒBƒ“ƒhƒE“à•”ƒNƒ‰ƒX‚±‚±‚Ü‚Å
      *
      */
 
-    //å››è§’å½¢æç”»ã‚¯ãƒ©ã‚¹
+    //lŠpŒ`•`‰æƒNƒ‰ƒX
     public class Rect extends Canvas{
     	public void paint(Graphics g) {
     		super.paint(g);
     		Graphics2D g2 = (Graphics2D)this.getGraphics();
     		Rectangle rect = new Rectangle();
-    		rect.setRect(w/10,h/10,8*w/10,6*h/10);	//(xåº§æ¨™ã€yåº§æ¨™ã€å¹…ã€é«˜ã•)
+    		rect.setRect(w/10,h/10,8*w/10,6*h/10);	//(xÀ•WAyÀ•WA•A‚‚³)
     		g2.setColor(Color.GREEN);
     	    g2.setStroke(new BasicStroke(5.0f));
     	    g2.draw(rect);
     	}
     }
 
-/***************ã‚µãƒ¼ãƒãƒ¼é–¢é€£ã®ãƒ¡ã‚½ãƒƒãƒ‰ãƒ»ã‚¯ãƒ©ã‚¹ç¾¤************************************************************/
-	//ã‚µãƒ¼ãƒãƒ¼ã«é€ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
-	public void connectServer(){	// ã‚µãƒ¼ãƒã«æ¥ç¶š
+/***************ƒT[ƒo[ŠÖ˜A‚Ìƒƒ\ƒbƒhEƒNƒ‰ƒXŒQ************************************************************/
+	//ƒT[ƒo[‚É‘—‚éƒƒ\ƒbƒh
+	public void connectServer(){	// ƒT[ƒo‚ÉÚ‘±
 		//Socket socket = null;
 		try {
-			socket = new Socket(ipAddress, port); //ã‚µãƒ¼ãƒ(ipAddress, port)ã«æ¥ç¶š
-			System.out.println("ã‚µãƒ¼ãƒã¨æ¥ç¶šã—ã¾ã—ãŸã€‚"); //ãƒ†ã‚¹ãƒˆç”¨å‡ºåŠ›
-			oos = new ObjectOutputStream(socket.getOutputStream()); //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿é€ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”¨æ„
+			socket = new Socket(ipAddress, port); //ƒT[ƒo(ipAddress, port)‚ÉÚ‘±
+			System.out.println("ƒT[ƒo‚ÆÚ‘±‚µ‚Ü‚µ‚½B"); //ƒeƒXƒg—po—Í
+			oos = new ObjectOutputStream(socket.getOutputStream()); //ƒIƒuƒWƒFƒNƒgƒf[ƒ^‘—M—pƒIƒuƒWƒFƒNƒg‚Ì—pˆÓ
 			out = new OutputStreamWriter(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
-			//receiver = new Receiver(socket); //å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æº–å‚™
-			//receiver.start();//å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚¹ãƒ¬ãƒƒãƒ‰)èµ·å‹•
+			//receiver = new Receiver(socket); //óM—pƒIƒuƒWƒFƒNƒg‚Ì€”õ
+			//receiver.start();//óM—pƒIƒuƒWƒFƒNƒg(ƒXƒŒƒbƒh)‹N“®
 		} catch (UnknownHostException e) {
-			System.err.println("ãƒ›ã‚¹ãƒˆã®IPã‚¢ãƒ‰ãƒ¬ã‚¹ãŒåˆ¤å®šã§ãã¾ã›ã‚“: " + e);
+			System.err.println("ƒzƒXƒg‚ÌIPƒAƒhƒŒƒX‚ª”»’è‚Å‚«‚Ü‚¹‚ñ: " + e);
 			System.exit(-1);
 		} catch (IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚½ã‚±ãƒƒãƒˆã‚’é–‰ã˜ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	//ƒ\ƒPƒbƒg‚ğ•Â‚¶‚éƒƒ\ƒbƒh
 	public void closeSocket() {
 		try {
-			System.out.println("Socekt Close");//ç¢ºèªç”¨
+			System.out.println("Socekt Close");//Šm”F—p
 			socket.close();
 		}catch(IOException ioe) {
 			ioe.printStackTrace();
@@ -3849,21 +3849,21 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		}
 	}
 
-	/****  é€ä¿¡ç”¨ ****/
-	//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ç¢ºèª
+	/****  ‘—M—p ****/
+	//ƒpƒXƒ[ƒh‚ÌŠm”F
 	public void Scheck(int number, String password) {
 		try {
 			connectServer();
 			String outLine = "lg,"+Integer.toString(number)+","+password;
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
@@ -3872,192 +3872,192 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			/*if(inputLine=="1")	return true;
 			else	return false;*/
 			}catch(IOException e) {
-				System.err.println("ãƒ‡ãƒ¼ã‚¿é€å—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+				System.err.println("ƒf[ƒ^‘—óM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 				System.exit(-1);
 				//return false;
 			}
 	}
 
-	//ãƒ›ãƒ¼ãƒ ç”»é¢nãƒšãƒ¼ã‚¸ç›®ã®ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã®å–å¾—
+	//ƒz[ƒ€‰æ–Ênƒy[ƒW–Ú‚Ìƒ†[ƒUî•ñ‚Ìæ“¾
 	public void Shome(int page) {
 		try{
-			connectServer();	//ã‚µãƒ¼ãƒã¨æ¥ç¶š
-			// ãƒ‡ãƒ¼ã‚¿é€ä¿¡
+			connectServer();	//ƒT[ƒo‚ÆÚ‘±
+			// ƒf[ƒ^‘—M
 			String outLine = "us,"+Integer.toString(page);
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+			// ƒf[ƒ^óM
 			inputObj = null;
 			//while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 					if(inputObj!=null)  nowShowingUsers = (UserInfo[])inputObj;
-					else System.out.println("å–å¾—ã§ãã‚‹ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
+					else System.out.println("æ“¾‚Å‚«‚éƒ†[ƒUî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB");
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					//break;
 				}
 			//}
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//æ¡ä»¶æ¤œç´¢
+	//ğŒŒŸõ
 	public void Susersearch(int page, String cond) {
 		try{
 			connectServer();
 			String outLine = "uj,"+Integer.toString(page)+","+cond;
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
 			inputObj = null;
 				try {
 					inputObj = ois.readObject();
 					if(inputObj!=null)	nowShowingUsers = (UserInfo[])inputObj;
-					else System.out.println("å–å¾—ã§ãã‚‹ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
+					else System.out.println("æ“¾‚Å‚«‚éƒ†[ƒUî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB");
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 				}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//æ¡ä»¶æ¤œç´¢
+	//ğŒŒŸõ
 		public void Sgroupsearch(int page, String cond) {
 			try{
 				connectServer();
 				String outLine = "gj,"+Integer.toString(page)+","+cond;
 				oos.writeObject(outLine);
-				System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+				System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 				oos.flush();
 				inputObj = null;
 					try {
 						inputObj = ois.readObject();
 						if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
-						else System.out.println("å–å¾—ã§ãã‚‹ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
+						else System.out.println("æ“¾‚Å‚«‚éƒ†[ƒUî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB");
 					}catch(ClassNotFoundException e) {
-						System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					}
 
 				System.out.println(inputObj);
 				closeSocket();
 			}catch(IOException e) {
-				System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+				System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 				System.exit(-1);
 			}
 		}
 
-	// æ–°è¦ç™»éŒ²
+	// V‹K“o˜^
 	public void sendUserInfo(UserInfo obj) {
 		try{
 			connectServer();
 			UserInfo a = obj;
 			oos.writeObject(a);
-			System.out.println("ç™»éŒ²æƒ…å ±ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");
+			System.out.println("“o˜^î•ñ‚ğ‘—M‚µ‚Ü‚µ‚½B");
 			oos.flush();
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 
 	}
 
-	//ãƒ›ãƒ¼ãƒ ç”»é¢nãƒšãƒ¼ã‚¸ç›®ã®ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã‚’å–å¾—
+	//ƒz[ƒ€‰æ–Ênƒy[ƒW–Ú‚ÌƒOƒ‹[ƒvî•ñ‚ğæ“¾
 	public void Sgroup_home(int page) {
 		try{
 			connectServer();
 			String outLine = "gs,"+Integer.toString(page);
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+			// ƒf[ƒ^óM
 			inputObj = null;
 				try {
 					inputObj = ois.readObject();
 					if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
-					else System.out.println("å–å¾—ã§ãã‚‹ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
+					else System.out.println("æ“¾‚Å‚«‚éƒ†[ƒUî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB");
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 				}
 
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ã«ã„ã„ã­ã‚’é€ã‚‹
+	//ƒ†[ƒU‚É‚¢‚¢‚Ë‚ğ‘—‚é
 	public void Sgood(int number) {
 		try{
 			connectServer();
 			String outLine = "ug,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+			// ƒf[ƒ^óM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ã«ã„ã„ã­ã‚’é€ã‚‹
+	//ƒOƒ‹‚É‚¢‚¢‚Ë‚ğ‘—‚é
 	public void Sgroup_good(UUID number) {
 		try{
 			connectServer();
 			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«å¤‰æ›´
+	//ƒ†[ƒU‚ÌƒvƒƒtƒB[ƒ‹•ÏX
 	public void SchangeProf(UserInfo newprof) {
 		try{
 			connectServer();
@@ -4066,26 +4066,26 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();*/
 			oos.writeObject(newprof);
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
-			System.out.println(newprof+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(newprof+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«å¤‰æ›´
+	//ƒOƒ‹[ƒv‚ÌƒvƒƒtƒB[ƒ‹•ÏX
 	public void SchangeGroupProf(GroupInfo newprof) {
 		try{
 			connectServer();
@@ -4094,25 +4094,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();*/
 			oos.writeObject(newprof);
 			oos.flush();
-			System.out.println(newprof+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(newprof+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆ
+	//ƒOƒ‹[ƒvì¬
 	public void SmakeGroup(GroupInfo newprof) {
 		try{
 			connectServer();
@@ -4121,280 +4121,280 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			oos.writeObject(newprof);
 			oos.flush();
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			inputObj = null;
 			while(inputObj==null) {
 				try {
-					inputObj = ois.readObject();	//æ–°ã—ã„UUIDã‚’å–å¾—
+					inputObj = ois.readObject();	//V‚µ‚¢UUID‚ğæ“¾
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//è‡ªåˆ†ã®ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã®å–å¾—
+	//©•ª‚Ìƒ†[ƒUî•ñ‚Ìæ“¾
 	public void SgetmyUserprof(int number) {
 		try{
 			connectServer();
 			String outLine = "ui,"+Integer.toString(number);
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
 			inputObj = null;
 			while(inputObj==null) {
 				try {
-					inputObj = ois.readObject();	//è‡ªåˆ†ã®ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã‚’å–å¾—
+					inputObj = ois.readObject();	//©•ª‚Ìƒ†[ƒUî•ñ‚ğæ“¾
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
-			myUserInfo = (UserInfo)inputObj;	//UserInfoå‹ã«å¤‰æ›ã—ã¦ä»£å…¥
+			myUserInfo = (UserInfo)inputObj;	//UserInfoŒ^‚É•ÏŠ·‚µ‚Ä‘ã“ü
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ç›¸æ‰‹ã®ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã®å–å¾—
+	//‘Šè‚Ìƒ†[ƒUî•ñ‚Ìæ“¾
 		public void SgetyourUserprof(int number) {
 			try{
 				connectServer();
 				String outLine = "ui,"+Integer.toString(number);
 				oos.writeObject(outLine);
-				System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+				System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 				oos.flush();
 				inputObj = null;
 					try {
-						inputObj = ois.readObject();	//è‡ªåˆ†ã®ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã‚’å–å¾—
+						inputObj = ois.readObject();	//©•ª‚Ìƒ†[ƒUî•ñ‚ğæ“¾
 					}catch(ClassNotFoundException e) {
-						System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					}
 
 				System.out.println(inputObj);
-				yourUserInfo = (UserInfo)inputObj;	//UserInfoå‹ã«å¤‰æ›ã—ã¦ä»£å…¥
+				yourUserInfo = (UserInfo)inputObj;	//UserInfoŒ^‚É•ÏŠ·‚µ‚Ä‘ã“ü
 				closeSocket();
 			}catch(IOException e) {
-				System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+				System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 				System.exit(-1);
 			}
 		}
 
-	//è‡ªåˆ†ã®ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã®å–å¾—
+	//©•ª‚ÌƒOƒ‹[ƒvî•ñ‚Ìæ“¾
 	public void SgetmyGroupprof(UUID number) {
 		try{
 			connectServer();
 			String outLine = "gi,"+number.toString();
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
-					inputObj = ois.readObject();	//è‡ªåˆ†ã®ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã‚’å–å¾—
+					inputObj = ois.readObject();	//©•ª‚ÌƒOƒ‹[ƒvî•ñ‚ğæ“¾
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
-			myGroupInfo = (GroupInfo)inputObj;	//GroupInfoå‹ã«å¤‰æ›ã—ã¦ä»£å…¥
+			myGroupInfo = (GroupInfo)inputObj;	//GroupInfoŒ^‚É•ÏŠ·‚µ‚Ä‘ã“ü
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ç›¸æ‰‹ã®ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã®å–å¾—
+	//‘Šè‚ÌƒOƒ‹[ƒvî•ñ‚Ìæ“¾
 		public void SgetyourGroupprof(UUID number) {
 			try{
 				connectServer();
 				String outLine = "gi,"+number.toString();
 				oos.writeObject(outLine);
-				System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+				System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 				oos.flush();
-				//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+				//ƒf[ƒ^‚ğóM
 				inputObj = null;
 				while(inputObj==null) {
 					try {
-						inputObj = ois.readObject();	//è‡ªåˆ†ã®ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã‚’å–å¾—
+						inputObj = ois.readObject();	//©•ª‚ÌƒOƒ‹[ƒvî•ñ‚ğæ“¾
 					}catch(ClassNotFoundException e) {
-						System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 						break;
 					}
 				}
 				System.out.println(inputObj);
-				yourGroupInfo = (GroupInfo)inputObj;	//GroupInfoå‹ã«å¤‰æ›ã—ã¦ä»£å…¥
+				yourGroupInfo = (GroupInfo)inputObj;	//GroupInfoŒ^‚É•ÏŠ·‚µ‚Ä‘ã“ü
 				closeSocket();
 			}catch(IOException e) {
-				System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+				System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 				System.exit(-1);
 			}
 		}
 
-	//ãƒ¦ãƒ¼ã‚¶ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå‰Šé™¤
+	//ƒ†[ƒUƒAƒJƒEƒ“ƒgíœ
 	public void SdeleteUser(int number) {
 		try{
 			connectServer();
 			String outLine = "ud,"+Integer.toString(number);
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå‰Šé™¤
+	//ƒOƒ‹[ƒvƒAƒJƒEƒ“ƒgíœ
 	public void SdeleteGroup(UUID number) {
 		try{
 			connectServer();
 			String outLine = "gd,"+number.toString();
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ 
+	//ƒOƒ‹[ƒvQ‰Á
 	public void SjoinGroup(UUID number) {
 		try{
 			connectServer();
 			String outLine = "jg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ æ‹’å¦
+	//ƒOƒ‹[ƒvQ‰Á‹‘”Û
 	public void SrejectJoinGroup(UUID number) {
 		try{
 			connectServer();
 			String outLine = "rg,"+Integer.toString(myUserInfo.getStudentNumber())+","+number.toString();
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ã‹ã‚‰ã®ã„ã„ã­ã‚’æ–­ã‚‹
+	//ƒ†[ƒU‚©‚ç‚Ì‚¢‚¢‚Ë‚ğ’f‚é
 	public void SrejectGood(int number) {
 		try{
 			connectServer();
 			String outLine = "ur,"+Integer.toString(myUserInfo.getStudentNumber())+","+Integer.toString(number);
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ã‹ã‚‰ã®ã„ã„ã­ã‚’æ–­ã‚‹
+	//ƒOƒ‹[ƒv‚©‚ç‚Ì‚¢‚¢‚Ë‚ğ’f‚é
 	public void SrejectGoodfromGroup(UUID number) {
 		try{
 			connectServer();
 			String outLine = "gr,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
-			System.out.println(outLine+"ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚");  //ç¢ºèªç”¨
+			System.out.println(outLine+"‚ğ‘—M‚µ‚Ü‚µ‚½B");  //Šm”F—p
 			oos.flush();
-			//ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡
+			//ƒf[ƒ^‚ğóM
 			inputObj = null;
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
 				}catch(ClassNotFoundException e) {
-					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					break;
 				}
 			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒæ¥ç¶šæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoÚ‘±‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			System.exit(-1);
 		}
 	}
@@ -4402,14 +4402,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 
-	// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å—ä¿¡
+	// ƒƒbƒZ[ƒW‚ÌóM
 	public void receiveMessage(String msg){
-		System.out.println("ã‚µãƒ¼ãƒã‹ã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ " + msg + " ã‚’å—ä¿¡ã—ã¾ã—ãŸ"); //ãƒ†ã‚¹ãƒˆç”¨æ¨™æº–å‡ºåŠ›
-		//å—ã‘å–ã£ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«ã‚ˆã£ã¦ç•°ãªã‚‹å‡¦ç†ã‚’è¨˜è¿°
+		System.out.println("ƒT[ƒo‚©‚çƒƒbƒZ[ƒW " + msg + " ‚ğóM‚µ‚Ü‚µ‚½"); //ƒeƒXƒg—p•W€o—Í
+		//ó‚¯æ‚Á‚½ƒƒbƒZ[ƒW‚É‚æ‚Á‚ÄˆÙ‚È‚éˆ—‚ğ‹Lq
 
 	}
 
-	/***************ã“ã“ã¾ã§***************/
+	/***************‚±‚±‚Ü‚Å***************/
 
 }
 
