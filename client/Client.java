@@ -3867,9 +3867,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
-					nowShowingUsers[1] = (UserInfo)ois.readObject();
-					nowShowingUsers[2] = (UserInfo)ois.readObject();
+					nowShowingUsers = (UserInfo[])inputObj;
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;
@@ -3893,9 +3891,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers[0] = (UserInfo)inputObj;
-					nowShowingUsers[1] = (UserInfo)ois.readObject();
-					nowShowingUsers[2] = (UserInfo)ois.readObject();
+					nowShowingUsers = (UserInfo[])inputObj;
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;
@@ -3921,9 +3917,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				while(inputObj==null) {
 					try {
 						inputObj = ois.readObject();
-						nowShowingGroups[0] = (GroupInfo)inputObj;
-						nowShowingGroups[1] = (GroupInfo)ois.readObject();
-						nowShowingGroups[2] = (GroupInfo)ois.readObject();
+						nowShowingGroups = (GroupInfo[])inputObj;
 					}catch(ClassNotFoundException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 						break;
@@ -3976,9 +3970,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingGroups[0] = (GroupInfo)inputObj;
-					nowShowingGroups[1] = (GroupInfo)ois.readObject();
-					nowShowingGroups[2] = (GroupInfo)ois.readObject();
+					nowShowingGroups = (GroupInfo[])inputObj;
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					break;
