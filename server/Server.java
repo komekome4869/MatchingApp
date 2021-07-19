@@ -1384,10 +1384,7 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
-<<<<<<< HEAD
-=======
 
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 			//再度読み込み
 			readAllUserFiles();
 			readAllGroupFiles();
