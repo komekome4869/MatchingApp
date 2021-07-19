@@ -2280,7 +2280,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         cardPanel.add(card,"matchingInform");
 	}
 
-
 	public void goHome() {
 		if(isNowUsingGroupAccount) {
 			if(groupSearchCondition==""){
