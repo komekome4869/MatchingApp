@@ -556,7 +556,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "jg": //グループに参加
-							if(joinGroup(act[1], act[2])){//久保田が書き換え
+							if(joinGroup(act[1], act[2], false)){//久保田が書き換え
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -1145,7 +1145,9 @@ public class Server extends JFrame implements ActionListener{
 			}
 		}
 
-		joinGroup(String.valueOf(gi.hostUser), gi.groupNumber.toString());
+		//ホストを参加させる
+		joinGroup(String.valueOf(gi.hostUser), gi.groupNumber.toString(), true);
+
 		for(int i=0; i<gi.numberOfMember-1; i++) {
 			inviteUsers(String.valueOf(gi.hostUser), gi.groupNumber.toString());
 		}
@@ -1215,8 +1217,6 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			//参加したグループが全員集まったか確認
-			judgeAllGathered(uuid);
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1240,11 +1240,11 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//グループ参加
-	public static boolean joinGroup(String studentNum, String uuid) {
+	public static boolean joinGroup(String studentNum, String uuid, boolean preventJudge) {	//preventJudgeがtrueでjudgeAllGatheredを実行しない
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
-		String line;
+		String line = "";
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
@@ -1262,7 +1262,8 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループ(13行目)に追加
-			if(line == "") { //今まで参加してなかった場合
+
+			if(line.length() < 3) { 	//今まで参加してなかった場合
 				strbuf.append(uuid + "\n");
 			}else {				//すでに参加したことがある場合
 				strbuf.append(line + " " + uuid + "\n");
@@ -1291,11 +1292,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.write(strbuf.toString());
 
 			//参加したグループが全員集まったか確認
-			judgeAllGathered(uuid);
-
-			//再度読み込み
-			readAllUserFiles();
-			readAllGroupFiles();
+			if(!preventJudge) judgeAllGathered(uuid);
 
 		}catch(IOException e) {
 			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
@@ -1339,7 +1336,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			if(line.length() != 0) {
+			if(line.length() < 3) {
 				students = line.split(" ");//TODO
 			}
 			strbuf.append(line + "\n");
