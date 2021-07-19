@@ -357,7 +357,6 @@ public class Server extends JFrame implements ActionListener{
 				while((line = br.readLine()) != null) {
 					line_counter++;
 					switch(line_counter) {
-
 						case 1 :
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
 
@@ -1159,15 +1158,18 @@ public class Server extends JFrame implements ActionListener{
 		try {
 			//グループ情報ファイルを作成
 			FileWriter fw = new FileWriter(GroupFile);
-			fw.write(gi.name + "\n" +
+			fw.write(gi.groupNumber + "\n" +
+					 gi.name + "\n" +
 					 gi.relation + "\n" +
 					 /*UUID*/ "\n" +
 					 /*UUID*/ "\n" +
 					 /*UUID*/ "\n" +
 					 gi.hostUser + "\n" +
 					 nonhost + "\n" +
+					 gi.purpose + "\n" +
 					 gi.comment + "\n" +
-					 gi.numberOfMember + "\n"
+					 gi.numberOfMember + "\n" +
+					 String.valueOf(gi.isGathered) + "\n"
 					 );
 			fw.close();
 
