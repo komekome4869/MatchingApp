@@ -2809,31 +2809,40 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case"いいねreply":
 			Sgood(nowShowingUser.getStudentNumber());
 			SgetmyUserprof(myUserInfo.getStudentNumber());
-			goGoodInform();//TODO
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case"断るreply":
 			SrejectGood(nowShowingUser.getStudentNumber());
-			goGoodInform();
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case"いいねreplyGroup":
 			 Sgroup_good(nowShowingGroup.getStudentNumber());
-			layout.show(cardPanel, "goodInform");
+			 SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			 nowPage=1;
+			 goHome();
 			break;
 
 
 		case"断るreplyGroup":
 			SrejectGoodfromGroup(nowShowingGroup.getStudentNumber());
+			SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case "いいねgood":
 			Sgood(nowShowingUser.getStudentNumber());
-			bGoodGood.setVisible(false);
-			lGoodGood.setVisible(true);
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
@@ -3290,11 +3299,17 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "参加invite":
 			SjoinGroup(nowShowingGroup.getStudentNumber());
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
 		case "断るinvite":
 			SrejectJoinGroup(nowShowingGroup.getStudentNumber());
+			SgetmyUserprof(myUserInfo.getStudentNumber());
+			nowPage=1;
+			goHome();
 			break;
 
 
