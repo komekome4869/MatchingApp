@@ -1213,7 +1213,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			//誘われているグループ(13行目)に追加
+			//誘われているグループ(14行目)に追加
 			if(line.length() < 2) { 	//今まで誘われていなかった場合
 				strbuf.append(uuid + "\n");
 			}else {				//すでに誘われていた場合
@@ -1224,7 +1224,6 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
-
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1344,7 +1343,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			if(line.length() < 3) {
+			if(line.length() > 3) {
 				students = line.split(" ");//TODO
 			}
 			strbuf.append(line + "\n");
