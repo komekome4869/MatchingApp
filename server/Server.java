@@ -288,6 +288,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 15 :
+						if(line.length()>2)
 						users[userFileNum].isAuthentificated = Integer.parseInt(line);
 						break;
 
@@ -1768,6 +1769,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//相手のファイルの、「いいねしてくれた人」の欄に、自分を追加する
 			File yourfile = new File(System.getProperty("user.dir") + "\\ID\\" + your_num + ".txt");
@@ -1800,6 +1802,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			yourfw = new FileWriter(yourfile);
 			yourfw.write(strbuf.toString());
+			yourfw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1810,9 +1813,7 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-   				fw.close();
    				br.close();
-				yourfw.close();
 				yourbr.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -1918,6 +1919,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1928,7 +1930,6 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -1981,6 +1982,7 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1991,7 +1993,6 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-   				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2059,6 +2060,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -2069,7 +2071,6 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2116,6 +2117,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			if(!preventLoop) {
 				matchUsers(youruuid, myuuid, true);
@@ -2128,7 +2130,6 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2174,6 +2175,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -2183,7 +2185,6 @@ public class Server extends JFrame implements ActionListener{
    			System.out.println(e);
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2227,6 +2228,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -2237,7 +2239,6 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2282,6 +2283,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			if(!preventLoop) {
 				matchUsers(yourId, myId, true);
@@ -2293,7 +2295,6 @@ public class Server extends JFrame implements ActionListener{
    			System.out.println(e);
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2338,6 +2339,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			if(!preventLoop) {
 				matchUsers(youruuid, myuuid, true);
@@ -2349,7 +2351,6 @@ public class Server extends JFrame implements ActionListener{
    			System.out.println(e);
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
