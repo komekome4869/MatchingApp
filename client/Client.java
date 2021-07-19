@@ -3864,15 +3864,16 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			// データ受信
 			inputObj = null;
-			while(inputObj==null) {
+			//while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers = (UserInfo[])inputObj;
+					if(inputObj!=null)  nowShowingUsers = (UserInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
+					//break;
 				}
-			}
+			//}
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3888,15 +3889,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
 			inputObj = null;
-			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingUsers = (UserInfo[])inputObj;
+					if(inputObj!=null)	nowShowingUsers = (UserInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
 				}
-			}
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
@@ -3914,15 +3913,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				System.out.println(outLine+"を送信しました。");  //確認用
 				oos.flush();
 				inputObj = null;
-				while(inputObj==null) {
 					try {
 						inputObj = ois.readObject();
-						nowShowingGroups = (GroupInfo[])inputObj;
+						if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
+						else System.out.println("取得できるユーザ情報がありません。");
 					}catch(ClassNotFoundException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-						break;
 					}
-				}
+				
 				System.out.println(inputObj);
 				closeSocket();
 			}catch(IOException e) {
@@ -3967,15 +3965,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			oos.flush();
 			// データ受信
 			inputObj = null;
-			while(inputObj==null) {
 				try {
 					inputObj = ois.readObject();
-					nowShowingGroups = (GroupInfo[])inputObj;
+					if(inputObj!=null)	nowShowingGroups = (GroupInfo[])inputObj;
+					else System.out.println("取得できるユーザ情報がありません。");
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-					break;
 				}
-			}
+			
 			System.out.println(inputObj);
 			closeSocket();
 		}catch(IOException e) {
@@ -4151,14 +4148,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				System.out.println(outLine+"を送信しました。");  //確認用
 				oos.flush();
 				inputObj = null;
-				while(inputObj==null) {
 					try {
 						inputObj = ois.readObject();	//自分のユーザ情報を取得
 					}catch(ClassNotFoundException e) {
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
-						break;
 					}
-				}
+				
 				System.out.println(inputObj);
 				yourUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
 				closeSocket();
