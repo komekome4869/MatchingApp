@@ -1724,7 +1724,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、「いいねを送った人」の欄に、相手を追加
-			if(line10 == "") {
+			if(line10.length()<=1) {
 				strbuf.append(your_num + "\n");
 			}else {
 				strbuf.append(line10 + " " + your_num + "\n");
@@ -1763,7 +1763,7 @@ public class Server extends JFrame implements ActionListener{
 			
 			line11 = line;
 			
-			if(line11 == "") {
+			if(line11.length()<=1) {
 				strbuf.append(my_num + "\n");
 			}else {
 				strbuf.append(line11 + " " + my_num + "\n");
