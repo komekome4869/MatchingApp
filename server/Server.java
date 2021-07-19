@@ -1422,19 +1422,11 @@ public class Server extends JFrame implements ActionListener{
 			System.out.println(line);
 
 			//参加しているグループにuuidがあるときtrue
-<<<<<<< HEAD
-			if(line != null) {
-				return true;
-=======
 			if(line==null) {
 				System.out.println("行は空");
 				return false;
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 			}
 			else {
-<<<<<<< HEAD
-				return false;
-=======
 				if(line.length() > 2) {
 					if(line.contains(uuid)) {
 						System.out.println("contains");
@@ -1447,7 +1439,6 @@ public class Server extends JFrame implements ActionListener{
 					System.out.println("長さが2もない");
 					return false;
 				}
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 			}
 
 
