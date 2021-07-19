@@ -435,7 +435,7 @@ public class Server extends JFrame implements ActionListener{
 					}
 
 					//grouplist.add(groups[groupFileNum]);
-					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
+					activeGroups.put(groups[groupFileNum].groupNumber, groups[groupFileNum]);
 
 				}
 			} catch (IOException e) {
