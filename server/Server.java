@@ -552,7 +552,11 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "gg": //グループにいいねを送る
+<<<<<<< HEAD
 							if(goodGroup(act[1],act[2])) {
+=======
+							if(goodGroup(act[1],act[2])) {//久保田が書き換え
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -1744,14 +1748,13 @@ public class Server extends JFrame implements ActionListener{
 
 			if(line11 != null) {
 				students = line11.split(" ");
-			}
-
-			//一致してたらマッチ
-			for(int i=0; i<students.length;i++) {
-				if(students[i] == your_num) {
-					deleteGood(your_num, my_num); //相手のいいねした欄から自分を消す
-					deleteReceivedGood(my_num, your_num); //自分のいいねを受け取った欄から相手を消す
-					return matchUsers(my_num, your_num, false);
+				//一致してたらマッチ
+				for(int i=0; i<students.length;i++) {
+					if(students[i] == your_num) {
+						deleteGood(your_num, my_num); //相手のいいねした欄から自分を消す
+						deleteReceivedGood(my_num, your_num); //自分のいいねを受け取った欄から相手を消す
+						return matchUsers(my_num, your_num, false);
+					}
 				}
 			}
 
@@ -1774,6 +1777,8 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
+			br.close();
+			fr.close();
 
 			//相手のファイルの、「いいねしてくれた人」の欄に、自分を追加する
 			File yourfile = new File(System.getProperty("user.dir") + "\\ID\\" + your_num + ".txt");
@@ -1807,6 +1812,8 @@ public class Server extends JFrame implements ActionListener{
 			yourfw = new FileWriter(yourfile);
 			yourfw.write(strbuf.toString());
 			yourfw.close();
+			yourfr.close();
+			yourbr.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1850,7 +1857,11 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
+<<<<<<< HEAD
 			if(line.length()<= 1) {
+=======
+			if(line.length() < 2) {
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 				strbuf.append(yourId + "\n");
 			}else {
 				strbuf.append(line + " " + yourId + "\n");
@@ -1860,7 +1871,6 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
-
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -2064,6 +2074,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			br.close();
 			fw.close();
 
 			//再度読み込み
@@ -2074,7 +2085,7 @@ public class Server extends JFrame implements ActionListener{
    			System.out.println(e);
    			return false;
    		}finally {
-   			try {
+			try {
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
