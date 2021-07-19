@@ -3421,18 +3421,25 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "招待inform":
-			nowPage=1;/*
-			if(IsNowUsingGroupAccount) {
-
+			nowPage=1;
+			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
 			}
-			SgetmyUserprof(myUserInfo.getStudentNumber());
-			Sget*/
+			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
+			}
 			goInviteInform();
 			break;
 
 
 		case "いいねinform":
 			nowPage=1;
+			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			}
+			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
+			}
 			goGoodInform();
 			break;
 
@@ -3440,6 +3447,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "マッチングinform":
 			nowPage=1;
+			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
+			}
+			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
+			}
 			goMatchingInform();
 			break;
 
