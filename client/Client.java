@@ -1848,7 +1848,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lCommentMyGroupProfile.setHorizontalAlignment(JLabel.CENTER);
         card.add(lCommentMyGroupProfile);
 
-        tfCommentMyGroupProfile.setBounds(w/3,33*h/60,w/2,h/5);
+        tfCommentMyGroupProfile.setBounds(w/3,33*h/60,w/2,h/20);
         tfCommentMyGroupProfile.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(tfCommentMyGroupProfile);
 
