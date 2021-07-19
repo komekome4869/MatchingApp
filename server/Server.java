@@ -1254,9 +1254,9 @@ public class Server extends JFrame implements ActionListener{
 			line = line.replace(uuid, ""); //UUIDを削除
 			line = line.replace("  "," "); //並んだ空白を削除
 			//久保田が書き換え
-			if(line.length()!=0) {
-				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-				if(line.charAt(line.length()-1) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length() != 0) {
+				if(Character.isWhitespace(line.charAt(0)))  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(Character.isWhitespace(line.charAt(line.length() - 1)))  line = line.substring(1, line.length()-1); //最後の空白を削除
 			}
 
 			strbuf.append(line + "\n");
@@ -1301,7 +1301,8 @@ public class Server extends JFrame implements ActionListener{
         BufferedReader br = null;
         FileReader fr = null;
 		FileWriter fw = null;
-        String line="";
+
+        String line = "";
         String students[] = null;
         StringBuffer strbuf = new StringBuffer("");
 
