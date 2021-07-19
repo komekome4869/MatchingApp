@@ -3224,7 +3224,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 
 			if(tfCommentMakeGroup.getText().length()!=0 && tfCommentMakeGroup.getText().length()<16) {
-				nowShowingGroup.setName(tfCommentMakeGroup.getText());
+				nowShowingGroup.setComment(tfCommentMakeGroup.getText());
 			}
 			else {
 				tfCommentMakeGroup.setText("入力の上限は15文字です");
