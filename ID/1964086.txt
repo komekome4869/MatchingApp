@@ -7,8 +7,13 @@ kubota
 0
 0
 
+<<<<<<< HEAD
 
 9999999
+=======
+9999999
+
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 
 5f404e33-9322-41aa-a68c-00debf7b8e75 9c4af8d4-b9b4-439e-b473-65ff03a0b90a
 

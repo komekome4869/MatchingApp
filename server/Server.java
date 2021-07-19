@@ -122,6 +122,7 @@ public class Server extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if(cmd.equals("新規会員認証")) {
+			readAllUserFiles();
 			new Authentificate();
 		}
 		if(cmd.equals("会員検索")) {
@@ -786,7 +787,7 @@ public class Server extends JFrame implements ActionListener{
 		}
 
 		//なしならnullを返す
-		if(public_users == null) return null;
+		if(k == 0) return null;
 
 		//ユーザがいる場合
 		else {
@@ -849,7 +850,7 @@ public class Server extends JFrame implements ActionListener{
 	//GroupInfo送信
 	public GroupInfo[] sendGroupInfo(int page) {
 		GroupInfo res[] = new GroupInfo[3];
-		
+
 		//再読み込み
 		readAllGroupFiles();
 
@@ -970,7 +971,8 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 			//配列に追加
-			readUserFile(LoginFile);
+			readAllUserFiles();
+			readAllGroupFiles();
 
 		} catch (IOException e) {
 			System.err.print("新規登録の際にエラーが発生しました：" + e);
@@ -1697,7 +1699,7 @@ public class Server extends JFrame implements ActionListener{
  			File file = new File(System.getProperty("user.dir") + "\\ID\\" + my_num + ".txt");
  			fr = new FileReader(file);
  			br = new BufferedReader(fr);
- 			
+
  			String line;
 			int line_counter = 0;
 
@@ -1747,11 +1749,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
-			
-			fw.close();
-			br.close();
-			
-			
+
 			//相手のファイルの、「いいねしてくれた人」の欄に、自分を追加する
 			File yourfile = new File(System.getProperty("user.dir") + "\\ID\\" + your_num + ".txt");
 			yourfr = new FileReader(yourfile);
@@ -1766,20 +1764,20 @@ public class Server extends JFrame implements ActionListener{
 				if(line_counter == 11) break;
 				strbuf.append(line + "\n");
 			}
-			
+
 			line11 = line;
-			
+
 			if(line11.length()<=1) {
 				strbuf.append(my_num + "\n");
 			}else {
 				strbuf.append(line11 + " " + my_num + "\n");
 			}
-			
+
 			//最後まで読み込み
 			while((line = yourbr.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
-			
+
 			//書き込み
 			yourfw = new FileWriter(yourfile);
 			yourfw.write(strbuf.toString());
@@ -1793,6 +1791,8 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
+   				fw.close();
+   				br.close();
 				yourfw.close();
 				yourbr.close();
 			} catch (IOException e) {
@@ -1933,6 +1933,8 @@ public class Server extends JFrame implements ActionListener{
  			br = new BufferedReader(fr);
  			String line;
 			int line_counter = 0;
+			
+			System.out.println(file);
 
 			//該当行を検索
 			while((line = br.readLine()) != null) {
@@ -1943,14 +1945,17 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(yourId, ""); //numを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length()>0) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
+			
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1965,7 +1970,7 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
+   				//fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2338,7 +2343,7 @@ public class Server extends JFrame implements ActionListener{
 		CardLayout cardLayout;
 
 		int pageAuthen=-1;
-		File[] notAuthentificatededUsers;
+		File[] notAuthentificatededUsers = new File[1000];
 
 	    JTextField tfStudentNumberSearch = new JTextField(20);
 		JLabel lUserNameAuthen = new JLabel("");
@@ -2356,7 +2361,9 @@ public class Server extends JFrame implements ActionListener{
 
 		    prepareAuthen();
 		    commitAuthen();
-		    nextPage();
+		    if(pageAuthen != -1) {
+		    	nextPage();
+		    }
 
 		    cardLayout.show(cardPanel,"commitAuthen");
 		    getContentPane().add(cardPanel, BorderLayout.CENTER);
@@ -2380,6 +2387,8 @@ public class Server extends JFrame implements ActionListener{
 		            try {
 						//ファイルを読み込み
 						file = fileList[i];
+						System.out.println(file);
+						if(file.isDirectory()) continue;
 						fr = new FileReader(file);
 						br = new BufferedReader(fr);
 						int line_counter = 0;
@@ -2387,10 +2396,11 @@ public class Server extends JFrame implements ActionListener{
 						//該当行を検索
 						while((line = br.readLine()) != null) {
 							line_counter++;
-
 							if(line_counter == 15) {
-								if(line=="0") {
-									notAuthentificatededUsers[j]=file;
+								if(line.contains("0")) {
+									notAuthentificatededUsers[j] = new File(file.toString());
+									pageAuthen = j;
+							    	System.out.println("ok");
 									j++;
 								}
 								break;
@@ -2420,7 +2430,7 @@ public class Server extends JFrame implements ActionListener{
 	        FileReader fr = null;
 	        String line;
 
-			pageAuthen++;
+			if(pageAuthen == -1) return;
 
 			try {
 				//ファイルを読み込み
@@ -2444,6 +2454,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 					}
 				}
+
 			}
             catch(IOException e) {
 				System.err.print("認証に関する処理でエラーが発生しました：" + e);
@@ -2530,45 +2541,51 @@ public class Server extends JFrame implements ActionListener{
 			String cmd=ae.getActionCommand();
 
 			if(cmd.equals("認証")) {
-				 BufferedReader br = null;
+				 	BufferedReader br = null;
 			        FileReader fr = null;
 			        FileWriter fw = null;
 			        String line;
 			        StringBuffer strbuf = new StringBuffer("");
+			        if(pageAuthen != -1) {
+				        try {
+							//ファイルを読み込み
+							File file = notAuthentificatededUsers[pageAuthen];
+							fr = new FileReader(file);
+							br = new BufferedReader(fr);
+							int line_counter = 0;
 
-					try {
-						//ファイルを読み込み
-						File file = notAuthentificatededUsers[pageAuthen];
-						fr = new FileReader(file);
-						br = new BufferedReader(fr);
-						int line_counter = 0;
-
-						//該当行を検索
-						while((line = br.readLine()) != null) {
-							line_counter++;
-							if(line_counter == 15) {
-								strbuf.append("2\n");
+							//該当行を検索
+							while((line = br.readLine()) != null) {
+								line_counter++;
+								if(line_counter == 15) {
+									strbuf.append("2\n");
+								}
+								else {
+									strbuf.append(line + "\n");
+								}
 							}
-							else {
+
+							//最後まで読み込み
+							while((line = br.readLine()) != null) {
 								strbuf.append(line + "\n");
 							}
+
+							//書き込み
+							fw = new FileWriter(file);
+							fw.write(strbuf.toString());
+							fw.close();
+
+							readAllUserFiles();
+
+							pageAuthen--;
+
 						}
-
-						//最後まで読み込み
-						while((line = br.readLine()) != null) {
-							strbuf.append(line + "\n");
+						catch(IOException e) {
+							System.err.print("認証に関する処理でエラーが発生しました：" + e);
 						}
-
-						//書き込み
-						fw = new FileWriter(file);
-						fw.write(strbuf.toString());
-						readAllUserFiles();
-
 					}
-					catch(IOException e) {
-						System.err.print("認証に関する処理でエラーが発生しました：" + e);
-					}
-					if(pageAuthen==notAuthentificatededUsers.length-1) {
+					if(pageAuthen == -1) {
+						this.setVisible(false);
 						this.dispose();
 						//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 					}
@@ -2577,7 +2594,8 @@ public class Server extends JFrame implements ActionListener{
 					}
 			}
 			else if(cmd.equals("却下")) {
-				if(pageAuthen==notAuthentificatededUsers.length-1) {
+				if(pageAuthen == -1) {
+					this.setVisible(false);
 					this.dispose();
 					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 				}
