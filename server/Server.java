@@ -288,7 +288,6 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 15 :
-						if(line.length()>2)
 						users[userFileNum].isAuthentificated = Integer.parseInt(line);
 						break;
 
