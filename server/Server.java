@@ -380,10 +380,14 @@ public class Server extends JFrame implements ActionListener{
 
 						case 4 :
 							if(line.length()>2) {
-								String sendGood[] = line.split(" ");
-								for(int i=0; i<sendGood.length; i++) {
-									groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
-								}
+								try {
+									String sendGood[] = line.split(" ");
+									for(int i=0; i<sendGood.length; i++) {
+										groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
+									}
+								 } catch (IllegalArgumentException e) {
+
+							        }
 							}
 							break;
 
@@ -548,7 +552,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "gg": //グループにいいねを送る
-							if(goodGroup(act[1],act[2])) {//久保田が書き換え
+							if(goodGroup(act[1],act[2])) {
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -1846,7 +1850,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
-			if(line.length() < 2) {
+			if(line.length() <= 1) {
 				strbuf.append(yourId + "\n");
 			}else {
 				strbuf.append(line + " " + yourId + "\n");
@@ -2140,7 +2144,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
-			if(line.length() < 2) {
+			if(line.length() <= 1) {
 				strbuf.append(youruuid + "\n");
 			}else {
 				strbuf.append(line + " " + youruuid + "\n");
@@ -2298,8 +2302,10 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(yourId, ""); //numを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length()>0) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み
@@ -2354,8 +2360,10 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(youruuid, ""); //numを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length()>0) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み

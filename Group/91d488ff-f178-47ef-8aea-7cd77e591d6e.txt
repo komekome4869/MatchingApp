@@ -1,7 +1,13 @@
 91d488ff-f178-47ef-8aea-7cd77e591d6e
+<<<<<<< HEAD
 グループ名1
 友達1
 
+=======
+繧ｰ繝ｫ繝ｼ繝怜錐1
+蜿矩＃1
+ 3cc97fa9-8844-4804-9ba1-47efe16ad1e1 3cc97fa9-8844-4804-9ba1-47efe16ad1e1
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2.git
 
 4f0ed954-f666-481c-ae85-ec2cff5d016b
 1964086

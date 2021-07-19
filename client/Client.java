@@ -2683,6 +2683,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "通知":
+			userSearchCondition="";
+			groupSearchCondition="";
 			layout.show(cardPanel,"inform");
 			break;
 
@@ -2733,6 +2735,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "検索home":
+			userSearchCondition="";
+			groupSearchCondition="";
 			if(isNowUsingGroupAccount) {
 				layout.show(cardPanel, "searchGroup");
 			}
@@ -2743,6 +2747,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 
 		case "メニューhome":
+			userSearchCondition="";
+			groupSearchCondition="";
 			layout.show(cardPanel,"menu");
 			break;
 
@@ -2762,7 +2768,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			else {
 				for(int i=0;i<3;i++) {
 					if(cmd.equals("プロフィール"+String.valueOf(i)+"home") ){
-						System.out.println("プロフィール\"+String.valueOf(i)+\"home");//TODO
+						System.out.println("プロフィール\"+String.valueOf(i)+\"home");
 						nowShowingUser=nowShowingUsers[i];
 					}
 				}
@@ -2791,6 +2797,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case"次のページhome":
 			nowPage++;
 			if(isNowUsingGroupAccount) {
+				if(groupSearchCondition==""){
+					Sgroup_home(nowPage);
+				}
+				else {
+					Sgroupsearch(nowPage,groupSearchCondition);
+				}
 				if(nowShowingGroups!=null) {
 					goHome();
 				}
@@ -2799,6 +2811,13 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}
 			}
 			else {
+				if(userSearchCondition==""){
+					Shome(nowPage);
+				}
+				else {
+					Susersearch(nowPage,userSearchCondition);
+				}
+
 				if(nowShowingUsers!=null) {
 					goHome();
 				}
