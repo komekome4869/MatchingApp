@@ -1410,8 +1410,12 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループにuuidがあるときtrue
-			if(line.contains(uuid)) {
-				return true;
+			if(line.length() > 2) {
+				if(line.contains(uuid)) {
+					return true;
+				}else {
+					return false;
+				}
 			}else {
 				return false;
 			}
