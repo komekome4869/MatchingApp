@@ -244,7 +244,8 @@ public class Server extends JFrame implements ActionListener{
 							//System.out.println(line+"a");
 							System.out.println(sendStudents[0]+"a");
 							for(int i=0; i<sendStudents.length; i++) {
-								users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
+								if(sendStudents[i]!="")
+									users[userFileNum].sendGood[i] = Integer.parseInt(sendStudents[i]);
 							}
 						}
 						break;
@@ -253,7 +254,8 @@ public class Server extends JFrame implements ActionListener{
 						if(line.length()>2) {
 							String receiveStudents[] = line.split(" ");
 							for(int i=0; i<receiveStudents.length; i++) {
-								users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
+								if(receiveStudents[i]!="")
+									users[userFileNum].receiveGood[i] = Integer.parseInt(receiveStudents[i]);
 							}
 						}
 						break;
@@ -847,6 +849,9 @@ public class Server extends JFrame implements ActionListener{
 	//GroupInfo送信
 	public GroupInfo[] sendGroupInfo(int page) {
 		GroupInfo res[] = new GroupInfo[3];
+		
+		//再読み込み
+		readAllGroupFiles();
 
 		//なしならnullを返す
 		if(groups == null) return null;
@@ -1410,8 +1415,12 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループにuuidがあるときtrue
-			if(line.contains(uuid)) {
-				return true;
+			if(line.length() > 2) {
+				if(line.contains(uuid)) {
+					return true;
+				}else {
+					return false;
+				}
 			}else {
 				return false;
 			}
@@ -1671,14 +1680,18 @@ public class Server extends JFrame implements ActionListener{
 	//いいね
  	public static boolean goodUser(String my_num, String your_num) {
 		BufferedReader br = null;
+		BufferedReader yourbr = null;
 		FileReader fr = null;
+		FileReader yourfr = null;
 		FileWriter fw = null;
+		FileWriter yourfw = null;
 		StringBuffer strbuf = new StringBuffer("");
 
  		try {
  			File file = new File(System.getProperty("user.dir") + "\\ID\\" + my_num + ".txt");
  			fr = new FileReader(file);
  			br = new BufferedReader(fr);
+ 			
  			String line;
 			int line_counter = 0;
 
@@ -1702,7 +1715,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//一致してたらマッチ
-			for(int i=0; i<students.length;) {
+			for(int i=0; i<students.length;i++) {
 				if(students[i] == your_num) {
 					deleteGood(your_num, my_num); //相手のいいねした欄から自分を消す
 					deleteReceivedGood(my_num, your_num); //自分のいいねを受け取った欄から相手を消す
@@ -1710,7 +1723,7 @@ public class Server extends JFrame implements ActionListener{
 				}
 			}
 
-			//自分のファイルの、いいねを送った人に相手を追加
+			//自分のファイルの、「いいねを送った人」の欄に、相手を追加
 			if(line10 == "") {
 				strbuf.append(your_num + "\n");
 			}else {
@@ -1728,6 +1741,42 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			
+			fw.close();
+			br.close();
+			
+			
+			//相手のファイルの、「いいねしてくれた人」の欄に、自分を追加する
+			File yourfile = new File(System.getProperty("user.dir") + "\\ID\\" + your_num + ".txt");
+			yourfr = new FileReader(yourfile);
+ 			yourbr = new BufferedReader(yourfr);
+			line_counter = 0;
+			strbuf = new StringBuffer("");
+
+			//該当行を検索
+			while((line = yourbr.readLine()) != null) {
+				System.out.println(line);
+				line_counter++;
+				if(line_counter == 11) break;
+				strbuf.append(line + "\n");
+			}
+			
+			line11 = line;
+			
+			if(line11 == "") {
+				strbuf.append(my_num + "\n");
+			}else {
+				strbuf.append(line11 + " " + my_num + "\n");
+			}
+			
+			//最後まで読み込み
+			while((line = yourbr.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+			
+			//書き込み
+			yourfw = new FileWriter(yourfile);
+			yourfw.write(strbuf.toString());
 
 			//再度読み込み
 			readAllUserFiles();
@@ -1738,8 +1787,8 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
-				br.close();
+				yourfw.close();
+				yourbr.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
