@@ -2344,7 +2344,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 			for(int i=1;i<5;i++) {
 				SgetyourUserprof(nowShowingGroup.getNonhostUser()[i-1]);
-				if(yourUserInfo==null) {
+				if(yourUserInfo!=null) {
 					bMemberProfileViewGroup[i].setIcon(scaleImage(yourUserInfo.getMainPhoto(),w/3,h/12));
 					bMemberProfileViewGroup[i].setText(yourUserInfo.getName());
 					bMemberProfileViewGroup[i].setVisible(true);
@@ -2379,7 +2379,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			bGoodViewGroup.setVisible(true);
 		}
 
-		layout.show(cardPanel, "viewGroup");
+		layout.show(cardPanel, "viewGroup");//TODO
 	}
 
 	public void goGood() {
