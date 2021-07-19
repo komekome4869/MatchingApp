@@ -1927,6 +1927,8 @@ public class Server extends JFrame implements ActionListener{
  			br = new BufferedReader(fr);
  			String line;
 			int line_counter = 0;
+			
+			System.out.println(file);
 
 			//該当行を検索
 			while((line = br.readLine()) != null) {
@@ -1937,14 +1939,17 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(yourId, ""); //numを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length()>0) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
+			
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1959,7 +1964,7 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
+   				//fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
