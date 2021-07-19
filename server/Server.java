@@ -287,12 +287,8 @@ public class Server extends JFrame implements ActionListener{
 						}
 						break;
 
-<<<<<<< HEAD
-					case 15 :
-=======
 					case 15 :
 						if(line.length()>0)
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 						users[userFileNum].isAuthentificated = Integer.parseInt(line);
 						break;
 
