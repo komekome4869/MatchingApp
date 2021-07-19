@@ -2382,7 +2382,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel, "viewGroup");
 	}
 
-	public void goGood() {//TODO
+	public void goGood() {
 		System.out.println(nowShowingUser.getStudentNumber());
 		lNameGood.setText(nowShowingUser.getName());
 		lGenderGood2.setText(Sex[nowShowingUser.getGender()]);

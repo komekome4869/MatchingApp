@@ -1301,7 +1301,7 @@ public class Server extends JFrame implements ActionListener{
         BufferedReader br = null;
         FileReader fr = null;
 		FileWriter fw = null;
-        String line;
+        String line="";
         String students[] = null;
         StringBuffer strbuf = new StringBuffer("");
 
