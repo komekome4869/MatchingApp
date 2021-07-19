@@ -1153,7 +1153,9 @@ public class Server extends JFrame implements ActionListener{
 		}
 
 		String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
+		System.out.println("nonhost="+nonhost);
 		nonhost.replace(" 0","");
+		System.out.println("nonhost="+nonhost);//TODO
 
 		try {
 			//グループ情報ファイルを作成
@@ -2509,7 +2511,6 @@ public class Server extends JFrame implements ActionListener{
 					}
 					catch(IOException e) {
 						System.err.print("認証に関する処理でエラーが発生しました：" + e);
-
 					}
 					if(pageAuthen==notAuthentificatededUsers.length-1) {
 						this.dispose();
