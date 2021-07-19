@@ -1304,7 +1304,8 @@ public class Server extends JFrame implements ActionListener{
 			fw.write(strbuf.toString());
 
 			//参加したグループが全員集まったか確認
-			if(!preventJudge) judgeAllGathered(uuid);
+			if(!preventJudge)
+				judgeAllGathered(uuid);
 
 		}catch(IOException e) {
 			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
@@ -1383,12 +1384,16 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 			//再度読み込み
 			readAllUserFiles();
 			readAllGroupFiles();
 
         }catch(IOException e) {
-
+			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
         }
 	}
 
@@ -2606,35 +2611,12 @@ public class Server extends JFrame implements ActionListener{
 					}
 			}
 			else if(cmd.equals("却下")) {
-			 	BufferedReader br = null;
-		        FileReader fr = null;
-
 				if(pageAuthen == -1) {
 					this.setVisible(false);
 					this.dispose();
 					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 				}
 				else {
-					File file = notAuthentificatededUsers[pageAuthen];
-			        try {
-						//ファイルを読み込み
-						fr = new FileReader(file);
-						br = new BufferedReader(fr);
-
-					}catch(IOException e) {
-						System.err.print("認証に関する処理でエラーが発生しました：" + e);
-					}finally {
-						try {
-							fr.close();
-							br.close();
-							//削除
-							if(file.delete()) System.out.println("削除成功");
-							else System.out.println("削除失敗");
-						} catch (IOException e) {
-							// TODO 自動生成された catch ブロック
-							e.printStackTrace();
-						}
-					}
 					pageAuthen--;
 					if(pageAuthen == -1) {
 						this.setVisible(false);

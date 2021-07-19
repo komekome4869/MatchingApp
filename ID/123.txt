@@ -12,6 +12,12 @@ aaa
 
 938aca03-a4da-42e2-8f6f-12473296b74b
 
+<<<<<<< HEAD
 1
+=======
+
+
+2
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 aaa
 true
