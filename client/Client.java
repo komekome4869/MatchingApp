@@ -199,8 +199,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	static ObjectInputStream ois;
 	static BufferedWriter bw;
 	static Object inputObj;
-	String ipAddress = "182.170.133.46";	//ipアドレス設定
-	//String ipAddress = "localhost";
+	//String ipAddress = "182.170.133.46";	//ipアドレス設定
+	String ipAddress = "localhost";
 	int port = 50;  //port番号設定
 	String inputLine = "0";
 
@@ -2309,7 +2309,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					Shome(nowPage);
 				}
 				else {
-					Ssearch(nowPage,userSearchCondition);
+					Susersearch(nowPage,userSearchCondition);
 				}
 
 				if(nowShowingUsers[i]==null) {
@@ -3658,7 +3658,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	client.connectServer();
+    	//client.connectServer();
     	//client.new Notification();
     }
 
@@ -3882,10 +3882,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	}
 
 	//条件検索
-	public void Ssearch(int page, String cond) {
+	public void Susersearch(int page, String cond) {
 		try{
 			connectServer();
-			String outLine = "us,"+Integer.toString(page)+","+cond;
+			String outLine = "uj,"+Integer.toString(page)+","+cond;
 			oos.writeObject(outLine);
 			System.out.println(outLine+"を送信しました。");  //確認用
 			oos.flush();
@@ -3908,6 +3908,34 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			System.exit(-1);
 		}
 	}
+	
+	//条件検索
+		public void Sgroupsearch(int page, String cond) {
+			try{
+				connectServer();
+				String outLine = "gj,"+Integer.toString(page)+","+cond;
+				oos.writeObject(outLine);
+				System.out.println(outLine+"を送信しました。");  //確認用
+				oos.flush();
+				inputObj = null;
+				while(inputObj==null) {
+					try {
+						inputObj = ois.readObject();
+						nowShowingGroups[0] = (GroupInfo)inputObj;
+						nowShowingGroups[1] = (GroupInfo)ois.readObject();
+						nowShowingGroups[2] = (GroupInfo)ois.readObject();
+					}catch(ClassNotFoundException e) {
+						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+						break;
+					}
+				}
+				System.out.println(inputObj);
+				closeSocket();
+			}catch(IOException e) {
+				System.err.println("サーバ接続時にエラーが発生しました: " + e);
+				System.exit(-1);
+			}
+		}
 
 	// 新規登録
 	public void sendUserInfo(UserInfo obj) {
