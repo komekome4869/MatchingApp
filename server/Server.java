@@ -1349,9 +1349,8 @@ public class Server extends JFrame implements ActionListener{
 			strbuf.append(line + "\n");
 
 			//非ホストユーザがグループに入っているか確認
-			int i = 0;
 			int count_true = 0;
-			while(students[i] != null) {
+			for(int i=0; i<students.length; i++) {
 				if(judgeJoinedGroup(students[i], uuid)) count_true++;
 			}
 
