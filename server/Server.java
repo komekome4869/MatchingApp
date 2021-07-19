@@ -857,13 +857,13 @@ public class Server extends JFrame implements ActionListener{
 
 		//ユーザがいる場合
 		else {
-			if(groups[3*page - 3] != null) res[0] = groups[3*page - 2];
+			if(groups[3*page - 3] != null) res[0] = groups[3*page - 3];
 			else res[0] = null;
 
-			if(groups[3*page - 2] != null) res[1] = groups[3*page - 1];
+			if(groups[3*page - 2] != null) res[1] = groups[3*page - 2];
 			else res[1] = null;
 
-			if(groups[3*page-1] != null) res[2] = groups[3*page];
+			if(groups[3*page-1] != null) res[2] = groups[3*page-1];
 			else res[2] = null;
 		}
 
