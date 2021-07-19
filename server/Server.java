@@ -347,7 +347,7 @@ public class Server extends JFrame implements ActionListener{
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
 							BufferedImage main = ImageIO.read(main_image);
 
-							groups[groupFileNum].mainPhoto = main;
+							groups[groupFileNum].setMainPhoto(main);
 									;
 							break;
 
@@ -997,11 +997,11 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(ui.mainPhoto, "png", main_image);
-			ImageIO.write(ui.subPhoto[0], "png", sub1_image);
-			ImageIO.write(ui.subPhoto[1], "png", sub2_image);
-			ImageIO.write(ui.subPhoto[2], "png", sub3_image);
-			ImageIO.write(ui.subPhoto[3], "png", sub4_image);
+			ImageIO.write(ui.getMainPhoto(), "png", main_image);
+			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
+			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
+			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
+			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -1062,7 +1062,7 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 
 			//画像を保存
-			ImageIO.write(gi.mainPhoto, "png", main_image);
+			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
