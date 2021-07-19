@@ -2351,7 +2351,6 @@ public class Server extends JFrame implements ActionListener{
 	    JLabel lUserNumberAuthen = new JLabel("");
 	    JLabel lUserLineIdAuthen = new JLabel("");
 
-
 		public Authentificate(){
 
 			super("ユーザー認証");
