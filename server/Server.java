@@ -288,10 +288,7 @@ public class Server extends JFrame implements ActionListener{
 						break;
 
 					case 15 :
-<<<<<<< HEAD
 						if(line.length()>0)
-=======
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 						users[userFileNum].isAuthentificated = Integer.parseInt(line);
 						break;
 
@@ -2569,8 +2566,6 @@ public class Server extends JFrame implements ActionListener{
 			String cmd=ae.getActionCommand();
 
 			if(cmd.equals("認証")) {
-<<<<<<< HEAD
-=======
 			 	BufferedReader br = null;
 		        FileReader fr = null;
 		        FileWriter fw = null;
@@ -2633,7 +2628,6 @@ public class Server extends JFrame implements ActionListener{
 				}
 				else {
 					File file = notAuthentificatededUsers[pageAuthen];
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 				 	BufferedReader br = null;
 			        FileReader fr = null;
 			        FileWriter fw = null;
@@ -2642,7 +2636,7 @@ public class Server extends JFrame implements ActionListener{
 			        if(pageAuthen != -1) {
 				        try {
 							//ファイルを読み込み
-							File file = notAuthentificatededUsers[pageAuthen];
+							file = notAuthentificatededUsers[pageAuthen];
 							fr = new FileReader(file);
 							br = new BufferedReader(fr);
 							int line_counter = 0;
@@ -2686,6 +2680,7 @@ public class Server extends JFrame implements ActionListener{
 					else {
 						nextPage();
 					}
+				}
 			}
 			else if(cmd.equals("却下")) {
 				if(pageAuthen == -1) {
