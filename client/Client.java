@@ -3276,7 +3276,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				tfNumberGather[0].setForeground(Color.RED);
 			}
 			else if(flag) {
-				nowShowingGroup.setNumberOfMember(temp+2);
+				nowShowingGroup.setNumberOfMember(temp+1);
 				SmakeGroup(nowShowingGroup);
 				goHome();
 			}
