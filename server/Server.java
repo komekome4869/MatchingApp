@@ -482,6 +482,7 @@ public class Server extends JFrame implements ActionListener{
 
 						case "ui": //ユーザ情報の取得
 							try {
+								readAllUserFiles();
 								oos.writeObject(activeUsers.get(act[1]));
 								oos.flush();
 							} catch (IOException e) {
@@ -1859,7 +1860,8 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
-
+			fw.close();
+			
 			if(!preventLoop) {
 				matchUsers(yourId, myId, true);
 				readAllUserFiles();
@@ -1871,7 +1873,6 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
-				fw.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -1960,6 +1961,7 @@ public class Server extends JFrame implements ActionListener{
 				if(line_counter == 11) break;
 				strbuf.append(line + "\n");
 			}
+			System.out.println("line_counter:"+line_counter);
 
 			line = line.replace(yourId, ""); //numを削除
 			line = line.replace("  "," "); //並んだ空白を削除
@@ -1978,6 +1980,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
