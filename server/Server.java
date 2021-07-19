@@ -386,7 +386,7 @@ public class Server extends JFrame implements ActionListener{
 										groups[groupFileNum].sendGood[i] = UUID.fromString(sendGood[i]);
 									}
 								 } catch (IllegalArgumentException e) {
-							            
+
 							        }
 							}
 							break;
@@ -552,11 +552,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "gg": //グループにいいねを送る
-<<<<<<< HEAD
 							if(goodGroup(act[1],act[2])) {
-=======
-							if(goodGroup(act[1],act[2])) {//久保田が書き換え
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -1857,11 +1853,8 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
-<<<<<<< HEAD
+
 			if(line.length()<= 1) {
-=======
-			if(line.length() < 2) {
->>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 				strbuf.append(yourId + "\n");
 			}else {
 				strbuf.append(line + " " + yourId + "\n");
