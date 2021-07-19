@@ -1224,7 +1224,7 @@ public class Server extends JFrame implements ActionListener{
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
-		String line;
+		String line = "";
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
@@ -1242,7 +1242,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループ(13行目)に追加
-			if(line == "") { //今まで参加してなかった場合
+			if(line.length() < 3) { 	//今まで参加してなかった場合
 				strbuf.append(uuid + "\n");
 			}else {				//すでに参加したことがある場合
 				strbuf.append(line + " " + uuid + "\n");
@@ -1272,10 +1272,6 @@ public class Server extends JFrame implements ActionListener{
 
 			//参加したグループが全員集まったか確認
 			judgeAllGathered(uuid);
-
-			//再度読み込み
-			readAllUserFiles();
-			readAllGroupFiles();
 
 		}catch(IOException e) {
 			System.err.print("グループ参加に関する処理でエラーが発生しました：" + e);
@@ -1318,7 +1314,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			if(line.length() != 0) {
+			if(line.length() < 3) {
 				students = line.split(" ");//TODO
 			}
 			strbuf.append(line + "\n");
