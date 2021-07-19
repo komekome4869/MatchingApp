@@ -1235,7 +1235,7 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
-
+			fw.close();
 			//再度読み込み
 			readAllUserFiles();
 			readAllGroupFiles();
@@ -1246,7 +1246,7 @@ public class Server extends JFrame implements ActionListener{
 			try {
 				fr.close();
 				br.close();
-				fw.close();//nullpointer
+				//nullpointer
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
