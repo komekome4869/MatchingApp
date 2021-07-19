@@ -1368,6 +1368,8 @@ public class Server extends JFrame implements ActionListener{
 
 			//人数の行
 			boolean judge = false;
+			System.out.println("count : " + count_true);
+			System.out.println("ninzuu : " + Integer.parseInt(line));
 			if(count_true + 1 == Integer.parseInt(line))
 				judge = true;
 			strbuf.append(line + "\n");
@@ -1398,7 +1400,7 @@ public class Server extends JFrame implements ActionListener{
 	public static boolean judgeJoinedGroup(String studentNum, String uuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
-		String line;
+		String line = "";
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
@@ -1407,28 +1409,24 @@ public class Server extends JFrame implements ActionListener{
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			int line_counter = 0;
+			int i= 0;
 
 			//該当行を検索
 			while((line = br.readLine()) != null) {
 				line_counter++;
+				System.out.println(i++);
 				if(line_counter == 13) break;
 				strbuf.append(line + "\n");
 			}
 
+			System.out.println(line);
+
 			//参加しているグループにuuidがあるときtrue
-			if(line==null) {
-				return false;
+			if(line != null) {
+				return true;
 			}
 			else {
-				if(line.length() > 2) {
-					if(line.contains(uuid)) {
-						return true;
-					}else {
-						return false;
-					}
-				}else {
-					return false;
-				}
+				return false;
 			}
 
 
@@ -2411,20 +2409,14 @@ public class Server extends JFrame implements ActionListener{
 								break;
 							}
 						}
+
+						fr.close();
+						br.close();
 					}
 		            catch(IOException e) {
 						System.err.print("認証に関する処理でエラーが発生しました：" + e);
 
 					}
-		            finally {
-		            	try {
-							fr.close();
-							br.close();
-						}
-						catch (IOException e) {
-							e.printStackTrace();
-						}
-		            }
 		        }
 			}
 		}
@@ -2460,6 +2452,9 @@ public class Server extends JFrame implements ActionListener{
 						break;
 					}
 				}
+
+				fr.close();
+				br.close();
 
 			}
             catch(IOException e) {
