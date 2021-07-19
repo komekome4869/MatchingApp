@@ -4062,9 +4062,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void SchangeProf(UserInfo newprof) {
 		try{
 			connectServer();
-			String outLine = "uc,"+Integer.toString(myUserInfo.getStudentNumber());
+			/*String outLine = "uc,"+Integer.toString(myUserInfo.getStudentNumber());
 			oos.writeObject(outLine);
-			oos.flush();
+			oos.flush();*/
 			oos.writeObject(newprof);
 			oos.flush();
 			//データを受信
@@ -4079,7 +4079,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 			System.out.println(inputObj);
 			closeSocket();
-			System.out.println(outLine+"を送信しました。");  //確認用
+			System.out.println(newprof+"を送信しました。");  //確認用
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -4090,12 +4090,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	public void SchangeGroupProf(GroupInfo newprof) {
 		try{
 			connectServer();
-			String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
+			/*String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
 			oos.writeObject(outLine);
-			oos.flush();
+			oos.flush();*/
 			oos.writeObject(newprof);
 			oos.flush();
-			System.out.println(outLine+"を送信しました。");  //確認用
+			System.out.println(newprof+"を送信しました。");  //確認用
 			inputObj = null;
 			while(inputObj==null) {
 				try {

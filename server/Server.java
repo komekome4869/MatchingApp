@@ -771,19 +771,32 @@ public class Server extends JFrame implements ActionListener{
 	//UserInfo送信
 	public static UserInfo[] sendUserInfo(int page) {//久保田が書き換え
 		UserInfo res[] = new UserInfo[3];
+		UserInfo public_users[] = new UserInfo[1000];
+		int k=0;
+		//再読み込み
+		readAllUserFiles();
+		
+		for(int i=0;i<users.length;i++) {
+			if(users[i] != null) {
+				if(users[i].isPublic) {
+					public_users[k++] = users[i];
+				}
+			}
+		}
 
 		//なしならnullを返す
-		if(users == null) return null;
+		if(public_users == null) return null;
 
 		//ユーザがいる場合
 		else {
-			if(users[3*page - 3] != null) res[0] = users[3*page - 3];
+			
+			if(public_users[3*page - 3] != null) res[0] = public_users[3*page - 3];
 			else res[0] = null;
 
-			if(users[3*page - 2] != null) res[1] = users[3*page - 2];
+			if(public_users[3*page - 2] != null) res[1] = public_users[3*page - 2];
 			else res[1] = null;
 
-			if(users[3*page-1] != null) res[2] = users[3*page-1];
+			if(public_users[3*page - 1] != null) res[2] = public_users[3*page - 1];
 			else res[2] = null;
 		}
 
@@ -1030,6 +1043,10 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
 			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
 			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
+			
+			//再度読み込み
+			readAllUserFiles();
+			System.out.println("AllUserFile:"+userlist);
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -1091,6 +1108,9 @@ public class Server extends JFrame implements ActionListener{
 
 			//画像を保存
 			ImageIO.write(gi.getMainPhoto(), "png", main_image);
+			
+			//再度読み込み
+			readAllGroupFiles();
 
 		}catch(IOException e) {
 			System.err.print("ユーザ情報変更に関する処理でエラーが発生しました：" + e);
@@ -1197,6 +1217,7 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
+
 
 			//書き込み
 			fw = new FileWriter(file);
