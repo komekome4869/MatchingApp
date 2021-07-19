@@ -2423,7 +2423,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel,"good");
 	}
 
-	public void goInviteInform() {
+	public void goInviteInform() {//TODO
 
 		for(int i=0;i<3;i++) {
 			if(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]==null) {
@@ -3215,7 +3215,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 
 			if(tfRelationMakeGroup.getText().length()!=0) {
-				nowShowingGroup.setName(tfRelationMakeGroup.getText());
+				nowShowingGroup.setRelation(tfRelationMakeGroup.getText());
 			}
 			else {
 				tfRelationMakeGroup.setText("入力の上限は10文字です");
