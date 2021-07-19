@@ -4169,6 +4169,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//相手のユーザ情報の取得
 		public void SgetyourUserprof(int number) {
 			try{
+				connectServer();
 				String outLine = "ui,"+Integer.toString(number);
 				oos.writeObject(outLine);
 				System.out.println(outLine+"を送信しました。");  //確認用

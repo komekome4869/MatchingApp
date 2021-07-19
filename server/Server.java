@@ -1152,6 +1152,7 @@ public class Server extends JFrame implements ActionListener{
 				inviteUsers(String.valueOf(gi.nonhostUser[i]), gi.groupNumber.toString());
 		}
 
+
 		String nonhost = String.valueOf(gi.nonhostUser[0]);
 		for(int i=1; i<4; i++) {
 			if(gi.nonhostUser[i] != 0) {
@@ -2512,7 +2513,6 @@ public class Server extends JFrame implements ActionListener{
 					}
 					catch(IOException e) {
 						System.err.print("認証に関する処理でエラーが発生しました：" + e);
-
 					}
 					if(pageAuthen==notAuthentificatededUsers.length-1) {
 						this.dispose();
