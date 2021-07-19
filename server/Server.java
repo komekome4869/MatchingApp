@@ -315,7 +315,7 @@ public class Server extends JFrame implements ActionListener{
 	//グループファイルを全て読み込み
 	public static void readAllGroupFiles() {
 		groupFileNum = 0;
-		groups = null;
+		groups = new GroupInfo[1000];
 		activeGroups.clear();
 
 		File dir = new File(System.getProperty("user.dir") + "\\Group");
@@ -347,21 +347,20 @@ public class Server extends JFrame implements ActionListener{
 
 	//グループファイル読み込み
 	public static void readGroupFile(File file) {
-	       FileReader fr;
-	        BufferedReader br;
-			try {
+		FileReader fr;
+		BufferedReader br;
+		try {
 				fr = new FileReader(file);
 		        br = new BufferedReader(fr);
 		        String line;
 				int line_counter = 0;
+				groups[groupFileNum] = new GroupInfo();
 
 				while((line = br.readLine()) != null) {
 					line_counter++;
 					switch(line_counter) {
-
 						case 1 :
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
-
 
 							//画像の読み込み
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
@@ -438,7 +437,7 @@ public class Server extends JFrame implements ActionListener{
 					}
 
 					//grouplist.add(groups[groupFileNum]);
-					activeGroups.put(groups[userFileNum].groupNumber, groups[groupFileNum]);
+					activeGroups.put(groups[groupFileNum].groupNumber, groups[groupFileNum]);
 
 				}
 			} catch (IOException e) {
@@ -777,7 +776,7 @@ public class Server extends JFrame implements ActionListener{
 		int k=0;
 		//再読み込み
 		readAllUserFiles();
-		
+
 		for(int i=0;i<users.length;i++) {
 			if(users[i] != null) {
 				if(users[i].isPublic) {
@@ -791,7 +790,7 @@ public class Server extends JFrame implements ActionListener{
 
 		//ユーザがいる場合
 		else {
-			
+
 			if(public_users[3*page - 3] != null) res[0] = public_users[3*page - 3];
 			else res[0] = null;
 
@@ -1048,7 +1047,7 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
 			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
 			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
-			
+
 			//再度読み込み
 			readAllUserFiles();
 			System.out.println("AllUserFile:"+userlist);
@@ -1113,7 +1112,7 @@ public class Server extends JFrame implements ActionListener{
 
 			//画像を保存
 			ImageIO.write(gi.getMainPhoto(), "png", main_image);
-			
+
 			//再度読み込み
 			readAllGroupFiles();
 
@@ -1154,24 +1153,33 @@ public class Server extends JFrame implements ActionListener{
 		joinGroup(String.valueOf(gi.hostUser), gi.groupNumber.toString(), true);
 
 		for(int i=0; i<gi.numberOfMember-1; i++) {
-			inviteUsers(String.valueOf(gi.hostUser), gi.groupNumber.toString());
+			if(gi.nonhostUser[i] != 0)
+				inviteUsers(String.valueOf(gi.nonhostUser[i]), gi.groupNumber.toString());
 		}
 
-		String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
-		nonhost.replace(" 0","");
+
+		String nonhost = String.valueOf(gi.nonhostUser[0]);
+		for(int i=1; i<4; i++) {
+			if(gi.nonhostUser[i] != 0) {
+				nonhost = nonhost + " " + String.valueOf(gi.nonhostUser[i]);
+			}
+		}
 
 		try {
 			//グループ情報ファイルを作成
 			FileWriter fw = new FileWriter(GroupFile);
-			fw.write(gi.name + "\n" +
+			fw.write(gi.groupNumber + "\n" +
+					 gi.name + "\n" +
 					 gi.relation + "\n" +
 					 /*UUID*/ "\n" +
 					 /*UUID*/ "\n" +
 					 /*UUID*/ "\n" +
 					 gi.hostUser + "\n" +
 					 nonhost + "\n" +
+					 gi.purpose + "\n" +
 					 gi.comment + "\n" +
-					 gi.numberOfMember + "\n"
+					 gi.numberOfMember + "\n" +
+					 String.valueOf(gi.isGathered) + "\n"
 					 );
 			fw.close();
 
@@ -1210,8 +1218,8 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			//誘われているグループ(13行目)に追加
-			if(line == "") { 	//今まで誘われていなかった場合
+			//誘われているグループ(14行目)に追加
+			if(line.length() < 2) { 	//今まで誘われていなかった場合
 				strbuf.append(uuid + "\n");
 			}else {				//すでに誘われていた場合
 				strbuf.append(line + " " + uuid + "\n");
@@ -1221,7 +1229,6 @@ public class Server extends JFrame implements ActionListener{
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
-
 
 			//書き込み
 			fw = new FileWriter(file);
@@ -1341,15 +1348,14 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			if(line.length() < 3) {
+			if(line.length() > 3) {
 				students = line.split(" ");//TODO
 			}
 			strbuf.append(line + "\n");
 
 			//非ホストユーザがグループに入っているか確認
-			int i = 0;
 			int count_true = 0;
-			while(students[i] != null) {
+			for(int i=0; i<students.length; i++) {
 				if(judgeJoinedGroup(students[i], uuid)) count_true++;
 			}
 
@@ -1409,8 +1415,12 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//参加しているグループにuuidがあるときtrue
-			if(line.contains(uuid)) {
-				return true;
+			if(line.length() > 2) {
+				if(line.contains(uuid)) {
+					return true;
+				}else {
+					return false;
+				}
 			}else {
 				return false;
 			}
@@ -2551,7 +2561,6 @@ public class Server extends JFrame implements ActionListener{
 					}
 					catch(IOException e) {
 						System.err.print("認証に関する処理でエラーが発生しました：" + e);
-
 					}
 					if(pageAuthen==notAuthentificatededUsers.length-1) {
 						this.dispose();

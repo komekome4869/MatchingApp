@@ -3224,7 +3224,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 
 			if(tfCommentMakeGroup.getText().length()!=0 && tfCommentMakeGroup.getText().length()<16) {
-				nowShowingGroup.setName(tfCommentMakeGroup.getText());
+				nowShowingGroup.setComment(tfCommentMakeGroup.getText());
 			}
 			else {
 				tfCommentMakeGroup.setText("入力の上限は15文字です");
@@ -3276,7 +3276,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				tfNumberGather[0].setForeground(Color.RED);
 			}
 			else if(flag) {
-				nowShowingGroup.setNumberOfMember(temp+2);
+				nowShowingGroup.setNumberOfMember(temp+1);
 				SmakeGroup(nowShowingGroup);
 				goHome();
 			}
