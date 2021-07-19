@@ -44,19 +44,19 @@ import javax.swing.event.ChangeListener;
 
 public class Server extends JFrame implements ActionListener{
 
-	static PrintWriter out; //ãƒ‡ãƒ¼ã‚¿é€ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-	static Receiver receiver; //ãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	static PrintWriter out; //ƒf[ƒ^‘—M—pƒIƒuƒWƒFƒNƒg
+	static Receiver receiver; //ƒf[ƒ^óM—pƒIƒuƒWƒFƒNƒg
 	static ServerSocket ss;
 
 	static UserInfo[] users = new UserInfo[1000];
 	static HashMap<String, UserInfo> activeUsers =new HashMap<>();
-	static int userFileNum = 0;	//ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	static int userFileNum = 0;	//ƒ†[ƒUƒtƒ@ƒCƒ‹”
 
 	static GroupInfo[] groups = new GroupInfo[1000];
 	static HashMap<UUID, GroupInfo> activeGroups =new HashMap<>();
-	static int groupFileNum = 0;	//ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	static int groupFileNum = 0;	//ƒ†[ƒUƒtƒ@ƒCƒ‹”
 
-	//æ¤œç´¢ç”¨
+	//ŒŸõ—p
 	static ArrayList<UserInfo> userlist;
 	static ArrayList<UserInfo> user_buf = new ArrayList<UserInfo>();
 	static ArrayList<GroupInfo> grouplist;
@@ -65,14 +65,14 @@ public class Server extends JFrame implements ActionListener{
 	int w = 400;
 	int h = 650;
 
-	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	public Server(String title){
 		setTitle(title);
 
-		JLabel menu = new JLabel("ã‚µãƒ¼ãƒãƒ¡ãƒ‹ãƒ¥ãƒ¼");
-		JButton admit_button = new JButton("æ–°è¦ä¼šå“¡èªè¨¼");
+		JLabel menu = new JLabel("ƒT[ƒoƒƒjƒ…[");
+		JButton admit_button = new JButton("V‹K‰ïˆõ”FØ");
 		admit_button.setPreferredSize(new Dimension(250, 35));
-		JButton search_button = new JButton("ä¼šå“¡æ¤œç´¢");
+		JButton search_button = new JButton("‰ïˆõŒŸõ");
 		search_button.setPreferredSize(new Dimension(250, 35));
 
 		JPanel p = new JPanel();
@@ -84,7 +84,7 @@ public class Server extends JFrame implements ActionListener{
 		FlowLayout layout = new FlowLayout();
 		layout.setAlignment(FlowLayout.RIGHT);
 		p2.setLayout(layout);
-		JButton end = new JButton("çµ‚äº†");
+		JButton end = new JButton("I—¹");
 		end.setPreferredSize(new Dimension(70, 30));
 		p2.add(end);
 
@@ -100,39 +100,39 @@ public class Server extends JFrame implements ActionListener{
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚“ã§ãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—ã«è¿½åŠ 
+		//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ñ‚ÅƒnƒbƒVƒ…ƒ}ƒbƒv‚É’Ç‰Á
 		readAllUserFiles();
 		readAllGroupFiles();
 
 		try {
 			ss = new ServerSocket(50);
 		} catch (IOException e) {
-			System.err.println("ã‚µãƒ¼ãƒã‚½ã‚±ãƒƒãƒˆä½œæˆæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒT[ƒoƒ\ƒPƒbƒgì¬‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 		}
 	}
 
-	//ãƒ¡ã‚¤ãƒ³ãƒ¡ã‚½ãƒƒãƒ‰
+	//ƒƒCƒ“ƒƒ\ƒbƒh
 	public static void main(String args[]) {
 		Server server = new Server("MS_Server");
 		server.acceptClient();
 	}
 
-	//ãƒœã‚¿ãƒ³æ“ä½œ
+	//ƒ{ƒ^ƒ“‘€ì
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		if(cmd.equals("æ–°è¦ä¼šå“¡èªè¨¼")) {
+		if(cmd.equals("V‹K‰ïˆõ”FØ")) {
 			new Authentificate();
 		}
-		if(cmd.equals("ä¼šå“¡æ¤œç´¢")) {
+		if(cmd.equals("‰ïˆõŒŸõ")) {
 			new searchUsers();
 		}
-		if(cmd.equals("çµ‚äº†")) {
+		if(cmd.equals("I—¹")) {
 			System.exit(0);
 		}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦èª­ã¿è¾¼ã¿
+	//ƒ†[ƒUƒtƒ@ƒCƒ‹‚ğ‘S‚Ä“Ç‚İ‚İ
 	public static void readAllUserFiles() {
 		userFileNum = 0;
 		users = new UserInfo[1000];
@@ -158,14 +158,14 @@ public class Server extends JFrame implements ActionListener{
 					userFileNum++;
 				}
 			}
-			//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
+			//ƒ†[ƒUî•ñ‚ÌƒŠƒXƒg‚ğì¬
 			userlist = new ArrayList<UserInfo>(Arrays.asList(users));
 			System.out.println(userlist);
 			userFileNum--;
 		}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+	//ƒ†[ƒUƒtƒ@ƒCƒ‹“Ç‚İ‚İ
 	static void readUserFile(File file) {
         FileReader fr;
         BufferedReader br;
@@ -183,7 +183,7 @@ public class Server extends JFrame implements ActionListener{
 					case 1 :
 						users[userFileNum].studentNumber = Integer.parseInt(line);
 
-						//ç”»åƒã®èª­ã¿è¾¼ã¿
+						//‰æ‘œ‚Ì“Ç‚İ‚İ
 						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
 						File main_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_main.png");
 						File sub1_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub1.png");
@@ -305,12 +305,12 @@ public class Server extends JFrame implements ActionListener{
 
 			}
 		} catch (IOException e) {
-			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 			e.printStackTrace();
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦èª­ã¿è¾¼ã¿
+	//ƒOƒ‹[ƒvƒtƒ@ƒCƒ‹‚ğ‘S‚Ä“Ç‚İ‚İ
 	public static void readAllGroupFiles() {
 		groupFileNum = 0;
 		groups = null;
@@ -335,15 +335,15 @@ public class Server extends JFrame implements ActionListener{
 				groupFileNum++;
 			}
 		}
-		//ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
+		//ƒOƒ‹[ƒv‚ÌƒŠƒXƒg‚ğì¬
 		if(groups!=null) {
 			grouplist = new ArrayList<GroupInfo>(Arrays.asList(groups));
 			System.out.println("grouplist"+grouplist);
 		}
-		groupFileNum--; //è¦ç´ ã¨ä¸€è‡´ã•ã›ã‚‹
+		groupFileNum--; //—v‘f‚Æˆê’v‚³‚¹‚é
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+	//ƒOƒ‹[ƒvƒtƒ@ƒCƒ‹“Ç‚İ‚İ
 	public static void readGroupFile(File file) {
 	       FileReader fr;
 	        BufferedReader br;
@@ -361,7 +361,7 @@ public class Server extends JFrame implements ActionListener{
 							groups[groupFileNum].groupNumber = UUID.fromString(line);
 
 
-							//ç”»åƒã®èª­ã¿è¾¼ã¿
+							//‰æ‘œ‚Ì“Ç‚İ‚İ
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
 							BufferedImage main = ImageIO.read(main_image);
 
@@ -440,35 +440,35 @@ public class Server extends JFrame implements ActionListener{
 
 				}
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
 	}
 
-	//ãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰(å†…éƒ¨ã‚¯ãƒ©ã‚¹)
+	//ƒf[ƒ^óM—pƒXƒŒƒbƒh(“à•”ƒNƒ‰ƒX)
 	class Receiver extends Thread {
 		private ObjectInputStream ois;
 		private ObjectOutputStream oos;
-		// å†…éƒ¨ã‚¯ãƒ©ã‚¹Receiverã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		// “à•”ƒNƒ‰ƒXReceiver‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
 		Receiver (Socket socket){
 			try{
-				oos = new ObjectOutputStream(socket.getOutputStream()); //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿é€ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”¨æ„
-				ois = new ObjectInputStream(socket.getInputStream()); //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”¨æ„
+				oos = new ObjectOutputStream(socket.getOutputStream()); //ƒIƒuƒWƒFƒNƒgƒf[ƒ^‘—M—pƒIƒuƒWƒFƒNƒg‚Ì—pˆÓ
+				ois = new ObjectInputStream(socket.getInputStream()); //ƒIƒuƒWƒFƒNƒgƒf[ƒ^óM—pƒIƒuƒWƒFƒNƒg‚Ì—pˆÓ
 			} catch (IOException e) {
-					System.err.println("ãƒ‡ãƒ¼ã‚¿å—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+					System.err.println("ƒf[ƒ^óM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			}
 		}
 
-		//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‡¦ç†
+		//ƒƒbƒZ[ƒW‚Ìˆ—
 		public void receiveMessage(String inputLine) {
-				if (inputLine != null){ //ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ãŸã‚‰
-					String act[] = inputLine.split(","); //ã‚«ãƒ³ãƒã®å‰å¾Œã§æ–‡å­—åˆ—ã‚’åˆ†å‰²
-					System.out.println("receiveMessageãŒèµ·å‹•:"+inputLine);	//ç¢ºèªç”¨
+				if (inputLine != null){ //ƒf[ƒ^‚ğóM‚µ‚½‚ç
+					String act[] = inputLine.split(","); //ƒJƒ“ƒ}‚Ì‘OŒã‚Å•¶š—ñ‚ğ•ªŠ„
+					System.out.println("receiveMessage‚ª‹N“®:"+inputLine);	//Šm”F—p
 
 					try {
 						switch(act[0]){
-						case "lg": //æ–°è¦ç™»éŒ²ã™ã‚‹
-							if(checkPassword(act[1],act[2] /*(å­¦ç±ç•ªå·,ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰)*/) == true) {
+						case "lg": //V‹K“o˜^‚·‚é
+							if(checkPassword(act[1],act[2] /*(ŠwĞ”Ô†,ƒpƒXƒ[ƒh)*/) == true) {
 								oos.writeObject("1");
 								oos.flush();
 							}
@@ -480,61 +480,61 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "ui": //ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã®å–å¾—
+						case "ui": //ƒ†[ƒUî•ñ‚Ìæ“¾
 							try {
 								oos.writeObject(activeUsers.get(act[1]));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ãƒ¦ãƒ¼ã‚¶æƒ…å ±é€ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+								System.err.print("ƒ†[ƒUî•ñ‘—M‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 							}
 							break;
 
-						case "us": //3äººåˆ†é€ä¿¡
+						case "us": //3l•ª‘—M
 							try {
 								oos.writeObject(sendUserInfo(Integer.parseInt(act[1])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ãƒ¦ãƒ¼ã‚¶æƒ…å ±é€ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);//TODO
+								System.err.print("ƒ†[ƒUî•ñ‘—M‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);//TODO
 							}
 							break;
 
-						case "uj": //ãƒ¦ãƒ¼ã‚¶æ¡ä»¶æ¤œç´¢
+						case "uj": //ƒ†[ƒUğŒŒŸõ
 							try {
 								oos.writeObject(searchUsers(Integer.parseInt(act[1]), Integer.parseInt(act[2]), Integer.parseInt(act[3]), Integer.parseInt(act[4]), Integer.parseInt(act[5]), Integer.parseInt(act[6])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ãƒ¦ãƒ¼ã‚¶æƒ…å ±é€ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+								System.err.print("ƒ†[ƒUî•ñ‘—M‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 							}
 							break;
 
-						case "gi": //ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã®å–å¾—
+						case "gi": //ƒOƒ‹[ƒvî•ñ‚Ìæ“¾
 							try {
 								oos.writeObject(activeGroups.get(UUID.fromString(act[1])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±é€ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+								System.err.print("ƒOƒ‹[ƒvî•ñ‘—M‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 							}
 							break;
 
-						case "gs": //3ã‚°ãƒ«ãƒ¼ãƒ—åˆ†é€ä¿¡
+						case "gs": //3ƒOƒ‹[ƒv•ª‘—M
 							try {
 								oos.writeObject(sendGroupInfo(Integer.parseInt(act[1])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±é€ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+								System.err.print("ƒOƒ‹[ƒvî•ñ‘—M‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 							}
 							break;
 
-						case "gj": //ã‚°ãƒ«ãƒ¼ãƒ—æ¡ä»¶æ¤œç´¢
+						case "gj": //ƒOƒ‹[ƒvğŒŒŸõ
 							try {
 								oos.writeObject(searchGroups(Integer.parseInt(act[1]), Integer.parseInt(act[2]), Integer.parseInt(act[3])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±é€ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+								System.err.print("ƒOƒ‹[ƒvî•ñ‘—M‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 							}
 							break;
 
-						case "ug": //ãƒ¦ãƒ¼ã‚¶ã«ã„ã„ã­ã‚’é€ã‚‹
+						case "ug": //ƒ†[ƒU‚É‚¢‚¢‚Ë‚ğ‘—‚é
 							if(goodUser(act[1],act[2])) {
 								oos.writeObject("1");
 								oos.flush();
@@ -545,7 +545,7 @@ public class Server extends JFrame implements ActionListener{
 
 							break;
 
-						case "gg": //ã‚°ãƒ«ãƒ¼ãƒ—ã«ã„ã„ã­ã‚’é€ã‚‹
+						case "gg": //ƒOƒ‹[ƒv‚É‚¢‚¢‚Ë‚ğ‘—‚é
 							if(goodGroup(act[0],act[1])) {
 								oos.writeObject("1");
 								oos.flush();
@@ -555,8 +555,8 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "jg": //ã‚°ãƒ«ãƒ¼ãƒ—ã«å‚åŠ 
-							if(joinGroup(act[1], act[2], false)){//ä¹…ä¿ç”°ãŒæ›¸ãæ›ãˆ
+						case "jg": //ƒOƒ‹[ƒv‚ÉQ‰Á
+							if(joinGroup(act[1], act[2], false)){//‹v•Û“c‚ª‘‚«Š·‚¦
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -565,7 +565,7 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "rg": //ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ æ‹’å¦
+						case "rg": //ƒOƒ‹[ƒvQ‰Á‹‘”Û
 							if(deleteGroup(act[2])){
 								oos.writeObject("1");
 								oos.flush();
@@ -575,7 +575,7 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "ud": //ãƒ¦ãƒ¼ã‚¶æƒ…å ±å‰Šé™¤
+						case "ud": //ƒ†[ƒUî•ñíœ
 							if(deleteUser(act[1])){
 								oos.writeObject("1");
 								oos.flush();
@@ -585,7 +585,7 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "gd": //ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±å‰Šé™¤
+						case "gd": //ƒOƒ‹[ƒvî•ñíœ
 							if(deleteGroup(act[1])){
 								oos.writeObject("1");
 								oos.flush();
@@ -595,7 +595,7 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "ur": //ã„ã„ã­æ‹’å¦
+						case "ur": //‚¢‚¢‚Ë‹‘”Û
 							if(deleteReceivedGood(act[1], act[2])){
 								oos.writeObject("1");
 								oos.flush();
@@ -605,7 +605,7 @@ public class Server extends JFrame implements ActionListener{
 							}
 							break;
 
-						case "gr": //ã‚°ãƒ«ãƒ¼ãƒ—ã„ã„ã­æ‹’å¦
+						case "gr": //ƒOƒ‹[ƒv‚¢‚¢‚Ë‹‘”Û
 							if(deleteReceivedGroupGood(act[1], act[2])){
 								oos.writeObject("1");
 								oos.flush();
@@ -617,26 +617,26 @@ public class Server extends JFrame implements ActionListener{
 
 						}
 					}catch(IOException e) {
-						System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					}
 				}
 		}
 
-		// å†…éƒ¨ã‚¯ãƒ©ã‚¹ Receiverã®ãƒ¡ã‚½ãƒƒãƒ‰
+		// “à•”ƒNƒ‰ƒX Receiver‚Ìƒƒ\ƒbƒh
 		public void run(){
 			try {
 				while(true) {
 					try {
 						Object inputObj = ois.readObject();
-						System.out.println("ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ã¾ã—ãŸ");
+						System.out.println("ƒf[ƒ^‚ğóM‚µ‚Ü‚µ‚½");
 
-						//UserInfoå‹ãªã‚‰
+						//UserInfoŒ^‚È‚ç
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
 							ui.setStudentCard(ui.getStudentCard());//TODO
 
-							//æ–°è¦ç™»éŒ²
+							//V‹K“o˜^
 							if(ui.state == 0) {
 								try{
 									signUp(ui);
@@ -645,10 +645,10 @@ public class Server extends JFrame implements ActionListener{
 								}catch(IOException e) {
 									oos.writeObject("0");
 									oos.flush();
-									System.err.print("ã‚µã‚¤ãƒ³ã‚¢ãƒƒãƒ—ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+									System.err.print("ƒTƒCƒ“ƒAƒbƒv‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 								}
 							}
-							//ãƒ—ãƒ­ãƒ•å¤‰æ›´
+							//ƒvƒƒt•ÏX
 							if(ui.state == 1) {
 								try{
 									changeUserInfo(ui);
@@ -657,16 +657,16 @@ public class Server extends JFrame implements ActionListener{
 								}catch(IOException e) {
 									oos.writeObject("0");
 									oos.flush();
-									System.err.print("ãƒ¦ãƒ¼ã‚¶æƒ…å ±å¤‰æ›´æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+									System.err.print("ƒ†[ƒUî•ñ•ÏX‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 								}
 							}
 						}
 
-						//GroupInfoå‹ãªã‚‰
+						//GroupInfoŒ^‚È‚ç
 						else if(inputObj instanceof GroupInfo) {
 							GroupInfo gi = new GroupInfo();
 							gi = (GroupInfo)inputObj;
-							//ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆ
+							//ƒOƒ‹[ƒvì¬
 							if(gi.state == 0) {
 								try{
 									makeGroup(gi);
@@ -675,10 +675,10 @@ public class Server extends JFrame implements ActionListener{
 								}catch(IOException e) {
 									oos.writeObject("0");
 									oos.flush();
-									System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+									System.err.print("ƒOƒ‹[ƒvì¬‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 								}
 							}
-							//ãƒ—ãƒ­ãƒ•å¤‰æ›´
+							//ƒvƒƒt•ÏX
 							if(gi.state == 1) {
 								try{
 									changeGroupInfo(gi);
@@ -687,56 +687,56 @@ public class Server extends JFrame implements ActionListener{
 								}catch(IOException e) {
 									oos.writeObject("0");
 									oos.flush();
-									System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±å¤‰æ›´æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+									System.err.print("ƒOƒ‹[ƒvî•ñ•ÏX‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 								}
 							}
 						}
 
-						//ãã®ä»–ãªã‚‰receiveMessage()
+						//‚»‚Ì‘¼‚È‚çreceiveMessage()
 						else {
 							String inputLine = inputObj.toString();
-							System.out.println(inputLine);	//ç¢ºèªç”¨
+							System.out.println(inputLine);	//Šm”F—p
 							receiveMessage(inputLine);
 						}
 
 					} catch (ClassNotFoundException e) {
-						System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 					}
 				}
 			}catch(IOException e) {
-				System.out.println("ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãŒåˆ‡æ–­ã—ã¾ã—ãŸ");
+				System.out.println("ƒNƒ‰ƒCƒAƒ“ƒg‚ªØ’f‚µ‚Ü‚µ‚½");
 			}
 		}
 	}
 
-	//ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«æ¥ç¶š
-	public void acceptClient(){ //ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®æ¥ç¶š(ã‚µãƒ¼ãƒã®èµ·å‹•)
+	//ƒNƒ‰ƒCƒAƒ“ƒg‚ÉÚ‘±
+	public void acceptClient(){ //ƒNƒ‰ƒCƒAƒ“ƒg‚ÌÚ‘±(ƒT[ƒo‚Ì‹N“®)
 		try {
 			while (true) {
-				Socket socket = ss.accept(); //æ–°è¦æ¥ç¶šã‚’å—ã‘ä»˜ã‘ã‚‹
-				System.out.println("ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¨æ¥ç¶šã—ã¾ã—ãŸï¼"); //ãƒ†ã‚¹ãƒˆç”¨å‡ºåŠ›
-				out = new PrintWriter(socket.getOutputStream(), true);//ãƒ‡ãƒ¼ã‚¿é€ä¿¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”¨æ„
-				receiver = new Receiver(socket);//ãƒ‡ãƒ¼ã‚¿å—ä¿¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚¹ãƒ¬ãƒƒãƒ‰)ã‚’ç”¨æ„
-				receiver.start();//ãƒ‡ãƒ¼ã‚¿é€ä¿¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚¹ãƒ¬ãƒƒãƒ‰)ã‚’èµ·å‹•
+				Socket socket = ss.accept(); //V‹KÚ‘±‚ğó‚¯•t‚¯‚é
+				System.out.println("ƒNƒ‰ƒCƒAƒ“ƒg‚ÆÚ‘±‚µ‚Ü‚µ‚½D"); //ƒeƒXƒg—po—Í
+				out = new PrintWriter(socket.getOutputStream(), true);//ƒf[ƒ^‘—MƒIƒuƒWƒFƒNƒg‚ğ—pˆÓ
+				receiver = new Receiver(socket);//ƒf[ƒ^óMƒIƒuƒWƒFƒNƒg(ƒXƒŒƒbƒh)‚ğ—pˆÓ
+				receiver.start();//ƒf[ƒ^‘—MƒIƒuƒWƒFƒNƒg(ƒXƒŒƒbƒh)‚ğ‹N“®
 			}
 		} catch (Exception e) {
-			System.err.println("ã‚½ã‚±ãƒƒãƒˆä½œæˆæ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒ\ƒPƒbƒgì¬‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 		}
 	}
 
-	//æ¤œç´¢
+	//ŒŸõ
 	public static UserInfo[] searchUsers(int page, int gender, int grade, int faculty, int birth, int circle) {
 
 		user_buf.clear();
 
 		UserInfo res[] = new UserInfo[3];
 
-		System.out.println("userListï¼š"+userlist);
+		System.out.println("userListF"+userlist);
 
 		for(int i = 0; i < userlist.size(); i++){
 			UserInfo user = userlist.get(i);
 
-			//å®Œå…¨ä¸€è‡´
+			//Š®‘Sˆê’v
 			if(user!=null) {
 				if(user.gender == gender && user.grade == grade && user.faculty == faculty && user.birth == birth && user.circle == circle) {
 					user_buf.add(user);
@@ -746,13 +746,13 @@ public class Server extends JFrame implements ActionListener{
 		}
 
 
-			System.out.println("é…åˆ—ï¼š"+user_buf);
+			System.out.println("”z—ñF"+user_buf);
 
 
-		//å€™è£œãªã—ãªã‚‰nullã‚’è¿”ã™
+		//Œó•â‚È‚µ‚È‚çnull‚ğ•Ô‚·
 		if(user_buf == null) return null;
 
-		//å€™è£œãŒã„ã‚‹å ´åˆ
+		//Œó•â‚ª‚¢‚éê‡
 		else {
 			if(3*page - 2 <= user_buf.size()) res[0] = user_buf.get(3*page - 3);
 			else res[0] = null;
@@ -768,14 +768,14 @@ public class Server extends JFrame implements ActionListener{
 		return res;
 	}
 
-	//UserInfoé€ä¿¡
-	public static UserInfo[] sendUserInfo(int page) {//ä¹…ä¿ç”°ãŒæ›¸ãæ›ãˆ
+	//UserInfo‘—M
+	public static UserInfo[] sendUserInfo(int page) {//‹v•Û“c‚ª‘‚«Š·‚¦
 		UserInfo res[] = new UserInfo[3];
 
-		//ãªã—ãªã‚‰nullã‚’è¿”ã™
+		//‚È‚µ‚È‚çnull‚ğ•Ô‚·
 		if(users == null) return null;
 
-		//ãƒ¦ãƒ¼ã‚¶ãŒã„ã‚‹å ´åˆ
+		//ƒ†[ƒU‚ª‚¢‚éê‡
 		else {
 			if(users[3*page - 3] != null) res[0] = users[3*page - 3];
 			else res[0] = null;
@@ -787,13 +787,13 @@ public class Server extends JFrame implements ActionListener{
 			else res[2] = null;
 		}
 
-		//ãã®ãƒšãƒ¼ã‚¸ã«ãƒ¦ãƒ¼ã‚¶ãŒã„ãªã‘ã‚Œã°nullã‚’è¿”ã™
+		//‚»‚Ìƒy[ƒW‚Éƒ†[ƒU‚ª‚¢‚È‚¯‚ê‚Înull‚ğ•Ô‚·
 		if(res[0] == null && res[1] == null && res[2] == null) return null;
 
 		return res;
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—æ¤œç´¢
+	//ƒOƒ‹[ƒvŒŸõ
 	public GroupInfo[] searchGroups(int page, int purpose, int num) {
 
 		group_buf.clear();
@@ -803,7 +803,7 @@ public class Server extends JFrame implements ActionListener{
 		for(int i = 0; i < grouplist.size(); i++){
 			GroupInfo group = grouplist.get(i);
 
-			//å®Œå…¨ä¸€è‡´
+			//Š®‘Sˆê’v
 			if(group!=null) {
 				if(group.purpose == purpose || group.numberOfMember == num) {
 					group_buf.add(group);
@@ -812,10 +812,10 @@ public class Server extends JFrame implements ActionListener{
 
 		}
 
-		//å€™è£œãªã—ãªã‚‰nullã‚’è¿”ã™
+		//Œó•â‚È‚µ‚È‚çnull‚ğ•Ô‚·
 		if(group_buf == null) return null;
 
-		//å€™è£œãŒã„ã‚‹å ´åˆ
+		//Œó•â‚ª‚¢‚éê‡
 		else {
 			if(3*page - 2 <= group_buf.size()) res[0] = group_buf.get(3*page - 3);
 			else res[0] = null;
@@ -832,14 +832,14 @@ public class Server extends JFrame implements ActionListener{
 
 	}
 
-	//GroupInfoé€ä¿¡
+	//GroupInfo‘—M
 	public GroupInfo[] sendGroupInfo(int page) {
 		GroupInfo res[] = new GroupInfo[3];
 
-		//ãªã—ãªã‚‰nullã‚’è¿”ã™
+		//‚È‚µ‚È‚çnull‚ğ•Ô‚·
 		if(groups == null) return null;
 
-		//ãƒ¦ãƒ¼ã‚¶ãŒã„ã‚‹å ´åˆ
+		//ƒ†[ƒU‚ª‚¢‚éê‡
 		else {
 			if(groups[3*page - 2] != null) res[0] = groups[3*page - 2];
 			else res[0] = null;
@@ -851,49 +851,49 @@ public class Server extends JFrame implements ActionListener{
 			else res[2] = null;
 		}
 
-		//ãã®ãƒšãƒ¼ã‚¸ã«ãƒ¦ãƒ¼ã‚¶ãŒã„ãªã‘ã‚Œã°nullã‚’è¿”ã™
+		//‚»‚Ìƒy[ƒW‚Éƒ†[ƒU‚ª‚¢‚È‚¯‚ê‚Înull‚ğ•Ô‚·
 		if(res[0] == null && res[1] == null && res[2] == null) return null;
 
 		return res;
 	}
 
-	//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
+	//ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
 	public static boolean checkPassword(String num, String pass) {
-		String path = System.getProperty("user.dir") + "\\ID"; //ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-		File LoginFile = new File(path + "\\" + num + ".txt"); //ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«
+		String path = System.getProperty("user.dir") + "\\ID"; //ƒfƒBƒŒƒNƒgƒŠ
+		File LoginFile = new File(path + "\\" + num + ".txt"); //ƒ†[ƒUƒtƒ@ƒCƒ‹
 		File dir = new File(path);
 		BufferedReader br = null;
 		FileReader fr = null;
 
-		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¾ãŸã¯ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆ
+		//ƒfƒBƒŒƒNƒgƒŠ‚Ü‚½‚Íƒ†[ƒUƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡
 		if(!dir.exists() || !LoginFile.exists()) return false;
-		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŠã‚ˆã³ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+		//ƒfƒBƒŒƒNƒgƒŠ‚¨‚æ‚Ñƒ†[ƒUƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚éê‡
 		else {
 			try {
 				fr = new FileReader(LoginFile);
 				br = new BufferedReader(fr);
 				br.readLine();	//TODO
-				String str = br.readLine();				//2è¡Œç›®èª­ã¿è¾¼ã¿
+				String str = br.readLine();				//2s–Ú“Ç‚İ‚İ
 				br.close();
 				System.out.println("str="+str);
-				String res[] = str.split(" ");			//ç©ºç™½ã§åˆ†å‰²
+				String res[] = str.split(" ");			//‹ó”’‚Å•ªŠ„
 
-				//ã‚‚ã—ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸€è‡´ã—ã¦ã„ã‚Œã°true
+				//‚à‚µƒpƒXƒ[ƒh‚ªˆê’v‚µ‚Ä‚¢‚ê‚Îtrue
 				if(res[0].equals(pass)) return true;//TODO
-				//ãã†ã§ãªã‘ã‚Œã°false
+				//‚»‚¤‚Å‚È‚¯‚ê‚Îfalse
 				else return false;
 
 			}catch(IOException e) {
-				System.err.println("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+				System.err.println("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 				return false;
 			}
 		}
 	}
 
-	//æ–°è¦ç™»éŒ²
+	//V‹K“o˜^
 	public static void signUp(UserInfo ui) {
-		String path = System.getProperty("user.dir") + "\\ID"; //ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-		File LoginFile = new File(path + "\\" + ui.studentNumber + ".txt"); //ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«
+		String path = System.getProperty("user.dir") + "\\ID"; //ƒfƒBƒŒƒNƒgƒŠ
+		File LoginFile = new File(path + "\\" + ui.studentNumber + ".txt"); //ƒ†[ƒUƒtƒ@ƒCƒ‹
 		File dir = new File(path);
 		File image_dir = new File(path + "\\images");
 		File image_user_dir = new File(path + "\\images\\" + ui.studentNumber);
@@ -904,25 +904,25 @@ public class Server extends JFrame implements ActionListener{
 		File sub3_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub3.png");
 		File sub4_image = new File(path + "\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub4.png");
 
-		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ
+		//ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬
 		if(!dir.exists()) {
 			dir.mkdir();
 			image_dir.mkdir();
 		}
 
-		//ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
+		//ƒtƒ@ƒCƒ‹‚Ìì¬
 		if(!LoginFile.exists()) {
 			try {
 				LoginFile.createNewFile();
 				image_user_dir.mkdir();
 			} catch (IOException e) {
-				System.err.println("ãƒ•ã‚¡ã‚¤ãƒ«ä½œæˆæ™‚ã«äºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ");
+				System.err.println("ƒtƒ@ƒCƒ‹ì¬‚É—\Šú‚¹‚ÊƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½");
 				return;
 			}
 		}
 
 		try {
-			//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
+			//ƒ†[ƒUî•ñƒtƒ@ƒCƒ‹‚ğì¬
 			FileWriter fw = new FileWriter(LoginFile);
 			fw.write(ui.studentNumber + "\n" +
 					 ui.password + "\n" +
@@ -933,9 +933,9 @@ public class Server extends JFrame implements ActionListener{
 					 ui.birth + "\n" +
 					 ui.circle + "\n" +
 					 ui.hobby + "\n" +
-					 /*å­¦ç±ç•ªå·*/"\n" +
-					 /*å­¦ç±ç•ªå·*/"\n" +
-					 /*å­¦ç±ç•ªå·*/"\n" +
+					 /*ŠwĞ”Ô†*/"\n" +
+					 /*ŠwĞ”Ô†*/"\n" +
+					 /*ŠwĞ”Ô†*/"\n" +
 					 /*UUID*/"\n" +
 					 /*UUID*/"\n" +
 					 ui.isAuthentificated +"\n"+
@@ -944,7 +944,7 @@ public class Server extends JFrame implements ActionListener{
 					 );
 			fw.close();
 
-			//ç”»åƒã‚’ä¿å­˜
+			//‰æ‘œ‚ğ•Û‘¶
 			ImageIO.write(ui.getStudentCard(), "png", studentCard);
 			ImageIO.write(ui.getMainPhoto(), "png", main_image);
 			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
@@ -952,16 +952,16 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(ui.getSubPhoto()[2], "png", sub3_image);
 			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
-			//é…åˆ—ã«è¿½åŠ 
+			//”z—ñ‚É’Ç‰Á
 			readUserFile(LoginFile);
 
 		} catch (IOException e) {
-			System.err.print("æ–°è¦ç™»éŒ²ã®éš›ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("V‹K“o˜^‚ÌÛ‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return;
 		}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ã®æƒ…å ±å¤‰æ›´
+	//ƒ†[ƒU‚Ìî•ñ•ÏX
 	public static void changeUserInfo(UserInfo ui) {
 
 		BufferedReader br = null;
@@ -970,7 +970,7 @@ public class Server extends JFrame implements ActionListener{
 		int line_counter = 0;
 
 		try {
-			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+			//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + ui.studentNumber + ".txt");
 			File main_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_main.png");
 			File sub1_image = new File(System.getProperty("user.dir") + "\\ID\\images\\" + ui.studentNumber + "\\" + ui.studentNumber + "_sub1.png");
@@ -981,13 +981,13 @@ public class Server extends JFrame implements ActionListener{
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 10) break;
 			}
 
-			//ã„ã„ã­ç³»åˆ—ã‚’ä¿å­˜
+			//‚¢‚¢‚ËŒn—ñ‚ğ•Û‘¶
 			String line10 = line;
 			line = br.readLine();
 			String line11 = line;
@@ -1002,7 +1002,7 @@ public class Server extends JFrame implements ActionListener{
 			file.delete();
 			file.createNewFile();
 
-			//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
+			//ƒ†[ƒUî•ñƒtƒ@ƒCƒ‹‚ğì¬
 			FileWriter fw = new FileWriter(file);
 			fw.write(ui.studentNumber + "\n" +
 					 ui.password + "\n" +
@@ -1024,7 +1024,7 @@ public class Server extends JFrame implements ActionListener{
 					 );
 			fw.close();
 
-			//ç”»åƒã‚’ä¿å­˜
+			//‰æ‘œ‚ğ•Û‘¶
 			ImageIO.write(ui.getMainPhoto(), "png", main_image);
 			ImageIO.write(ui.getSubPhoto()[0], "png", sub1_image);
 			ImageIO.write(ui.getSubPhoto()[1], "png", sub2_image);
@@ -1032,13 +1032,13 @@ public class Server extends JFrame implements ActionListener{
 			ImageIO.write(ui.getSubPhoto()[3], "png", sub4_image);
 
 		}catch(IOException e) {
-			System.err.print("ãƒ¦ãƒ¼ã‚¶æƒ…å ±å¤‰æ›´ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("ƒ†[ƒUî•ñ•ÏX‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return;
 		}
 		return;
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ã®æƒ…å ±å¤‰æ›´
+	//ƒOƒ‹[ƒv‚Ìî•ñ•ÏX
 	public static void changeGroupInfo(GroupInfo gi) {
 
 		BufferedReader br = null;
@@ -1047,20 +1047,20 @@ public class Server extends JFrame implements ActionListener{
 		int line_counter = 0;
 
 		try {
-			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+			//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 			File file = new File(System.getProperty("user.dir") + "\\Group\\" + gi.groupNumber + ".txt");
 			File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + gi.groupNumber + "_main.png");
 
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 4) break;
 			}
 
-			//ã„ã„ã­ç³»åˆ—ã‚’ä¿å­˜
+			//‚¢‚¢‚ËŒn—ñ‚ğ•Û‘¶
 			String line4 = line;
 			line = br.readLine();
 			String line5 = line;
@@ -1074,7 +1074,7 @@ public class Server extends JFrame implements ActionListener{
 			String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
 			nonhost.replace(" 0","");
 
-			//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
+			//ƒ†[ƒUî•ñƒtƒ@ƒCƒ‹‚ğì¬
 			FileWriter fw = new FileWriter(file);
 			fw.write(gi.name + "\n" +
 					 gi.relation + "\n" +
@@ -1089,54 +1089,55 @@ public class Server extends JFrame implements ActionListener{
 			fw.close();
 			fw.close();
 
-			//ç”»åƒã‚’ä¿å­˜
+			//‰æ‘œ‚ğ•Û‘¶
 			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
 		}catch(IOException e) {
-			System.err.print("ãƒ¦ãƒ¼ã‚¶æƒ…å ±å¤‰æ›´ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("ƒ†[ƒUî•ñ•ÏX‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return;
 		}
 		return;
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆ
+	//ƒOƒ‹[ƒvì¬
 	public static void makeGroup(GroupInfo gi) {
 
-		String path = System.getProperty("user.dir") + "\\Group"; //ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-		gi.groupNumber = UUID.randomUUID(); //UUIDã®ä½œæˆ
+		String path = System.getProperty("user.dir") + "\\Group"; //ƒfƒBƒŒƒNƒgƒŠ
+		gi.groupNumber = UUID.randomUUID(); //UUID‚Ìì¬
 		File GroupFile = new File(path + "\\" + gi.groupNumber.toString() + ".txt");
 		File dir = new File(path);
 		File image_dir = new File(path + "\\images");
 		File main_image = new File(path + "\\images" + "\\" + gi.groupNumber + "_main.png");
 
-		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ
+		//ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬
 		if(!dir.exists()) {
 			dir.mkdir();
 			image_dir.mkdir();
 		}
 
-		//ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
+		//ƒtƒ@ƒCƒ‹‚Ìì¬
 		if(!GroupFile.exists()) {
 			try {
 				GroupFile.createNewFile();
 			} catch (IOException e) {
-				System.err.println("ãƒ•ã‚¡ã‚¤ãƒ«ä½œæˆæ™‚ã«äºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ");
+				System.err.println("ƒtƒ@ƒCƒ‹ì¬‚É—\Šú‚¹‚ÊƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½");
 				return;
 			}
 		}
 
-		//ãƒ›ã‚¹ãƒˆã‚’å‚åŠ ã•ã›ã‚‹
+		//ƒzƒXƒg‚ğQ‰Á‚³‚¹‚é
 		joinGroup(String.valueOf(gi.hostUser), gi.groupNumber.toString(), true);
 
 		for(int i=0; i<gi.numberOfMember-1; i++) {
-			inviteUsers(String.valueOf(gi.hostUser), gi.groupNumber.toString());
+			if(gi.nonhostUser[i] != 0)
+				inviteUsers(String.valueOf(gi.nonhostUser[i]), gi.groupNumber.toString());
 		}
 
 		String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
 		nonhost.replace(" 0","");
 
 		try {
-			//ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
+			//ƒOƒ‹[ƒvî•ñƒtƒ@ƒCƒ‹‚ğì¬
 			FileWriter fw = new FileWriter(GroupFile);
 			fw.write(gi.name + "\n" +
 					 gi.relation + "\n" +
@@ -1150,20 +1151,20 @@ public class Server extends JFrame implements ActionListener{
 					 );
 			fw.close();
 
-			//ç”»åƒã‚’ä¿å­˜
+			//‰æ‘œ‚ğ•Û‘¶
 			ImageIO.write(gi.getMainPhoto(), "png", main_image);
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
 		} catch (IOException e) {
-			System.err.print("æ–°è¦ç™»éŒ²ã®éš›ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("V‹K“o˜^‚ÌÛ‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return;
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆæ™‚ã«æ‹›å¾…
+	//ƒOƒ‹[ƒvì¬‚Éµ‘Ò
 	public static void inviteUsers(String studentNum, String uuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1172,41 +1173,41 @@ public class Server extends JFrame implements ActionListener{
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
-			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+			//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 14) break;
 				strbuf.append(line + "\n");
 			}
 
-			//èª˜ã‚ã‚Œã¦ã„ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—(13è¡Œç›®)ã«è¿½åŠ 
-			if(line == "") { 	//ä»Šã¾ã§èª˜ã‚ã‚Œã¦ã„ãªã‹ã£ãŸå ´åˆ
+			//—U‚í‚ê‚Ä‚¢‚éƒOƒ‹[ƒv(13s–Ú)‚É’Ç‰Á
+			if(line == "") { 	//¡‚Ü‚Å—U‚í‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡
 				strbuf.append(uuid + "\n");
-			}else {				//ã™ã§ã«èª˜ã‚ã‚Œã¦ã„ãŸå ´åˆ
+			}else {				//‚·‚Å‚É—U‚í‚ê‚Ä‚¢‚½ê‡
 				strbuf.append(line + " " + uuid + "\n");
 			}
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
 		}catch(IOException e) {
-			System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("ƒOƒ‹[ƒvQ‰Á‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 		}finally {
 			try {
 				fr.close();
@@ -1218,8 +1219,8 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ 
-	public static boolean joinGroup(String studentNum, String uuid, boolean preventJudge) {	//preventJudgeãŒtrueã§judgeAllGatheredã‚’å®Ÿè¡Œã—ãªã„
+	//ƒOƒ‹[ƒvQ‰Á
+	public static boolean joinGroup(String studentNum, String uuid, boolean preventJudge) {	//preventJudge‚ªtrue‚ÅjudgeAllGathered‚ğÀs‚µ‚È‚¢
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
@@ -1227,58 +1228,58 @@ public class Server extends JFrame implements ActionListener{
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
-			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+			//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 13) break;
 				strbuf.append(line + "\n");
 			}
 
-			//å‚åŠ ã—ã¦ã„ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—(13è¡Œç›®)ã«è¿½åŠ 
+			//Q‰Á‚µ‚Ä‚¢‚éƒOƒ‹[ƒv(13s–Ú)‚É’Ç‰Á
 
-			if(line.length() < 3) { 	//ä»Šã¾ã§å‚åŠ ã—ã¦ãªã‹ã£ãŸå ´åˆ
+			if(line.length() < 3) { 	//¡‚Ü‚ÅQ‰Á‚µ‚Ä‚È‚©‚Á‚½ê‡
 				strbuf.append(uuid + "\n");
-			}else {				//ã™ã§ã«å‚åŠ ã—ãŸã“ã¨ãŒã‚ã‚‹å ´åˆ
+			}else {				//‚·‚Å‚ÉQ‰Á‚µ‚½‚±‚Æ‚ª‚ ‚éê‡
 				strbuf.append(line + " " + uuid + "\n");
 			}
 
-			line = br.readLine(); //æ¬¡ã®è¡Œ
+			line = br.readLine(); //Ÿ‚Ìs
 
-			//èª˜ã‚ã‚Œã¦ã„ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—(14è¡Œç›®)ã‹ã‚‰å‰Šé™¤
-			line = line.replace(uuid, ""); //UUIDã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			//ä¹…ä¿ç”°ãŒæ›¸ãæ›ãˆ
+			//—U‚í‚ê‚Ä‚¢‚éƒOƒ‹[ƒv(14s–Ú)‚©‚çíœ
+			line = line.replace(uuid, ""); //UUID‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			//‹v•Û“c‚ª‘‚«Š·‚¦
 			if(line.length() != 0) {
-				if(Character.isWhitespace(line.charAt(0)))  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-				if(Character.isWhitespace(line.charAt(line.length() - 1)))  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+				if(Character.isWhitespace(line.charAt(0)))  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+				if(Character.isWhitespace(line.charAt(line.length() - 1)))  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			}
 
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å‚åŠ ã—ãŸã‚°ãƒ«ãƒ¼ãƒ—ãŒå…¨å“¡é›†ã¾ã£ãŸã‹ç¢ºèª
+			//Q‰Á‚µ‚½ƒOƒ‹[ƒv‚ª‘SˆõW‚Ü‚Á‚½‚©Šm”F
 			if(!preventJudge) judgeAllGathered(uuid);
 
 		}catch(IOException e) {
-			System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("ƒOƒ‹[ƒvQ‰Á‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return false;
 
 		}finally {
-			try {//ä¹…ä¿ç”°ãŒæ›¸ãæ›ãˆ
+			try {//‹v•Û“c‚ª‘‚«Š·‚¦
 				fr.close();
 				br.close();
 				fw.close();//nullpointer
@@ -1292,7 +1293,7 @@ public class Server extends JFrame implements ActionListener{
 
 	}
 
-	//å…¨å“¡é›†ã¾ã£ãŸã‹
+	//‘SˆõW‚Ü‚Á‚½‚©
 	public static void judgeAllGathered(String uuid) {
         BufferedReader br = null;
         FileReader fr = null;
@@ -1308,7 +1309,7 @@ public class Server extends JFrame implements ActionListener{
 			br = new BufferedReader(fr);
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 8) break;
@@ -1320,39 +1321,39 @@ public class Server extends JFrame implements ActionListener{
 			}
 			strbuf.append(line + "\n");
 
-			//éãƒ›ã‚¹ãƒˆãƒ¦ãƒ¼ã‚¶ãŒã‚°ãƒ«ãƒ¼ãƒ—ã«å…¥ã£ã¦ã„ã‚‹ã‹ç¢ºèª
+			//”ñƒzƒXƒgƒ†[ƒU‚ªƒOƒ‹[ƒv‚É“ü‚Á‚Ä‚¢‚é‚©Šm”F
 			int i = 0;
 			int count_true = 0;
 			while(students[i] != null) {
 				if(judgeJoinedGroup(students[i], uuid)) count_true++;
 			}
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 11) break;
 				strbuf.append(line + "\n");
 			}
 
-			//äººæ•°ã®è¡Œ
+			//l”‚Ìs
 			boolean judge = false;
 			if(count_true + 1 == Integer.parseInt(line))
 				judge = true;
 			strbuf.append(line + "\n");
 
-			//å…¨å“¡é›†ã¾ã£ãŸã‹ã®è¡Œ
-			line = br.readLine(); //æ¬¡ã®è¡Œ
+			//‘SˆõW‚Ü‚Á‚½‚©‚Ìs
+			line = br.readLine(); //Ÿ‚Ìs
 			if(judge) {
 				strbuf.append("true\n");
 			}else {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -1361,7 +1362,7 @@ public class Server extends JFrame implements ActionListener{
         }
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚åŠ ã®æœ‰ç„¡ã‚’ãƒã‚§ãƒƒã‚¯
+	//ƒOƒ‹[ƒv‚ÌQ‰Á‚Ì—L–³‚ğƒ`ƒFƒbƒN
 	public static boolean judgeJoinedGroup(String studentNum, String uuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1369,20 +1370,20 @@ public class Server extends JFrame implements ActionListener{
 		StringBuffer strbuf = new StringBuffer("");
 
 		try {
-			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+			//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 13) break;
 				strbuf.append(line + "\n");
 			}
 
-			//å‚åŠ ã—ã¦ã„ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—ã«uuidãŒã‚ã‚‹ã¨ãtrue
+			//Q‰Á‚µ‚Ä‚¢‚éƒOƒ‹[ƒv‚Éuuid‚ª‚ ‚é‚Æ‚«true
 			if(line.contains(uuid)) {
 				return true;
 			}else {
@@ -1390,7 +1391,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 		}catch(IOException e) {
-			System.err.print("judgeJoinedGroupã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("judgeJoinedGroup‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return false;
 
 		}finally {
@@ -1404,67 +1405,67 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ æ‹’å¦ãƒ»ã‚°ãƒ«ãƒ¼ãƒ—å‰Šé™¤
+	//ƒOƒ‹[ƒvQ‰Á‹‘”ÛEƒOƒ‹[ƒvíœ
 	public static boolean deleteGroup(String uuid) {
         BufferedReader br = null;
         FileReader fr = null;
         String line;
 
 		try {
-			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+			//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 			File file = new File(System.getProperty("user.dir") + "\\Group\\" + uuid + ".txt");
 			File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + uuid + "_main.png");
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 4) break;
 			}
 
-			//ã„ã„ã­ã—ãŸã‚°ãƒ«ãƒ¼ãƒ—é”
+			//‚¢‚¢‚Ë‚µ‚½ƒOƒ‹[ƒv’B
 			String Groups[] = line.split(" ");
 
-			//ã“ã“ã§ã„ã„ã­ã‚’é€ã£ãŸãƒ»é€ã‚‰ã‚ŒãŸã‚°ãƒ«ãƒ¼ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã®ã„ã„ã­ã‹ã‚‰ã“ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’å‰Šé™¤
-			for(int i = 0; i < Groups.length; i++) //refuseGood(Groups[i],uuid); //ã„ã„ã­ã—ãŸã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è‡ªåˆ†ãŒé€ã£ãŸã„ã„ã­ã‚’æ¶ˆã™(ã„ã„ã­ã•ã‚ŒãŸã‚°ãƒ«ãƒ¼ãƒ—,è‡ªåˆ†)
-			for(int j = 0; j < Groups.length; j++) //refuseGood(uuid,Groups[i]); //ã„ã„ã­ã•ã‚ŒãŸã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è‡ªåˆ†ã«ã„ã„ã­ã—ãŸè¨˜éŒ²ã‚’æ¶ˆã™(è‡ªåˆ†,ã„ã„ã­ã—ãŸã‚°ãƒ«ãƒ¼ãƒ—)
+			//‚±‚±‚Å‚¢‚¢‚Ë‚ğ‘—‚Á‚½E‘—‚ç‚ê‚½ƒOƒ‹[ƒvƒtƒ@ƒCƒ‹‚Ì‚¢‚¢‚Ë‚©‚ç‚±‚ÌƒOƒ‹[ƒv‚ğíœ
+			for(int i = 0; i < Groups.length; i++) //refuseGood(Groups[i],uuid); //‚¢‚¢‚Ë‚µ‚½ƒOƒ‹[ƒv‚Ìƒtƒ@ƒCƒ‹‚©‚ç©•ª‚ª‘—‚Á‚½‚¢‚¢‚Ë‚ğÁ‚·(‚¢‚¢‚Ë‚³‚ê‚½ƒOƒ‹[ƒv,©•ª)
+			for(int j = 0; j < Groups.length; j++) //refuseGood(uuid,Groups[i]); //‚¢‚¢‚Ë‚³‚ê‚½ƒOƒ‹[ƒv‚Ìƒtƒ@ƒCƒ‹‚©‚ç©•ª‚É‚¢‚¢‚Ë‚µ‚½‹L˜^‚ğÁ‚·(©•ª,‚¢‚¢‚Ë‚µ‚½ƒOƒ‹[ƒv)
 
-			//ãƒ›ã‚¹ãƒˆãƒ¦ãƒ¼ã‚¶ã®ã‚°ãƒ«ãƒ¼ãƒ—ã«é–¢ã™ã‚‹è¨˜éŒ²ã‚’å‰Šé™¤
+			//ƒzƒXƒgƒ†[ƒU‚ÌƒOƒ‹[ƒv‚ÉŠÖ‚·‚é‹L˜^‚ğíœ
 			deleteGroupLog(line,uuid);
 
-			//æ¬¡ã®è¡Œ
+			//Ÿ‚Ìs
 			line = br.readLine();
 
-			//æ–‡å­—åˆ—ã‚’ã‚¹ãƒšãƒ¼ã‚¹ã§åˆ†å‰²
+			//•¶š—ñ‚ğƒXƒy[ƒX‚Å•ªŠ„
 			String nonhoststudents[] = line.split(" ");
 
-			//äººæ•°ã®è¡Œã¾ã§ã‚¹ã‚­ãƒƒãƒ—
+			//l”‚Ìs‚Ü‚ÅƒXƒLƒbƒv
 			for(int i = 0; i<3; i++) {
 				line = br.readLine();
 			}
 
-			//ã‚°ãƒ«ãƒ¼ãƒ—ã®äººæ•°ã‚’è¨˜éŒ²
+			//ƒOƒ‹[ƒv‚Ìl”‚ğ‹L˜^
 			int num = Integer.parseInt(line);
 
-			//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã‹ã‚‰ã‚°ãƒ«ãƒ¼ãƒ—ã«é–¢ã™ã‚‹è¨˜éŒ²ã‚’å‰Šé™¤
+			//ƒ†[ƒUî•ñ‚©‚çƒOƒ‹[ƒv‚ÉŠÖ‚·‚é‹L˜^‚ğíœ
 			for(int i = 0; i < num - 1; i++) {
 				deleteGroupLog(nonhoststudents[num],uuid);
 			}
 
-			//ã‚°ãƒ«ãƒ¼ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
+			//ƒOƒ‹[ƒvƒtƒ@ƒCƒ‹íœ
 			file.delete();
 
-			//ç”»åƒå‰Šé™¤
+			//‰æ‘œíœ
 			main_image.delete();
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
 		}catch(IOException e) {
-			System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—å‚åŠ æ‹’å¦ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+			System.err.print("ƒOƒ‹[ƒvQ‰Á‹‘”Û‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			return false;
 
 		}finally {
@@ -1481,7 +1482,7 @@ public class Server extends JFrame implements ActionListener{
 
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶ã®ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒ­ã‚°ã‚’å‰Šé™¤
+	//ƒ†[ƒU‚ÌƒOƒ‹[ƒv‚ÌƒƒO‚ğíœ
 	public static void deleteGroupLog(String studentNum, String uuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1490,54 +1491,54 @@ public class Server extends JFrame implements ActionListener{
 		StringBuffer strbuf = new StringBuffer("");
 
 			try {
-				//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+				//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 				File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 				fr = new FileReader(file);
 				br = new BufferedReader(fr);
 				int line_counter = 0;
 
-				//è©²å½“è¡Œã‚’æ¤œç´¢
+				//ŠY“–s‚ğŒŸõ
 				while((line = br.readLine()) != null) {
 					line_counter++;
 					if(line_counter == 13) break;
 					strbuf.append(line + "\n");
 				}
 
-				//ã™ã§ã«å‚åŠ ã—ã¦ã„ã‚‹å ´åˆ
+				//‚·‚Å‚ÉQ‰Á‚µ‚Ä‚¢‚éê‡
 				if(line.contains(uuid)) {
-					line = line.replace(uuid, ""); //UUIDã‚’å‰Šé™¤
-					line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-					if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-					if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+					line = line.replace(uuid, ""); //UUID‚ğíœ
+					line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+					if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+					if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 					strbuf.append(line + "\n");
 				}
 
-				line = br.readLine(); //æ¬¡ã®è¡Œ
+				line = br.readLine(); //Ÿ‚Ìs
 
-				//èª˜ã‚ã‚Œã¦ã„ã‚‹æ®µéšã®å ´åˆ
+				//—U‚í‚ê‚Ä‚¢‚é’iŠK‚Ìê‡
 				if(line.contains(uuid)) {
-					line = line.replace(uuid, ""); //UUIDã‚’å‰Šé™¤
-					line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-					if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-					if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+					line = line.replace(uuid, ""); //UUID‚ğíœ
+					line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+					if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+					if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 					strbuf.append(line + "\n");
 				}
 
-				//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+				//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 				while((line = br.readLine()) != null) {
 					strbuf.append(line + "\n");
 				}
 
-				//æ›¸ãè¾¼ã¿
+				//‘‚«‚İ
 				fw = new FileWriter(file);
 				fw.write(strbuf.toString());
 
-				//å†åº¦èª­ã¿è¾¼ã¿
+				//Ä“x“Ç‚İ‚İ
 				readAllUserFiles();
 				readAllGroupFiles();
 
 			}catch(IOException e) {
-				System.err.print("ã‚°ãƒ«ãƒ¼ãƒ—æ‹›å¾…å‰Šé™¤ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+				System.err.print("ƒOƒ‹[ƒvµ‘Òíœ‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 			}finally {
 				try {
 					fr.close();
@@ -1549,85 +1550,85 @@ public class Server extends JFrame implements ActionListener{
 			}
 	}
 
-	//ãƒ¦ãƒ¼ã‚¶å‰Šé™¤
+	//ƒ†[ƒUíœ
 	public static boolean deleteUser(String studentNum) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		File image_user_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\" + studentNum);
 		String line;
-		String SentGoodStudents[] = new String[100]; //ã„ã„ã­ã‚’ã—ãŸã²ã¨ã€ã¨ã‚Šã‚ãˆãš100äººã¾ã§
-		String BeingSentGoodStudents[] = new String[100]; //ã„ã„ã­ã‚’ãã‚ŒãŸäººã€100äºº
-		String MatchingStudents[] = new String[100]; //ãƒãƒƒãƒãƒ³ã‚°ã—ãŸäººã€100äºº
-		String Groups[] = new String[100]; //å‚åŠ ã—ã¦ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—ã€ã¨ã‚Šã‚ãˆãš100å€‹ã¾ã§
-		String InvitedGroups[] = new String[100]; //èª˜ã‚ã‚Œã¦ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—ã€ã¨ã‚Šã‚ãˆãš100å€‹ã¾ã§
+		String SentGoodStudents[] = new String[100]; //‚¢‚¢‚Ë‚ğ‚µ‚½‚Ğ‚ÆA‚Æ‚è‚ ‚¦‚¸100l‚Ü‚Å
+		String BeingSentGoodStudents[] = new String[100]; //‚¢‚¢‚Ë‚ğ‚­‚ê‚½lA100l
+		String MatchingStudents[] = new String[100]; //ƒ}ƒbƒ`ƒ“ƒO‚µ‚½lA100l
+		String Groups[] = new String[100]; //Q‰Á‚µ‚Ä‚éƒOƒ‹[ƒvA‚Æ‚è‚ ‚¦‚¸100ŒÂ‚Ü‚Å
+		String InvitedGroups[] = new String[100]; //—U‚í‚ê‚Ä‚éƒOƒ‹[ƒvA‚Æ‚è‚ ‚¦‚¸100ŒÂ‚Ü‚Å
 
 			try {
-				//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+				//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 				File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 				fr = new FileReader(file);
 				br = new BufferedReader(fr);
 				int line_counter = 0;
 
-				//è©²å½“è¡Œã‚’æ¤œç´¢
+				//ŠY“–s‚ğŒŸõ
 				while((line = br.readLine()) != null) {
 					line_counter++;
 					if(line_counter == 10) break;
 				}
 
-				//ç©ºç™½ã§åˆ†å‰²ã—ã¦ä¿å­˜ã€ã„ã„ã­ã‚’é€ã£ãŸã²ã¨
+				//‹ó”’‚Å•ªŠ„‚µ‚Ä•Û‘¶A‚¢‚¢‚Ë‚ğ‘—‚Á‚½‚Ğ‚Æ
 				SentGoodStudents = line.split(" ");
-				//ã“ã“ã§ã„ã„ã­å‰Šé™¤
+				//‚±‚±‚Å‚¢‚¢‚Ëíœ
 				for(int i=0; i<SentGoodStudents.length; i++) {
 					deleteReceivedGood(SentGoodStudents[i], studentNum);
 				}
 
-				//æ¬¡ã®è¡Œ
+				//Ÿ‚Ìs
 				line = br.readLine();
 
-				//ç©ºç™½ã§åˆ†å‰²ã—ã¦ä¿å­˜ã€ã„ã„ã­ã‚’ãã‚ŒãŸäºº
+				//‹ó”’‚Å•ªŠ„‚µ‚Ä•Û‘¶A‚¢‚¢‚Ë‚ğ‚­‚ê‚½l
 				BeingSentGoodStudents = line.split(" ");
-				//ã“ã“ã§ã„ã„ã­å‰Šé™¤
+				//‚±‚±‚Å‚¢‚¢‚Ëíœ
 				for(int i=0; i<BeingSentGoodStudents.length; i++) {
 					deleteGood(BeingSentGoodStudents[i], studentNum);
 				}
 
-				//æ¬¡ã®è¡Œ
+				//Ÿ‚Ìs
 				line = br.readLine();
 
-				//ç©ºç™½ã§åˆ†å‰²ã—ã¦ä¿å­˜ã€ãƒãƒƒãƒãƒ³ã‚°ã—ãŸäºº
+				//‹ó”’‚Å•ªŠ„‚µ‚Ä•Û‘¶Aƒ}ƒbƒ`ƒ“ƒO‚µ‚½l
 				MatchingStudents = line.split(" ");
 				for(int i=0; i<MatchingStudents.length; i++) {
 					deleteMatching(MatchingStudents[i], studentNum, false);
 				}
 
-				//æ¬¡ã®è¡Œ
+				//Ÿ‚Ìs
 				line = br.readLine();
 
-				//ç©ºç™½ã§åˆ†å‰²ã—ã¦ä¿å­˜ã€å‚åŠ ã—ã¦ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—
+				//‹ó”’‚Å•ªŠ„‚µ‚Ä•Û‘¶AQ‰Á‚µ‚Ä‚éƒOƒ‹[ƒv
 				Groups = line.split(" ");
 				for(int i=0; i<Groups.length; i++) {
 					deleteGroup(Groups[i]);
 				}
 
-				//æ¬¡ã®è¡Œ
+				//Ÿ‚Ìs
 				line = br.readLine();
 
-				//ç©ºç™½ã§åˆ†å‰²ã—ã¦ä¿å­˜ã€èª˜ã‚ã‚Œã¦ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—
+				//‹ó”’‚Å•ªŠ„‚µ‚Ä•Û‘¶A—U‚í‚ê‚Ä‚éƒOƒ‹[ƒv
 				InvitedGroups = line.split(" ");
 				for(int i=0; i<InvitedGroups.length; i++) {
 					deleteGroup(InvitedGroups[i]);
 				}
 
-				//å‰Šé™¤
+				//íœ
 				file.delete();
 				image_user_dir.delete();
 
-				//å†åº¦èª­ã¿è¾¼ã¿
+				//Ä“x“Ç‚İ‚İ
 				readAllUserFiles();
 				readAllGroupFiles();
 
 			}catch(IOException e) {
-				System.err.print("ãƒ¦ãƒ¼ã‚¶å‰Šé™¤ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+				System.err.print("ƒ†[ƒUíœ‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 				return false;
 			}finally {
 				try {
@@ -1641,7 +1642,7 @@ public class Server extends JFrame implements ActionListener{
 			return true;
 	}
 
-	//ã„ã„ã­
+	//‚¢‚¢‚Ë
  	public static boolean goodUser(String my_num, String your_num) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1655,7 +1656,7 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 10) break;
@@ -1663,27 +1664,27 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			String students[] = null;
-			String line10 = line;	//10è¡Œç›®ã„ã„ã­ã—ãŸ
+			String line10 = line;	//10s–Ú‚¢‚¢‚Ë‚µ‚½
 
-			//æ¬¡ã®è¡Œ
+			//Ÿ‚Ìs
 			line = br.readLine();
 
-			String line11 = line;	//11è¡Œç›®ã„ã„ã­ã•ã‚ŒãŸ
+			String line11 = line;	//11s–Ú‚¢‚¢‚Ë‚³‚ê‚½
 
 			if(line11 != null) {
 				students = line11.split(" ");
 			}
 
-			//ä¸€è‡´ã—ã¦ãŸã‚‰ãƒãƒƒãƒ
+			//ˆê’v‚µ‚Ä‚½‚çƒ}ƒbƒ`
 			for(int i=0; i<students.length;) {
 				if(students[i] == your_num) {
-					deleteGood(your_num, my_num); //ç›¸æ‰‹ã®ã„ã„ã­ã—ãŸæ¬„ã‹ã‚‰è‡ªåˆ†ã‚’æ¶ˆã™
-					deleteReceivedGood(my_num, your_num); //è‡ªåˆ†ã®ã„ã„ã­ã‚’å—ã‘å–ã£ãŸæ¬„ã‹ã‚‰ç›¸æ‰‹ã‚’æ¶ˆã™
+					deleteGood(your_num, my_num); //‘Šè‚Ì‚¢‚¢‚Ë‚µ‚½—“‚©‚ç©•ª‚ğÁ‚·
+					deleteReceivedGood(my_num, your_num); //©•ª‚Ì‚¢‚¢‚Ë‚ğó‚¯æ‚Á‚½—“‚©‚ç‘Šè‚ğÁ‚·
 					return matchUsers(my_num, your_num, false);
 				}
 			}
 
-			//è‡ªåˆ†ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã€ã„ã„ã­ã‚’é€ã£ãŸäººã«ç›¸æ‰‹ã‚’è¿½åŠ 
+			//©•ª‚Ìƒtƒ@ƒCƒ‹‚ÌA‚¢‚¢‚Ë‚ğ‘—‚Á‚½l‚É‘Šè‚ğ’Ç‰Á
 			if(line10 == "") {
 				strbuf.append(your_num + "\n");
 			}else {
@@ -1692,17 +1693,17 @@ public class Server extends JFrame implements ActionListener{
 
 			strbuf.append(line11 + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -1714,7 +1715,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
@@ -1722,8 +1723,8 @@ public class Server extends JFrame implements ActionListener{
  		return true;
  	}
 
- 	//ãƒ¦ãƒ¼ã‚¶ãƒãƒƒãƒãƒ³ã‚°
- 	public static boolean matchUsers(String myId, String yourId, boolean preventLoop) {	//preventLoopãŒtrueãªã‚‰å†å¸°ã‚’è¡Œã‚ãªã„
+ 	//ƒ†[ƒUƒ}ƒbƒ`ƒ“ƒO
+ 	public static boolean matchUsers(String myId, String yourId, boolean preventLoop) {	//preventLoop‚ªtrue‚È‚çÄ‹A‚ğs‚í‚È‚¢
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
@@ -1736,27 +1737,27 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 12) break;
 				strbuf.append(line + "\n");
 			}
 
-			//è‡ªåˆ†ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã€ã„ã„ã­ã‚’é€ã£ãŸäººã«ç›¸æ‰‹ã‚’è¿½åŠ 
+			//©•ª‚Ìƒtƒ@ƒCƒ‹‚ÌA‚¢‚¢‚Ë‚ğ‘—‚Á‚½l‚É‘Šè‚ğ’Ç‰Á
 			if(line == "") {
 				strbuf.append(yourId + "\n");
 			}else {
 				strbuf.append(line + " " + yourId + "\n");
 			}
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
@@ -1774,7 +1775,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
@@ -1782,7 +1783,7 @@ public class Server extends JFrame implements ActionListener{
  		return true;
  	}
 
- 	//ã„ã„ã­ã‚’æ¶ˆã™
+ 	//‚¢‚¢‚Ë‚ğÁ‚·
  	public static boolean deleteGood(String myId, String yourId) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1796,29 +1797,29 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 10) break;
 				strbuf.append(line + "\n");
 			}
 
-			line = line.replace(yourId, ""); //numã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+			line = line.replace(yourId, ""); //num‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -1830,7 +1831,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
@@ -1838,7 +1839,7 @@ public class Server extends JFrame implements ActionListener{
  		return true;
  	}
 
- 	//å—ã‘å–ã£ãŸã„ã„ã­ã‚’æ¶ˆã™
+ 	//ó‚¯æ‚Á‚½‚¢‚¢‚Ë‚ğÁ‚·
  	public static boolean deleteReceivedGood(String myId, String yourId) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1852,29 +1853,29 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 11) break;
 				strbuf.append(line + "\n");
 			}
 
-			line = line.replace(yourId, ""); //numã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+			line = line.replace(yourId, ""); //num‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -1886,7 +1887,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
@@ -1894,7 +1895,7 @@ public class Server extends JFrame implements ActionListener{
  		return true;
  	}
 
-	//ã‚°ãƒ«ãƒ¼ãƒ—ã„ã„ã­
+	//ƒOƒ‹[ƒv‚¢‚¢‚Ë
  	public static boolean goodGroup(String myuuid, String youruuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1908,7 +1909,7 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 4) break;
@@ -1916,17 +1917,17 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			String groups[] = null;
-			String line4 = line;	//4è¡Œç›®
+			String line4 = line;	//4s–Ú
 
-			//æ¬¡ã®è¡Œ
+			//Ÿ‚Ìs
 			line = br.readLine();
 
-			String line5 = line;	//5è¡Œç›®
+			String line5 = line;	//5s–Ú
 
 			if(line5 != null) {
 				groups = line5.split(" ");
 
-				//ä¸€è‡´ã—ã¦ãŸã‚‰ãƒãƒƒãƒ
+				//ˆê’v‚µ‚Ä‚½‚çƒ}ƒbƒ`
 				for(int i=0; i<groups.length;) {
 					if(groups[i] == youruuid) {
 						return matchGroups(myuuid, youruuid, false);
@@ -1934,7 +1935,7 @@ public class Server extends JFrame implements ActionListener{
 				}
 			}
 
-			//è‡ªåˆ†ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã€ã„ã„ã­ã‚’é€ã£ãŸäººã«ç›¸æ‰‹ã‚’è¿½åŠ 
+			//©•ª‚Ìƒtƒ@ƒCƒ‹‚ÌA‚¢‚¢‚Ë‚ğ‘—‚Á‚½l‚É‘Šè‚ğ’Ç‰Á
 			if(line4 == "") {
 				strbuf.append(youruuid + "\n");
 			}else {
@@ -1943,16 +1944,16 @@ public class Server extends JFrame implements ActionListener{
 
 			strbuf.append(line5 + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -1964,7 +1965,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
@@ -1972,7 +1973,7 @@ public class Server extends JFrame implements ActionListener{
  		return true;
 	}
 
- 	//ã‚°ãƒ«ãƒ¼ãƒ—ãƒãƒƒãƒãƒ³ã‚°
+ 	//ƒOƒ‹[ƒvƒ}ƒbƒ`ƒ“ƒO
  	public static boolean matchGroups(String myuuid, String youruuid, boolean preventLoop) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -1986,26 +1987,26 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 6) break;
 				strbuf.append(line + "\n");
 			}
 
-			//è‡ªåˆ†ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã€ã„ã„ã­ã‚’é€ã£ãŸäººã«ç›¸æ‰‹ã‚’è¿½åŠ 
+			//©•ª‚Ìƒtƒ@ƒCƒ‹‚ÌA‚¢‚¢‚Ë‚ğ‘—‚Á‚½l‚É‘Šè‚ğ’Ç‰Á
 			if(line == "") {
 				strbuf.append(youruuid + "\n");
 			}else {
 				strbuf.append(line + " " + youruuid + "\n");
 			}
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
@@ -2023,7 +2024,7 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
@@ -2031,7 +2032,7 @@ public class Server extends JFrame implements ActionListener{
  		return true;
  	}
 
- 	//ã‚°ãƒ«ãƒ¼ãƒ—ã„ã„ã­ã‚’æ¶ˆã™
+ 	//ƒOƒ‹[ƒv‚¢‚¢‚Ë‚ğÁ‚·
  	public static void deleteGroupGood(String myuuid, String youruuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -2045,29 +2046,29 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 4) break;
 				strbuf.append(line + "\n");
 			}
 
-			line = line.replace(youruuid, ""); //uuidã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+			line = line.replace(youruuid, ""); //uuid‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -2078,13 +2079,13 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
  	}
 
- 	//å—ã‘å–ã£ãŸã‚°ãƒ«ãƒ¼ãƒ—ã„ã„ã­ã‚’æ¶ˆã™
+ 	//ó‚¯æ‚Á‚½ƒOƒ‹[ƒv‚¢‚¢‚Ë‚ğÁ‚·
  	public static boolean deleteReceivedGroupGood(String myuuid, String youruuid) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -2098,29 +2099,29 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 5) break;
 				strbuf.append(line + "\n");
 			}
 
-			line = line.replace(youruuid, ""); //uuidã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+			line = line.replace(youruuid, ""); //uuid‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
-			//å†åº¦èª­ã¿è¾¼ã¿
+			//Ä“x“Ç‚İ‚İ
 			readAllUserFiles();
 			readAllGroupFiles();
 
@@ -2132,14 +2133,14 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
  		return true;
  	}
 
- 	//ãƒãƒƒãƒãƒ³ã‚°å‰Šé™¤
+ 	//ƒ}ƒbƒ`ƒ“ƒOíœ
  	public static void deleteMatching(String myId, String yourId, boolean preventLoop) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -2153,25 +2154,25 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 12) break;
 				strbuf.append(line + "\n");
 			}
 
-			line = line.replace(yourId, ""); //numã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+			line = line.replace(yourId, ""); //num‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
@@ -2188,14 +2189,14 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
 
  	}
 
- 	//ã‚°ãƒ«ãƒ¼ãƒ—ãƒãƒƒãƒãƒ³ã‚°å‰Šé™¤
+ 	//ƒOƒ‹[ƒvƒ}ƒbƒ`ƒ“ƒOíœ
  	public static void deleteGroupMatching(String myuuid, String youruuid, boolean preventLoop) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -2209,25 +2210,25 @@ public class Server extends JFrame implements ActionListener{
  			String line;
 			int line_counter = 0;
 
-			//è©²å½“è¡Œã‚’æ¤œç´¢
+			//ŠY“–s‚ğŒŸõ
 			while((line = br.readLine()) != null) {
 				line_counter++;
 				if(line_counter == 6) break;
 				strbuf.append(line + "\n");
 			}
 
-			line = line.replace(youruuid, ""); //numã‚’å‰Šé™¤
-			line = line.replace("  "," "); //ä¸¦ã‚“ã ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //å…ˆé ­ã®ç©ºç™½ã‚’å‰Šé™¤
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //æœ€å¾Œã®ç©ºç™½ã‚’å‰Šé™¤
+			line = line.replace(youruuid, ""); //num‚ğíœ
+			line = line.replace("  "," "); //•À‚ñ‚¾‹ó”’‚ğíœ
+			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //æ“ª‚Ì‹ó”’‚ğíœ
+			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //ÅŒã‚Ì‹ó”’‚ğíœ
 			strbuf.append(line + "\n");
 
-			//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+			//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 			while((line = br.readLine()) != null) {
 				strbuf.append(line + "\n");
 			}
 
-			//æ›¸ãè¾¼ã¿
+			//‘‚«‚İ
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 
@@ -2244,13 +2245,13 @@ public class Server extends JFrame implements ActionListener{
 				fw.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
+				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
 				e.printStackTrace();
 			}
    		}
  	}
 
-	//èªè¨¼å†…éƒ¨ã‚¯ãƒ©ã‚¹
+	//”FØ“à•”ƒNƒ‰ƒX
 	class Authentificate extends JFrame implements ActionListener{
 		JPanel cardPanel;
 		CardLayout cardLayout;
@@ -2267,7 +2268,7 @@ public class Server extends JFrame implements ActionListener{
 
 		public Authentificate(){
 
-			super("ãƒ¦ãƒ¼ã‚¶ãƒ¼èªè¨¼");
+			super("ƒ†[ƒU[”FØ");
 			cardPanel = new JPanel();
 		    cardLayout = new CardLayout();
 		    cardPanel.setLayout(cardLayout);
@@ -2284,7 +2285,7 @@ public class Server extends JFrame implements ActionListener{
 		}
 
 		public void prepareAuthen() {
-			String path = System.getProperty("user.dir") + "\\ID"; //ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+			String path = System.getProperty("user.dir") + "\\ID"; //ƒfƒBƒŒƒNƒgƒŠ
 			File[] fileList = new File(path).listFiles();
 
 			if (fileList != null) {
@@ -2296,13 +2297,13 @@ public class Server extends JFrame implements ActionListener{
 
 		        for (int i = 0; i < fileList.length; i++) {
 		            try {
-						//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+						//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 						file = fileList[i];
 						fr = new FileReader(file);
 						br = new BufferedReader(fr);
 						int line_counter = 0;
 
-						//è©²å½“è¡Œã‚’æ¤œç´¢
+						//ŠY“–s‚ğŒŸõ
 						while((line = br.readLine()) != null) {
 							line_counter++;
 
@@ -2316,7 +2317,7 @@ public class Server extends JFrame implements ActionListener{
 						}
 					}
 		            catch(IOException e) {
-						System.err.print("èªè¨¼ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("”FØ‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 
 					}
 		            finally {
@@ -2341,19 +2342,19 @@ public class Server extends JFrame implements ActionListener{
 			pageAuthen++;
 
 			try {
-				//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+				//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 				file = notAuthentificatededUsers[pageAuthen];
 				fr = new FileReader(file);
 				br = new BufferedReader(fr);
 
-				line = br.readLine(); //æ¬¡ã®è¡Œ
+				line = br.readLine(); //Ÿ‚Ìs
 				lUserNumberAuthen.setText(line);
 
-				line = br.readLine(); //æ¬¡ã®è¡Œ
-				line = br.readLine(); //æ¬¡ã®è¡Œ
+				line = br.readLine(); //Ÿ‚Ìs
+				line = br.readLine(); //Ÿ‚Ìs
 				lUserNameAuthen.setText(line);
 
-				//è©²å½“è¡Œã‚’æ¤œç´¢
+				//ŠY“–s‚ğŒŸõ
 				int line_counter = 3;
 				while((line = br.readLine()) != null) {
 					line_counter++;
@@ -2364,7 +2365,7 @@ public class Server extends JFrame implements ActionListener{
 				}
 			}
             catch(IOException e) {
-				System.err.print("èªè¨¼ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+				System.err.print("”FØ‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 
 			}
 			/*finally {
@@ -2383,9 +2384,9 @@ public class Server extends JFrame implements ActionListener{
 			JPanel card=new JPanel();
 			card.setLayout(null);
 
-			JLabel lTitleAuthen = new JLabel("èªè¨¼");
+			JLabel lTitleAuthen = new JLabel("”FØ");
 			lTitleAuthen.setBounds(w/4,h/15,w/2,h/15);
-			lTitleAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/10));
+			lTitleAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/10));
 			lTitleAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lTitleAuthen);
 
@@ -2394,51 +2395,51 @@ public class Server extends JFrame implements ActionListener{
 	        lStudentCardAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lStudentCardAuthen);
 
-	        JLabel lNameAuthen = new JLabel("åå‰");
+	        JLabel lNameAuthen = new JLabel("–¼‘O");
 	        lNameAuthen.setBounds(w/10,7*h/15,w/5,h/15);
-	        lNameAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lNameAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lNameAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lNameAuthen);
 
 	        lUserNameAuthen.setBounds(2*w/5,7*h/15,3*w/5,h/15);
-	        lUserNameAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lUserNameAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lUserNameAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lUserNameAuthen);
 
-	        JLabel lNumberAuthen = new JLabel("å­¦ç±ç•ªå·");
+	        JLabel lNumberAuthen = new JLabel("ŠwĞ”Ô†");
 	        lNumberAuthen.setBounds(w/10,8*h/15,w/5,h/15);
-	        lNumberAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lNumberAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lNumberAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lNumberAuthen);
 
 	        lUserNumberAuthen.setBounds(2*w/5,8*h/15,3*w/5,h/15);
-	        lUserNumberAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lUserNumberAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lUserNumberAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lUserNumberAuthen);
 
-	        JLabel lLineIdAuthen = new JLabel("LINEã®ID");
+	        JLabel lLineIdAuthen = new JLabel("LINE‚ÌID");
 	        lLineIdAuthen.setBounds(w/10,9*h/15,w/5,h/15);
-	        lLineIdAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lLineIdAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lLineIdAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lLineIdAuthen);
 
 	        lUserLineIdAuthen.setBounds(2*w/5,9*h/15,3*w/5,h/15);
-	        lUserLineIdAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lUserLineIdAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lUserLineIdAuthen.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lUserLineIdAuthen);
 
-	        JButton bAcceptAuthen=new JButton("èªè¨¼");
+	        JButton bAcceptAuthen=new JButton("”FØ");
 	        bAcceptAuthen.setBounds(w/5,5*h/6,w/4,h/15);
 	        bAcceptAuthen.addActionListener(this);
-	        bAcceptAuthen.setActionCommand("èªè¨¼");
-	        bAcceptAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        bAcceptAuthen.setActionCommand("”FØ");
+	        bAcceptAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        card.add(bAcceptAuthen);
 
-	        JButton bRejectAuthen=new JButton("å´ä¸‹");
+	        JButton bRejectAuthen=new JButton("‹p‰º");
 	        bRejectAuthen.setBounds(11*w/20,5*h/6,w/4,h/15);
 	        bRejectAuthen.addActionListener(this);
-	        bRejectAuthen.setActionCommand("å´ä¸‹");
-	        bRejectAuthen.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        bRejectAuthen.setActionCommand("‹p‰º");
+	        bRejectAuthen.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        card.add(bRejectAuthen);
 
 	        cardPanel.add(card,"Authen");
@@ -2447,7 +2448,7 @@ public class Server extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent ae) {
 			String cmd=ae.getActionCommand();
 
-			if(cmd.equals("èªè¨¼")) {
+			if(cmd.equals("”FØ")) {
 				 BufferedReader br = null;
 			        FileReader fr = null;
 			        FileWriter fw = null;
@@ -2455,13 +2456,13 @@ public class Server extends JFrame implements ActionListener{
 			        StringBuffer strbuf = new StringBuffer("");
 
 					try {
-						//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+						//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 						File file = notAuthentificatededUsers[pageAuthen];
 						fr = new FileReader(file);
 						br = new BufferedReader(fr);
 						int line_counter = 0;
 
-						//è©²å½“è¡Œã‚’æ¤œç´¢
+						//ŠY“–s‚ğŒŸõ
 						while((line = br.readLine()) != null) {
 							line_counter++;
 							if(line_counter == 15) {
@@ -2472,33 +2473,33 @@ public class Server extends JFrame implements ActionListener{
 							}
 						}
 
-						//æœ€å¾Œã¾ã§èª­ã¿è¾¼ã¿
+						//ÅŒã‚Ü‚Å“Ç‚İ‚İ
 						while((line = br.readLine()) != null) {
 							strbuf.append(line + "\n");
 						}
 
-						//æ›¸ãè¾¼ã¿
+						//‘‚«‚İ
 						fw = new FileWriter(file);
 						fw.write(strbuf.toString());
 						readAllUserFiles();
 
 					}
 					catch(IOException e) {
-						System.err.print("èªè¨¼ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+						System.err.print("”FØ‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 
 					}
 					if(pageAuthen==notAuthentificatededUsers.length-1) {
 						this.dispose();
-						//TODO èªè¨¼ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã ã‘é–‰ã˜ãŸã„ã€‚é–“é•ã£ã¦ã‚‹å¯èƒ½æ€§ãŒé«˜ã„
+						//TODO ”FØƒEƒCƒ“ƒhƒE‚¾‚¯•Â‚¶‚½‚¢BŠÔˆá‚Á‚Ä‚é‰Â”\«‚ª‚‚¢
 					}
 					else {
 						nextPage();
 					}
 			}
-			else if(cmd.equals("å´ä¸‹")) {
+			else if(cmd.equals("‹p‰º")) {
 				if(pageAuthen==notAuthentificatededUsers.length-1) {
 					this.dispose();
-					//TODO èªè¨¼ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã ã‘é–‰ã˜ãŸã„ã€‚é–“é•ã£ã¦ã‚‹å¯èƒ½æ€§ãŒé«˜ã„
+					//TODO ”FØƒEƒCƒ“ƒhƒE‚¾‚¯•Â‚¶‚½‚¢BŠÔˆá‚Á‚Ä‚é‰Â”\«‚ª‚‚¢
 				}
 				else {
 					nextPage();
@@ -2507,12 +2508,12 @@ public class Server extends JFrame implements ActionListener{
 		}
 	}
 
-	//ç”»åƒã®ãƒªã‚µã‚¤ã‚º
+	//‰æ‘œ‚ÌƒŠƒTƒCƒY
 	public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
-	        int width = bi.getWidth();    // ã‚ªãƒªã‚¸ãƒŠãƒ«ç”»åƒã®å¹…
-	        int height = bi.getHeight();  // ã‚ªãƒªã‚¸ãƒŠãƒ«ç”»åƒã®é«˜ã•
+	        int width = bi.getWidth();    // ƒIƒŠƒWƒiƒ‹‰æ‘œ‚Ì•
+	        int height = bi.getHeight();  // ƒIƒŠƒWƒiƒ‹‰æ‘œ‚Ì‚‚³
 
-	        // ç¸¦æ¨ªã®æ¯”ç‡ã‹ã‚‰ã€scaleã‚’æ±ºã‚ã‚‹
+	        // c‰¡‚Ì”ä—¦‚©‚çAscale‚ğŒˆ‚ß‚é
 	        double widthScale = (double) destWidth / (double) width;
 	        double heightScale = (double) destHeight / (double) height;
 	        double scale = widthScale < heightScale ? widthScale : heightScale;
@@ -2529,7 +2530,7 @@ public class Server extends JFrame implements ActionListener{
 	        return new ImageIcon(dst);
 	    }
 
-	//ä¼šå“¡æ¤œç´¢å†…éƒ¨ã‚¯ãƒ©ã‚¹
+	//‰ïˆõŒŸõ“à•”ƒNƒ‰ƒX
 	class searchUsers extends JFrame implements ActionListener,ChangeListener{
 		JPanel cardPanel;
 		CardLayout cardLayout;
@@ -2540,14 +2541,14 @@ public class Server extends JFrame implements ActionListener{
 	     JLabel[] lSubPhotoUserInfo = new JLabel[4];
 	     JToggleButton tbDeleteUserInfo = new JToggleButton("No");
 
-		 String[] items = {"åå‰","æ€§åˆ¥","å­¦å¹´","å­¦éƒ¨","å‡ºèº«","ã‚µãƒ¼ã‚¯ãƒ«","è¶£å‘³","LINEã®ID"};
-		 int row = items.length;// è¡¨ã®è¡Œæ•°
+		 String[] items = {"–¼‘O","«•Ê","Šw”N","Šw•”","og","ƒT[ƒNƒ‹","ï–¡","LINE‚ÌID"};
+		 int row = items.length;// •\‚Ìs”
 
-	     JTable tTableUserInfo = new JTable(row,2); // ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã®è¡¨
+	     JTable tTableUserInfo = new JTable(row,2); // ƒvƒƒtƒB[ƒ‹‚Ì•\
 
 		public searchUsers(){
 
-			super("ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¤œç´¢");
+			super("ƒ†[ƒU[ŒŸõ");
 			cardPanel = new JPanel();
 		    cardLayout = new CardLayout();
 		    cardPanel.setLayout(cardLayout);
@@ -2567,31 +2568,31 @@ public class Server extends JFrame implements ActionListener{
 			JPanel card=new JPanel();
 			card.setLayout(null);
 
-			JLabel lTItleSearch = new JLabel("ãƒ¦ãƒ¼ã‚¶æ¤œç´¢");
+			JLabel lTItleSearch = new JLabel("ƒ†[ƒUŒŸõ");
 	        lTItleSearch.setBounds(w/4,h/15,w/2,h/15);
-	        lTItleSearch.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+	        lTItleSearch.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 	        lTItleSearch.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lTItleSearch);
 
-			JLabel lStudentNumberSearch = new JLabel("å­¦ç±ç•ªå·");
+			JLabel lStudentNumberSearch = new JLabel("ŠwĞ”Ô†");
 	        lStudentNumberSearch.setBounds(w/10,2*h/5,w/5,h/15);
-	        lStudentNumberSearch.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/30));
+	        lStudentNumberSearch.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/30));
 	        lStudentNumberSearch.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lStudentNumberSearch);
 
 	        tfStudentNumberSearch.setBounds(3*w/10,2*h/5,3*w/5,h/15);
-	        tfStudentNumberSearch.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        tfStudentNumberSearch.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        card.add(tfStudentNumberSearch);
 
-			JButton bSearchSearch=new JButton("æ¤œç´¢");
+			JButton bSearchSearch=new JButton("ŒŸõ");
 	        bSearchSearch.setBounds(w/4,2*h/3,w/2,h/15);
 	        bSearchSearch.addActionListener(this);
-	        bSearchSearch.setActionCommand("æ¤œç´¢");
-	        bSearchSearch.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        bSearchSearch.setActionCommand("ŒŸõ");
+	        bSearchSearch.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        card.add(bSearchSearch);
 
 
-	        //è‡ªåˆ†ãŒä½œã‚‹ç”»é¢ã«åå‰ä»˜ã‘ã€‚ãƒ¡ã‚½ãƒƒãƒ‰åã¨åŒã˜ã˜ã‚ƒãªãã¦ã‚‚å¤§ä¸ˆå¤«ã ã‘ã©ã€åŒã˜ã®ã»ã†ãŒåˆ†ã‹ã‚Šã‚„ã™ã„ã‹ã‚‚ã€‚
+	        //©•ª‚ªì‚é‰æ–Ê‚É–¼‘O•t‚¯Bƒƒ\ƒbƒh–¼‚Æ“¯‚¶‚¶‚á‚È‚­‚Ä‚à‘åä•v‚¾‚¯‚ÇA“¯‚¶‚Ì‚Ù‚¤‚ª•ª‚©‚è‚â‚·‚¢‚©‚àB
 			cardPanel.add(card,"search");
 		}
 
@@ -2605,24 +2606,24 @@ public class Server extends JFrame implements ActionListener{
 			JButton bPrePage = new JButton(iLeft);
 	        bPrePage.setBounds(w/14,h/30,w/11,h/20);
 	        bPrePage.addActionListener(this);
-	        bPrePage.setActionCommand("æˆ»ã‚‹");
+	        bPrePage.setActionCommand("–ß‚é");
 	        card.add(bPrePage);
 
-	        JLabel lTitleUserInfo = new JLabel("ãƒ¦ãƒ¼ã‚¶æƒ…å ±");
+	        JLabel lTitleUserInfo = new JLabel("ƒ†[ƒUî•ñ");
 			lTitleUserInfo.setBounds(w/4,h/60,w/2,h/15);
-			lTitleUserInfo.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+			lTitleUserInfo.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 			lTitleUserInfo.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lTitleUserInfo);
 
 	        lMainPhotoUserInfo.setBounds(w/4,6*h/60,w/2,h/6);
-	        lMainPhotoUserInfo.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	        lMainPhotoUserInfo.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        lMainPhotoUserInfo.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lMainPhotoUserInfo);
 
 	        for(int i=0;i<4;i++) {
 	        	lSubPhotoUserInfo[i] = new JLabel();
 	        	lSubPhotoUserInfo[i].setBounds(w/15+w*i*7/30,17*h/60,w/6,h/10);
-	            lSubPhotoUserInfo[i].setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+	            lSubPhotoUserInfo[i].setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	            card.add(lSubPhotoUserInfo[i]);
 	        }
 
@@ -2633,28 +2634,28 @@ public class Server extends JFrame implements ActionListener{
 	        for(int i=0;i<row;i++) {
 	        	tTableUserInfo.setValueAt("a", i, 1);
 	        }
-	        // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	        // ƒXƒNƒ[ƒ‹ƒo[
 	        JScrollPane sp = new JScrollPane(tTableUserInfo);
 			sp.setBounds(w/4,27*h/65,w/2,h/4);
 			card.add(sp);
 
-			// ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå‰Šé™¤
-			/*JLabel lDeleteUserInfo = new JLabel("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå‰Šé™¤");
+			// ƒAƒJƒEƒ“ƒgíœ
+			/*JLabel lDeleteUserInfo = new JLabel("ƒAƒJƒEƒ“ƒgíœ");
 			lDeleteUserInfo.setBounds(w/10,40*h/60,w/2,h/15);
-			lDeleteUserInfo.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/25));
+			lDeleteUserInfo.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/25));
 			lDeleteUserInfo.setHorizontalAlignment(JLabel.CENTER);
 	        card.add(lDeleteUserInfo);
 
 	        tbDeleteUserInfo.setBounds(6*w/10,41*h/60,w/7,h/20);
 	        tbDeleteUserInfo.addChangeListener(this);
-	        tbDeleteUserInfo.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/35));
+	        tbDeleteUserInfo.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/35));
 			card.add(tbDeleteUserInfo);*/
 
 			JButton bDecideUserInfo=new JButton("BAN");
 			bDecideUserInfo.setBounds(w/4,24*h/30,w/2,h/15);
 			bDecideUserInfo.addActionListener(this);
 			bDecideUserInfo.setActionCommand("BAN");
-			bDecideUserInfo.setFont(new Font("ï¼­ï¼³ æ˜æœ", Font.PLAIN, w/20));
+			bDecideUserInfo.setFont(new Font("‚l‚r –¾’©", Font.PLAIN, w/20));
 	        card.add(bDecideUserInfo);
 
 			cardPanel.add(card,"UserInfo");
@@ -2673,15 +2674,15 @@ public class Server extends JFrame implements ActionListener{
 			String cmd=ae.getActionCommand();
 			System.out.println(cmd);
 
-			if(cmd=="æ¤œç´¢") {
-				System.out.println("æ¤œç´¢å®Ÿè¡Œ");
+			if(cmd=="ŒŸõ") {
+				System.out.println("ŒŸõÀs");
 				String studentNum=tfStudentNumberSearch.getText();
 				BufferedReader br = null;
 		        FileReader fr = null;
 		        String line;
 
 				try {
-					//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
+					//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
 					File file = new File(System.getProperty("user.dir") + "\\ID\\" + studentNum + ".txt");
 					File image_dir = new File(System.getProperty("user.dir") + "\\ID\\images\\"+studentNum+"\\"+studentNum+"_main.png");
 
@@ -2708,7 +2709,7 @@ public class Server extends JFrame implements ActionListener{
 					fr = new FileReader(file);
 					br = new BufferedReader(fr);
 
-					//è©²å½“è¡Œã‚’æ¤œç´¢
+					//ŠY“–s‚ğŒŸõ
 					line = br.readLine();
 					line = br.readLine();
 					for(int i=0;i<7;i++) {
@@ -2727,14 +2728,14 @@ public class Server extends JFrame implements ActionListener{
 					cardLayout.show(cardPanel,"UserInfo");
 				}
 				catch(IOException e) {
-					System.err.print("ãƒ¦ãƒ¼ã‚¶æ¤œç´¢ã«é–¢ã™ã‚‹å‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
+					System.err.print("ƒ†[ƒUŒŸõ‚ÉŠÖ‚·‚éˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
 				}
 			}
 			else if(cmd.equals("BAN")) {
 				deleteUser(tfStudentNumberSearch.getText());
 				cardLayout.show(cardPanel,"search");
 			}
-			else if(cmd.equals("æˆ»ã‚‹")) {
+			else if(cmd.equals("–ß‚é")) {
 				cardLayout.show(cardPanel,"search");
 			}
 
