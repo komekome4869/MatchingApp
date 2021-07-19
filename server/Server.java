@@ -773,6 +773,8 @@ public class Server extends JFrame implements ActionListener{
 		UserInfo res[] = new UserInfo[3];
 		UserInfo public_users[] = new UserInfo[1000];
 		int k=0;
+		//再読み込み
+		readAllUserFiles();
 		
 		for(int i=0;i<users.length;i++) {
 			if(users[i] != null) {
@@ -788,13 +790,13 @@ public class Server extends JFrame implements ActionListener{
 		//ユーザがいる場合
 		else {
 			
-			if(public_users[3*page - 3] != null) res[0] = users[3*page - 3];
+			if(public_users[3*page - 3] != null) res[0] = public_users[3*page - 3];
 			else res[0] = null;
 
-			if(public_users[3*page - 2] != null) res[1] = users[3*page - 2];
+			if(public_users[3*page - 2] != null) res[1] = public_users[3*page - 2];
 			else res[1] = null;
 
-			if(public_users[3*page-1] != null) res[2] = users[3*page-1];
+			if(public_users[3*page - 1] != null) res[2] = public_users[3*page - 1];
 			else res[2] = null;
 		}
 
