@@ -1152,8 +1152,12 @@ public class Server extends JFrame implements ActionListener{
 				inviteUsers(String.valueOf(gi.nonhostUser[i]), gi.groupNumber.toString());
 		}
 
-		String nonhost = gi.nonhostUser[0] + " " + gi.nonhostUser[1] + " " + gi.nonhostUser[2] + " " + gi.nonhostUser[3];
-		nonhost.replace(" 0","");
+		String nonhost = String.valueOf(gi.nonhostUser[0]);
+		for(int i=1; i<4; i++) {
+			if(gi.nonhostUser[i] != 0) {
+				nonhost = nonhost + " " + String.valueOf(gi.nonhostUser[i]);
+			}
+		}
 
 		try {
 			//グループ情報ファイルを作成
