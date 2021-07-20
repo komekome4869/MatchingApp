@@ -1712,10 +1712,10 @@ public class Server extends JFrame implements ActionListener{
 	//いいね
  	public static boolean goodUser(String my_num, String your_num) {
 		BufferedReader br = null;
-		BufferedReader yourbr = null;
 		FileReader fr = null;
-		FileReader yourfr = null;
 		FileWriter fw = null;
+		FileReader yourfr = null;
+		BufferedReader yourbr = null;
 		FileWriter yourfw = null;
 		StringBuffer strbuf = new StringBuffer("");
 
@@ -1736,6 +1736,7 @@ public class Server extends JFrame implements ActionListener{
 
 			String students[] = null;
 			String line10 = line;	//10行目いいねした
+			System.out.println(line + "あ");
 
 			//次の行
 			line = br.readLine();
@@ -1746,10 +1747,14 @@ public class Server extends JFrame implements ActionListener{
 				students = line11.split(" ");
 				//一致してたらマッチ
 				for(int i=0; i<students.length;i++) {
-					if(students[i] == your_num) {
-						deleteGood(your_num, my_num); //相手のいいねした欄から自分を消す
-						deleteReceivedGood(my_num, your_num); //自分のいいねを受け取った欄から相手を消す
-						return matchUsers(my_num, your_num, false);
+					if(students[i].length() > 1) {
+						if(Integer.parseInt(students[i]) == Integer.parseInt(your_num)) {
+							fr.close();
+							br.close();
+							deleteGood(your_num, my_num); //相手のいいねした欄から自分を消す
+							deleteReceivedGood(my_num, your_num); //自分のいいねを受け取った欄から相手を消す
+							return matchUsers(my_num, your_num, false);
+						}
 					}
 				}
 			}
@@ -1818,14 +1823,6 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
-   		}finally {
-   			try {
-   				br.close();
-				yourbr.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
 
  		return true;
@@ -1853,8 +1850,12 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
+<<<<<<< HEAD
 
 			if(line.length()<= 1) {
+=======
+			if(line.length() <= 1) {
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 				strbuf.append(yourId + "\n");
 			}else {
 				strbuf.append(line + " " + yourId + "\n");
@@ -1869,6 +1870,8 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
+			fr.close();
+			br.close();
 
 			if(!preventLoop) {
 				matchUsers(yourId, myId, true);
@@ -1879,13 +1882,6 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
-   		}finally {
-   			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
 
  		return true;
@@ -1914,8 +1910,10 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(yourId, ""); //numを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
-			if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			if(line.length() > 1) {
+				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
+				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
+			}
 			strbuf.append(line + "\n");
 
 			//最後まで読み込み
@@ -1937,6 +1935,7 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
+   				fr.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -1989,7 +1988,6 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			fw.close();
-			fw.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -2000,6 +1998,7 @@ public class Server extends JFrame implements ActionListener{
    			return false;
    		}finally {
    			try {
+   				fr.close();
 				br.close();
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
@@ -2015,6 +2014,9 @@ public class Server extends JFrame implements ActionListener{
 		BufferedReader br = null;
 		FileReader fr = null;
 		FileWriter fw = null;
+		FileReader yourfr = null;
+		BufferedReader yourbr = null;
+		FileWriter yourfw = null;
 		StringBuffer strbuf = new StringBuffer("");
 
  		try {
@@ -2041,17 +2043,24 @@ public class Server extends JFrame implements ActionListener{
 
 			if(line5 != null) {
 				groups = line5.split(" ");
-
 				//一致してたらマッチ
-				for(int i=0; i<groups.length;i++) {
-					if(groups[i] == youruuid) {
-						return matchGroups(myuuid, youruuid, false);
+				for(int i=0; i<groups.length; i++) {
+					if(groups[i].length() > 1) {
+						if(groups[i].equals(youruuid)) {
+							fr.close();
+							br.close();
+							deleteGroupGood(youruuid, myuuid); //相手のいいねした欄から自分を消す
+							System.out.println("ok");
+							deleteReceivedGroupGood(myuuid, youruuid); //自分のいいねを受け取った欄から相手を消す
+							System.out.println("ok");
+							return matchGroups(myuuid, youruuid, false);
+						}
 					}
 				}
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
-			if(line4 == "") {
+			if(line4.length() <= 1) {
 				strbuf.append(youruuid + "\n");
 			}else {
 				strbuf.append(line4 + " " + youruuid + "\n");
@@ -2068,7 +2077,43 @@ public class Server extends JFrame implements ActionListener{
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
 			br.close();
+			fr.close();
 			fw.close();
+
+			//相手のファイルの、「いいねしてくれた人」の欄に、自分を追加する
+			File yourfile = new File(System.getProperty("user.dir") + "\\Group\\" + youruuid + ".txt");
+			yourfr = new FileReader(yourfile);
+ 			yourbr = new BufferedReader(yourfr);
+			line_counter = 0;
+			strbuf = new StringBuffer("");
+
+			//該当行を検索
+			while((line = yourbr.readLine()) != null) {
+				System.out.println(line);
+				line_counter++;
+				if(line_counter == 5) break;
+				strbuf.append(line + "\n");
+			}
+
+			line5 = line;
+
+			if(line5.length()<=1) {
+				strbuf.append(myuuid + "\n");
+			}else {
+				strbuf.append(line5 + " " + myuuid + "\n");
+			}
+
+			//最後まで読み込み
+			while((line = yourbr.readLine()) != null) {
+				strbuf.append(line + "\n");
+			}
+
+			//書き込み
+			yourfw = new FileWriter(yourfile);
+			yourfw.write(strbuf.toString());
+			yourfw.close();
+			yourfr.close();
+			yourbr.close();
 
 			//再度読み込み
 			readAllUserFiles();
@@ -2077,13 +2122,6 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
-   		}finally {
-			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
 
  		return true;
@@ -2097,7 +2135,7 @@ public class Server extends JFrame implements ActionListener{
 		StringBuffer strbuf = new StringBuffer("");
 
  		try {
- 			File file = new File(System.getProperty("user.dir") + "\\ID\\" + myuuid + ".txt");
+ 			File file = new File(System.getProperty("user.dir") + "\\Group\\" + myuuid + ".txt");
  			fr = new FileReader(file);
  			br = new BufferedReader(fr);
  			String line;
@@ -2125,10 +2163,12 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			br.close();
+			fr.close();
 			fw.close();
 
 			if(!preventLoop) {
-				matchUsers(youruuid, myuuid, true);
+				matchGroups(youruuid, myuuid, true);
 				readAllUserFiles();
 				readAllGroupFiles();
 			}
@@ -2136,13 +2176,6 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
-   		}finally {
-   			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
 
  		return true;
@@ -2171,7 +2204,7 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(youruuid, ""); //uuidを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.length()>0) {
+			if(line.length() > 1) {
 				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
 				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
 			}
@@ -2185,7 +2218,10 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			br.close();
+			fr.close();
 			fw.close();
+
 
 			//再度読み込み
 			readAllUserFiles();
@@ -2193,13 +2229,6 @@ public class Server extends JFrame implements ActionListener{
 
   		}catch(IOException e) {
    			System.out.println(e);
-   		}finally {
-   			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
  	}
 
@@ -2226,7 +2255,7 @@ public class Server extends JFrame implements ActionListener{
 
 			line = line.replace(youruuid, ""); //uuidを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			if(line.length()>0) {
+			if(line.length() > 1) {
 				if(line.charAt(0) == ' ')  line = line.substring(1, line.length()); //先頭の空白を削除
 				if(line.charAt(line.length()) == ' ')  line = line.substring(1, line.length()-1); //最後の空白を削除
 			}
@@ -2240,6 +2269,8 @@ public class Server extends JFrame implements ActionListener{
 			//書き込み
 			fw = new FileWriter(file);
 			fw.write(strbuf.toString());
+			br.close();
+			fr.close();
 			fw.close();
 
 			//再度読み込み
@@ -2249,13 +2280,6 @@ public class Server extends JFrame implements ActionListener{
   		}catch(IOException e) {
    			System.out.println(e);
    			return false;
-   		}finally {
-   			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
    		}
  		return true;
  	}
