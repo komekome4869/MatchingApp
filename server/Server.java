@@ -1850,6 +1850,7 @@ public class Server extends JFrame implements ActionListener{
 			}
 
 			//自分のファイルの、いいねを送った人に相手を追加
+
 			if(line.length() <= 1) {
 				strbuf.append(yourId + "\n");
 			}else {

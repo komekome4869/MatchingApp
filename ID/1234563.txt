@@ -7,10 +7,15 @@ User3
 0
 0
 
-1234561
 1964986
 
 fd4600e7-b5fb-4515-9344-8232077b9268
+=======
+
+
+
+
+>>>>>>> branch 'main' of https://github.com/szkiwr/PL2ver2
 
 1
 ユーザ3のLINEID

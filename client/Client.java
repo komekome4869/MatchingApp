@@ -72,7 +72,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	String[] Faculty = {"経営", "経済", "教育", "理工", "都市科学"};
 	String[] Birthplace = {"北海道・東北", "関東", "中部", "近畿", "中国", "四国", "九州", "海外"};
 	String[] Circle = {"テニス", "運動", "文化","所属していない"};
-	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい"};
+	String[] Purpose = {"男子と仲良くなりたい","女子と仲良くなりたい","遊びに行く友達が欲しい"};
 	String[] HowMany = {"2","3","4","5"};
 	String[] yesNo= {"はい","いいえ"};
 
