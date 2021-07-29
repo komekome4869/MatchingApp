@@ -53,7 +53,10 @@ public class ServerDriver{
 					System.out.println("state?");
 					msg = r.readLine();
 					gi.state = Integer.parseInt(msg);
-					readExampleGroupFile();
+
+					System.out.println("groupname?");
+					msg = r.readLine();
+					readExampleGroupFile(msg);
 
 					receiver.executeGroupInfo(gi);
 				}
@@ -217,11 +220,11 @@ public class ServerDriver{
 		}
 	}
 
-	public static void readExampleGroupFile() {
+	public static void readExampleGroupFile(String groupname) {
 		FileReader fr;
 		BufferedReader br;
 		try {
-				fr = new FileReader(System.getProperty("user.dir") + "\\Group\\8a986017-e0b9-4b1c-ba50-78a7091a4c5b.txt");
+				fr = new FileReader(System.getProperty("user.dir") + "\\Group\\" + groupname + ".txt");
 		        br = new BufferedReader(fr);
 		        String line;
 				int line_counter = 0;
