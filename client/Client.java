@@ -2380,7 +2380,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			bGoodViewGroup.setVisible(true);
 		}
 
-		layout.show(cardPanel, "viewGroup");//TODO
+		layout.show(cardPanel, "viewGroup");
 	}
 
 	public void goGood() {
