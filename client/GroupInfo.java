@@ -181,7 +181,7 @@ public class GroupInfo implements Serializable{
 		return numberOfMember;
 	}
 
-	public void setIsGatered(boolean a) {
+	public void setIsGathered(boolean a) {
 		isGathered=a;
 	}
 

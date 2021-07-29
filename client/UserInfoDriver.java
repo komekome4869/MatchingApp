@@ -141,7 +141,7 @@ public class UserInfoDriver {
 		}
 
 		System.out.println("setSubPhotoで配列の第1要素にtestImage4を入力します");
-		ui.setSubPhoto(testbi[4],0);
+		ui.setSubPhoto(testbi[3],0);
 		try {
 			ImageIO.write(ui.getSubPhoto()[0], "png", new File("./テスト用画像/SubPhoto単体Test.png"));
 		} catch (IOException e) {
