@@ -72,7 +72,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
 	ImageIcon backImage;
-	
+
 	//アクションリスナーでいじるために一部の変数を外部変数に
 	JTextField tfIdLogin = new JTextField(20);
 	JTextField tfPasswordLogin = new JTextField(20);
@@ -734,7 +734,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		cardPanel.add(card,"reply");
 	}
 
-	public void replyGroup() {
+	public void replyGroup() {//TODO
 		JPanel card=new JPanel();
 		card.setLayout(null);
 
@@ -763,6 +763,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
             bMemberProfileReplyGroup[i]=new JButton("プロフィール");
             bMemberProfileReplyGroup[i].setBounds(w/6,(11+7*i)*h/60,2*w/3,h/12);
             bMemberProfileReplyGroup[i].addActionListener(this);
+            bMemberProfileReplyGroup[i].setContentAreaFilled(false);
             bMemberProfileReplyGroup[i].setActionCommand("メンバ"+String.valueOf(i)+"replyGroup");
             bMemberProfileReplyGroup[i].setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
             card.add(bMemberProfileReplyGroup[i]);
@@ -775,7 +776,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bGoodReplyGroup.setForeground(Color.white);
         bGoodReplyGroup.setActionCommand("いいねreplyGroup");
         bGoodReplyGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
-        bGoodReplyGroup.setVisible(false);
         card.add(bGoodReplyGroup);
 
         JButton bBadReplyGroup=new JButton("断る");
@@ -785,7 +785,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bBadReplyGroup.setForeground(Color.white);
         bBadReplyGroup.setActionCommand("断るreplyGroup");
         bBadReplyGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/27));
-        bBadReplyGroup.setVisible(false);
         card.add(bBadReplyGroup);
 
         JButton bHome=new JButton("HOME");
@@ -2426,6 +2425,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 	public void goGoodInform() {
 		if(isNowUsingGroupAccount) {
+
 			for(int i=0;i<3;i++) {
 				if(myGroupInfo.getReceiveGood()[3*(nowPage-1)+i]==null) {
 					bIconGoodInform[i].setVisible(false);
@@ -3609,6 +3609,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						if(yourUserInfo!=null) {
 							bMemberProfileReplyGroup[i].setIcon(scaleImage(yourUserInfo.getMainPhoto(),w/3,h/12));
 							bMemberProfileReplyGroup[i].setText(yourUserInfo.getName());
+							bMemberProfileReplyGroup[i].setVisible(true);
+						}
+						else {
+							bMemberProfileReplyGroup[i].setVisible(false);
 						}
 					}
 

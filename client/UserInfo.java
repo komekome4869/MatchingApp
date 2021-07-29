@@ -76,14 +76,6 @@ public class UserInfo implements Serializable{
 		return img;
 	}
 
-	public int getState() {
-		return state;
-	}
-
-	public void setState(int s) {
-		state=s;
-	}
-
 	public void setStudentNumber(int sn) {
 		studentNumber=sn;
 	}
