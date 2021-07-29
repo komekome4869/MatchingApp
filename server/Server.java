@@ -2680,7 +2680,7 @@ public class Server extends JFrame implements ActionListener{
 							while((line = br.readLine()) != null) {
 								line_counter++;
 								if(line_counter == 15) {
-									strbuf.append("2\n");
+									strbuf.append("0\n");
 								}
 								else {
 									strbuf.append(line + "\n");
