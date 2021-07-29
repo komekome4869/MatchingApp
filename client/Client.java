@@ -72,8 +72,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
 	ImageIcon backImage;
-	BufferedImage defaultBi;
-
+	
 	//アクションリスナーでいじるために一部の変数を外部変数に
 	JTextField tfIdLogin = new JTextField(20);
 	JTextField tfPasswordLogin = new JTextField(20);

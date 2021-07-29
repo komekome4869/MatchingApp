@@ -2698,7 +2698,7 @@ public class Server extends JFrame implements ActionListener{
 					}
 					if(pageAuthen == -1) {
 						this.setVisible(false);
-						readAllUserFiles();//TODO
+						readAllUserFiles();
 						this.dispose();
 					}
 					else {
