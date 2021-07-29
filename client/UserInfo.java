@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class UserInfo implements Serializable{
 	static int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
-	int state;		//新規登録なら0,プロフ更新なら1
+	int state=0;		//新規登録なら0,プロフ更新なら1
 
 	int studentNumber=1;	//学籍番号
 	String password="";
@@ -133,7 +133,7 @@ public class UserInfo implements Serializable{
 	}
 
 	public void setBirth(int b) {
-		gender=b;
+		birth=b;
 	}
 
 	public int getBirth() {
@@ -141,7 +141,7 @@ public class UserInfo implements Serializable{
 	}
 
 	public void setCircle(int c) {
-		gender=c;
+		circle=c;
 	}
 
 	public int getCircle() {

@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class GroupInfo implements Serializable{
 	int MAX=100;	//イイネ数をやグループ数の保持する限界数。変えてもいい
-	int state;		//グル作成なら0,プロフ更新なら1
+	int state=0;		//グル作成なら0,プロフ更新なら1
 
 	UUID groupNumber;	//このグルの識別番号。クライアントがグルを作ったのち、サーバが割り振る
 	String name="グループ名";		//グループ名

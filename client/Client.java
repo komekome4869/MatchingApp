@@ -248,7 +248,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    	nowShowingUsers[i]=new UserInfo();
 	    	nowShowingGroups[i]=new GroupInfo();
 	    }
-	    myUserInfo=new UserInfo();
 
 	}
 
@@ -2406,8 +2405,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		layout.show(cardPanel,"good");
 	}
 
-	public void goInviteInform() {//TODO
-
+	public void goInviteInform() {
 		for(int i=0;i<3;i++) {
 			if(myUserInfo.getInvitedGroup()[3*(nowPage-1)+i]==null) {
 				bIconInviteInform[i].setVisible(false);
@@ -2447,7 +2445,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 		}
 		else {
-			for(int i=0;i<3;i++) {//TODO
+			for(int i=0;i<3;i++) {
 				if(myUserInfo.getReceiveGood()[3*(nowPage-1)+i]==0) {
 					bIconGoodInform[i].setVisible(false);
 				}
@@ -2890,6 +2888,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
 		case "Myプロフィールmenu":
 			if(isNowUsingGroupAccount) {
+				SgetmyGroupprof(myGroupInfo.getStudentNumber());
 				tfNameMyGroupProfile.setForeground(Color.BLACK);
 				tfRelationMyGroupProfile.setForeground(Color.BLACK);
 				tfCommentMyGroupProfile.setForeground(Color.BLACK);
@@ -2915,6 +2914,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				layout.show(cardPanel, "myGroupProfile");
 			}
 			else {
+				SgetmyUserprof(myUserInfo.getStudentNumber());
 				tfNameMyProfile.setForeground(Color.BLACK);
 				tfHobbyMyProfile.setForeground(Color.BLACK);
 				tfLineIdMyProfile.setForeground(Color.BLACK);
@@ -3049,7 +3049,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			tfHobbyMyProfile.setForeground(Color.BLACK);
 			tfLineIdMyProfile.setForeground(Color.BLACK);
 
-			if(tfNameMyProfile.getText().length()!=0 && tfNameMyProfile.getText().length()<11) {
+			if(tfNameMyProfile.getText().length()>0 && tfNameMyProfile.getText().length()<11) {
 				myUserInfo.setName(tfNameMyProfile.getText());
 			}
 			else {
@@ -3067,7 +3067,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				flag=false;
 			}
 
-			if(tfLineIdMyProfile.getText().length()!=0 && tfLineIdMyProfile.getText().length()<21) {
+			if(tfLineIdMyProfile.getText().length()>0 && tfLineIdMyProfile.getText().length()<21) {
 				myUserInfo.setLineId(tfLineIdMyProfile.getText());
 			}
 			else {
@@ -3076,13 +3076,14 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				flag=false;
 			}
 
-			myUserInfo.setGender(cbGenderMyProfile.getSelectedIndex());
-			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
-			myUserInfo.setFaculty(cbFacultyMyProfile.getSelectedIndex());
-			myUserInfo.setBirth(cbBirthMyProfile.getSelectedIndex());
-			myUserInfo.setCircle(cbCircleMyProfile.getSelectedIndex());
+
 
 			if(flag) {
+				myUserInfo.setGender(cbGenderMyProfile.getSelectedIndex());
+				myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
+				myUserInfo.setFaculty(cbFacultyMyProfile.getSelectedIndex());
+				myUserInfo.setBirth(cbBirthMyProfile.getSelectedIndex());
+				myUserInfo.setCircle(cbCircleMyProfile.getSelectedIndex());
 				SchangeProf(myUserInfo);
 				layout.show(cardPanel,"menu");
 			}
@@ -3321,7 +3322,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		case "メンバ0viewGroup":
 		case "メンバ1viewGroup":
 		case "メンバ2viewGroup":
-		case "メンバ3viewGroup"://TODO
+		case "メンバ3viewGroup":
 		case "メンバ4viewGroup":
 			if(cmd.equals("メンバ0viewGroup")) {
 				SgetyourUserprof(nowShowingGroup.getHostUser());
@@ -3372,10 +3373,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			tfRelationMyGroupProfile.setForeground(Color.BLACK);
 			tfCommentMyGroupProfile.setForeground(Color.BLACK);
 
-			nowShowingGroup.setPurpose(cbPurposeMakeGroup.getSelectedIndex());
-			myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
-			myGroupInfo.setPurpose(cbPurposeMyGroupProfile.getSelectedIndex());
-
 			if(tfNameMyGroupProfile.getText().length()!=0 && tfNameMyGroupProfile.getText().length()<11) {
 				myGroupInfo.setName(tfNameMyGroupProfile.getText());
 			}
@@ -3404,6 +3401,9 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			}
 
 			if(flag) {
+				nowShowingGroup.setPurpose(cbPurposeMakeGroup.getSelectedIndex());
+				myUserInfo.setGrade(cbGradeMyProfile.getSelectedIndex());
+				myGroupInfo.setPurpose(cbPurposeMyGroupProfile.getSelectedIndex());
 				SchangeGroupProf(myGroupInfo);
 				layout.show(cardPanel,"menu");
 			}
@@ -3992,6 +3992,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			/*String outLine = "uc,"+Integer.toString(myUserInfo.getStudentNumber());
 			oos.writeObject(outLine);
 			oos.flush();*/
+			newprof.state=1;
 			oos.writeObject(newprof);
 			oos.flush();
 			//データを受信
@@ -4020,6 +4021,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 			/*String outLine = "gc,"+myGroupInfo.getStudentNumber().toString();
 			oos.writeObject(outLine);
 			oos.flush();*/
+			newprof.state=1;
 			oos.writeObject(newprof);
 			oos.flush();
 			System.out.println(newprof+"を送信しました。");  //確認用

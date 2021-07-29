@@ -308,8 +308,7 @@ public class Server extends JFrame implements ActionListener{
 
 			}
 		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+			System.out.println("ユーザファイル読み込みがでエラー発生");
 		}
 	}
 
@@ -445,8 +444,7 @@ public class Server extends JFrame implements ActionListener{
 
 				}
 			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+				System.out.println("グループファイル読み込みでエラー発生");
 			}
 	}
 
@@ -500,7 +498,7 @@ public class Server extends JFrame implements ActionListener{
 								oos.writeObject(sendUserInfo(Integer.parseInt(act[1])));
 								oos.flush();
 							} catch (IOException e) {
-								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);//TODO
+								System.err.print("ユーザ情報送信時にエラーが発生しました：" + e);
 							}
 							break;
 
@@ -562,7 +560,7 @@ public class Server extends JFrame implements ActionListener{
 							break;
 
 						case "jg": //グループに参加
-							if(joinGroup(act[1], act[2], false)){//久保田が書き換え
+							if(joinGroup(act[1], act[2], false)){
 								oos.writeObject("1");
 								oos.flush();
 							}else {
@@ -640,7 +638,7 @@ public class Server extends JFrame implements ActionListener{
 						if(inputObj instanceof UserInfo) {
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
-							ui.setStudentCard(ui.getStudentCard());//TODO
+							ui.setStudentCard(ui.getStudentCard());
 
 							//新規登録
 							if(ui.state == 0) {
@@ -775,7 +773,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//UserInfo送信
-	public static UserInfo[] sendUserInfo(int page) {//久保田が書き換え
+	public static UserInfo[] sendUserInfo(int page) {
 		UserInfo res[] = new UserInfo[3];
 		UserInfo public_users[] = new UserInfo[1000];
 		int k=0;
@@ -894,14 +892,14 @@ public class Server extends JFrame implements ActionListener{
 			try {
 				fr = new FileReader(LoginFile);
 				br = new BufferedReader(fr);
-				br.readLine();	//TODO
+				br.readLine();
 				String str = br.readLine();				//2行目読み込み
 				br.close();
 				System.out.println("str="+str);
 				String res[] = str.split(" ");			//空白で分割
 
 				//もしパスワードが一致していればtrue
-				if(res[0].equals(pass)) return true;//TODO
+				if(res[0].equals(pass)) return true;
 				//そうでなければfalse
 				else return false;
 
@@ -1020,6 +1018,7 @@ public class Server extends JFrame implements ActionListener{
 			String line13 = line;
 			line = br.readLine();
 			String line14 = line;
+			fr.close();
 			br.close();
 
 			file.delete();
@@ -1093,6 +1092,7 @@ public class Server extends JFrame implements ActionListener{
 			String line5 = line;
 			line = br.readLine();
 			String line6 = line;
+			fr.close();
 			br.close();
 
 			file.delete();
@@ -1113,7 +1113,6 @@ public class Server extends JFrame implements ActionListener{
 					 gi.comment + "\n" +
 					 gi.numberOfMember + "\n"
 					 );
-			fw.close();
 			fw.close();
 
 			//画像を保存
@@ -1292,7 +1291,6 @@ public class Server extends JFrame implements ActionListener{
 			//誘われているグループ(14行目)から削除
 			line = line.replace(uuid, ""); //UUIDを削除
 			line = line.replace("  "," "); //並んだ空白を削除
-			//久保田が書き換え
 			if(line.length() != 0) {
 				if(Character.isWhitespace(line.charAt(0)))  line = line.substring(1, line.length()); //先頭の空白を削除
 				if(Character.isWhitespace(line.charAt(line.length() - 1)))  line = line.substring(1, line.length()-1); //最後の空白を削除
@@ -1350,7 +1348,7 @@ public class Server extends JFrame implements ActionListener{
 				strbuf.append(line + "\n");
 			}
 
-			String students[] = line.split(" ");//TODO
+			String students[] = line.split(" ");
 			strbuf.append(line + "\n");
 
 			//非ホストユーザがグループに入っているか確認
@@ -1934,8 +1932,7 @@ public class Server extends JFrame implements ActionListener{
    				fr.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+				System.out.println("いいね削除でエラー発生");
 			}
    		}
 
@@ -1997,8 +1994,7 @@ public class Server extends JFrame implements ActionListener{
    				fr.close();
 				br.close();
 			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+				System.out.println("受けたいいね削除でエラー発生");
 			}
    		}
 
@@ -2331,8 +2327,7 @@ public class Server extends JFrame implements ActionListener{
    			try {
 				br.close();
 			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+				System.out.println("マッチング削除でエラー発生");
 			}
    		}
 
@@ -2389,8 +2384,7 @@ public class Server extends JFrame implements ActionListener{
    			try {
 				br.close();
 			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+				System.out.println("グループマッチング削除でエラー発生");
 			}
    		}
  	}
@@ -2709,7 +2703,6 @@ public class Server extends JFrame implements ActionListener{
 						this.setVisible(false);
 						readAllUserFiles();//TODO
 						this.dispose();
-						//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 					}
 					else {
 						nextPage();
