@@ -79,6 +79,7 @@ public class ServerDriver{
 		}
 	}
 
+	//選択したファイルを読み込み
 	public static void readExampleUserFile(String username) {
         FileReader fr;
         BufferedReader br;
@@ -220,6 +221,7 @@ public class ServerDriver{
 		}
 	}
 
+	//選択したファイルを読み込み
 	public static void readExampleGroupFile(String groupname) {
 		FileReader fr;
 		BufferedReader br;
