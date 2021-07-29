@@ -71,7 +71,7 @@ public class GroupInfoDriver {
 		System.out.println("getHostUser出力: " +gi.getPurpose());
 
 		System.out.println("setCommentで「コメントテスト」を入力します");
-		gi.setName("コメントテスト");
+		gi.setComment("コメントテスト");
 		System.out.println("getComment出力: " +gi.getComment());
 
 		System.out.println("setNumberOfMemberで「5」を入力します");
