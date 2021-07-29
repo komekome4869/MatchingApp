@@ -2326,6 +2326,7 @@ public class Server extends JFrame implements ActionListener{
    		}finally {
    			try {
 				br.close();
+				fr.close();
 			} catch (IOException e) {
 				System.out.println("マッチング削除でエラー発生");
 			}
@@ -2382,6 +2383,7 @@ public class Server extends JFrame implements ActionListener{
    			System.out.println(e);
    		}finally {
    			try {
+   				fr.close();
 				br.close();
 			} catch (IOException e) {
 				System.out.println("グループマッチング削除でエラー発生");
@@ -2658,46 +2660,41 @@ public class Server extends JFrame implements ActionListener{
 					File file = notAuthentificatededUsers[pageAuthen];
 				 	BufferedReader br = null;
 			        FileReader fr = null;
-			        FileWriter fw = null;
-			        String line;
-			        StringBuffer strbuf = new StringBuffer("");
-			        if(pageAuthen != -1) {
-				        try {
-							//ファイルを読み込み
-							file = notAuthentificatededUsers[pageAuthen];
-							fr = new FileReader(file);
-							br = new BufferedReader(fr);
-							int line_counter = 0;
+			        String filename = null;
 
-							//該当行を検索
-							while((line = br.readLine()) != null) {
-								line_counter++;
-								if(line_counter == 15) {
-									strbuf.append("0\n");
-								}
-								else {
-									strbuf.append(line + "\n");
-								}
-							}
+			        try {
+						//ファイルを読み込み
+						fr = new FileReader(file);
+						br = new BufferedReader(fr);
 
-							//最後まで読み込み
-							while((line = br.readLine()) != null) {
-								strbuf.append(line + "\n");
-							}
+						filename = br.readLine();
+						fr.close();
+						br.close();
 
-							//書き込み
-							fw = new FileWriter(file);
-							fw.write(strbuf.toString());
-							fw.close();
+					}
+					catch(IOException e) {
+						System.err.print("認証に関する処理でエラーが発生しました：" + e);
+					}
 
-							readAllUserFiles();
+			        File card = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename + "\\" + filename + "_card.png");
+			        File main = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename + "\\" + filename + "_main.png");
+			        File sub1 = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename + "\\" + filename + "_sub1.png");
+			        File sub2 = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename + "\\" + filename + "_sub2.png");
+			        File sub3 = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename + "\\" + filename + "_sub3.png");
+			        File sub4 = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename + "\\" + filename + "_sub4.png");
+			        File dir = new File(System.getProperty("user.dir") + "\\ID\\images\\" + filename);
 
-							pageAuthen--;
+			        file.delete();
+			        card.delete();
+			        main.delete();
+			        sub1.delete();
+			        sub2.delete();
+			        sub3.delete();
+			        sub4.delete();
+			        dir.delete();
 
-						}
-						catch(IOException e) {
-							System.err.print("認証に関する処理でエラーが発生しました：" + e);
-						}
+					pageAuthen--;
+
 					}
 					if(pageAuthen == -1) {
 						this.setVisible(false);
@@ -2708,7 +2705,6 @@ public class Server extends JFrame implements ActionListener{
 						nextPage();
 					}
 				}
-			}
 			else if(cmd.equals("却下")) {
 				if(pageAuthen == -1) {
 					this.setVisible(false);
