@@ -64,7 +64,6 @@ public class UserInfo implements Serializable{
 		BufferedImage subImg = img.getSubimage(0, 0, w, h);
 		WritableRaster raster = subImg.getRaster();
 		int size = raster.getNumBands() * w * h;
-//		System.out.println("getNumBands:" + size);
 		int [] buf = new int[ size ];
 		raster.getPixels(0, 0, w, h, buf);
 		return buf;
