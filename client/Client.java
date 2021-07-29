@@ -1,19 +1,11 @@
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FileDialog;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.AreaAveragingScaleFilter;
@@ -43,7 +35,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 public class Client extends JFrame implements ActionListener,ChangeListener{
@@ -80,8 +71,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	ImageIcon iRight=new ImageIcon("./img/right.jpeg");
 	ImageIcon iLeft=new ImageIcon("./img/left.jpeg");
 	ImageIcon iAdd=new ImageIcon("./img/Add.jpeg");
-	ImageIcon backNoButton=new ImageIcon("./img/ボタンなし背景.png");
-	ImageIcon backWithButton=new ImageIcon("./img/ボタンあり背景.png");
+	ImageIcon backImage;
 	BufferedImage defaultBi;
 
 	//アクションリスナーでいじるために一部の変数を外部変数に
@@ -211,8 +201,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	    cardPanel.setLayout(layout);
 
 	    try {
-			backNoButton=scaleImage(ImageIO.read(new File("./img/背景.jpg")),w+30,h+30);
-			backWithButton=scaleImage(ImageIO.read(new File("./img/背景.jpg")),w+10,h);
+			backImage=scaleImage(ImageIO.read(new File("./img/背景.jpg")),w+30,h+30);
 		}
 	    catch (IOException e) {
 			e.printStackTrace();
@@ -330,7 +319,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         card.add(lMessageLogin);
 
 
-        JLabel background=new JLabel(backNoButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -391,7 +380,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         lMessageNew_r.setVisible(false);
         card.add(lMessageNew_r);
 
-        JLabel background=new JLabel(backNoButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -466,7 +455,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		lErrorJudge.setVisible(false);
 		card.add(lErrorJudge);
 
-		JLabel background=new JLabel(backNoButton);
+		JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -494,7 +483,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 		manual.setHorizontalAlignment(JLabel.CENTER);
 		card.add(manual);
 
-		JLabel background=new JLabel(backNoButton);
+		JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -520,7 +509,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bnextFinishAuthen.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bnextFinishAuthen);
 
-        JLabel background=new JLabel(backNoButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -602,7 +591,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -740,7 +729,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -819,7 +808,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -952,7 +941,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1016,7 +1005,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1098,7 +1087,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchSeachUser.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bSearchSeachUser);
 
-        JLabel background=new JLabel(backNoButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -1150,7 +1139,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bSearchSeachGroup.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/20));
         card.add(bSearchSeachGroup);
 
-        JLabel background=new JLabel(backNoButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-15,-15,w+30,h+30);
 		card.add(background);
 
@@ -1221,7 +1210,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1368,7 +1357,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1454,7 +1443,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1553,7 +1542,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1628,7 +1617,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1707,7 +1696,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1781,7 +1770,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1887,7 +1876,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1957,7 +1946,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -1988,17 +1977,11 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
         JTextArea taexpHtu = new JTextArea(explain);
         taexpHtu.setEditable(false);
-        //taexpHtu.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
         taexpHtu.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/30));
         // スクロールバー
         JScrollPane sp = new JScrollPane(taexpHtu);
 		sp.setBounds(w/10+10,h/6+10,3*w/4,5*h/10);
 		card.add(sp);
-        //card.add(taexpHtu);
-
-        /*Rect rect = new Rect();
-        rect.setBounds(0,0,w,h);
-        card.add(rect);*/
 
         JButton bHome=new JButton("HOME");
         bHome.setBounds(w/5,51*h/60,w/5,h/15);
@@ -2018,7 +2001,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -2080,7 +2063,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -2145,7 +2128,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -2210,7 +2193,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -2275,7 +2258,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         bInform.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
         card.add(bInform);
 
-        JLabel background=new JLabel(backWithButton);
+        JLabel background=new JLabel(backImage);
 		background.setBounds(-7,0,w,h);
 		card.add(background);
 
@@ -3739,15 +3722,12 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 
     public static void main(String[] args) {
     	Client client=new Client();
-    	//client.connectServer();
-    	//client.new Notification();
     }
 
     public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
-        int width = bi.getWidth();    // オリジナル画像の幅
-        int height = bi.getHeight();  // オリジナル画像の高さ
+        int width = bi.getWidth();
+        int height = bi.getHeight();
 
-        // 縦横の比率から、scaleを決める
         double widthScale = (double) destWidth / (double) width;
         double heightScale = (double) destHeight / (double) height;
         double scale = widthScale < heightScale ? widthScale : heightScale;
@@ -3764,114 +3744,6 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
         return new ImageIcon(dst);
     }
 
-
-    //TODO 多分もういらない
-	//通知ウィンドウ内部クラスですよ
-    public class Notification extends JFrame implements ActionListener{
-
-    	public Notification() {
-    		//閉じるボタン・リサイズ
-			JButton end = new JButton("閉じる");
-			end.setPreferredSize(new Dimension(100, 50));
-			end.addActionListener(this);
-
-			//backボタン nextボタン
-			JButton next = new JButton("next");
-			JButton back = new JButton("back");
-			next.setPreferredSize(new Dimension(100, 50));
-			next.addActionListener(this);
-			back.setPreferredSize(new Dimension(100, 50));
-			back.addActionListener(this);
-
-			//パネル
-		    JPanel p1 = new JPanel();
-		    JPanel p2 = new JPanel();
-		    FlowLayout layout = new FlowLayout();
-		    layout.setAlignment(FlowLayout.RIGHT);
-		    p1.setLayout(layout);
-		    p2.setLayout(null);
-
-		    p1.add(end);
-		    p2.add(next);
-		    p2.add(back);
-		    getContentPane().add(p1, BorderLayout.PAGE_END);
-		    getContentPane().add(p2, null);
-
-		    //タイトルなど
-    		setTitle("通知");
-    		setSize(w, h);
-    		setVisible(true);
-    		setResizable(false);
-    	}
-
-		public void actionPerformed(ActionEvent e) {
-			//閉じるボタンでウィンドウを閉じる
-			Component c = (Component)e.getSource();
-			Window w = SwingUtilities.getWindowAncestor(c);
-			w.dispose();
-		}
-
-    }
-    /*
-    //検索ウィンドウ内部クラス
-    public class search extends JFrame implements ActionListener{
-    	public search() {
-    		JLabel menu = new JLabel("検索");
-    		JComboBox<String> sex = new JComboBox<String>(Sex);
-    		JLabel sexL = new JLabel("性別");
-    		JComboBox<String> grade = new JComboBox<String>(Grade);
-    		JLabel gradeL = new JLabel("学年");
-    		JComboBox<String> faculty = new JComboBox<String>(Faculty);
-    		JLabel facultyL = new JLabel("学部");
-    		JComboBox<String> birthplace = new JComboBox<String>(Birthplace);
-    		JLabel birthplaceL = new JLabel("出身");
-    		JComboBox<String> circle = new JComboBox<String>(Circle);
-    		JLabel circleL = new JLabel("サークル");
-
-    		JPanel p = new JPanel();
-    		p.add(menu);
-    		p.add(sexL);
-    		p.add(sex);
-    		p.add(gradeL);
-    		p.add(grade);
-    		p.add(facultyL);
-    		p.add(faculty);
-    		p.add(birthplaceL);
-    		p.add(birthplace);
-    		p.add(circleL);
-    		p.add(circle);
-
-    		getContentPane().add(p, BorderLayout.CENTER);
-
-    		setSize(w, h);
-    		setVisible(true);
-    		setResizable(false);
-
-    	}
-
-		public void actionPerformed(ActionEvent e) {
-			//閉じるボタンでウィンドウを閉じる
-			Component c = (Component)e.getSource();
-			Window w = SwingUtilities.getWindowAncestor(c);
-			w.dispose();
-		}
-    }
-    //検索ウィンドウ内部クラスここまで
-     *
-     */
-
-    //四角形描画クラス
-    public class Rect extends Canvas{
-    	public void paint(Graphics g) {
-    		super.paint(g);
-    		Graphics2D g2 = (Graphics2D)this.getGraphics();
-    		Rectangle rect = new Rectangle();
-    		rect.setRect(w/10,h/10,8*w/10,6*h/10);	//(x座標、y座標、幅、高さ)
-    		g2.setColor(Color.GREEN);
-    	    g2.setStroke(new BasicStroke(5.0f));
-    	    g2.draw(rect);
-    	}
-    }
 
 /***************サーバー関連のメソッド・クラス群************************************************************/
 	//サーバーに送るメソッド

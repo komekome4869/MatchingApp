@@ -2650,7 +2650,6 @@ public class Server extends JFrame implements ActionListener{
 				if(pageAuthen <= -1) {
 					this.setVisible(false);
 					this.dispose();
-					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 				}
 				else {
 					nextPage();
@@ -2660,7 +2659,6 @@ public class Server extends JFrame implements ActionListener{
 				if(pageAuthen <= -1) {
 					this.setVisible(false);
 					this.dispose();
-					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 				}
 				else {
 					File file = notAuthentificatededUsers[pageAuthen];
@@ -2722,14 +2720,12 @@ public class Server extends JFrame implements ActionListener{
 				if(pageAuthen == -1) {
 					this.setVisible(false);
 					this.dispose();
-					//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 				}
 				else {
 					pageAuthen--;
 					if(pageAuthen == -1) {
 						this.setVisible(false);
 						this.dispose();
-						//TODO 認証ウインドウだけ閉じたい。間違ってる可能性が高い
 					}
 					nextPage();
 				}
@@ -2739,10 +2735,9 @@ public class Server extends JFrame implements ActionListener{
 
 	//画像のリサイズ
 	public ImageIcon scaleImage(BufferedImage bi, int destWidth, int destHeight) throws IOException {
-	        int width = bi.getWidth();    // オリジナル画像の幅
-	        int height = bi.getHeight();  // オリジナル画像の高さ
+	        int width = bi.getWidth();
+	        int height = bi.getHeight();
 
-	        // 縦横の比率から、scaleを決める
 	        double widthScale = (double) destWidth / (double) width;
 	        double heightScale = (double) destHeight / (double) height;
 	        double scale = widthScale < heightScale ? widthScale : heightScale;
@@ -2867,18 +2862,6 @@ public class Server extends JFrame implements ActionListener{
 	        JScrollPane sp = new JScrollPane(tTableUserInfo);
 			sp.setBounds(w/4,27*h/65,w/2,h/4);
 			card.add(sp);
-
-			// アカウント削除
-			/*JLabel lDeleteUserInfo = new JLabel("アカウント削除");
-			lDeleteUserInfo.setBounds(w/10,40*h/60,w/2,h/15);
-			lDeleteUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/25));
-			lDeleteUserInfo.setHorizontalAlignment(JLabel.CENTER);
-	        card.add(lDeleteUserInfo);
-
-	        tbDeleteUserInfo.setBounds(6*w/10,41*h/60,w/7,h/20);
-	        tbDeleteUserInfo.addChangeListener(this);
-	        tbDeleteUserInfo.setFont(new Font("ＭＳ 明朝", Font.PLAIN, w/35));
-			card.add(tbDeleteUserInfo);*/
 
 			JButton bDecideUserInfo=new JButton("BAN");
 			bDecideUserInfo.setBounds(w/4,24*h/30,w/2,h/15);
