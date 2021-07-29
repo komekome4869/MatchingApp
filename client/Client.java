@@ -3798,7 +3798,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 			/*if(inputLine=="1")	return true;
 			else	return false;*/
@@ -3829,7 +3829,8 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					//break;
 				}
-			//}
+				System.out.println(inputObj+"を受信しました");
+				closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
 			System.exit(-1);
@@ -3852,7 +3853,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 				}catch(ClassNotFoundException e) {
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 				}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3877,7 +3878,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					}
 
-				System.out.println(inputObj);
+				System.out.println(inputObj+"を受信しました");
 				closeSocket();
 			}catch(IOException e) {
 				System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3902,7 +3903,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3929,7 +3930,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 				}
 
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3955,7 +3956,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -3966,6 +3967,10 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 	//グルにいいねを送る
 	public void Sgroup_good(UUID number) {
 		try{
+			//テスト用
+			/*UUID uuid = UUID.randomUUID();
+			myGroupInfo.setStudentNumber(uuid);*/
+			
 			connectServer();
 			String outLine = "gg,"+myGroupInfo.getStudentNumber().toString()+","+number.toString();
 			oos.writeObject(outLine);
@@ -3980,7 +3985,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4008,7 +4013,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 			System.out.println(newprof+"を送信しました。");  //確認用
 		}catch(IOException e) {
@@ -4037,7 +4042,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4064,7 +4069,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4089,7 +4094,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			myUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
 			closeSocket();
 		}catch(IOException e) {
@@ -4113,7 +4118,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
 					}
 
-				System.out.println(inputObj);
+				System.out.println(inputObj+"を受信しました");
 				yourUserInfo = (UserInfo)inputObj;	//UserInfo型に変換して代入
 				closeSocket();
 			}catch(IOException e) {
@@ -4140,7 +4145,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			myGroupInfo = (GroupInfo)inputObj;	//GroupInfo型に変換して代入
 			closeSocket();
 		}catch(IOException e) {
@@ -4167,7 +4172,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 						break;
 					}
 				}
-				System.out.println(inputObj);
+				System.out.println(inputObj+"を受信しました");
 				yourGroupInfo = (GroupInfo)inputObj;	//GroupInfo型に変換して代入
 				closeSocket();
 			}catch(IOException e) {
@@ -4194,7 +4199,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4220,7 +4225,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4246,7 +4251,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4272,7 +4277,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4298,7 +4303,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
@@ -4324,7 +4329,7 @@ public class Client extends JFrame implements ActionListener,ChangeListener{
 					break;
 				}
 			}
-			System.out.println(inputObj);
+			System.out.println(inputObj+"を受信しました");
 			closeSocket();
 		}catch(IOException e) {
 			System.err.println("サーバ接続時にエラーが発生しました: " + e);
