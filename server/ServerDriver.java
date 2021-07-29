@@ -20,9 +20,9 @@ public class ServerDriver{
 		ServerSocket ss = new ServerSocket(100);
 		Socket sock = ss.accept();
 
-		System.out.println("ƒT[ƒo‚ª‹N“®‚µ‚Ü‚µ‚½");
+		System.out.println("ã‚µãƒ¼ãƒãŒèµ·å‹•ã—ã¾ã—ãŸ");
 
-		// ƒf[ƒ^óM—pƒIƒuƒWƒFƒNƒg
+		// ãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 		Server.Receiver receiver = new Server.Receiver(sock);
 
 		Server server = new Server("test");
@@ -31,10 +31,10 @@ public class ServerDriver{
 
 		while(true){
 			try {
-				System.out.println("UserInfo‚ğ‘—M‚·‚é‚È‚ç0,GroupInfo‚ğ‘—M‚·‚é‚È‚ç1,ƒƒbƒZ[ƒW‚ğ‘—M‚·‚é‚È‚ç2");
+				System.out.println("UserInfoã‚’é€ä¿¡ã™ã‚‹ãªã‚‰0,GroupInfoã‚’é€ä¿¡ã™ã‚‹ãªã‚‰1,ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ã™ã‚‹ãªã‚‰2");
 				String msg = r.readLine();
 				if(Integer.parseInt(msg) == 0) {
-					System.out.println("ƒfƒtƒHƒ‹ƒgî•ñ‚ğ“ü—Í");
+					System.out.println("ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæƒ…å ±ã‚’å…¥åŠ›");
 
 					System.out.println("state?");
 					msg = r.readLine();
@@ -48,7 +48,7 @@ public class ServerDriver{
 
 				}
 				else if(Integer.parseInt(msg) == 1) {
-					System.out.println("ƒfƒtƒHƒ‹ƒgî•ñ‚ğ“ü—Í");
+					System.out.println("ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæƒ…å ±ã‚’å…¥åŠ›");
 
 					System.out.println("state?");
 					msg = r.readLine();
@@ -58,15 +58,15 @@ public class ServerDriver{
 					receiver.executeGroupInfo(gi);
 				}
 				else if(Integer.parseInt(msg) == 2){
-					System.out.println("óM—pƒƒbƒZ[ƒW‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
+					System.out.println("å—ä¿¡ç”¨ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„");
 					msg = r.readLine();
 					receiver.receiveMessage(msg);
-					System.out.println("ƒeƒXƒgƒƒbƒZ[ƒWu" + msg + "v‚ğóM‚µ‚Ü‚µ‚½");
+					System.out.println("ãƒ†ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€Œ" + msg + "ã€ã‚’å—ä¿¡ã—ã¾ã—ãŸ");
 				}
 				else {
-					System.out.println("³‚µ‚¢’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
+					System.out.println("æ­£ã—ã„å€¤ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„");
 				}
-				System.out.println("ƒeƒXƒg‘€ì‚ğs‚Á‚½ŒãAóM—pƒeƒXƒgƒƒbƒZ[ƒW‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
+				System.out.println("ãƒ†ã‚¹ãƒˆæ“ä½œã‚’è¡Œã£ãŸå¾Œã€å—ä¿¡ç”¨ãƒ†ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„");
 
 			}catch(IOException e) {
 				System.err.println(e);
@@ -93,7 +93,7 @@ public class ServerDriver{
 					case 1 :
 						ui.studentNumber = Integer.parseInt(line);
 
-						//‰æ‘œ‚Ì“Ç‚İ‚İ
+						//ç”»åƒã®èª­ã¿è¾¼ã¿
 						File studentCard = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_card.png");
 						File main_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_main.png");
 						File sub1_image = new File(System.getProperty("user.dir") + "\\ID\\images" + "\\" + line + "\\" + line + "_sub1.png");
@@ -213,7 +213,7 @@ public class ServerDriver{
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("ƒ†[ƒUƒtƒ@ƒCƒ‹“Ç‚İ‚İ‚ª‚ÅƒGƒ‰[”­¶");
+			System.out.println("ãƒ¦ãƒ¼ã‚¶ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ãŒã§ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ");
 		}
 	}
 
@@ -233,7 +233,7 @@ public class ServerDriver{
 						case 1 :
 							gi.groupNumber = UUID.fromString(line);
 
-							//‰æ‘œ‚Ì“Ç‚İ‚İ
+							//ç”»åƒã®èª­ã¿è¾¼ã¿
 							File main_image = new File(System.getProperty("user.dir") + "\\Group\\images\\" + line + "_main.png");
 							BufferedImage main = ImageIO.read(main_image);
 
@@ -312,7 +312,7 @@ public class ServerDriver{
 					}
 				}
 			} catch (IOException e) {
-				System.out.println("ƒOƒ‹[ƒvƒtƒ@ƒCƒ‹“Ç‚İ‚İ‚ÅƒGƒ‰[”­¶");
+				System.out.println("ã‚°ãƒ«ãƒ¼ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ã§ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ");
 			}
 	}
 }

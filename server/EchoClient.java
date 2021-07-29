@@ -14,10 +14,10 @@ public class EchoClient {
 	public static void main(String args[]) {
 
 		try{
-			// ƒT[ƒo‚ÉÚ‘±
+			// ã‚µãƒ¼ãƒã«æ¥ç¶š
 			Socket socket = new Socket(ipAddress, port);
 
-			// ƒf[ƒ^óM—pƒIƒuƒWƒFƒNƒg
+			// ãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 			receiver = new Receiver(socket);
 			receiver.start();
 
@@ -28,49 +28,49 @@ public class EchoClient {
 	}
 }
 
-// ƒf[ƒ^óM—pƒXƒŒƒbƒh
+// ãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰
 class Receiver extends Thread{
 	public ObjectInputStream ois;
 	public ObjectOutputStream oos;
 
-	// “à•”ƒNƒ‰ƒXReceiver‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// å†…éƒ¨ã‚¯ãƒ©ã‚¹Receiverã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Receiver (Socket socket){
 		try{
-			oos = new ObjectOutputStream(socket.getOutputStream()); //ƒIƒuƒWƒFƒNƒgƒf[ƒ^‘—M—pƒIƒuƒWƒFƒNƒg‚Ì—pˆÓ
-			ois = new ObjectInputStream(socket.getInputStream()); //ƒIƒuƒWƒFƒNƒgƒf[ƒ^óM—pƒIƒuƒWƒFƒNƒg‚Ì—pˆÓ
+			oos = new ObjectOutputStream(socket.getOutputStream()); //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿é€ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”¨æ„
+			ois = new ObjectInputStream(socket.getInputStream()); //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿å—ä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”¨æ„
 		} catch (IOException e) {
-				System.err.println("ƒf[ƒ^óM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
+				System.err.println("ãƒ‡ãƒ¼ã‚¿å—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
 		}
 	}
 
-	// Receiver‚Ìƒƒ\ƒbƒh
+	// Receiverã®ãƒ¡ã‚½ãƒƒãƒ‰
 	public void run(){
 		try {
 			while(true) {
 				try {
 					Object inputObj = ois.readObject();
 
-					//UserInfoŒ^‚È‚ç
+					//UserInfoå‹ãªã‚‰
 					if(inputObj instanceof UserInfo) {
-						System.out.println("UserInfoŒ^ƒf[ƒ^‚ğóM‚µ‚Ü‚µ‚½");
+						System.out.println("UserInfoå‹ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ã¾ã—ãŸ");
 					}
 
-					//GroupInfoŒ^‚È‚ç
+					//GroupInfoå‹ãªã‚‰
 					else if(inputObj instanceof GroupInfo) {
-						System.out.println("GroupInfoŒ^ƒf[ƒ^‚ğóM‚µ‚Ü‚µ‚½");
+						System.out.println("GroupInfoå‹ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ã¾ã—ãŸ");
 					}
 
-					//‚»‚Ì‘¼‚È‚çreceiveMessage()
+					//ãã®ä»–ãªã‚‰receiveMessage()
 					else {
-						System.out.println("ƒƒbƒZ[ƒW‚ğƒf[ƒ^‚ğóM‚µ‚Ü‚µ‚½ : " + inputObj.toString());
+						System.out.println("ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ã¾ã—ãŸ : " + inputObj.toString());
 					}
 
 				} catch (ClassNotFoundException e) {
-					System.err.print("ƒIƒuƒWƒFƒNƒgóM‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½F" + e);
+					System.err.print("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå—ä¿¡æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼š" + e);
 				}
 			}
 		}catch(IOException e) {
-			System.out.println("ƒNƒ‰ƒCƒAƒ“ƒg‚ªØ’f‚µ‚Ü‚µ‚½");
+			System.out.println("ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãŒåˆ‡æ–­ã—ã¾ã—ãŸ");
 		}
 	}
 }
