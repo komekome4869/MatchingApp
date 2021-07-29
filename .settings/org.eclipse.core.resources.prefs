@@ -4,4 +4,6 @@ encoding//ID/1234562.txt=UTF-8
 encoding//client/Client.java=UTF-8
 encoding//client/GroupInfo.java=UTF-8
 encoding//client/UserInfo.java=UTF-8
+encoding//server/EchoClient.java=UTF-8
 encoding//server/Server.java=UTF-8
+encoding//server/ServerDriver.java=UTF-8

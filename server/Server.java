@@ -46,6 +46,8 @@ public class Server extends JFrame implements ActionListener{
 
 	static PrintWriter out; //データ送信用オブジェクト
 	static Receiver receiver; //データ受信用オブジェクト
+	static ObjectInputStream ois_buf; //テスト用
+	static ObjectOutputStream oos_buf; //テスト用
 	static ServerSocket ss;
 
 	static UserInfo[] users = new UserInfo[1000];
@@ -449,14 +451,16 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//データ受信用スレッド(内部クラス)
-	class Receiver extends Thread {
-		private ObjectInputStream ois;
-		private ObjectOutputStream oos;
+	static class Receiver extends Thread {
+		public ObjectInputStream ois;
+		public ObjectOutputStream oos;
 		// 内部クラスReceiverのコンストラクタ
 		Receiver (Socket socket){
 			try{
 				oos = new ObjectOutputStream(socket.getOutputStream()); //オブジェクトデータ送信用オブジェクトの用意
 				ois = new ObjectInputStream(socket.getInputStream()); //オブジェクトデータ受信用オブジェクトの用意
+				oos_buf = oos;
+				ois_buf = ois;
 			} catch (IOException e) {
 					System.err.println("データ受信時にエラーが発生しました: " + e);
 			}
@@ -626,6 +630,70 @@ public class Server extends JFrame implements ActionListener{
 				}
 		}
 
+		//stateによって実行内容変更
+		public void executeUserInfo(UserInfo ui) {
+		try {
+				//新規登録
+				if(ui.state == 0) {
+					try{
+						signUp(ui);
+						oos.writeObject("1");
+						oos.flush();
+					}catch(IOException e) {
+						oos.writeObject("0");
+						oos.flush();
+						System.err.print("サインアップでエラーが発生しました：" + e);
+					}
+				}
+				//プロフ変更
+				if(ui.state == 1) {
+					try{
+						changeUserInfo(ui);
+						oos.writeObject("1");
+						oos.flush();
+					}catch(IOException e) {
+						oos.writeObject("0");
+						oos.flush();
+						System.err.print("ユーザ情報変更時にエラーが発生しました：" + e);
+					}
+				}
+			}catch(IOException e){
+				System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+			}
+		}
+
+		//stateによって実行内容変更
+		public void executeGroupInfo(GroupInfo gi) {
+			try {
+				//グループ作成
+				if(gi.state == 0) {
+					try{
+						makeGroup(gi);
+						oos.writeObject("1");
+						oos.flush();
+					}catch(IOException e) {
+						oos.writeObject("0");
+						oos.flush();
+						System.err.print("グループ作成時にエラーが発生しました：" + e);
+					}
+				}
+				//プロフ変更
+				if(gi.state == 1) {
+					try{
+						changeGroupInfo(gi);
+						oos.writeObject("1");
+						oos.flush();
+					}catch(IOException e) {
+						oos.writeObject("0");
+						oos.flush();
+						System.err.print("グループ情報変更時にエラーが発生しました：" + e);
+					}
+				}
+			}catch(IOException e){
+				System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
+			}
+		}
+
 		// 内部クラス Receiverのメソッド
 		public void run(){
 			try {
@@ -639,61 +707,14 @@ public class Server extends JFrame implements ActionListener{
 							UserInfo ui = new UserInfo();
 							ui = (UserInfo)inputObj;
 							ui.setStudentCard(ui.getStudentCard());
-
-							//新規登録
-							if(ui.state == 0) {
-								try{
-									signUp(ui);
-									oos.writeObject("1");
-									oos.flush();
-								}catch(IOException e) {
-									oos.writeObject("0");
-									oos.flush();
-									System.err.print("サインアップでエラーが発生しました：" + e);
-								}
-							}
-							//プロフ変更
-							if(ui.state == 1) {
-								try{
-									changeUserInfo(ui);
-									oos.writeObject("1");
-									oos.flush();
-								}catch(IOException e) {
-									oos.writeObject("0");
-									oos.flush();
-									System.err.print("ユーザ情報変更時にエラーが発生しました：" + e);
-								}
-							}
+							executeUserInfo(ui);
 						}
 
 						//GroupInfo型なら
 						else if(inputObj instanceof GroupInfo) {
 							GroupInfo gi = new GroupInfo();
 							gi = (GroupInfo)inputObj;
-							//グループ作成
-							if(gi.state == 0) {
-								try{
-									makeGroup(gi);
-									oos.writeObject("1");
-									oos.flush();
-								}catch(IOException e) {
-									oos.writeObject("0");
-									oos.flush();
-									System.err.print("グループ作成時にエラーが発生しました：" + e);
-								}
-							}
-							//プロフ変更
-							if(gi.state == 1) {
-								try{
-									changeGroupInfo(gi);
-									oos.writeObject("1");
-									oos.flush();
-								}catch(IOException e) {
-									oos.writeObject("0");
-									oos.flush();
-									System.err.print("グループ情報変更時にエラーが発生しました：" + e);
-								}
-							}
+							executeGroupInfo(gi);
 						}
 
 						//その他ならreceiveMessage()
@@ -811,7 +832,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//グループ検索
-	public GroupInfo[] searchGroups(int page, int purpose, int num) {
+	public static GroupInfo[] searchGroups(int page, int purpose, int num) {
 
 		group_buf.clear();
 
@@ -850,7 +871,7 @@ public class Server extends JFrame implements ActionListener{
 	}
 
 	//GroupInfo送信
-	public GroupInfo[] sendGroupInfo(int page) {
+	public static GroupInfo[] sendGroupInfo(int page) {
 		GroupInfo res[] = new GroupInfo[3];
 
 		//再読み込み
