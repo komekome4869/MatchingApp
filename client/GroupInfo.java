@@ -56,14 +56,6 @@ public class GroupInfo implements Serializable{
 		return img;
 	}
 
-	public int getState() {
-		return state;
-	}
-
-	public void setState(int s) {
-		state=s;
-	}
-
 	public void setStudentNumber(UUID gn) {
 		groupNumber=gn;
 	}
