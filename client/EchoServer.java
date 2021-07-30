@@ -15,19 +15,19 @@ public class EchoServer {
 		    System.out.println("サーバが起動しました");
 		    while(true) {
 			try {
-			    sock = server.accept(); // �N���C�A���g����̐ڑ���҂�
+			    sock = server.accept();
 
 			    System.out.println("クライアントと接続しました");
 			    ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
 			    ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
 			    Object s;
 			    try{
-			    	while((s = in.readObject()) != null) { // ��s��M
-			    		out.writeObject("テストメッセージ"); // ��s���M
+			    	while((s = in.readObject()) != null) {
+			    		out.writeObject("テストメッセージ");
 			    		out.flush();
 			    	System.out.println(s);
 			    	}
-			    	sock.close(); // �N���C�A���g����̐ڑ���ؒf
+			    	sock.close();
 			    	System.out.println("クライアントと切断しました。");
 			    }catch(ClassNotFoundException e) {
 			    	System.err.print("オブジェクト受信時にエラーが発生しました：" + e);
